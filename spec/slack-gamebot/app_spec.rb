@@ -23,7 +23,7 @@ describe SlackGamebot::App do
     context 'with auth' do
       context 'run' do
         before do
-          subject.run
+          subject.send(:auth!)
         end
         it 'succeeds auth' do
           expect(subject.config.url).to eq 'https://pingpong.slack.com/'
@@ -32,6 +32,16 @@ describe SlackGamebot::App do
           expect(subject.config.team_id).to eq 'TDEADBEEF'
           expect(subject.config.user_id).to eq 'UBAADFOOD'
         end
+      end
+    end
+    context 'dispatch' do
+      it 'hi' do
+        expect(subject).to receive(:message).with('CBAADFOOD', 'Hi <@UDEADBEAT>!')
+        subject.send(:dispatch, text: 'gamebot hi', channel: 'CBAADFOOD', user: 'UDEADBEAT')
+      end
+      it 'invalid command' do
+        expect(subject).to receive(:message).with('CBAADFOOD', "Sorry <@UDEADBEAT>, I don't understand that command!")
+        subject.send(:dispatch, text: 'gamebot foobar', channel: 'CBAADFOOD', user: 'UDEADBEAT')
       end
     end
   end

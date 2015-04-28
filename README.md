@@ -7,21 +7,19 @@ A game bot for slack.
 
 ## Installation
 
-TODO
+Create a new Bot Integration under [services/new/bot](http://slack.com/services/new/bot). Note the API token.
 
-## Configuration
+Deploy this application to Heroku or another service. Set _SLACK_API_TOKEN_.
 
-Configure the root directory of your mail fixtures in *spec/spec_helper.rb*.
-
-```ruby
-SlackGamebot.configure do |config|
-  # TODO
-end
+```
+heroku config:add SLACK_API_TOKEN=...
 ```
 
 ## Usage
 
-TODO
+Start talking to your bot!
+
+![](screenshots/hi.png)
 
 ## Contributing
 

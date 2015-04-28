@@ -13,23 +13,60 @@ module SlackGamebot
       SlackGamebot.config
     end
 
-    def logger
-      @logger ||= Logger.new(STDOUT)
-    end
-
     def self.instance
       @instance ||= SlackGamebot::App.new
     end
 
     def run
       auth!
+      start!
     end
 
     private
 
+    def logger
+      @logger ||= begin
+        $stdout.sync = true
+        Logger.new(STDOUT)
+      end
+    end
+
+    def start!
+      client.start
+    end
+
+    def client
+      @client ||= Slack.realtime.tap do |client|
+        client.on :hello do |_data|
+          logger.info "Successfully connected to #{SlackGamebot.config.url}."
+        end
+        client.on :message do |data|
+          begin
+            dispatch(data)
+          rescue StandardError => e
+            logger.error e
+          end
+        end
+      end
+    end
+
+    def dispatch(data)
+      data = Hashie::Mash.new(data)
+      return unless data.text && data.text.start_with?('gamebot')
+      case data.text
+      when 'gamebot hi'
+        message data.channel, "Hi <@#{data.user}>!"
+      when /^gamebot/
+        message data.channel, "Sorry <@#{data.user}>, I don't understand that command!"
+      end
+    end
+
+    def message(channel, text)
+      Slack.chat_postMessage(channel: channel, text: text)
+    end
+
     def auth!
       auth = Slack.auth_test
-      fail auth['error'] unless auth['ok']
       SlackGamebot.configure do |config|
         config.url = auth['url']
         config.team = auth['team']
