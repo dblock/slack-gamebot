@@ -2,7 +2,6 @@ Slack-Gamebot
 =============
 
 [![Build Status](https://travis-ci.org/dblock/slack-gamebot.png)](https://travis-ci.org/dblock/slack-gamebot)
-[![Gem Version](https://badge.fury.io/rb/slack-gamebot.svg)](http://badge.fury.io/rb/slack-gamebot)
 
 A game bot for slack.
 
