@@ -1,5 +1,6 @@
 require 'slack-gamebot/version'
 require 'slack-gamebot/config'
+require 'slack-gamebot/app'
 
 module SlackGamebot
   class << self
