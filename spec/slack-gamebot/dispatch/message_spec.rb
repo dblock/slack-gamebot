@@ -17,8 +17,7 @@ describe SlackGamebot::Dispatch::Message do
     expect(subject).to receive(:message).with('channel', "Sorry <@user>, I don't understand that command!")
     app.send(:message, text: 'gamebot foobar', channel: 'channel', user: 'user')
   end
-  context 'register' do
-    use_vcr_cassette 'user_info'
+  context 'register', vcr: { cassette_name: 'user_info' } do
     it 'registers a new user' do
       expect(subject).to receive(:message).with('channel', "Welcome <@user>! You're ready to play.")
       app.send(:message, text: 'gamebot register', channel: 'channel', user: 'user')

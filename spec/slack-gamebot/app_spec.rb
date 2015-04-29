@@ -15,8 +15,7 @@ describe SlackGamebot::App do
       expect { subject }.to raise_error RuntimeError, "Missing ENV['SLACK_API_TOKEN']."
     end
   end
-  context 'configured' do
-    use_vcr_cassette 'auth_test'
+  context 'configured', vcr: { cassette_name: 'auth_test' } do
     context 'run' do
       before do
         subject.send(:auth!)
