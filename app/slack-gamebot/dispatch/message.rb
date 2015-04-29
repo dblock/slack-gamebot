@@ -5,7 +5,7 @@ module SlackGamebot
 
       def message(data)
         data = Hashie::Mash.new(data)
-        bot_name, command, _ = SlackGamebot::Dispatch::Message.parse_command(data.text)
+        bot_name, command, arguments = SlackGamebot::Dispatch::Message.parse_command(data.text)
         case command
         when nil
           SlackGamebot::Dispatch::Message.message data.channel, SlackGamebot::ASCII
