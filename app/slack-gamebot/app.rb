@@ -37,7 +37,7 @@ module SlackGamebot
 
     def client
       @client ||= Slack.realtime.tap do |client|
-        client.on :hello do |_data|
+        client.on :hello do
           logger.info "Successfully connected to #{SlackGamebot.config.url}."
         end
         client.on :message do |data|
@@ -52,13 +52,20 @@ module SlackGamebot
 
     def dispatch(data)
       data = Hashie::Mash.new(data)
-      return unless data.text && data.text.start_with?('gamebot')
-      case data.text
-      when 'gamebot hi'
+      bot_name, command = parse_command(data.text)
+      return unless bot_name == SlackGamebot.config.user
+      case command
+      when 'hi'
         message data.channel, "Hi <@#{data.user}>!"
-      when /^gamebot/
+      else
         message data.channel, "Sorry <@#{data.user}>, I don't understand that command!"
       end
+    end
+
+    def parse_command(text)
+      parts = text.split.reject(&:blank?) if text
+      bot_name = parts.first if parts
+      [bot_name, parts[1..parts.length].join]
     end
 
     def message(channel, text)
