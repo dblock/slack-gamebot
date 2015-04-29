@@ -17,20 +17,45 @@ describe SlackGamebot::Dispatch::Message do
     expect(subject).to receive(:message).with('channel', "Sorry <@user>, I don't understand that command!")
     app.send(:message, text: 'gamebot foobar', channel: 'channel', user: 'user')
   end
-  context 'register', vcr: { cassette_name: 'user_info' } do
-    it 'registers a new user' do
-      expect(subject).to receive(:message).with('channel', "Welcome <@user>! You're ready to play.")
-      app.send(:message, text: 'gamebot register', channel: 'channel', user: 'user')
+  context 'as a user', vcr: { cassette_name: 'user_info' } do
+    context 'register' do
+      it 'registers a new user' do
+        expect(subject).to receive(:message).with('channel', "Welcome <@user>! You're ready to play.")
+        app.send(:message, text: 'gamebot register', channel: 'channel', user: 'user')
+      end
+      it 'renames an existing user' do
+        Fabricate(:user, user_id: 'user')
+        expect(subject).to receive(:message).with('channel', "Welcome back <@user>, I've updated your registration.")
+        app.send(:message, text: 'gamebot register', channel: 'channel', user: 'user')
+      end
+      it 'already registered' do
+        Fabricate(:user, user_id: 'user', user_name: 'username')
+        expect(subject).to receive(:message).with('channel', "Welcome back <@user>, you're already registered.")
+        app.send(:message, text: 'gamebot register', channel: 'channel', user: 'user')
+      end
     end
-    it 'renames an existing user' do
-      Fabricate(:user, user_id: 'user')
-      expect(subject).to receive(:message).with('channel', "Welcome back <@user>, I've updated your registration.")
-      app.send(:message, text: 'gamebot register', channel: 'channel', user: 'user')
-    end
-    it 'already registered' do
-      Fabricate(:user, user_id: 'user', user_name: 'username')
-      expect(subject).to receive(:message).with('channel', "Welcome back <@user>, you're already registered.")
-      app.send(:message, text: 'gamebot register', channel: 'channel', user: 'user')
+    context 'with a user record' do
+      context 'challenge' do
+        it 'creates a singles challenge' do
+          user = Fabricate(:user, user_name: 'username')
+          opponent = Fabricate(:user)
+          expect do
+            expect(subject).to receive(:message).with('channel', "#{user.user_name} challenged #{opponent.user_name} to a match!")
+            app.send(:message, text: "gamebot challenge <@#{opponent.user_id}>", channel: 'channel', user: user.user_id)
+          end.to change(Challenge, :count).by(1)
+          challenge = Challenge.last
+          expect(challenge.created_by).to eq user
+          expect(challenge.challengers).to eq [user]
+          expect(challenge.challenged).to eq [opponent]
+        end
+        it 'requires an opponent' do
+          expect do
+            expect do
+              app.send(:message, text: 'gamebot challenge', channel: 'channel', user: 'user')
+            end.to raise_error(ArgumentError, 'Number of teammates (1) and opponents (0) must match.')
+          end.to_not change(Challenge, :count)
+        end
+      end
     end
   end
 end

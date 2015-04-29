@@ -3,6 +3,7 @@ source 'http://rubygems.org'
 gem 'hashie'
 gem 'slack-api', github: 'aki017/slack-ruby-gem', require: 'slack'
 gem 'mongoid', '~> 4.x'
+gem 'ruby-enum'
 
 group :development, :test do
   gem 'rake', '~> 10.4'

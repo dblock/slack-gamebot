@@ -13,30 +13,38 @@ module SlackGamebot
           SlackGamebot::Dispatch::Message.message data.channel, "Hi <@#{data.user}>!"
         when 'register'
           SlackGamebot::Dispatch::Message.register_user data
+        when 'challenge'
+          SlackGamebot::Dispatch::Message.challenge data, command, arguments
         else
           SlackGamebot::Dispatch::Message.message data.channel, "Sorry <@#{data.user}>, I don't understand that command!"
         end if bot_name == SlackGamebot.config.user
+      rescue Mongoid::Errors::Validations => e
+        raise ArgumentError, e.document.errors.first[1]
       end
 
       private
 
+      def self.challenge(data, _command, arguments)
+        challenger = User.find_create_or_update_by_slack_id!(data.user)
+        challenge = Challenge.create_from_teammates_and_opponents!(challenger, arguments)
+        SlackGamebot::Dispatch::Message.message data.channel, "#{challenge.challengers.map(&:user_name).join(' and ')} challenged #{challenge.challenged.map(&:user_name).join(' and ')} to a match!"
+      end
+
       def self.register_user(data)
-        user = User.where(user_id: data.user).first
-        user_info = Hashie::Mash.new(Slack.users_info(user: data.user)).user
-        if user && user.user_name != user_info.name
-          user.update_attributes!(user_name: user_info.name)
-          SlackGamebot::Dispatch::Message.message data.channel, "Welcome back <@#{data.user}>, I've updated your registration."
-        elsif user && user.user_name == user_info.name
-          SlackGamebot::Dispatch::Message.message data.channel, "Welcome back <@#{data.user}>, you're already registered."
-        else
-          user = User.create!(user_id: data.user, user_name: user_info.name)
+        ts = Time.now.utc
+        user = User.find_create_or_update_by_slack_id!(data.user)
+        if user.created_at >= ts
           SlackGamebot::Dispatch::Message.message data.channel, "Welcome <@#{data.user}>! You're ready to play."
+        elsif user.updated_at >= ts
+          SlackGamebot::Dispatch::Message.message data.channel, "Welcome back <@#{data.user}>, I've updated your registration."
+        else
+          SlackGamebot::Dispatch::Message.message data.channel, "Welcome back <@#{data.user}>, you're already registered."
         end
         user
       end
 
       def self.parse_command(text)
-        parts = text.gsub(/[^[:word:]\s]/, '').split.reject(&:blank?) if text
+        parts = text.gsub(/[^[:word:]<>@\s]/, '').split.reject(&:blank?) if text
         bot_name = parts.first if parts
         [bot_name, parts[1], parts[2..parts.length]]
       end

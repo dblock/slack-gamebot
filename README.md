@@ -36,7 +36,37 @@ Politely says 'hi' back.
 
 Registers a user.
 
+```
+gamebot register
+
+Welcome Victor Barna! You're ready to play.
+```
+
 This command can also update a user's registration, for example after the user has been renamed. The bot notices user renames, but this may be necessary if the bot wasn't running during that operation.
+
+```
+gamebot register
+
+Welcome back Victor Barna! I've updated your registration.
+```
+
+#### gamebot challenge <opponent>, ... [with <teammate>, ...]
+
+Creates a new challenge between you and an opponent.
+
+```
+gamebot challenge @WangHoe
+
+Victor Barna challenged Wang Hoe to a match!
+```
+
+You can create group challenges, too. Both sides must have the same number of players.
+
+```
+gamebot challenge @WangHoe @ZhangJike with @DengYaping
+
+Victor Barna and Deng Yaping challenged Wang Hoe and Zhang Jike to a match!
+```
 
 ## Contributing
 
