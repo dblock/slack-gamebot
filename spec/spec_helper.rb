@@ -6,14 +6,9 @@ require 'rspec'
 require 'config/environment'
 require 'slack-gamebot'
 
-require 'vcr'
-
-VCR.configure do |config|
-  config.cassette_library_dir = 'spec/fixtures/slack'
-  config.hook_into :webmock
-  config.default_cassette_options = { record: :new_episodes }
+Dir[File.join(File.dirname(__FILE__), 'support', '*.rb')].each do |file|
+  require file
 end
 
-RSpec.configure do |config|
-  config.extend VCR::RSpec::Macros
-end
+require 'fabrication'
+require 'faker'

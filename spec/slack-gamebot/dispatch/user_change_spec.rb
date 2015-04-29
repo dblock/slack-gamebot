@@ -1,0 +1,14 @@
+require 'spec_helper'
+
+describe SlackGamebot::Dispatch::UserChange do
+  let(:app) { SlackGamebot::App.new }
+  context 'with a user' do
+    before do
+      @user = Fabricate(:user)
+    end
+    it 'renames user' do
+      app.send(:user_change, type: 'user_change', user: { id: @user.user_id, name: 'updated' })
+      expect(@user.reload.user_name).to eq('updated')
+    end
+  end
+end

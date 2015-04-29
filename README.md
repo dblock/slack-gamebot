@@ -32,6 +32,12 @@ Shows GameBot version and links.
 
 Politely says 'hi' back.
 
+#### gamebot register
+
+Registers a user.
+
+This command can also update a user's registration, for example after the user has been renamed. The bot notices user renames, but this may be necessary if the bot wasn't running during that operation.
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md).

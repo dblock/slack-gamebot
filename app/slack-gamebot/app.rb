@@ -1,5 +1,11 @@
 module SlackGamebot
   class App
+    cattr_accessor :hooks
+
+    include SlackGamebot::Dispatch::UserChange
+    include SlackGamebot::Dispatch::Hello
+    include SlackGamebot::Dispatch::Message
+
     def initialize
       SlackGamebot.configure do |config|
         config.token = ENV['SLACK_API_TOKEN'] || fail("Missing ENV['SLACK_API_TOKEN'].")
@@ -36,41 +42,24 @@ module SlackGamebot
     end
 
     def client
-      @client ||= Slack.realtime.tap do |client|
-        client.on :hello do
-          logger.info "Successfully connected to #{SlackGamebot.config.url}."
-        end
-        client.on :message do |data|
-          begin
-            dispatch(data)
-          rescue StandardError => e
-            logger.error e
+      @client ||= begin
+        client = Slack.realtime
+        hooks.each do |hook|
+          client.on hook do |data|
+            begin
+              send hook, data
+            rescue StandardError => e
+              logger.error e
+              begin
+                Slack.chat_postMessage(channel: data['channel'], text: e.message) if data.key?('channel')
+              rescue
+                # ignore
+              end
+            end
           end
         end
+        client
       end
-    end
-
-    def dispatch(data)
-      data = Hashie::Mash.new(data)
-      bot_name, command = parse_command(data.text)
-      case command
-      when ''
-        message data.channel, SlackGamebot::ASCII
-      when 'hi'
-        message data.channel, "Hi <@#{data.user}>!"
-      else
-        message data.channel, "Sorry <@#{data.user}>, I don't understand that command!"
-      end if bot_name == SlackGamebot.config.user
-    end
-
-    def parse_command(text)
-      parts = text.split.reject(&:blank?) if text
-      bot_name = parts.first if parts
-      [bot_name, parts[1..parts.length].join]
-    end
-
-    def message(channel, text)
-      Slack.chat_postMessage(channel: channel, text: text)
     end
 
     def auth!
