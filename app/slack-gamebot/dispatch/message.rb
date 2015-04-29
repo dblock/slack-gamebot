@@ -5,9 +5,9 @@ module SlackGamebot
 
       def message(data)
         data = Hashie::Mash.new(data)
-        bot_name, command = SlackGamebot::Dispatch::Message.parse_command(data.text)
+        bot_name, command, _ = SlackGamebot::Dispatch::Message.parse_command(data.text)
         case command
-        when ''
+        when nil
           SlackGamebot::Dispatch::Message.message data.channel, SlackGamebot::ASCII
         when 'hi'
           SlackGamebot::Dispatch::Message.message data.channel, "Hi <@#{data.user}>!"
@@ -29,15 +29,16 @@ module SlackGamebot
         elsif user && user.user_name == user_info.name
           SlackGamebot::Dispatch::Message.message data.channel, "Welcome back <@#{data.user}>, you're already registered."
         else
-          User.create!(user_id: data.user, user_name: user_info.name)
+          user = User.create!(user_id: data.user, user_name: user_info.name)
           SlackGamebot::Dispatch::Message.message data.channel, "Welcome <@#{data.user}>! You're ready to play."
         end
+        user
       end
 
       def self.parse_command(text)
-        parts = text.split.reject(&:blank?) if text
+        parts = text.gsub(/[^[:word:]\s]/, '').split.reject(&:blank?) if text
         bot_name = parts.first if parts
-        [bot_name, parts[1..parts.length].join]
+        [bot_name, parts[1], parts[2..parts.length]]
       end
 
       def self.message(channel, text)
