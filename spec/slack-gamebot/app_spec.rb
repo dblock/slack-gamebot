@@ -35,6 +35,10 @@ describe SlackGamebot::App do
       end
     end
     context 'dispatch' do
+      it 'gamebot' do
+        expect(subject).to receive(:message).with('CBAADFOOD', SlackGamebot::ASCII)
+        subject.send(:dispatch, text: 'gamebot', channel: 'CBAADFOOD', user: 'UDEADBEAT')
+      end
       it 'hi' do
         expect(subject).to receive(:message).with('CBAADFOOD', 'Hi <@UDEADBEAT>!')
         subject.send(:dispatch, text: 'gamebot hi', channel: 'CBAADFOOD', user: 'UDEADBEAT')

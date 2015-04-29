@@ -53,13 +53,14 @@ module SlackGamebot
     def dispatch(data)
       data = Hashie::Mash.new(data)
       bot_name, command = parse_command(data.text)
-      return unless bot_name == SlackGamebot.config.user
       case command
+      when ''
+        message data.channel, SlackGamebot::ASCII
       when 'hi'
         message data.channel, "Hi <@#{data.user}>!"
       else
         message data.channel, "Sorry <@#{data.user}>, I don't understand that command!"
-      end
+      end if bot_name == SlackGamebot.config.user
     end
 
     def parse_command(text)
