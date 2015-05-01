@@ -15,6 +15,10 @@ module SlackGamebot
           SlackGamebot::Dispatch::Message.register_user data
         when 'challenge'
           SlackGamebot::Dispatch::Message.challenge data, command, arguments
+        when 'accept'
+          SlackGamebot::Dispatch::Message.accept_challenge data
+        when 'decline'
+          SlackGamebot::Dispatch::Message.decline_challenge data
         else
           SlackGamebot::Dispatch::Message.message data.channel, "Sorry <@#{data.user}>, I don't understand that command!"
         end if bot_name == SlackGamebot.config.user
@@ -28,6 +32,28 @@ module SlackGamebot
         challenger = User.find_create_or_update_by_slack_id!(data.user)
         challenge = Challenge.create_from_teammates_and_opponents!(challenger, arguments)
         SlackGamebot::Dispatch::Message.message data.channel, "#{challenge.challengers.map(&:user_name).join(' and ')} challenged #{challenge.challenged.map(&:user_name).join(' and ')} to a match!"
+      end
+
+      def self.accept_challenge(data)
+        challenger = User.find_create_or_update_by_slack_id!(data.user)
+        challenge = Challenge.find_by_user(challenger)
+        if challenge
+          challenge.accept!(challenger)
+          SlackGamebot::Dispatch::Message.message data.channel, "#{challenger.user_name} accepted #{challenge}."
+        else
+          SlackGamebot::Dispatch::Message.message data.channel, 'No challenge to accept!'
+        end
+      end
+
+      def self.decline_challenge(data)
+        challenger = User.find_create_or_update_by_slack_id!(data.user)
+        challenge = Challenge.find_by_user(challenger)
+        if challenge
+          challenge.decline!(challenger)
+          SlackGamebot::Dispatch::Message.message data.channel, "#{challenger.user_name} declined #{challenge}."
+        else
+          SlackGamebot::Dispatch::Message.message data.channel, 'No challenge to decline!'
+        end
       end
 
       def self.register_user(data)

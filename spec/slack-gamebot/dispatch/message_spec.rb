@@ -57,5 +57,21 @@ describe SlackGamebot::Dispatch::Message do
         end
       end
     end
+    context 'with a challenge' do
+      before do
+        @challenged = Fabricate(:user, user_name: 'username')
+        @challenge = Fabricate(:challenge, challenged: [@challenged])
+      end
+      it 'accept' do
+        expect(subject).to receive(:message).with('channel', "#{@challenged.user_name} accepted #{@challenge}.")
+        app.send(:message, text: 'gamebot accept', channel: 'channel', user: @challenged.user_id)
+        expect(@challenge.reload.state).to eq ChallengeState::ACCEPTED
+      end
+      it 'decline' do
+        expect(subject).to receive(:message).with('channel', "#{@challenged.user_name} declined #{@challenge}.")
+        app.send(:message, text: 'gamebot decline', channel: 'channel', user: @challenged.user_id)
+        expect(@challenge.reload.state).to eq ChallengeState::DECLINED
+      end
+    end
   end
 end

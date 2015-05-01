@@ -75,4 +75,58 @@ describe Challenge do
       end
     end
   end
+  context '#accept!' do
+    before do
+      @challenge = Fabricate(:challenge)
+    end
+    it 'can be accepted' do
+      accepted_by = @challenge.challenged.first
+      @challenge.accept!(accepted_by)
+      expect(@challenge.accepted_by).to eq accepted_by
+      expect(@challenge.state).to eq ChallengeState::ACCEPTED
+    end
+    it 'requires accepted_by' do
+      @challenge.state = ChallengeState::ACCEPTED
+      expect(@challenge).to_not be_valid
+    end
+    it 'cannot be accepted by another player' do
+      expect do
+        @challenge.accept!(@challenge.challengers.first)
+      end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challenged.map(&:user_name).join(' ')} can accept this challenge./
+    end
+    it 'cannot be accepted twice' do
+      accepted_by = @challenge.challenged.first
+      @challenge.accept!(accepted_by)
+      expect do
+        @challenge.accept!(accepted_by)
+      end.to raise_error RuntimeError, /Challenge has already been accepted./
+    end
+  end
+  context '#decline!' do
+    before do
+      @challenge = Fabricate(:challenge)
+    end
+    it 'can be declineed' do
+      declined_by = @challenge.challenged.first
+      @challenge.decline!(declined_by)
+      expect(@challenge.declined_by).to eq declined_by
+      expect(@challenge.state).to eq ChallengeState::DECLINED
+    end
+    it 'requires declined_by' do
+      @challenge.state = ChallengeState::DECLINED
+      expect(@challenge).to_not be_valid
+    end
+    it 'cannot be declineed by another player' do
+      expect do
+        @challenge.decline!(@challenge.challengers.first)
+      end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challenged.map(&:user_name).join(' ')} can decline this challenge./
+    end
+    it 'cannot be declineed twice' do
+      declined_by = @challenge.challenged.first
+      @challenge.decline!(declined_by)
+      expect do
+        @challenge.decline!(declined_by)
+      end.to raise_error RuntimeError, /Challenge has already been declined./
+    end
+  end
 end
