@@ -100,4 +100,24 @@ describe SlackGamebot::Dispatch::Message do
       end
     end
   end
+  context 'leaderboard' do
+    before do
+      @user_elo_42 = Fabricate(:user, elo: 42, wins: 3, losses: 2)
+      @user_elo_48 = Fabricate(:user, elo: 48, wins: 2, losses: 3)
+    end
+    it 'displays leaderboard sorted by elo' do
+      expect(subject).to receive(:message).with('channel', "1. #{@user_elo_48}\n2. #{@user_elo_42}")
+      app.send(:message, text: 'gamebot leaderboard', channel: 'channel')
+    end
+    it 'limits to max' do
+      expect(subject).to receive(:message).with('channel', "1. #{@user_elo_48}")
+      app.send(:message, text: 'gamebot leaderboard 1', channel: 'channel')
+    end
+    it 'supports infinity' do
+      user_elo_43 = Fabricate(:user, elo: 43, wins: 2, losses: 3)
+      user_elo_44 = Fabricate(:user, elo: 44, wins: 2, losses: 3)
+      expect(subject).to receive(:message).with('channel', "1. #{@user_elo_48}\n2. #{user_elo_44}\n3. #{user_elo_43}\n4. #{@user_elo_42}")
+      app.send(:message, text: 'gamebot leaderboard infinity', channel: 'channel')
+    end
+  end
 end

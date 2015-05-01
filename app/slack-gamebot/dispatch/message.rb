@@ -23,6 +23,8 @@ module SlackGamebot
           SlackGamebot::Dispatch::Message.cancel_challenge data
         when 'lost'
           SlackGamebot::Dispatch::Message.lose_challenge data
+        when 'leaderboard'
+          SlackGamebot::Dispatch::Message.leaderboard data, arguments
         else
           SlackGamebot::Dispatch::Message.message data.channel, "Sorry <@#{data.user}>, I don't understand that command!"
         end if bot_name == SlackGamebot.config.user
@@ -93,6 +95,17 @@ module SlackGamebot
           SlackGamebot::Dispatch::Message.message data.channel, "Welcome back <@#{data.user}>, you're already registered."
         end
         user
+      end
+
+      def self.leaderboard(data, arguments)
+        max = 3
+        case arguments.first.downcase
+        when 'infinity'
+          max = nil
+        else
+          max = Integer(arguments.first)
+        end if arguments.any?
+        SlackGamebot::Dispatch::Message.message data.channel, User.leaderboard(max)
       end
 
       def self.parse_command(text)

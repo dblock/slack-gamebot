@@ -40,4 +40,28 @@ describe User do
       end
     end
   end
+  context '#leaderboard' do
+    it 'ranks incrementally' do
+      user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
+      user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
+      expect(User.leaderboard).to eq "1. #{user2}\n2. #{user1}"
+    end
+    it 'ranks players with the same elo equally' do
+      user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
+      user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
+      user3 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
+      expect(User.leaderboard).to eq "1. #{user2}\n2. #{user1}\n2. #{user3}"
+    end
+    it 'limits to max' do
+      Fabricate(:user, elo: 1, wins: 1, losses: 1)
+      user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
+      Fabricate(:user, elo: 1, wins: 1, losses: 1)
+      expect(User.leaderboard(1)).to eq "1. #{user2}"
+    end
+    it 'ignores players without wins or losses' do
+      user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
+      Fabricate(:user, elo: 2, wins: 0, losses: 0)
+      expect(User.leaderboard).to eq "1. #{user1}"
+    end
+  end
 end

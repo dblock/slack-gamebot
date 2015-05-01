@@ -78,6 +78,8 @@ class Challenge
     else
       fail "Only #{(challenged + challengers).map(&:user_name).join(' or ')} can lose this challenge."
     end
+    winners.inc(wins: 1)
+    losers.inc(losses: 1)
     Match.create!(challenge: self, winners: winners, losers: losers)
     update_attributes!(state: ChallengeState::PLAYED)
   end

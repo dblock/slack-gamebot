@@ -100,6 +100,20 @@ gamebot cancel
 Victor Barna and Deng Yaping canceled a challenge against Wang Hoe and Zhang Jike.
 ```
 
+#### gamebot leaderboard [number|infinity]
+
+Get the leaderboard.
+
+```
+gamebot leaderboard
+
+1. Victor Barna: 3 wins, 2 losses (elo: 148)
+2. Deng Yaping: 1 win, 3 losses (elo: 24)
+3. Wang Hoe: 0 wins, 1 loss (elo: -12)
+```
+
+The leaderboard contains 3 topmost players ranked by [Elo](http://en.wikipedia.org/wiki/Elo_rating_system), use _leaderboard 10_ or _leaderboard infinity_ to see 10 players or more, respectively.
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md).

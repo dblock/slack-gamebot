@@ -169,6 +169,8 @@ describe Challenge do
       expect(game.challenge).to eq @challenge
       expect(game.winners).to eq @challenge.challenged
       expect(game.losers).to eq @challenge.challengers
+      expect(game.winners.all? { |player| player.wins == 1 && player.losses == 0 }).to be true
+      expect(game.losers.all? { |player| player.wins == 0 && player.losses == 1 }).to be true
     end
     it 'can be lost by the challenged' do
       expect do
@@ -178,6 +180,8 @@ describe Challenge do
       expect(game.challenge).to eq @challenge
       expect(game.winners).to eq @challenge.challengers
       expect(game.losers).to eq @challenge.challenged
+      expect(game.winners.all? { |player| player.wins == 1 && player.losses == 0 }).to be true
+      expect(game.losers.all? { |player| player.wins == 0 && player.losses == 1 }).to be true
     end
   end
 end

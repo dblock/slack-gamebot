@@ -4,6 +4,10 @@ class User
 
   field :user_id, type: String
   field :user_name, type: String
+  field :wins, type: Integer, default: 0
+  field :losses, type: Integer, default: 0
+  field :elo, type: Integer, default: 0
+  field :tau, type: Float, default: 0
 
   index({ user_id: 1, team_id: 1 }, unique: true, name: 'user_team_index')
 
@@ -22,5 +26,22 @@ class User
     instance.update_attributes!(user_name: instance_info.name) if instance && instance.user_name != instance_info.name
     instance ||= User.create!(user_id: slack_id, user_name: instance_info.name)
     instance
+  end
+
+  def self.leaderboard(max = 3)
+    players = User.all.any_of(:wins.gt => 0, :losses.gt => 0)
+    players = players.limit(max) if max && max > 0
+    players = players.desc(:elo).asc(:_id).to_a
+    rank = 1
+    leaderboard = []
+    players.each_with_index do |player, index|
+      rank += 1 if index > 0 && players[index - 1].elo != player.elo
+      leaderboard << "#{rank}. #{player}"
+    end
+    leaderboard.join("\n")
+  end
+
+  def to_s
+    "#{user_name}: #{wins} win#{wins != 1 ? 's' : ''}, #{losses} loss#{losses != 1 ? 'es' : ''} (elo: #{elo})"
   end
 end
