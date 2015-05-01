@@ -3,7 +3,7 @@ Slack-Gamebot
 
 [![Build Status](https://travis-ci.org/dblock/slack-gamebot.png)](https://travis-ci.org/dblock/slack-gamebot)
 
-A game bot for slack.
+A generic game bot for slack. Works for ping-pong (2, 4 or more players), chess, etc.
 
 ## Installation
 
