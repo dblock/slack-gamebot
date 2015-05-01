@@ -36,6 +36,10 @@ Shows GameBot version and links.
 
 Politely says 'hi' back.
 
+#### gamebot help
+
+Get help.
+
 #### gamebot register
 
 Registers a user.

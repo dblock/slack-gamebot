@@ -25,6 +25,8 @@ module SlackGamebot
           SlackGamebot::Dispatch::Message.lose_challenge data
         when 'leaderboard'
           SlackGamebot::Dispatch::Message.leaderboard data, arguments
+        when 'help'
+          SlackGamebot::Dispatch::Message.message_with_gif data.channel, 'See https://github.com/dblock/slack-gamebot, please.', 'help'
         else
           SlackGamebot::Dispatch::Message.message_with_gif data.channel, "Sorry <@#{data.user}>, I don't understand that command!", 'idiot'
         end if bot_name == SlackGamebot.config.user

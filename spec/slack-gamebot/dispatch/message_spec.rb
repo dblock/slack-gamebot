@@ -14,6 +14,10 @@ describe SlackGamebot::Dispatch::Message do
     expect(subject).to receive(:message).with('channel', 'Hi <@user>!')
     app.send(:message, text: 'gamebot hi', channel: 'channel', user: 'user')
   end
+  it 'help' do
+    expect(subject).to receive(:message).with('channel', 'See https://github.com/dblock/slack-gamebot, please.')
+    app.send(:message, text: 'gamebot help', channel: 'channel', user: 'user')
+  end
   it 'invalid command' do
     expect(subject).to receive(:message).with('channel', "Sorry <@user>, I don't understand that command!")
     app.send(:message, text: 'gamebot foobar', channel: 'channel', user: 'user')
