@@ -5,6 +5,8 @@ gem 'slack-api', github: 'aki017/slack-ruby-gem', require: 'slack'
 gem 'mongoid', '~> 4.x'
 gem 'ruby-enum'
 gem 'giphy', github: 'sebasoga/giphy'
+gem 'sinatra'
+gem 'puma'
 
 group :development, :test do
   gem 'rake', '~> 10.4'

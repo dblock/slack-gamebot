@@ -78,6 +78,11 @@ GEM
     parser (2.2.0.3)
       ast (>= 1.1, < 3.0)
     powerpack (0.1.0)
+    puma (2.11.0)
+      rack (>= 1.1, < 2.0)
+    rack (1.6.0)
+    rack-protection (1.5.3)
+      rack
     rainbow (2.0.0)
     rake (10.4.2)
     rspec (3.2.0)
@@ -103,7 +108,12 @@ GEM
       i18n
     ruby-progressbar (1.7.5)
     safe_yaml (1.0.4)
+    sinatra (1.4.5)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (~> 1.3, >= 1.3.4)
     thread_safe (0.3.5)
+    tilt (1.4.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     vcr (2.9.3)
@@ -124,10 +134,12 @@ DEPENDENCIES
   giphy!
   hashie
   mongoid (~> 4.x)
+  puma
   rake (~> 10.4)
   rspec (~> 3.2)
   rubocop (= 0.30.0)
   ruby-enum
+  sinatra
   slack-api!
   vcr
   webmock
