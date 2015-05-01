@@ -16,6 +16,7 @@ describe Match do
     context 'doubles' do
       before do
         @match = Fabricate(:match, challenge: Fabricate(:doubles_challenge))
+        @match.reload
       end
       it 'updates elo and tau' do
         expect(@match.challenge.challengers.map(&:elo)).to eq [48, 48]
@@ -32,11 +33,12 @@ describe Match do
         challengers = challenge1.challengers
         challenged = [Fabricate(:user), Fabricate(:user)]
         @match = Fabricate(:match, challenge: Fabricate(:challenge, challengers: challengers, challenged: challenged))
+        @match.reload
       end
       it 'updates elo and tau' do
         expect(@match.challenge.challengers.map(&:elo)).to eq [5, 5]
         expect(@match.challenge.challengers.map(&:tau)).to eq [1, 1]
-        expect(@match.challenge.challenged.map(&:elo)).to eq [-48, -48]
+        expect(@match.challenge.challenged.map(&:elo)).to eq [-55, -55]
         expect(@match.challenge.challenged.map(&:tau)).to eq [0.5, 0.5]
       end
     end
@@ -48,6 +50,7 @@ describe Match do
         challengers = challenge1.challenged
         challenged = [Fabricate(:user), Fabricate(:user)]
         @match = Fabricate(:match, challenge: Fabricate(:challenge, challengers: challengers, challenged: challenged))
+        @match.reload
       end
       it 'updates elo and tau' do
         expect(@match.challenge.challengers.map(&:elo)).to eq [88, 88]

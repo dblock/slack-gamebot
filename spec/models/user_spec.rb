@@ -66,5 +66,10 @@ describe User do
       Fabricate(:user, elo: 2, wins: 0, losses: 0)
       expect(User.leaderboard).to eq "1. #{user1}"
     end
+    it 'first game' do
+      user1 = Fabricate(:user, elo: 48, wins: 1, losses: 0)
+      user2 = Fabricate(:user, elo: -48, wins: 0, losses: 1)
+      expect(User.leaderboard).to eq "1. #{user1}\n2. #{user2}"
+    end
   end
 end

@@ -29,7 +29,7 @@ class User
   end
 
   def self.leaderboard(max = 3)
-    players = User.all.any_of(:wins.gt => 0, :losses.gt => 0)
+    players = User.all.any_of({ :wins.gt => 0 }, :losses.gt => 0)
     players = players.limit(max) if max && max > 0
     players = players.desc(:elo).asc(:_id).to_a
     rank = 1

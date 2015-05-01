@@ -29,6 +29,7 @@ class Match
       e = 100 - 1.0 / (1.0 + (10.0**((loser.elo - winners_elo) / 400.0))) * 100
       loser.tau += 0.5
       loser.elo -= e * (Elo::DELTA_TAU**loser.tau)
+      loser.save!
     end
   end
 end
