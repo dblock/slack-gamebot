@@ -10,11 +10,13 @@ A game bot for slack.
 Create a new Bot Integration under [services/new/bot](http://slack.com/services/new/bot). Note the API token.
 You will be able to invoke gamebot by the name you give it in the UI above.
 
-Deploy this application to Heroku or another service. Set _SLACK_API_TOKEN_.
+Deploy this application to Heroku with MongoLab or Compose or another similar service. Set _SLACK_API_TOKEN_.
 
 ```
 heroku config:add SLACK_API_TOKEN=...
 ```
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 ## Usage
 

@@ -1,0 +1,9 @@
+{
+	"name": "GameBot for Slack",
+	"description": "A game bot Slack integration.",
+	"respository": "https://github.com/dblock/slack-gamebot",
+	"keywords": ["slack", "integration"],
+	"addons": [
+		"mongolab"
+	]
+}
