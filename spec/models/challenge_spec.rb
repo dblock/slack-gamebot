@@ -82,7 +82,7 @@ describe Challenge do
     it 'can be accepted' do
       accepted_by = @challenge.challenged.first
       @challenge.accept!(accepted_by)
-      expect(@challenge.accepted_by).to eq accepted_by
+      expect(@challenge.updated_by).to eq accepted_by
       expect(@challenge.state).to eq ChallengeState::ACCEPTED
     end
     it 'requires accepted_by' do
@@ -106,27 +106,78 @@ describe Challenge do
     before do
       @challenge = Fabricate(:challenge)
     end
-    it 'can be declineed' do
+    it 'can be declined' do
       declined_by = @challenge.challenged.first
       @challenge.decline!(declined_by)
-      expect(@challenge.declined_by).to eq declined_by
+      expect(@challenge.updated_by).to eq declined_by
       expect(@challenge.state).to eq ChallengeState::DECLINED
     end
     it 'requires declined_by' do
       @challenge.state = ChallengeState::DECLINED
       expect(@challenge).to_not be_valid
     end
-    it 'cannot be declineed by another player' do
+    it 'cannot be declined by another player' do
       expect do
         @challenge.decline!(@challenge.challengers.first)
       end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challenged.map(&:user_name).join(' ')} can decline this challenge./
     end
-    it 'cannot be declineed twice' do
+    it 'cannot be declined twice' do
       declined_by = @challenge.challenged.first
       @challenge.decline!(declined_by)
       expect do
         @challenge.decline!(declined_by)
       end.to raise_error RuntimeError, /Challenge has already been declined./
+    end
+  end
+  context '#cancel!' do
+    before do
+      @challenge = Fabricate(:challenge)
+    end
+    it 'can be canceled' do
+      canceled_by = @challenge.challengers.first
+      @challenge.cancel!(canceled_by)
+      expect(@challenge.updated_by).to eq canceled_by
+      expect(@challenge.state).to eq ChallengeState::CANCELED
+    end
+    it 'requires canceled_by' do
+      @challenge.state = ChallengeState::CANCELED
+      expect(@challenge).to_not be_valid
+    end
+    it 'cannot be canceled_by by another player' do
+      expect do
+        @challenge.cancel!(@challenge.challenged.first)
+      end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challengers.map(&:user_name).join(' ')} can cancel this challenge./
+    end
+    it 'cannot be canceled_by twice' do
+      canceled_by = @challenge.challengers.first
+      @challenge.cancel!(canceled_by)
+      expect do
+        @challenge.cancel!(canceled_by)
+      end.to raise_error RuntimeError, /Challenge has already been canceled./
+    end
+  end
+  context '#lose!' do
+    before do
+      @challenge = Fabricate(:challenge)
+      @challenge.accept!(@challenge.challenged.first)
+    end
+    it 'can be lost by the challenger' do
+      expect do
+        @challenge.lose!(@challenge.challengers.first)
+      end.to change(Match, :count).by(1)
+      game = Match.last
+      expect(game.challenge).to eq @challenge
+      expect(game.winners).to eq @challenge.challenged
+      expect(game.losers).to eq @challenge.challengers
+    end
+    it 'can be lost by the challenged' do
+      expect do
+        @challenge.lose!(@challenge.challenged.first)
+      end.to change(Match, :count).by(1)
+      game = Match.last
+      expect(game.challenge).to eq @challenge
+      expect(game.winners).to eq @challenge.challengers
+      expect(game.losers).to eq @challenge.challenged
     end
   end
 end

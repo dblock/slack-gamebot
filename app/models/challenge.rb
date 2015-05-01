@@ -4,11 +4,12 @@ class Challenge
 
   field :state, type: String, default: ChallengeState::PROPOSED
   belongs_to :created_by, class_name: 'User', inverse_of: nil
-  belongs_to :accepted_by, class_name: 'User', inverse_of: nil
-  belongs_to :declined_by, class_name: 'User', inverse_of: nil
+  belongs_to :updated_by, class_name: 'User', inverse_of: nil
 
   has_and_belongs_to_many :challengers, class_name: 'User', inverse_of: nil
   has_and_belongs_to_many :challenged, class_name: 'User', inverse_of: nil
+
+  has_one :match
 
   index({ challenger_ids: 1, challenged_ids: 1, state: 1 }, name: 'active_challenge_index')
 
@@ -16,11 +17,8 @@ class Challenge
   validate :validate_opponents_counts
   validate :validate_unique_challenge
 
-  validate :validate_accepted_by
-  validates_presence_of :accepted_by, if: ->(challenge) { challenge.state == ChallengeState::ACCEPTED }
-
-  validate :validate_declined_by
-  validates_presence_of :declined_by, if: ->(challenge) { challenge.state == ChallengeState::DECLINED }
+  validate :validate_updated_by
+  validates_presence_of :updated_by, if: ->(challenge) { challenge.state != ChallengeState::PROPOSED }
 
   # Given a challenger and a list of names splits into two groups, returns users.
   def self.split_teammates_and_opponents(challenger, names, separator = 'with')
@@ -53,12 +51,35 @@ class Challenge
 
   def accept!(challenger)
     fail "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
-    update_attributes!(accepted_by: challenger, state: ChallengeState::ACCEPTED)
+    update_attributes!(updated_by: challenger, state: ChallengeState::ACCEPTED)
   end
 
   def decline!(challenger)
     fail "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
-    update_attributes!(declined_by: challenger, state: ChallengeState::DECLINED)
+    update_attributes!(updated_by: challenger, state: ChallengeState::DECLINED)
+  end
+
+  def cancel!(challenger)
+    fail "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
+    update_attributes!(updated_by: challenger, state: ChallengeState::CANCELED)
+  end
+
+  def lose!(loser)
+    fail 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
+    fail "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+    winners = nil
+    losers = nil
+    if challenged.include?(loser)
+      winners = challengers
+      losers = challenged
+    elsif
+      winners = challenged
+      losers = challengers
+    else
+      fail "Only #{(challenged + challengers).map(&:user_name).join(' or ')} can lose this challenge."
+    end
+    Match.create!(challenge: self, winners: winners, losers: losers)
+    update_attributes!(state: ChallengeState::PLAYED)
   end
 
   def to_s
@@ -97,15 +118,17 @@ class Challenge
     end
   end
 
-  def validate_accepted_by
-    return unless accepted_by && state == ChallengeState::ACCEPTED
-    return if challenged.include?(accepted_by)
-    errors.add(:accepted_by, "Only #{challenged.map(&:user_name).join(' and ')} can accept this challenge.")
-  end
-
-  def validate_declined_by
-    return unless declined_by && state == ChallengeState::DECLINED
-    return if challenged.include?(declined_by)
-    errors.add(:accepted_by, "Only #{challenged.map(&:user_name).join(' and ')} can decline this challenge.")
+  def validate_updated_by
+    case state
+    when ChallengeState::ACCEPTED
+      return if updated_by && challenged.include?(updated_by)
+      errors.add(:accepted_by, "Only #{challenged.map(&:user_name).join(' and ')} can accept this challenge.")
+    when ChallengeState::DECLINED
+      return if updated_by && challenged.include?(updated_by)
+      errors.add(:declined_by, "Only #{challenged.map(&:user_name).join(' and ')} can decline this challenge.")
+    when ChallengeState::CANCELED
+      return if updated_by && challengers.include?(updated_by)
+      errors.add(:declined_by, "Only #{challengers.map(&:user_name).join(' and ')} can cancel this challenge.")
+    end
   end
 end

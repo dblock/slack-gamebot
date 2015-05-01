@@ -57,20 +57,46 @@ describe SlackGamebot::Dispatch::Message do
         end
       end
     end
-    context 'with a challenge' do
+    context 'with a challenged' do
       before do
         @challenged = Fabricate(:user, user_name: 'username')
         @challenge = Fabricate(:challenge, challenged: [@challenged])
       end
       it 'accept' do
-        expect(subject).to receive(:message).with('channel', "#{@challenged.user_name} accepted #{@challenge}.")
+        expect(subject).to receive(:message).with('channel', "#{@challenge.challenged.map(&:user_name).join(' and ')} accepted #{@challenge.challengers.map(&:user_name).join(' and ')} challenge.")
         app.send(:message, text: 'gamebot accept', channel: 'channel', user: @challenged.user_id)
         expect(@challenge.reload.state).to eq ChallengeState::ACCEPTED
       end
       it 'decline' do
-        expect(subject).to receive(:message).with('channel', "#{@challenged.user_name} declined #{@challenge}.")
+        expect(subject).to receive(:message).with('channel', "#{@challenge.challenged.map(&:user_name).join(' and ')} declined #{@challenge.challengers.map(&:user_name).join(' and ')} challenge.")
         app.send(:message, text: 'gamebot decline', channel: 'channel', user: @challenged.user_id)
         expect(@challenge.reload.state).to eq ChallengeState::DECLINED
+      end
+    end
+    context 'with a challenger' do
+      before do
+        @challenged = Fabricate(:user, user_name: 'username')
+        @challenge = Fabricate(:challenge, challengers: [@challenged])
+      end
+      it 'cancel' do
+        expect(subject).to receive(:message).with('channel', "#{@challenge.challengers.map(&:user_name).join(' and ')} canceled a challenge against #{@challenge.challenged.map(&:user_name).join(' and ')}.")
+        app.send(:message, text: 'gamebot cancel', channel: 'channel', user: @challenged.user_id)
+        expect(@challenge.reload.state).to eq ChallengeState::CANCELED
+      end
+    end
+    context 'with an accepted challenge' do
+      before do
+        @challenged = Fabricate(:user, user_name: 'username')
+        @challenge = Fabricate(:challenge, challenged: [@challenged])
+        @challenge.accept!(@challenged)
+      end
+      it 'lose' do
+        expect(subject).to receive(:message).with('channel', "Match has been recorded! #{@challenge.challengers.map(&:user_name).join(' and ')} defeated #{@challenge.challenged.map(&:user_name).join(' and ')}.")
+        app.send(:message, text: 'gamebot lost', channel: 'channel', user: @challenged.user_id)
+        @challenge.reload
+        expect(@challenge.state).to eq ChallengeState::PLAYED
+        expect(@challenge.match.winners).to eq @challenge.challengers
+        expect(@challenge.match.losers).to eq @challenge.challenged
       end
     end
   end

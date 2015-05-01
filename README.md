@@ -68,6 +68,36 @@ gamebot challenge @WangHoe @ZhangJike with @DengYaping
 Victor Barna and Deng Yaping challenged Wang Hoe and Zhang Jike to a match!
 ```
 
+#### gamebot accept
+
+Accept a challenge.
+
+```
+gamebot accept
+
+Wang Hoe and Zhang Jike accepted Victor Barna and Deng Yaping's challenge.
+```
+
+#### gamebot decline
+
+Decline a challenge.
+
+```
+gamebot decline
+
+Wang Hoe and Zhang Jike declined Victor Barna and Deng Yaping's challenge.
+```
+
+#### gamebot cancel
+
+Cancel a challenge.
+
+```
+gamebot cancel
+
+Victor Barna and Deng Yaping canceled a challenge against Wang Hoe and Zhang Jike.
+```
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md).

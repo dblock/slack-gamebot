@@ -19,6 +19,10 @@ module SlackGamebot
           SlackGamebot::Dispatch::Message.accept_challenge data
         when 'decline'
           SlackGamebot::Dispatch::Message.decline_challenge data
+        when 'cancel'
+          SlackGamebot::Dispatch::Message.cancel_challenge data
+        when 'lost'
+          SlackGamebot::Dispatch::Message.lose_challenge data
         else
           SlackGamebot::Dispatch::Message.message data.channel, "Sorry <@#{data.user}>, I don't understand that command!"
         end if bot_name == SlackGamebot.config.user
@@ -39,7 +43,7 @@ module SlackGamebot
         challenge = Challenge.find_by_user(challenger)
         if challenge
           challenge.accept!(challenger)
-          SlackGamebot::Dispatch::Message.message data.channel, "#{challenger.user_name} accepted #{challenge}."
+          SlackGamebot::Dispatch::Message.message data.channel,  "#{challenge.challenged.map(&:user_name).join(' and ')} accepted #{challenge.challengers.map(&:user_name).join(' and ')} challenge."
         else
           SlackGamebot::Dispatch::Message.message data.channel, 'No challenge to accept!'
         end
@@ -50,9 +54,31 @@ module SlackGamebot
         challenge = Challenge.find_by_user(challenger)
         if challenge
           challenge.decline!(challenger)
-          SlackGamebot::Dispatch::Message.message data.channel, "#{challenger.user_name} declined #{challenge}."
+          SlackGamebot::Dispatch::Message.message data.channel,  "#{challenge.challenged.map(&:user_name).join(' and ')} declined #{challenge.challengers.map(&:user_name).join(' and ')} challenge."
         else
           SlackGamebot::Dispatch::Message.message data.channel, 'No challenge to decline!'
+        end
+      end
+
+      def self.cancel_challenge(data)
+        challenger = User.find_create_or_update_by_slack_id!(data.user)
+        challenge = Challenge.find_by_user(challenger)
+        if challenge
+          challenge.cancel!(challenger)
+          SlackGamebot::Dispatch::Message.message data.channel,  "#{challenge.challengers.map(&:user_name).join(' and ')} canceled a challenge against #{challenge.challenged.map(&:user_name).join(' and ')}."
+        else
+          SlackGamebot::Dispatch::Message.message data.channel, 'No challenge to cancel!'
+        end
+      end
+
+      def self.lose_challenge(data)
+        challenger = User.find_create_or_update_by_slack_id!(data.user)
+        challenge = Challenge.find_by_user(challenger)
+        if challenge
+          challenge.lose!(challenger)
+          SlackGamebot::Dispatch::Message.message data.channel, "Match has been recorded! #{challenge.match}."
+        else
+          SlackGamebot::Dispatch::Message.message data.channel, 'No challenge to lose!'
         end
       end
 
