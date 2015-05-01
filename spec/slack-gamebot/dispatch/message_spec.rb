@@ -4,6 +4,7 @@ describe SlackGamebot::Dispatch::Message do
   let(:app) { SlackGamebot::App.new }
   before do
     SlackGamebot.config.user = 'gamebot'
+    allow(Giphy).to receive(:random)
   end
   it 'gamebot' do
     expect(subject).to receive(:message).with('channel', SlackGamebot::ASCII)

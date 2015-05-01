@@ -38,7 +38,7 @@ class User
       rank += 1 if index > 0 && players[index - 1].elo != player.elo
       leaderboard << "#{rank}. #{player}"
     end
-    leaderboard.join("\n")
+    leaderboard.any? ? leaderboard.join("\n") : 'No players.'
   end
 
   def to_s

@@ -16,6 +16,8 @@ Deploy this application to Heroku with MongoLab or Compose or another similar se
 heroku config:add SLACK_API_TOKEN=...
 ```
 
+While it's currently not necessary, uyou may need to set _GIPHY_API_KEY_ in the future, see [github.com/Giphy/GiphyAPI](https://github.com/Giphy/GiphyAPI) for details.
+
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 ## Usage

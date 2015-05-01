@@ -10,7 +10,7 @@ module SlackGamebot
         when nil
           SlackGamebot::Dispatch::Message.message data.channel, SlackGamebot::ASCII
         when 'hi'
-          SlackGamebot::Dispatch::Message.message data.channel, "Hi <@#{data.user}>!"
+          SlackGamebot::Dispatch::Message.message_with_gif data.channel, "Hi <@#{data.user}>!", 'hi'
         when 'register'
           SlackGamebot::Dispatch::Message.register_user data
         when 'challenge'
@@ -26,7 +26,7 @@ module SlackGamebot
         when 'leaderboard'
           SlackGamebot::Dispatch::Message.leaderboard data, arguments
         else
-          SlackGamebot::Dispatch::Message.message data.channel, "Sorry <@#{data.user}>, I don't understand that command!"
+          SlackGamebot::Dispatch::Message.message_with_gif data.channel, "Sorry <@#{data.user}>, I don't understand that command!", 'idiot'
         end if bot_name == SlackGamebot.config.user
       rescue Mongoid::Errors::Validations => e
         raise ArgumentError, e.document.errors.first[1]
@@ -37,7 +37,7 @@ module SlackGamebot
       def self.challenge(data, _command, arguments)
         challenger = User.find_create_or_update_by_slack_id!(data.user)
         challenge = Challenge.create_from_teammates_and_opponents!(challenger, arguments)
-        SlackGamebot::Dispatch::Message.message data.channel, "#{challenge.challengers.map(&:user_name).join(' and ')} challenged #{challenge.challenged.map(&:user_name).join(' and ')} to a match!"
+        SlackGamebot::Dispatch::Message.message_with_gif data.channel, "#{challenge.challengers.map(&:user_name).join(' and ')} challenged #{challenge.challenged.map(&:user_name).join(' and ')} to a match!", 'challenge'
       end
 
       def self.accept_challenge(data)
@@ -45,7 +45,7 @@ module SlackGamebot
         challenge = Challenge.find_by_user(challenger)
         if challenge
           challenge.accept!(challenger)
-          SlackGamebot::Dispatch::Message.message data.channel,  "#{challenge.challenged.map(&:user_name).join(' and ')} accepted #{challenge.challengers.map(&:user_name).join(' and ')} challenge."
+          SlackGamebot::Dispatch::Message.message_with_gif data.channel,  "#{challenge.challenged.map(&:user_name).join(' and ')} accepted #{challenge.challengers.map(&:user_name).join(' and ')} challenge.", 'game'
         else
           SlackGamebot::Dispatch::Message.message data.channel, 'No challenge to accept!'
         end
@@ -56,7 +56,7 @@ module SlackGamebot
         challenge = Challenge.find_by_user(challenger)
         if challenge
           challenge.decline!(challenger)
-          SlackGamebot::Dispatch::Message.message data.channel,  "#{challenge.challenged.map(&:user_name).join(' and ')} declined #{challenge.challengers.map(&:user_name).join(' and ')} challenge."
+          SlackGamebot::Dispatch::Message.message_with_gif data.channel,  "#{challenge.challenged.map(&:user_name).join(' and ')} declined #{challenge.challengers.map(&:user_name).join(' and ')} challenge.", 'no'
         else
           SlackGamebot::Dispatch::Message.message data.channel, 'No challenge to decline!'
         end
@@ -67,7 +67,7 @@ module SlackGamebot
         challenge = Challenge.find_by_user(challenger)
         if challenge
           challenge.cancel!(challenger)
-          SlackGamebot::Dispatch::Message.message data.channel,  "#{challenge.challengers.map(&:user_name).join(' and ')} canceled a challenge against #{challenge.challenged.map(&:user_name).join(' and ')}."
+          SlackGamebot::Dispatch::Message.message_with_gif data.channel,  "#{challenge.challengers.map(&:user_name).join(' and ')} canceled a challenge against #{challenge.challenged.map(&:user_name).join(' and ')}.", 'chicken'
         else
           SlackGamebot::Dispatch::Message.message data.channel, 'No challenge to cancel!'
         end
@@ -78,7 +78,7 @@ module SlackGamebot
         challenge = Challenge.find_by_user(challenger)
         if challenge
           challenge.lose!(challenger)
-          SlackGamebot::Dispatch::Message.message data.channel, "Match has been recorded! #{challenge.match}."
+          SlackGamebot::Dispatch::Message.message_with_gif data.channel, "Match has been recorded! #{challenge.match}.", 'loser'
         else
           SlackGamebot::Dispatch::Message.message data.channel, 'No challenge to lose!'
         end
@@ -87,13 +87,14 @@ module SlackGamebot
       def self.register_user(data)
         ts = Time.now.utc
         user = User.find_create_or_update_by_slack_id!(data.user)
-        if user.created_at >= ts
-          SlackGamebot::Dispatch::Message.message data.channel, "Welcome <@#{data.user}>! You're ready to play."
-        elsif user.updated_at >= ts
-          SlackGamebot::Dispatch::Message.message data.channel, "Welcome back <@#{data.user}>, I've updated your registration."
-        else
-          SlackGamebot::Dispatch::Message.message data.channel, "Welcome back <@#{data.user}>, you're already registered."
+        message = if user.created_at >= ts
+                    "Welcome <@#{data.user}>! You're ready to play."
+                  elsif user.updated_at >= ts
+                    "Welcome back <@#{data.user}>, I've updated your registration."
+                  else
+                    "Welcome back <@#{data.user}>, you're already registered."
         end
+        SlackGamebot::Dispatch::Message.message_with_gif data.channel, message, 'welcome'
         user
       end
 
@@ -110,12 +111,17 @@ module SlackGamebot
 
       def self.parse_command(text)
         parts = text.gsub(/[^[:word:]<>@\s]/, '').split.reject(&:blank?) if text
-        bot_name = parts.first if parts
-        [bot_name, parts[1], parts[2..parts.length]]
+        [parts.first, parts[1], parts[2..parts.length]] if parts
       end
 
       def self.message(channel, text)
         Slack.chat_postMessage(channel: channel, text: text)
+      end
+
+      def self.message_with_gif(channel, text, keywords)
+        gif = Giphy.random(keywords)
+        text = text + "\n" + gif.image_url.to_s if gif
+        SlackGamebot::Dispatch::Message.message channel, text
       end
     end
   end

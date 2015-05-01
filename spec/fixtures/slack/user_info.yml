@@ -101,4 +101,346 @@ http_interactions:
       string: '{"ok":false,"error":"invalid_auth"}'
     http_version: 
   recorded_at: Wed, 29 Apr 2015 16:11:44 GMT
+- request:
+    method: get
+    uri: http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=welcome
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Accept-Ranges:
+      - bytes
+      - bytes
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type, Accept
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      - '0'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 01 May 2015 21:00:45 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      - 1.1 varnish
+      X-Powered-By:
+      - PHP/5.5.9-1ubuntu4
+      X-Varnish:
+      - '1526114703'
+      - '925560860'
+      Content-Length:
+      - '338'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"gif","id":"zhbrTTpmSCYog","url":"http:\/\/giphy.com\/gifs\/internet-welcome-zhbrTTpmSCYog","image_original_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/zhbrTTpmSCYog\/giphy.gif","image_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/zhbrTTpmSCYog\/giphy.gif","image_mp4_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/zhbrTTpmSCYog\/giphy.mp4","image_frames":"4","image_width":"480","image_height":"360","fixed_height_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/zhbrTTpmSCYog\/200_d.gif","fixed_height_downsampled_width":"267","fixed_height_downsampled_height":"200","fixed_width_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/zhbrTTpmSCYog\/200w_d.gif","fixed_width_downsampled_width":"200","fixed_width_downsampled_height":"150","fixed_height_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/zhbrTTpmSCYog\/100.gif","fixed_height_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/zhbrTTpmSCYog\/100_s.gif","fixed_height_small_width":"133","fixed_height_small_height":"100","fixed_width_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/zhbrTTpmSCYog\/100w.gif","fixed_width_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/zhbrTTpmSCYog\/100w_s.gif","fixed_width_small_width":"100","fixed_width_small_height":"75"},"meta":{"status":200,"msg":"OK"}}'
+    http_version: 
+  recorded_at: Fri, 01 May 2015 21:01:50 GMT
+- request:
+    method: get
+    uri: http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=challenge
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Accept-Ranges:
+      - bytes
+      - bytes
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type, Accept
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      - '0'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 01 May 2015 21:02:40 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      - 1.1 varnish
+      X-Powered-By:
+      - PHP/5.5.9-1ubuntu4
+      X-Varnish:
+      - '1559561978'
+      - '375781905'
+      Content-Length:
+      - '348'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"gif","id":"V8ZPN5JgatCRq","url":"http:\/\/giphy.com\/gifs\/face-challenge-cinnamon-V8ZPN5JgatCRq","image_original_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/V8ZPN5JgatCRq\/giphy.gif","image_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/V8ZPN5JgatCRq\/giphy.gif","image_mp4_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/V8ZPN5JgatCRq\/giphy.mp4","image_frames":"16","image_width":"255","image_height":"205","fixed_height_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/V8ZPN5JgatCRq\/200_d.gif","fixed_height_downsampled_width":"249","fixed_height_downsampled_height":"200","fixed_width_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/V8ZPN5JgatCRq\/200w_d.gif","fixed_width_downsampled_width":"200","fixed_width_downsampled_height":"161","fixed_height_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/V8ZPN5JgatCRq\/100.gif","fixed_height_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/V8ZPN5JgatCRq\/100_s.gif","fixed_height_small_width":"124","fixed_height_small_height":"100","fixed_width_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/V8ZPN5JgatCRq\/100w.gif","fixed_width_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/V8ZPN5JgatCRq\/100w_s.gif","fixed_width_small_width":"100","fixed_width_small_height":"80"},"meta":{"status":200,"msg":"OK"}}'
+    http_version: 
+  recorded_at: Fri, 01 May 2015 21:01:51 GMT
+- request:
+    method: get
+    uri: http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=game
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Accept-Ranges:
+      - bytes
+      - bytes
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type, Accept
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      - '0'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 01 May 2015 21:02:51 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      - 1.1 varnish
+      X-Powered-By:
+      - PHP/5.5.9-1ubuntu4.7
+      X-Varnish:
+      - '1161395570'
+      - '835416638'
+      Content-Length:
+      - '341'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"gif","id":"VrBWl1FlS1wRO","url":"http:\/\/giphy.com\/gifs\/cat-game-VrBWl1FlS1wRO","image_original_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/VrBWl1FlS1wRO\/giphy.gif","image_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/VrBWl1FlS1wRO\/giphy.gif","image_mp4_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/VrBWl1FlS1wRO\/giphy.mp4","image_frames":"143","image_width":"400","image_height":"225","fixed_height_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/VrBWl1FlS1wRO\/200_d.gif","fixed_height_downsampled_width":"356","fixed_height_downsampled_height":"200","fixed_width_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/VrBWl1FlS1wRO\/200w_d.gif","fixed_width_downsampled_width":"200","fixed_width_downsampled_height":"113","fixed_height_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/VrBWl1FlS1wRO\/100.gif","fixed_height_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/VrBWl1FlS1wRO\/100_s.gif","fixed_height_small_width":"178","fixed_height_small_height":"100","fixed_width_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/VrBWl1FlS1wRO\/100w.gif","fixed_width_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/VrBWl1FlS1wRO\/100w_s.gif","fixed_width_small_width":"100","fixed_width_small_height":"56"},"meta":{"status":200,"msg":"OK"}}'
+    http_version: 
+  recorded_at: Fri, 01 May 2015 21:01:51 GMT
+- request:
+    method: get
+    uri: http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=no
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Accept-Ranges:
+      - bytes
+      - bytes
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type, Accept
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      - '0'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 01 May 2015 21:02:46 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      - 1.1 varnish
+      X-Powered-By:
+      - PHP/5.5.9-1ubuntu4
+      X-Varnish:
+      - '1947377598'
+      - '925560918'
+      Content-Length:
+      - '345'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"gif","id":"8HoHlbs5rhsLC","url":"http:\/\/giphy.com\/gifs\/no-star-trek-horrified-8HoHlbs5rhsLC","image_original_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/8HoHlbs5rhsLC\/giphy.gif","image_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/8HoHlbs5rhsLC\/giphy.gif","image_mp4_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/8HoHlbs5rhsLC\/giphy.mp4","image_frames":"88","image_width":"250","image_height":"197","fixed_height_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/8HoHlbs5rhsLC\/200_d.gif","fixed_height_downsampled_width":"254","fixed_height_downsampled_height":"200","fixed_width_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/8HoHlbs5rhsLC\/200w_d.gif","fixed_width_downsampled_width":"200","fixed_width_downsampled_height":"158","fixed_height_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/8HoHlbs5rhsLC\/100.gif","fixed_height_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/8HoHlbs5rhsLC\/100_s.gif","fixed_height_small_width":"127","fixed_height_small_height":"100","fixed_width_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/8HoHlbs5rhsLC\/100w.gif","fixed_width_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/8HoHlbs5rhsLC\/100w_s.gif","fixed_width_small_width":"100","fixed_width_small_height":"79"},"meta":{"status":200,"msg":"OK"}}'
+    http_version: 
+  recorded_at: Fri, 01 May 2015 21:01:52 GMT
+- request:
+    method: get
+    uri: http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=chicken
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Accept-Ranges:
+      - bytes
+      - bytes
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type, Accept
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      - '0'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 01 May 2015 21:00:47 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      - 1.1 varnish
+      X-Powered-By:
+      - PHP/5.5.9-1ubuntu4
+      X-Varnish:
+      - '1526114757'
+      - '494257000'
+      Content-Length:
+      - '346'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"gif","id":"6FMR2mCNClNK0","url":"http:\/\/giphy.com\/gifs\/sexy-food-chicken-6FMR2mCNClNK0","image_original_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/6FMR2mCNClNK0\/giphy.gif","image_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/6FMR2mCNClNK0\/giphy.gif","image_mp4_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/6FMR2mCNClNK0\/giphy.mp4","image_frames":"13","image_width":"400","image_height":"225","fixed_height_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/6FMR2mCNClNK0\/200_d.gif","fixed_height_downsampled_width":"356","fixed_height_downsampled_height":"200","fixed_width_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/6FMR2mCNClNK0\/200w_d.gif","fixed_width_downsampled_width":"200","fixed_width_downsampled_height":"113","fixed_height_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/6FMR2mCNClNK0\/100.gif","fixed_height_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/6FMR2mCNClNK0\/100_s.gif","fixed_height_small_width":"178","fixed_height_small_height":"100","fixed_width_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/6FMR2mCNClNK0\/100w.gif","fixed_width_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/6FMR2mCNClNK0\/100w_s.gif","fixed_width_small_width":"100","fixed_width_small_height":"56"},"meta":{"status":200,"msg":"OK"}}'
+    http_version: 
+  recorded_at: Fri, 01 May 2015 21:01:52 GMT
+- request:
+    method: get
+    uri: http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=loser
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Accept-Ranges:
+      - bytes
+      - bytes
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type, Accept
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      - '0'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 01 May 2015 21:02:52 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      - 1.1 varnish
+      X-Powered-By:
+      - PHP/5.5.9-1ubuntu4
+      X-Varnish:
+      - '1161395609'
+      - '925560943'
+      Content-Length:
+      - '337'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"gif","id":"O9w5Sqeb0AZgI","url":"http:\/\/giphy.com\/gifs\/love-like-loser-O9w5Sqeb0AZgI","image_original_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/O9w5Sqeb0AZgI\/giphy.gif","image_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/O9w5Sqeb0AZgI\/giphy.gif","image_mp4_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/O9w5Sqeb0AZgI\/giphy.mp4","image_frames":"24","image_width":"200","image_height":"150","fixed_height_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/O9w5Sqeb0AZgI\/200_d.gif","fixed_height_downsampled_width":"267","fixed_height_downsampled_height":"200","fixed_width_downsampled_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/O9w5Sqeb0AZgI\/200w_d.gif","fixed_width_downsampled_width":"200","fixed_width_downsampled_height":"150","fixed_height_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/O9w5Sqeb0AZgI\/100.gif","fixed_height_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/O9w5Sqeb0AZgI\/100_s.gif","fixed_height_small_width":"133","fixed_height_small_height":"100","fixed_width_small_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/O9w5Sqeb0AZgI\/100w.gif","fixed_width_small_still_url":"http:\/\/s3.amazonaws.com\/giphygifs\/media\/O9w5Sqeb0AZgI\/100w_s.gif","fixed_width_small_width":"100","fixed_width_small_height":"75"},"meta":{"status":200,"msg":"OK"}}'
+    http_version: 
+  recorded_at: Fri, 01 May 2015 21:01:52 GMT
 recorded_with: VCR 2.9.3

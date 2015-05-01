@@ -41,6 +41,9 @@ describe User do
     end
   end
   context '#leaderboard' do
+    it 'returns no players' do
+      expect(User.leaderboard).to eq 'No players.'
+    end
     it 'ranks incrementally' do
       user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
       user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
