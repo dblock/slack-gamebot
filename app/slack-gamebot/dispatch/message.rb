@@ -113,7 +113,7 @@ module SlackGamebot
 
       def self.parse_command(text)
         parts = text.gsub(/[^[:word:]<>@\s]/, '').split.reject(&:blank?) if text
-        [parts.first, parts[1], parts[2..parts.length]] if parts
+        [parts.first.downcase, parts[1].try(:downcase), parts[2..parts.length]] if parts
       end
 
       def self.message(channel, text)
