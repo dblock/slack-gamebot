@@ -11,6 +11,7 @@ gem 'puma'
 group :development, :test do
   gem 'rake', '~> 10.4'
   gem 'rubocop', '0.30.0'
+  gem 'foreman'
 end
 
 group :test do

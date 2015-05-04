@@ -10,15 +10,11 @@ A generic game bot for slack. Works for ping-pong (2, 4 or more players), chess,
 Create a new Bot Integration under [services/new/bot](http://slack.com/services/new/bot). Note the API token.
 You will be able to invoke gamebot by the name you give it in the UI above.
 
-Deploy this application to Heroku with MongoLab or Compose or another similar service. Set _SLACK_API_TOKEN_.
+Run `SLACK_API_TOKEN=<your API token> foreman start`
 
-```
-heroku config:add SLACK_API_TOKEN=...
-```
+## Production Deployment
 
-While it's currently not necessary, uyou may need to set _GIPHY_API_KEY_ in the future, see [github.com/Giphy/GiphyAPI](https://github.com/Giphy/GiphyAPI) for details.
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+See [DEPLOYMENT](DEPLOYMENT.md)
 
 ## Usage
 
