@@ -6,7 +6,7 @@ module SlackGamebot
         challenge = ::Challenge.find_by_user(challenger)
         if challenge
           challenge.cancel!(challenger)
-          send_message_with_gif data.channel,  "#{challenge.challengers.map(&:user_name).join(' and ')} canceled a challenge against #{challenge.challenged.map(&:user_name).join(' and ')}.", 'chicken'
+          send_message_with_gif data.channel, "#{challenge.challengers.map(&:user_name).join(' and ')} canceled a challenge against #{challenge.challenged.map(&:user_name).join(' and ')}.", 'chicken'
         else
           send_message data.channel, 'No challenge to cancel!'
         end
