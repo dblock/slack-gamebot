@@ -10,7 +10,7 @@ A generic game bot for slack. Works for ping-pong (2, 4 or more players), chess,
 Create a new Bot Integration under [services/new/bot](http://slack.com/services/new/bot). Note the API token.
 You will be able to invoke gamebot by the name you give it in the UI above.
 
-Run `SLACK_API_TOKEN=<your API token> foreman start`
+Run `SLACK_API_TOKEN=<your API token> GAMEBOT_SECRET=secret foreman start`
 
 ## Production Deployment
 
@@ -115,6 +115,16 @@ gamebot leaderboard
 ```
 
 The leaderboard contains 3 topmost players ranked by [Elo](http://en.wikipedia.org/wiki/Elo_rating_system), use _leaderboard 10_ or _leaderboard infinity_ to see 10 players or more, respectively.
+
+#### gamebot reset [secret]
+
+Direct-message gamebot to reset all users and pending challenges.
+
+```
+gamebot reset <secret>
+
+Welcome to the new season!
+```
 
 ## Contributing
 

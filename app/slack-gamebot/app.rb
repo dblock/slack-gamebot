@@ -9,6 +9,7 @@ module SlackGamebot
     def initialize
       SlackGamebot.configure do |config|
         config.token = ENV['SLACK_API_TOKEN'] || fail("Missing ENV['SLACK_API_TOKEN'].")
+        config.secret = ENV['GAMEBOT_SECRET'] || warn("Missing ENV['GAMEBOT_SECRET'].")
       end
       Slack.configure do |config|
         config.token = SlackGamebot.config.token

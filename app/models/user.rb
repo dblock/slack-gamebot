@@ -41,6 +41,10 @@ class User
     leaderboard.any? ? leaderboard.join("\n") : 'No players.'
   end
 
+  def self.reset_all!
+    User.all.set(wins: 0, losses: 0, elo: 0, tau: 0)
+  end
+
   def to_s
     "#{user_name}: #{wins} win#{wins != 1 ? 's' : ''}, #{losses} loss#{losses != 1 ? 'es' : ''} (elo: #{elo})"
   end

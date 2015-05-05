@@ -72,4 +72,21 @@ describe User do
       expect(User.leaderboard).to eq "1. #{user1}\n2. #{user2}"
     end
   end
+  context '#reset_all' do
+    it 'resets all user stats' do
+      user1 = Fabricate(:user, elo: 48, losses: 1, wins: 2, tau: 0.5)
+      user2 = Fabricate(:user, elo: 54, losses: 2, wins: 1, tau: 1.5)
+      User.reset_all!
+      user1.reload
+      user2.reload
+      expect(user1.wins).to eq 0
+      expect(user1.losses).to eq 0
+      expect(user1.tau).to eq 0
+      expect(user1.elo).to eq 0
+      expect(user2.wins).to eq 0
+      expect(user2.losses).to eq 0
+      expect(user2.tau).to eq 0
+      expect(user2.elo).to eq 0
+    end
+  end
 end

@@ -16,6 +16,14 @@ Set SLACK_API_TOKEN from the Bot integration settings on Slack.
 heroku config:add SLACK_API_TOKEN=...
 ```
 
+#### GAMEBOT_SECRET
+
+DM Slack-Gamebot using this secret to perform a season reset. Only tell GameBot admins.
+
+```
+heroku config:add GAMEBOT_SECRET=...
+```
+
 #### GIPHY_API_KEY
 
 Slack-Gamebot replies with animated GIFs. While it's currently not necessary, uyou may need to set GIPHY_API_KEY in the future, see [github.com/Giphy/GiphyAPI](https://github.com/Giphy/GiphyAPI) for details.
