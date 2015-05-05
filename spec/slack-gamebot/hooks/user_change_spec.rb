@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SlackGamebot::Dispatch::UserChange do
+describe SlackGamebot::Hooks::UserChange do
   let(:app) { SlackGamebot::App.new }
   context 'with a user' do
     before do

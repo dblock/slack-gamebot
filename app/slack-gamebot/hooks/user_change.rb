@@ -1,7 +1,7 @@
 module SlackGamebot
-  module Dispatch
+  module Hooks
     module UserChange
-      extend Hook
+      extend Base
 
       def user_change(data)
         data = Hashie::Mash.new(data)

@@ -1,7 +1,8 @@
 require 'slack-gamebot/version'
 require 'slack-gamebot/ascii'
 require 'slack-gamebot/config'
-require 'slack-gamebot/dispatch'
+require 'slack-gamebot/hooks'
+require 'slack-gamebot/commands'
 require 'slack-gamebot/app'
 require 'models'
 

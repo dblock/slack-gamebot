@@ -6,7 +6,7 @@ require 'rspec'
 require 'config/environment'
 require 'slack-gamebot'
 
-Dir[File.join(File.dirname(__FILE__), 'support', '*.rb')].each do |file|
+Dir[File.join(File.dirname(__FILE__), 'support', '**/*.rb')].each do |file|
   require file
 end
 

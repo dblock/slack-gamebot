@@ -2,9 +2,9 @@ module SlackGamebot
   class App
     cattr_accessor :hooks
 
-    include SlackGamebot::Dispatch::UserChange
-    include SlackGamebot::Dispatch::Hello
-    include SlackGamebot::Dispatch::Message
+    include SlackGamebot::Hooks::UserChange
+    include SlackGamebot::Hooks::Hello
+    include SlackGamebot::Hooks::Message
 
     def initialize
       SlackGamebot.configure do |config|

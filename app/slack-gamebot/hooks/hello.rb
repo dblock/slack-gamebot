@@ -1,7 +1,7 @@
 module SlackGamebot
-  module Dispatch
+  module Hooks
     module Hello
-      extend Hook
+      extend Base
 
       def hello(_data)
         logger.info "Successfully connected to #{SlackGamebot.config.url}."

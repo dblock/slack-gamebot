@@ -30,7 +30,7 @@ class Challenge
       if name == separator
         current_side = teammates
       else
-        user = User.find_by_slack_mention(name)
+        user = ::User.find_by_slack_mention(name)
         fail ArgumentError, "I don't know who #{name} is! Ask them to _#{SlackGamebot.config.user} register_." unless user
         current_side << user
       end
@@ -113,7 +113,7 @@ class Challenge
 
   def validate_unique_challenge
     (challengers + challenged).each do |player|
-      existing_challenge = Challenge.find_by_user(player)
+      existing_challenge = ::Challenge.find_by_user(player)
       next unless existing_challenge.present?
       next if existing_challenge == self
       errors.add(:challenge, "#{player.user_name} can't play. There's already #{existing_challenge}.")
