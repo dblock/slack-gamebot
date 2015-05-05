@@ -60,7 +60,7 @@ class Challenge
   end
 
   def cancel!(challenger)
-    fail "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
+    fail "Challenge has already been #{state}." unless [ChallengeState::PROPOSED, ChallengeState::ACCEPTED].include?(state)
     update_attributes!(updated_by: challenger, state: ChallengeState::CANCELED)
   end
 
