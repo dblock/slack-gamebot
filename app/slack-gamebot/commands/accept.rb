@@ -6,7 +6,7 @@ module SlackGamebot
         challenge = ::Challenge.find_by_user(challenger)
         if challenge
           challenge.accept!(challenger)
-          send_message_with_gif data.channel, "#{challenge.challenged.map(&:user_name).join(' and ')} accepted #{challenge.challengers.map(&:user_name).join(' and ')} challenge.", 'game'
+          send_message_with_gif data.channel, "#{challenge.challenged.map(&:user_name).join(' and ')} accepted #{challenge.challengers.map(&:user_name).join(' and ')}'s challenge.", 'game'
         else
           send_message data.channel, 'No challenge to accept!'
         end
