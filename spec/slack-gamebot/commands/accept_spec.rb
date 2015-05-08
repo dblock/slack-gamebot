@@ -5,7 +5,7 @@ describe SlackGamebot::Commands::Accept, vcr: { cassette_name: 'user_info' } do
   let!(:challenge) { Fabricate(:challenge, challenged: [challenged]) }
   it 'accepts a challenge' do
     expect(message: 'gamebot accept', user: challenged.user_id).to respond_with_slack_message(
-      "#{challenge.challenged.map(&:user_name).join(' and ')} accepted #{challenge.challengers.map(&:user_name).join(' and ')} challenge."
+      "#{challenge.challenged.map(&:user_name).join(' and ')} accepted #{challenge.challengers.map(&:user_name).join(' and ')}'s challenge."
     )
     expect(challenge.reload.state).to eq ChallengeState::ACCEPTED
   end
