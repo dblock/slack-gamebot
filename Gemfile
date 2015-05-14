@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
 
+ruby '2.1.6'
+
 gem 'hashie'
 gem 'slack-api', github: 'aki017/slack-ruby-gem', require: 'slack'
 gem 'mongoid', '~> 4.x'
