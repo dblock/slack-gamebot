@@ -21,4 +21,9 @@ describe SlackGamebot::Commands::Decline, vcr: { cassette_name: 'user_info' } do
       )
     end.to_not change(Challenge, :count)
   end
+  it 'does not butcher names with special characters' do
+    expect(message: 'gamebot challenge Jung-hwa', user: user.user_id).to respond_with_error(
+      "I don't know who Jung-hwa is! Ask them to _gamebot register_."
+    )
+  end
 end

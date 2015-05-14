@@ -16,7 +16,7 @@ module SlackGamebot
       private
 
       def parse_command(text)
-        parts = text.gsub(/[^[:word:]<>@\s]/, '').split.reject(&:blank?) if text
+        parts = text.split.reject(&:blank?) if text
         [parts.first.downcase, parts[1].try(:downcase), parts[2..parts.length]] if parts && parts.any?
       end
 
