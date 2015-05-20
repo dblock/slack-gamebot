@@ -22,6 +22,19 @@ GIT
 GEM
   remote: http://rubygems.org/
   specs:
+    actionpack (4.2.1)
+      actionview (= 4.2.1)
+      activesupport (= 4.2.1)
+      rack (~> 1.6)
+      rack-test (~> 0.6.2)
+      rails-dom-testing (~> 1.0, >= 1.0.5)
+      rails-html-sanitizer (~> 1.0, >= 1.0.1)
+    actionview (4.2.1)
+      activesupport (= 4.2.1)
+      builder (~> 3.1)
+      erubis (~> 2.7.0)
+      rails-dom-testing (~> 1.0, >= 1.0.5)
+      rails-html-sanitizer (~> 1.0, >= 1.0.1)
     activemodel (4.2.1)
       activesupport (= 4.2.1)
       builder (~> 3.1)
@@ -51,6 +64,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
     equalizer (0.0.11)
+    erubis (2.7.0)
     eventmachine (1.0.7)
     fabrication (2.11.2)
     faker (1.4.3)
@@ -99,8 +113,13 @@ GEM
     i18n (0.7.0)
     ice_nine (0.11.1)
     json (1.8.2)
+    kaminari (0.16.3)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     launchy (2.4.3)
       addressable (~> 2.3)
+    loofah (2.0.2)
+      nokogiri (>= 1.5.9)
     mini_portile (0.6.2)
     minitest (5.6.1)
     mongoid (4.0.2)
@@ -134,6 +153,14 @@ GEM
       rack (>= 1.0.0)
     rack-test (0.6.3)
       rack (>= 1.0)
+    rails-deprecated_sanitizer (1.0.3)
+      activesupport (>= 4.2.0.alpha)
+    rails-dom-testing (1.0.6)
+      activesupport (>= 4.2.0.beta, < 5.0)
+      nokogiri (~> 1.6.0)
+      rails-deprecated_sanitizer (>= 1.0.1)
+    rails-html-sanitizer (1.0.2)
+      loofah (~> 2.0)
     rainbow (2.0.0)
     rake (10.4.2)
     representable (2.2.0)
@@ -196,6 +223,7 @@ DEPENDENCIES
   grape-roar
   hashie
   hyperclient
+  kaminari (~> 0.16.1)
   mongoid (~> 4.x)
   puma
   rack-cors

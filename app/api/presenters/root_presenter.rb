@@ -9,6 +9,20 @@ module Api
         "#{base_url(opts)}/"
       end
 
+      link :users do |opts|
+        {
+          href: "#{base_url(opts)}/users{?page,size}",
+          templated: true
+        }
+      end
+
+      link :user do |opts|
+        {
+          href: "#{base_url(opts)}/users/{id}",
+          templated: true
+        }
+      end
+
       private
 
       def base_url(opts)

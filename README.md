@@ -126,6 +126,14 @@ gamebot reset <secret>
 Welcome to the new season!
 ```
 
+## API
+
+Slack-gamebot implements a Hypermedia API. Navigate to the application root to browse through available objects and methods.
+
+![](screenshots/api.png)
+
+We recommend [HyperClient](https://github.com/codegram/hyperclient) to query the API programmatically in Ruby.
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md).

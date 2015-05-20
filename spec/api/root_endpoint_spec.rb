@@ -11,7 +11,7 @@ describe Api::RootEndpoint do
     get '/'
     expect(last_response.status).to eq 200
     links = JSON.parse(last_response.body)['_links']
-    expect(links.keys.sort).to eq(%w(self))
+    expect(links.keys.sort).to eq(%w(self user users))
   end
   it 'follows all links' do
     get '/'

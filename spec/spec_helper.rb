@@ -13,3 +13,4 @@ end
 
 require 'fabrication'
 require 'faker'
+require 'hyperclient'

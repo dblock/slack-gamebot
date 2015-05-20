@@ -10,6 +10,7 @@ gem 'giphy', github: 'dblock/giphy', branch: 'handle-errors-and-redirects'
 gem 'puma'
 gem 'grape-roar'
 gem 'rack-cors'
+gem 'kaminari', '~> 0.16.1', require: 'kaminari/grape'
 
 group :development, :test do
   gem 'rake', '~> 10.4'
