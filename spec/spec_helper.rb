@@ -2,6 +2,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..'))
 
 require 'rubygems'
 require 'rspec'
+require 'rack/test'
 
 require 'config/environment'
 require 'slack-gamebot'

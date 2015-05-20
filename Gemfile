@@ -7,8 +7,9 @@ gem 'slack-api', github: 'aki017/slack-ruby-gem', require: 'slack'
 gem 'mongoid', '~> 4.x'
 gem 'ruby-enum'
 gem 'giphy', github: 'dblock/giphy', branch: 'handle-errors-and-redirects'
-gem 'sinatra'
 gem 'puma'
+gem 'grape-roar'
+gem 'rack-cors'
 
 group :development, :test do
   gem 'rake', '~> 10.4'
@@ -23,4 +24,6 @@ group :test do
   gem 'fabrication'
   gem 'faker'
   gem 'database_cleaner', '~> 1.4'
+  gem 'hyperclient'
+  gem 'rack-test', '~> 0.6.2'
 end

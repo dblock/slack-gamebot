@@ -1,0 +1,6 @@
+require 'grape'
+require 'roar'
+require 'grape-roar'
+require 'api/presenters'
+require 'api/root_endpoint'
+require 'api/middleware'

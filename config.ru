@@ -4,4 +4,4 @@ Thread.new do
   SlackGamebot::App.instance.run
 end
 
-run SlackGamebot::Web
+run Api::Middleware.instance
