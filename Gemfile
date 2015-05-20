@@ -6,7 +6,7 @@ gem 'hashie'
 gem 'slack-api', github: 'aki017/slack-ruby-gem', require: 'slack'
 gem 'mongoid', '~> 4.x'
 gem 'ruby-enum'
-gem 'giphy', '~> 2.0.0'
+gem 'giphy', github: 'dblock/giphy', branch: 'handle-errors-and-redirects'
 gem 'sinatra'
 gem 'puma'
 

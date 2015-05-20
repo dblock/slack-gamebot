@@ -8,6 +8,17 @@ GIT
       faye-websocket (~> 0.9.2)
       multi_json (~> 1.0, >= 1.0.3)
 
+GIT
+  remote: git://github.com/dblock/giphy.git
+  revision: 9a3184f397ce5727772c77335b706a201387b856
+  branch: handle-errors-and-redirects
+  specs:
+    giphy (2.0.0)
+      faraday (~> 0.9)
+      faraday_middleware
+      faraday_middleware-parse_oj (~> 0.3)
+      launchy (~> 2.4)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -48,10 +59,6 @@ GEM
       websocket-driver (>= 0.5.1)
     foreman (0.78.0)
       thor (~> 0.19.1)
-    giphy (2.0.0)
-      faraday (~> 0.9)
-      faraday_middleware-parse_oj (~> 0.3)
-      launchy (~> 2.4)
     hashie (3.4.1)
     i18n (0.7.0)
     json (1.8.2)
@@ -69,7 +76,7 @@ GEM
       optionable (~> 0.2.0)
     multi_json (1.11.0)
     multipart-post (2.0.0)
-    oj (2.12.7)
+    oj (2.12.8)
     optionable (0.2.0)
     origin (2.1.1)
     parser (2.2.0.3)
@@ -130,7 +137,7 @@ DEPENDENCIES
   fabrication
   faker
   foreman
-  giphy (~> 2.0.0)
+  giphy!
   hashie
   mongoid (~> 4.x)
   puma
