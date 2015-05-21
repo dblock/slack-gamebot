@@ -14,7 +14,7 @@ module Api
     end
 
     def call(env)
-      Api::RootEndpoint.call(env)
+      Api::Endpoints::RootEndpoint.call(env)
     end
   end
 end

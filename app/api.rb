@@ -1,7 +1,7 @@
 require 'grape'
 require 'roar'
 require 'grape-roar'
+
 require 'api/presenters'
-require 'api/users_endpoint'
-require 'api/root_endpoint'
+require 'api/endpoints'
 require 'api/middleware'

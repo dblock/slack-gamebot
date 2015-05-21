@@ -11,16 +11,32 @@ module Api
 
       link :users do |opts|
         {
-          href: "#{base_url(opts)}/users{?page,size}",
+          href: "#{base_url(opts)}/users/{?page,size}",
           templated: true
         }
       end
 
-      link :user do |opts|
+      link :challenges do |opts|
         {
-          href: "#{base_url(opts)}/users/{id}",
+          href: "#{base_url(opts)}/challenges/{?page,size}",
           templated: true
         }
+      end
+
+      link :matches do |opts|
+        {
+          href: "#{base_url(opts)}/matches/{?page,size}",
+          templated: true
+        }
+      end
+
+      [:challenge, :match, :user].each do |model|
+        link model do |opts|
+          {
+            href: "#{base_url(opts)}/#{model.to_s.pluralize}/{id}",
+            templated: true
+          }
+        end
       end
 
       private
