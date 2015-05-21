@@ -98,9 +98,15 @@ GEM
       rack-accept
       rack-mount
       virtus (>= 1.0.0)
+    grape-entity (0.4.5)
+      activesupport
+      multi_json (>= 1.3.2)
     grape-roar (0.3.0)
       grape
       roar (>= 1.0)
+    grape-swagger (0.10.1)
+      grape (>= 0.8.0)
+      grape-entity
     hashie (3.4.1)
     hyperclient (0.7.0)
       faraday (~> 0.8)
@@ -221,6 +227,7 @@ DEPENDENCIES
   foreman
   giphy!
   grape-roar
+  grape-swagger
   hashie
   hyperclient
   kaminari (~> 0.16.1)

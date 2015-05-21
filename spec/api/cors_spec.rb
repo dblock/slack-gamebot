@@ -1,11 +1,7 @@
 require 'spec_helper'
 
 describe Api do
-  include Rack::Test::Methods
-
-  def app
-    Api::Middleware.instance
-  end
+  include Api::Test::EndpointTest
 
   context 'CORS' do
     it 'supports options' do
