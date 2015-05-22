@@ -9,7 +9,10 @@ module SlackGamebot
         else
           max = Integer(arguments.first)
         end if arguments.any?
-        send_message data.channel, User.leaderboard(max)
+        message = User.ranked(max).map do |user|
+          "#{user.rank}. #{user}"
+        end.join("\n")
+        send_message data.channel, message
       end
     end
   end

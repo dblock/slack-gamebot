@@ -1,18 +1,37 @@
 require 'spec_helper'
 
 describe User do
-  context '#find_by_slack_mention' do
+  context '#find_by_slack_mention!' do
     before do
       @user = Fabricate(:user)
     end
     it 'finds by slack id' do
-      expect(User.find_by_slack_mention("<@#{@user.user_id}>")).to eq @user
+      expect(User.find_by_slack_mention!("<@#{@user.user_id}>")).to eq @user
     end
     it 'finds by username' do
-      expect(User.find_by_slack_mention(@user.user_name)).to eq @user
+      expect(User.find_by_slack_mention!(@user.user_name)).to eq @user
     end
     it 'finds by username is case-insensitive' do
-      expect(User.find_by_slack_mention(@user.user_name.capitalize)).to eq @user
+      expect(User.find_by_slack_mention!(@user.user_name.capitalize)).to eq @user
+    end
+    it 'requires a known user' do
+      expect do
+        User.find_by_slack_mention!('<@nobody>')
+      end.to raise_error ArgumentError, "I don't know who <@nobody> is! Ask them to _#{SlackGamebot.config.user} register_."
+    end
+  end
+  context '#find_many_by_slack_mention!' do
+    before do
+      @users = [Fabricate(:user), Fabricate(:user)]
+    end
+    it 'finds by slack_id or slack_mention' do
+      users = User.find_many_by_slack_mention! [@users.first.user_name, @users.last.slack_mention]
+      expect(users).to contain_exactly(*@users)
+    end
+    it 'requires known users' do
+      expect do
+        User.find_many_by_slack_mention! %w(foo bar)
+      end.to raise_error ArgumentError, "I don't know who foo is! Ask them to _#{SlackGamebot.config.user} register_."
     end
   end
   context '#find_create_or_update_by_slack_id!', vcr: { cassette_name: 'user_info' } do
@@ -43,38 +62,6 @@ describe User do
       end
     end
   end
-  context '#leaderboard' do
-    it 'returns no players' do
-      expect(User.leaderboard).to eq 'No players.'
-    end
-    it 'ranks incrementally' do
-      user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
-      user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
-      expect(User.leaderboard).to eq "1. #{user2}\n2. #{user1}"
-    end
-    it 'ranks players with the same elo equally' do
-      user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
-      user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
-      user3 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
-      expect(User.leaderboard).to eq "1. #{user2}\n2. #{user1}\n2. #{user3}"
-    end
-    it 'limits to max' do
-      Fabricate(:user, elo: 1, wins: 1, losses: 1)
-      user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
-      Fabricate(:user, elo: 1, wins: 1, losses: 1)
-      expect(User.leaderboard(1)).to eq "1. #{user2}"
-    end
-    it 'ignores players without wins or losses' do
-      user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
-      Fabricate(:user, elo: 2, wins: 0, losses: 0)
-      expect(User.leaderboard).to eq "1. #{user1}"
-    end
-    it 'first game' do
-      user1 = Fabricate(:user, elo: 48, wins: 1, losses: 0)
-      user2 = Fabricate(:user, elo: -48, wins: 0, losses: 1)
-      expect(User.leaderboard).to eq "1. #{user1}\n2. #{user2}"
-    end
-  end
   context '#reset_all' do
     it 'resets all user stats' do
       user1 = Fabricate(:user, elo: 48, losses: 1, wins: 2, tau: 0.5)
@@ -86,10 +73,80 @@ describe User do
       expect(user1.losses).to eq 0
       expect(user1.tau).to eq 0
       expect(user1.elo).to eq 0
+      expect(user1.rank).to be nil
       expect(user2.wins).to eq 0
       expect(user2.losses).to eq 0
       expect(user2.tau).to eq 0
       expect(user2.elo).to eq 0
+      expect(user2.rank).to be nil
+    end
+  end
+  context '#rank!' do
+    it 'updates when elo changes' do
+      user = Fabricate(:user)
+      expect(user.rank).to be nil
+      user.update_attributes!(elo: 65, wins: 1)
+      expect(user.rank).to eq 1
+    end
+    it 'ranks four players' do
+      user1 = Fabricate(:user, elo: 100, wins: 4, losses: 0)
+      user2 = Fabricate(:user, elo: 40, wins: 1, losses: 1)
+      user3 = Fabricate(:user, elo: 60, wins: 2, losses: 0)
+      user4 = Fabricate(:user, elo: 80, wins: 3, losses: 0)
+      expect(user1.reload.rank).to eq 1
+      expect(user2.reload.rank).to eq 4
+      expect(user3.reload.rank).to eq 3
+      expect(user4.reload.rank).to eq 2
+    end
+    it 'ranks players with the same elo and different wins/losses'
+    it 'ranks players with the same elo and wins/losses equally' do
+      user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
+      user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
+      expect(user1.rank).to eq 1
+      expect(user1.rank).to eq user2.rank
+    end
+    it 'is updated for all users' do
+      user1 = Fabricate(:user, elo: 65, wins: 1)
+      expect(user1.rank).to eq 1
+      user2 = Fabricate(:user, elo: 75, wins: 2)
+      expect(user1.reload.rank).to eq 2
+      expect(user2.rank).to eq 1
+      user1.update_attributes!(elo: 100, wins: 3)
+      expect(user1.rank).to eq 1
+      expect(user2.reload.rank).to eq 2
+    end
+  end
+  context '.ranked' do
+    it 'returns an empty list' do
+      expect(User.ranked).to eq []
+    end
+    it 'ranks incrementally' do
+      user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
+      user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
+      expect(User.ranked).to eq [user2, user1]
+    end
+    it 'limits to max' do
+      Fabricate(:user, elo: 1, wins: 1, losses: 1)
+      user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
+      Fabricate(:user, elo: 1, wins: 1, losses: 1)
+      expect(User.ranked(1)).to eq [user2]
+    end
+    it 'ignores players without rank' do
+      user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
+      Fabricate(:user)
+      expect(User.ranked).to eq [user1]
+    end
+  end
+  context '.rank_section' do
+    it 'returns a section' do
+      user1 = Fabricate(:user, elo: 100, wins: 4, losses: 0)
+      user2 = Fabricate(:user, elo: 40, wins: 1, losses: 1)
+      user3 = Fabricate(:user, elo: 60, wins: 2, losses: 0)
+      user4 = Fabricate(:user, elo: 80, wins: 3, losses: 0)
+      [user1, user2, user3, user4].each(&:reload)
+      expect(User.rank_section([user1])).to eq [user1]
+      expect(User.rank_section([user1, user3])).to eq [user1, user4, user3]
+      expect(User.rank_section([user1, user3, user4])).to eq [user1, user4, user3]
     end
   end
 end

@@ -36,9 +36,7 @@ class Challenge
       if name == separator
         current_side = teammates
       else
-        user = ::User.find_by_slack_mention(name)
-        fail ArgumentError, "I don't know who #{name} is! Ask them to _#{SlackGamebot.config.user} register_." unless user
-        current_side << user
+        current_side << ::User.find_by_slack_mention!(name)
       end
     end
 
