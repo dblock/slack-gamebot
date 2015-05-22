@@ -3,7 +3,10 @@ require 'roar/json'
 require 'roar/json/hal'
 
 require 'api/presenters/paginated_presenter'
-
-Dir[File.expand_path('../presenters', __FILE__) + '/**/*.rb'].each do |file|
-  require file
-end
+require 'api/presenters/challenge_presenter'
+require 'api/presenters/challenges_presenter'
+require 'api/presenters/user_presenter'
+require 'api/presenters/users_presenter'
+require 'api/presenters/match_presenter'
+require 'api/presenters/matches_presenter'
+require 'api/presenters/root_presenter'
