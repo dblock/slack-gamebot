@@ -1,14 +1,4 @@
 GIT
-  remote: git://github.com/aki017/slack-ruby-gem.git
-  revision: d5d8865a27f0a14d153e8636d6b16df8b62bc27b
-  specs:
-    slack-api (1.1.1)
-      faraday (>= 0.7, < 0.10)
-      faraday_middleware (~> 0.8)
-      faye-websocket (~> 0.9.2)
-      multi_json (~> 1.0, >= 1.0.3)
-
-GIT
   remote: git://github.com/dblock/giphy.git
   revision: 9a3184f397ce5727772c77335b706a201387b856
   branch: handle-errors-and-redirects
@@ -198,6 +188,11 @@ GEM
       i18n
     ruby-progressbar (1.7.5)
     safe_yaml (1.0.4)
+    slack-api (1.1.6)
+      faraday (>= 0.7, < 0.10)
+      faraday_middleware (~> 0.8)
+      faye-websocket (~> 0.9.2)
+      multi_json (~> 1.0, >= 1.0.3)
     thor (0.19.1)
     thread_safe (0.3.5)
     tzinfo (1.2.2)
@@ -239,6 +234,6 @@ DEPENDENCIES
   rspec (~> 3.2)
   rubocop (= 0.30.0)
   ruby-enum
-  slack-api!
+  slack-api (~> 1.1.6)
   vcr
   webmock

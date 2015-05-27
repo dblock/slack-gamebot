@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 ruby '2.1.6'
 
 gem 'hashie'
-gem 'slack-api', github: 'aki017/slack-ruby-gem', require: 'slack'
+gem 'slack-api', '~> 1.1.6', require: 'slack'
 gem 'mongoid', '~> 4.x'
 gem 'ruby-enum'
 gem 'giphy', github: 'dblock/giphy', branch: 'handle-errors-and-redirects'

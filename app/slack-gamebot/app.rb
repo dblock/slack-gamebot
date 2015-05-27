@@ -29,6 +29,10 @@ module SlackGamebot
       start!
     end
 
+    def stop!
+      client.stop
+    end
+
     private
 
     def logger
@@ -39,7 +43,10 @@ module SlackGamebot
     end
 
     def start!
-      client.start
+      loop do
+        client.start
+        @client = nil
+      end
     end
 
     def client
