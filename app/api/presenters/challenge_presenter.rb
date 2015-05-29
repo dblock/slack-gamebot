@@ -7,6 +7,7 @@ module Api
 
       property :id, type: String, desc: 'Challenge ID.'
       property :state, type: String, desc: 'Current state of the challenge.'
+      property :channel, type: String, desc: 'Channel where the challenge was created.'
 
       link :created_by do |opts|
         request = Grape::Request.new(opts[:env])

@@ -7,7 +7,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     challenge.accept!(challenged)
   end
   it 'lost' do
-    expect(message: 'gamebot lost', user: challenged.user_id).to respond_with_slack_message(
+    expect(message: 'gamebot lost', user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
       "Match has been recorded! #{challenge.challengers.map(&:user_name).join(' and ')} defeated #{challenge.challenged.map(&:user_name).join(' and ')}."
     )
     challenge.reload

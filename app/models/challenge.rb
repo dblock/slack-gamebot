@@ -3,6 +3,8 @@ class Challenge
   include Mongoid::Timestamps
 
   field :state, type: String, default: ChallengeState::PROPOSED
+  field :channel, type: String
+
   belongs_to :created_by, class_name: 'User', inverse_of: nil
   belongs_to :updated_by, class_name: 'User', inverse_of: nil
 
@@ -39,9 +41,10 @@ class Challenge
     [teammates, opponents]
   end
 
-  def self.create_from_teammates_and_opponents!(challenger, names, separator = 'with')
+  def self.create_from_teammates_and_opponents!(channel, challenger, names, separator = 'with')
     teammates, opponents = split_teammates_and_opponents(challenger, names, separator)
     Challenge.create!(
+      channel: channel,
       created_by: challenger,
       challengers: teammates,
       challenged: opponents,
@@ -88,11 +91,12 @@ class Challenge
     "a challenge between between #{challengers.map(&:user_name).join(' and ')} and #{challenged.map(&:user_name).join(' and ')}"
   end
 
-  def self.find_by_user(player)
+  def self.find_by_user(channel, player)
     Challenge.any_of(
       { challenger_ids: player._id },
       challenged_ids: player._id
     ).where(
+      channel: channel,
       :state.in => [
         ChallengeState::PROPOSED,
         ChallengeState::ACCEPTED
@@ -113,7 +117,7 @@ class Challenge
 
   def validate_unique_challenge
     (challengers + challenged).each do |player|
-      existing_challenge = ::Challenge.find_by_user(player)
+      existing_challenge = ::Challenge.find_by_user(channel, player)
       next unless existing_challenge.present?
       next if existing_challenge == self
       errors.add(:challenge, "#{player.user_name} can't play. There's already #{existing_challenge}.")
