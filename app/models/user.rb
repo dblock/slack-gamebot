@@ -16,7 +16,7 @@ class User
   end
 
   def self.find_by_slack_mention(user_name)
-    User.where(user_name =~ /^<@(.*)>$/ ? { user_id: Regexp.last_match[1] } : { user_name: user_name }).first
+    User.where(user_name =~ /^<@(.*)>$/ ? { user_id: Regexp.last_match[1] } : { user_name: Regexp.new("^#{user_name}$", 'i') }).first
   end
 
   # Find an existing record, update the username if necessary, otherwise create a user record.

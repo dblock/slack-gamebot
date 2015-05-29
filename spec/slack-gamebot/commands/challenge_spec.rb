@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe SlackGamebot::Commands::Decline, vcr: { cassette_name: 'user_info' } do
+describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } do
   let(:user) { Fabricate(:user, user_name: 'username') }
   let(:opponent) { Fabricate(:user) }
-  it 'creates a singles challenge' do
+  it 'creates a singles challenge by user id' do
     expect do
       expect(message: "gamebot challenge <@#{opponent.user_id}>", user: user.user_id).to respond_with_slack_message(
         "#{user.user_name} challenged #{opponent.user_name} to a match!"
@@ -13,6 +13,20 @@ describe SlackGamebot::Commands::Decline, vcr: { cassette_name: 'user_info' } do
     expect(challenge.created_by).to eq user
     expect(challenge.challengers).to eq [user]
     expect(challenge.challenged).to eq [opponent]
+  end
+  it 'creates a singles challenge by user name' do
+    expect do
+      expect(message: "gamebot challenge #{opponent.user_name}", user: user.user_id).to respond_with_slack_message(
+        "#{user.user_name} challenged #{opponent.user_name} to a match!"
+      )
+    end.to change(Challenge, :count).by(1)
+  end
+  it 'creates a singles challenge by user name case-insensitive' do
+    expect do
+      expect(message: "gamebot challenge #{opponent.user_name.capitalize}", user: user.user_id).to respond_with_slack_message(
+        "#{user.user_name} challenged #{opponent.user_name} to a match!"
+      )
+    end.to change(Challenge, :count).by(1)
   end
   it 'requires an opponent' do
     expect do

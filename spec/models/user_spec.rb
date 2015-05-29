@@ -11,6 +11,9 @@ describe User do
     it 'finds by username' do
       expect(User.find_by_slack_mention(@user.user_name)).to eq @user
     end
+    it 'finds by username is case-insensitive' do
+      expect(User.find_by_slack_mention(@user.user_name.capitalize)).to eq @user
+    end
   end
   context '#find_create_or_update_by_slack_id!', vcr: { cassette_name: 'user_info' } do
     context 'without a user' do
