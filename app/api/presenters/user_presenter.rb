@@ -10,6 +10,7 @@ module Api
       property :wins, type: Integer, desc: 'Number of wins.'
       property :losses, type: Integer, desc: 'Number of losses.'
       property :elo, type: Integer, desc: 'Elo.'
+      property :created_at, as: :registered_at, type: DateTime, desc: 'Date/time when the user has registered.'
 
       link :self do |opts|
         request = Grape::Request.new(opts[:env])
