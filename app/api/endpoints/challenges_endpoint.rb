@@ -19,7 +19,7 @@ module Api
           optional :size, type: Integer, default: 3, desc: 'Number of challenges to return.'
         end
         get do
-          present Kaminari.paginate_array(Challenge.all).page(params[:page]).per(params[:size]), with: Api::Presenters::ChallengesPresenter
+          present Challenge.all.page(params[:page]).per(params[:size]), with: Api::Presenters::ChallengesPresenter
         end
       end
     end

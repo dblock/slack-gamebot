@@ -19,7 +19,7 @@ module Api
           optional :size, type: Integer, default: 3, desc: 'Number of users to return.'
         end
         get do
-          present Kaminari.paginate_array(User.all).page(params[:page]).per(params[:size]), with: Api::Presenters::UsersPresenter
+          present User.all.page(params[:page]).per(params[:size]), with: Api::Presenters::UsersPresenter
         end
       end
     end

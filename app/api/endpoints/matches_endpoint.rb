@@ -19,7 +19,7 @@ module Api
           optional :size, type: Integer, default: 3, desc: 'Number of matches to return.'
         end
         get do
-          present Kaminari.paginate_array(Match.all).page(params[:page]).per(params[:size]), with: Api::Presenters::MatchesPresenter
+          present Match.all.page(params[:page]).per(params[:size]), with: Api::Presenters::MatchesPresenter
         end
       end
     end

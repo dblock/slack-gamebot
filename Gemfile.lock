@@ -159,7 +159,7 @@ GEM
       loofah (~> 2.0)
     rainbow (2.0.0)
     rake (10.4.2)
-    representable (2.2.0)
+    representable (2.2.2)
       multi_json
       nokogiri
       uber (~> 0.0.7)
