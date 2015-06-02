@@ -2,6 +2,9 @@ module Api
   module Endpoints
     class ChallengesEndpoint < Grape::API
       format :json
+      helpers Api::Helpers::CursorHelpers
+      helpers Api::Helpers::SortHelpers
+      helpers Api::Helpers::PaginationParameters
 
       namespace :challenges do
         desc 'Get a challenge.'
@@ -15,11 +18,12 @@ module Api
 
         desc 'Get all the challenges.'
         params do
-          optional :page, type: Integer, default: 1, desc: 'Page of challenges to return.'
-          optional :size, type: Integer, default: 3, desc: 'Number of challenges to return.'
+          use :pagination
         end
+        sort Challenge::SORT_ORDERS
         get do
-          present Challenge.all.page(params[:page]).per(params[:size]), with: Api::Presenters::ChallengesPresenter
+          challenges = paginate_and_sort_by_cursor(Challenge, default_sort_order: '-_id')
+          present challenges, with: Api::Presenters::ChallengesPresenter
         end
       end
     end

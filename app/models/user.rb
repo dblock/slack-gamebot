@@ -9,7 +9,13 @@ class User
   field :elo, type: Integer, default: 0
   field :tau, type: Float, default: 0
 
-  index({ user_id: 1, team_id: 1 }, unique: true, name: 'user_team_index')
+  index({ user_id: 1 }, unique: true)
+  index(user_name: 1)
+  index(wins: 1)
+  index(losses: 1)
+  index(elo: 1)
+
+  SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'user_name', '-user_name']
 
   def slack_mention
     "<@#{user_id}>"

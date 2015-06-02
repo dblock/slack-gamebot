@@ -2,7 +2,9 @@ class Match
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  belongs_to :challenge
+  SORT_ORDERS = ['created_at', '-created_at']
+
+  belongs_to :challenge, index: true
   before_create :calculate_elo!
 
   has_and_belongs_to_many :winners, class_name: 'User', inverse_of: nil

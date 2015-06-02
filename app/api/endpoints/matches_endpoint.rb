@@ -2,6 +2,9 @@ module Api
   module Endpoints
     class MatchesEndpoint < Grape::API
       format :json
+      helpers Api::Helpers::CursorHelpers
+      helpers Api::Helpers::SortHelpers
+      helpers Api::Helpers::PaginationParameters
 
       namespace :matches do
         desc 'Get a match.'
@@ -15,11 +18,12 @@ module Api
 
         desc 'Get all the matches.'
         params do
-          optional :page, type: Integer, default: 1, desc: 'Page of matches to return.'
-          optional :size, type: Integer, default: 3, desc: 'Number of matches to return.'
+          use :pagination
         end
+        sort Match::SORT_ORDERS
         get do
-          present Match.all.page(params[:page]).per(params[:size]), with: Api::Presenters::MatchesPresenter
+          matches = paginate_and_sort_by_cursor(Match, default_sort_order: '-_id')
+          present matches, with: Api::Presenters::MatchesPresenter
         end
       end
     end

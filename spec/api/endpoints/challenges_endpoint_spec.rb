@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Api::Endpoints::ChallengesEndpoint do
   include Api::Test::EndpointTest
 
-  it_behaves_like 'a paginated api', Challenge
+  it_behaves_like 'a cursor api', Challenge
 
   context 'challenge' do
     let(:existing_challenge) { Fabricate(:challenge) }

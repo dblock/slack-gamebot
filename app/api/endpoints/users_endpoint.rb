@@ -2,6 +2,9 @@ module Api
   module Endpoints
     class UsersEndpoint < Grape::API
       format :json
+      helpers Api::Helpers::CursorHelpers
+      helpers Api::Helpers::SortHelpers
+      helpers Api::Helpers::PaginationParameters
 
       namespace :users do
         desc 'Get a user.'
@@ -15,11 +18,12 @@ module Api
 
         desc 'Get all the users.'
         params do
-          optional :page, type: Integer, default: 1, desc: 'Page of users to return.'
-          optional :size, type: Integer, default: 3, desc: 'Number of users to return.'
+          use :pagination
         end
+        sort User::SORT_ORDERS
         get do
-          present User.all.page(params[:page]).per(params[:size]), with: Api::Presenters::UsersPresenter
+          users = paginate_and_sort_by_cursor(User, default_sort_order: '-elo')
+          present users, with: Api::Presenters::UsersPresenter
         end
       end
     end

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Api::Endpoints::MatchesEndpoint do
   include Api::Test::EndpointTest
 
-  it_behaves_like 'a paginated api', Match
+  it_behaves_like 'a cursor api', Match
 
   context 'match' do
     let(:existing_match) { Fabricate(:match) }

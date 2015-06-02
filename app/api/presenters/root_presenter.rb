@@ -11,21 +11,21 @@ module Api
 
       link :users do |opts|
         {
-          href: "#{base_url(opts)}/users/{?page,size}",
+          href: "#{base_url(opts)}/users/#{PAGINATION_PARAMS}",
           templated: true
         }
       end
 
       link :challenges do |opts|
         {
-          href: "#{base_url(opts)}/challenges/{?page,size}",
+          href: "#{base_url(opts)}/challenges/#{PAGINATION_PARAMS}",
           templated: true
         }
       end
 
       link :matches do |opts|
         {
-          href: "#{base_url(opts)}/matches/{?page,size}",
+          href: "#{base_url(opts)}/matches/#{PAGINATION_PARAMS}",
           templated: true
         }
       end
@@ -45,6 +45,8 @@ module Api
         request = Grape::Request.new(opts[:env])
         request.base_url
       end
+
+      PAGINATION_PARAMS = "{?#{Api::Helpers::PaginationParameters::ALL.join(',')}}"
     end
   end
 end

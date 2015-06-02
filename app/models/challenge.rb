@@ -2,11 +2,15 @@ class Challenge
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  index(state: 1, channel: 1)
+
+  SORT_ORDERS = ['created_at', '-created_at', 'updated_at', '-updated_at', 'state', '-state', 'channel', '-channel']
+
   field :state, type: String, default: ChallengeState::PROPOSED
   field :channel, type: String
 
-  belongs_to :created_by, class_name: 'User', inverse_of: nil
-  belongs_to :updated_by, class_name: 'User', inverse_of: nil
+  belongs_to :created_by, class_name: 'User', inverse_of: nil, index: true
+  belongs_to :updated_by, class_name: 'User', inverse_of: nil, index: true
 
   has_and_belongs_to_many :challengers, class_name: 'User', inverse_of: nil
   has_and_belongs_to_many :challenged, class_name: 'User', inverse_of: nil

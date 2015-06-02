@@ -6,7 +6,7 @@ module Api
       include Grape::Roar::Representer
       include Api::Presenters::PaginatedPresenter
 
-      collection :to_a, extend: MatchPresenter, as: :matches, embedded: true
+      collection :results, extend: MatchPresenter, as: :matches, embedded: true
     end
   end
 end

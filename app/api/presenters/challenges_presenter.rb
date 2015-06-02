@@ -6,7 +6,7 @@ module Api
       include Grape::Roar::Representer
       include Api::Presenters::PaginatedPresenter
 
-      collection :to_a, extend: ChallengePresenter, as: :challenges, embedded: true
+      collection :results, extend: ChallengePresenter, as: :challenges, embedded: true
     end
   end
 end
