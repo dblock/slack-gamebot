@@ -5,6 +5,8 @@ Slack-Gamebot
 
 A generic game bot for slack. Works for ping-pong (2, 4 or more players), chess, etc.
 
+![](screenshots/game.gif)
+
 ## Installation
 
 Create a new Bot Integration under [services/new/bot](http://slack.com/services/new/bot). Note the API token.
@@ -53,6 +55,8 @@ gamebot register
 
 Welcome back Victor Barna! I've updated your registration.
 ```
+
+![](screenshots/register.gif)
 
 #### gamebot challenge <opponent>, ... [with <teammate>, ...]
 
