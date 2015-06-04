@@ -92,7 +92,7 @@ class Challenge
   end
 
   def to_s
-    "a challenge between between #{challengers.map(&:user_name).join(' and ')} and #{challenged.map(&:user_name).join(' and ')}"
+    "a challenge between #{challengers.map(&:user_name).join(' and ')} and #{challenged.map(&:user_name).join(' and ')}"
   end
 
   def self.find_by_user(channel, player)
