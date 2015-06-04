@@ -14,6 +14,7 @@ gem 'rack-cors'
 gem 'kaminari', '~> 0.16.1', require: 'kaminari/grape'
 gem 'grape-swagger'
 gem 'mongoid-scroll'
+gem 'time_ago_in_words'
 
 group :development, :test do
   gem 'rake', '~> 10.4'

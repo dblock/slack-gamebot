@@ -120,6 +120,10 @@ gamebot leaderboard
 
 The leaderboard contains 3 topmost players ranked by [Elo](http://en.wikipedia.org/wiki/Elo_rating_system), use _leaderboard 10_ or _leaderboard infinity_ to see 10 players or more, respectively.
 
+#### gamebot challenges
+
+Displays all outstanding (proposed and accepted) challenges.
+
 #### gamebot reset [secret]
 
 Direct-message gamebot to reset all users and pending challenges.
