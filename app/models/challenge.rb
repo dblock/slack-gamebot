@@ -137,8 +137,8 @@ class Challenge
       return if updated_by && challenged.include?(updated_by)
       errors.add(:declined_by, "Only #{challenged.map(&:user_name).join(' and ')} can decline this challenge.")
     when ChallengeState::CANCELED
-      return if updated_by && challengers.include?(updated_by)
-      errors.add(:declined_by, "Only #{challengers.map(&:user_name).join(' and ')} can cancel this challenge.")
+      return if updated_by && (challengers.include?(updated_by) || challenged.include?(updated_by))
+      errors.add(:declined_by, "Only #{challengers.map(&:user_name).join(' and ')} or #{challenged.map(&:user_name).join(' and ')} can cancel this challenge.")
     end
   end
 end

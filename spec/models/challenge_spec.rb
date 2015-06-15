@@ -151,8 +151,14 @@ describe Challenge do
     before do
       @challenge = Fabricate(:challenge)
     end
-    it 'can be canceled' do
+    it 'can be canceled by challenger' do
       canceled_by = @challenge.challengers.first
+      @challenge.cancel!(canceled_by)
+      expect(@challenge.updated_by).to eq canceled_by
+      expect(@challenge.state).to eq ChallengeState::CANCELED
+    end
+    it 'can be canceled by challenged' do
+      canceled_by = @challenge.challenged.first
       @challenge.cancel!(canceled_by)
       expect(@challenge.updated_by).to eq canceled_by
       expect(@challenge.state).to eq ChallengeState::CANCELED
@@ -162,9 +168,10 @@ describe Challenge do
       expect(@challenge).to_not be_valid
     end
     it 'cannot be canceled_by by another player' do
+      player = Fabricate(:user)
       expect do
-        @challenge.cancel!(@challenge.challenged.first)
-      end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challengers.map(&:user_name).join(' ')} can cancel this challenge./
+        @challenge.cancel!(player)
+      end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challengers.map(&:user_name).join(' and ')} or #{@challenge.challenged.map(&:user_name).join(' ')} can cancel this challenge./
     end
     it 'cannot be canceled_by twice' do
       canceled_by = @challenge.challengers.first
