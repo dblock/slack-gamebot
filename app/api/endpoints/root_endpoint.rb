@@ -6,7 +6,6 @@ module Api
       get do
         present self, with: Api::Presenters::RootPresenter
       end
-
       mount Api::Endpoints::UsersEndpoint
       mount Api::Endpoints::ChallengesEndpoint
       mount Api::Endpoints::MatchesEndpoint

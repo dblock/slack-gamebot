@@ -124,6 +124,17 @@ The leaderboard contains 3 topmost players ranked by [Elo](http://en.wikipedia.o
 
 Displays all outstanding (proposed and accepted) challenges.
 
+#### gamebot rank [<user>, ...]
+
+Show the smallest range of ranks for a list of players.  If no user is specified, your rank is shown.
+
+```
+gamebot rank @WangHoe @DengYaping
+
+2. Deng Yaping: 1 win, 3 losses (elo: 24)
+3. Wang Hoe: 0 wins, 1 loss (elo: -12)
+```
+
 #### gamebot reset [secret]
 
 Direct-message gamebot to reset all users and pending challenges.
