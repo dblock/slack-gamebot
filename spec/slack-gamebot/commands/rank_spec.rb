@@ -7,7 +7,10 @@ describe SlackGamebot::Commands::Rank, vcr: { cassette_name: 'user_info' } do
   let!(:user_elo_67) { Fabricate(:user, elo: 67, wins: 5, losses: 2) }
   let!(:user_elo_98) { Fabricate(:user, elo: 98, wins: 7, losses: 0) }
   it 'ranks the requester if no argument is passed' do
-    expect(message: 'gamebot rank', user: user_elo_42).to respond_with_slack_message "3. #{user_elo_42}"
+    expect(message: 'gamebot rank', user: user_elo_42.user_id).to respond_with_slack_message '3. username: 3 wins, 2 losses (elo: 42)'
+  end
+  it 'ranks someone who is not ranked' do
+    expect(message: 'gamebot rank', user: Fabricate(:user).user_id).to respond_with_slack_message 'username: not ranked'
   end
   it 'ranks one player by slack mention' do
     expect(message: "gamebot rank #{user_elo_42.slack_mention}").to respond_with_slack_message "3. #{user_elo_42}"
