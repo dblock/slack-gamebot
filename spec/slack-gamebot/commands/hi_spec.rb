@@ -1,7 +1,10 @@
 require 'spec_helper'
 
-describe SlackGamebot::Commands::Hi do
+describe SlackRubyBot::Commands::Hi do
+  def app
+    SlackGamebot::App.new
+  end
   it 'says hi' do
-    expect(message: 'gamebot hi').to respond_with_slack_message('Hi <@user>!')
+    expect(message: "#{SlackRubyBot.config.user} hi").to respond_with_slack_message('Hi <@user>!')
   end
 end

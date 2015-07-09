@@ -1,10 +1,13 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Default do
-  it 'gamebot' do
-    expect(message: 'gamebot').to respond_with_slack_message(SlackGamebot::ASCII)
+  def app
+    SlackGamebot::App.new
   end
-  it 'Gamebot' do
-    expect(message: 'Gamebot').to respond_with_slack_message(SlackGamebot::ASCII)
+  it 'default' do
+    expect(message: SlackRubyBot.config.user).to respond_with_slack_message(SlackGamebot::ASCII)
+  end
+  it 'upcase' do
+    expect(message: SlackRubyBot.config.user.upcase).to respond_with_slack_message(SlackGamebot::ASCII)
   end
 end

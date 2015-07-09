@@ -2,13 +2,11 @@ source 'http://rubygems.org'
 
 ruby '2.1.6'
 
-gem 'hashie'
-gem 'slack-api', '~> 1.1.6', require: 'slack'
+gem 'slack-ruby-bot', github: 'dblock/slack-ruby-bot'
 gem 'mongoid', '~> 4.x'
 gem 'ruby-enum'
-gem 'giphy', '~> 2.0.2'
 gem 'puma'
-gem 'grape', github: 'intridea/grape'
+gem 'grape', '0.12.0'
 gem 'grape-roar'
 gem 'rack-cors'
 gem 'kaminari', '~> 0.16.1', require: 'kaminari/grape'
@@ -23,12 +21,12 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rspec', '~> 3.2'
+  gem 'rspec'
+  gem 'rack-test'
   gem 'webmock'
   gem 'vcr'
   gem 'fabrication'
   gem 'faker'
   gem 'database_cleaner', '~> 1.4'
   gem 'hyperclient'
-  gem 'rack-test', '~> 0.6.2'
 end

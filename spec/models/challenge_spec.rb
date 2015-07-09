@@ -40,7 +40,7 @@ describe Challenge do
     it 'requires known opponents' do
       expect do
         Challenge.split_teammates_and_opponents(@challenger, ['username'])
-      end.to raise_error ArgumentError, "I don't know who username is! Ask them to _testbot register_."
+      end.to raise_error ArgumentError, "I don't know who username is! Ask them to _#{SlackRubyBot.config.user} register_."
     end
   end
   context '#create_from_teammates_and_opponents!' do

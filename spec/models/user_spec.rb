@@ -17,7 +17,7 @@ describe User do
     it 'requires a known user' do
       expect do
         User.find_by_slack_mention!('<@nobody>')
-      end.to raise_error ArgumentError, "I don't know who <@nobody> is! Ask them to _#{SlackGamebot.config.user} register_."
+      end.to raise_error ArgumentError, "I don't know who <@nobody> is! Ask them to _#{SlackRubyBot.config.user} register_."
     end
   end
   context '#find_many_by_slack_mention!' do
@@ -31,7 +31,7 @@ describe User do
     it 'requires known users' do
       expect do
         User.find_many_by_slack_mention! %w(foo bar)
-      end.to raise_error ArgumentError, "I don't know who foo is! Ask them to _#{SlackGamebot.config.user} register_."
+      end.to raise_error ArgumentError, "I don't know who foo is! Ask them to _#{SlackRubyBot.config.user} register_."
     end
   end
   context '#find_create_or_update_by_slack_id!', vcr: { cassette_name: 'user_info' } do

@@ -1,7 +1,15 @@
-require File.expand_path('../app', __FILE__)
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+
+require 'slack-gamebot'
 
 Thread.new do
-  SlackGamebot::App.instance.run
+  begin
+    SlackGamebot::App.instance.run
+  rescue Exception => e
+    STDERR.puts e
+    STDERR.puts e.backtrace
+    raise e
+  end
 end
 
 run Api::Middleware.instance

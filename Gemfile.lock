@@ -1,38 +1,34 @@
 GIT
-  remote: git://github.com/intridea/grape.git
-  revision: 7a2761dd820556b0ffb3544b4949cb1a685efe7e
+  remote: git://github.com/dblock/slack-ruby-bot.git
+  revision: 22f150f027d15c1a195692db0decf6bb4c850b7d
   specs:
-    grape (0.11.1)
+    slack-ruby-bot (0.2.0)
       activesupport
-      builder
-      hashie (>= 2.1.0)
-      multi_json (>= 1.3.2)
-      multi_xml (>= 0.5.2)
-      rack (>= 1.3.0)
-      rack-accept
-      rack-mount
-      virtus (>= 1.0.0)
+      giphy (~> 2.0.2)
+      hashie
+      slack-api (~> 1.1.6)
+      websocket-driver (~> 0.5.4)
 
 GEM
   remote: http://rubygems.org/
   specs:
-    actionpack (4.2.1)
-      actionview (= 4.2.1)
-      activesupport (= 4.2.1)
+    actionpack (4.2.3)
+      actionview (= 4.2.3)
+      activesupport (= 4.2.3)
       rack (~> 1.6)
       rack-test (~> 0.6.2)
       rails-dom-testing (~> 1.0, >= 1.0.5)
-      rails-html-sanitizer (~> 1.0, >= 1.0.1)
-    actionview (4.2.1)
-      activesupport (= 4.2.1)
+      rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    actionview (4.2.3)
+      activesupport (= 4.2.3)
       builder (~> 3.1)
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
-      rails-html-sanitizer (~> 1.0, >= 1.0.1)
-    activemodel (4.2.1)
-      activesupport (= 4.2.1)
+      rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    activemodel (4.2.3)
+      activesupport (= 4.2.3)
       builder (~> 3.1)
-    activesupport (4.2.1)
+    activesupport (4.2.3)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
@@ -46,7 +42,7 @@ GEM
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
-    bson (2.3.0)
+    bson (3.1.2)
     builder (3.2.2)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -60,7 +56,7 @@ GEM
     equalizer (0.0.11)
     erubis (2.7.0)
     eventmachine (1.0.7)
-    fabrication (2.11.2)
+    fabrication (2.13.2)
     faker (1.4.3)
       i18n (~> 0.5)
     faraday (0.9.1)
@@ -70,7 +66,7 @@ GEM
       net-http-digest_auth (~> 1.4)
     faraday_hal_middleware (0.0.1)
       faraday_middleware (>= 0.9, < 0.10)
-    faraday_middleware (0.9.1)
+    faraday_middleware (0.9.2)
       faraday (>= 0.7.4, < 0.10)
     faraday_middleware-parse_oj (0.3.0)
       faraday (~> 0.9.0)
@@ -87,6 +83,16 @@ GEM
       faraday_middleware (~> 0.9)
       faraday_middleware-parse_oj (~> 0.3)
       launchy (~> 2.4)
+    grape (0.12.0)
+      activesupport
+      builder
+      hashie (>= 2.1.0)
+      multi_json (>= 1.3.2)
+      multi_xml (>= 0.5.2)
+      rack (>= 1.3.0)
+      rack-accept
+      rack-mount
+      virtus (>= 1.0.0)
     grape-entity (0.4.5)
       activesupport
       multi_json (>= 1.3.2)
@@ -96,7 +102,7 @@ GEM
     grape-swagger (0.10.1)
       grape (>= 0.8.0)
       grape-entity
-    hashie (3.4.1)
+    hashie (3.4.2)
     hyperclient (0.7.0)
       faraday (~> 0.8)
       faraday-digestauth (~> 0.2)
@@ -107,7 +113,7 @@ GEM
       uri_template (~> 0.5)
     i18n (0.7.0)
     ice_nine (0.11.1)
-    json (1.8.2)
+    json (1.8.3)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -116,7 +122,7 @@ GEM
     loofah (2.0.2)
       nokogiri (>= 1.5.9)
     mini_portile (0.6.2)
-    minitest (5.6.1)
+    minitest (5.7.0)
     mongoid (4.0.2)
       activemodel (~> 4.0)
       moped (~> 2.0.0)
@@ -125,11 +131,11 @@ GEM
     mongoid-scroll (0.3.0)
       i18n
       mongoid (>= 3.0)
-    moped (2.0.4)
-      bson (~> 2.2)
+    moped (2.0.6)
+      bson (~> 3.0)
       connection_pool (~> 2.0)
       optionable (~> 0.2.0)
-    multi_json (1.11.0)
+    multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     net-http-digest_auth (1.4)
@@ -138,12 +144,12 @@ GEM
     oj (2.12.9)
     optionable (0.2.0)
     origin (2.1.1)
-    parser (2.2.0.3)
+    parser (2.3.0.pre.2)
       ast (>= 1.1, < 3.0)
-    powerpack (0.1.0)
-    puma (2.11.0)
+    powerpack (0.1.1)
+    puma (2.11.3)
       rack (>= 1.1, < 2.0)
-    rack (1.6.0)
+    rack (1.6.4)
     rack-accept (0.4.5)
       rack (>= 0.4)
     rack-cors (0.4.0)
@@ -161,32 +167,32 @@ GEM
       loofah (~> 2.0)
     rainbow (2.0.0)
     rake (10.4.2)
-    representable (2.2.2)
+    representable (2.2.3)
       multi_json
       nokogiri
       uber (~> 0.0.7)
     roar (1.0.1)
       representable (>= 2.0.1, <= 3.0.0)
-    rspec (3.2.0)
-      rspec-core (~> 3.2.0)
-      rspec-expectations (~> 3.2.0)
-      rspec-mocks (~> 3.2.0)
-    rspec-core (3.2.3)
-      rspec-support (~> 3.2.0)
-    rspec-expectations (3.2.1)
+    rspec (3.3.0)
+      rspec-core (~> 3.3.0)
+      rspec-expectations (~> 3.3.0)
+      rspec-mocks (~> 3.3.0)
+    rspec-core (3.3.1)
+      rspec-support (~> 3.3.0)
+    rspec-expectations (3.3.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.2.0)
-    rspec-mocks (3.2.1)
+      rspec-support (~> 3.3.0)
+    rspec-mocks (3.3.1)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.2.0)
-    rspec-support (3.2.2)
+      rspec-support (~> 3.3.0)
+    rspec-support (3.3.0)
     rubocop (0.30.0)
       astrolabe (~> 1.3)
       parser (>= 2.2.0.1, < 3.0)
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.4)
-    ruby-enum (0.2.1)
+    ruby-enum (0.4.0)
       i18n
     ruby-progressbar (1.7.5)
     safe_yaml (1.0.4)
@@ -223,26 +229,21 @@ DEPENDENCIES
   fabrication
   faker
   foreman
-  giphy (~> 2.0.2)
-  grape!
+  grape (= 0.12.0)
   grape-roar
   grape-swagger
-  hashie
   hyperclient
   kaminari (~> 0.16.1)
   mongoid (~> 4.x)
   mongoid-scroll
   puma
   rack-cors
-  rack-test (~> 0.6.2)
+  rack-test
   rake (~> 10.4)
-  rspec (~> 3.2)
+  rspec
   rubocop (= 0.30.0)
   ruby-enum
-  slack-api (~> 1.1.6)
+  slack-ruby-bot!
   time_ago_in_words
   vcr
   webmock
-
-BUNDLED WITH
-   1.10.2
