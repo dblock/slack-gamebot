@@ -1,14 +1,3 @@
-GIT
-  remote: git://github.com/dblock/slack-ruby-bot.git
-  revision: 22f150f027d15c1a195692db0decf6bb4c850b7d
-  specs:
-    slack-ruby-bot (0.2.0)
-      activesupport
-      giphy (~> 2.0.2)
-      hashie
-      slack-api (~> 1.1.6)
-      websocket-driver (~> 0.5.4)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -201,6 +190,12 @@ GEM
       faraday_middleware (~> 0.8)
       faye-websocket (~> 0.9.2)
       multi_json (~> 1.0, >= 1.0.3)
+    slack-ruby-bot (0.2.0)
+      activesupport
+      giphy (~> 2.0.2)
+      hashie
+      slack-api (~> 1.1.6)
+      websocket-driver (~> 0.5.4)
     thor (0.19.1)
     thread_safe (0.3.5)
     time_ago_in_words (0.1.1)
@@ -243,7 +238,7 @@ DEPENDENCIES
   rspec
   rubocop (= 0.30.0)
   ruby-enum
-  slack-ruby-bot!
+  slack-ruby-bot (~> 0.2.0)
   time_ago_in_words
   vcr
   webmock
