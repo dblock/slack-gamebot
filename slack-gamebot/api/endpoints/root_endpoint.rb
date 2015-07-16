@@ -9,6 +9,7 @@ module Api
       mount Api::Endpoints::UsersEndpoint
       mount Api::Endpoints::ChallengesEndpoint
       mount Api::Endpoints::MatchesEndpoint
+      mount Api::Endpoints::SeasonsEndpoint
       add_swagger_documentation
     end
   end

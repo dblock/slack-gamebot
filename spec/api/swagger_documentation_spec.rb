@@ -13,6 +13,7 @@ describe Api do
         '/users.{format}',
         '/challenges.{format}',
         '/matches.{format}',
+        '/seasons.{format}',
         '/swagger_doc.{format}'
       ])
     end

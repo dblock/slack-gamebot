@@ -1,6 +1,6 @@
 class Season
   include Mongoid::Document
-  include Mongoid::Timestamps
+  include Mongoid::Timestamps::Created
 
   belongs_to :created_by, class_name: 'User', inverse_of: nil, index: true
   has_many :challenges
@@ -10,6 +10,8 @@ class Season
   after_create :reset_users!
 
   validate :validate_challenges
+
+  SORT_ORDERS = ['created_at', '-created_at']
 
   def initialize(attrs = {})
     super

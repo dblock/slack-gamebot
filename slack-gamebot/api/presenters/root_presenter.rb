@@ -30,7 +30,14 @@ module Api
         }
       end
 
-      [:challenge, :match, :user].each do |model|
+      link :seasons do |opts|
+        {
+          href: "#{base_url(opts)}/seasons/#{PAGINATION_PARAMS}",
+          templated: true
+        }
+      end
+
+      [:challenge, :match, :user, :season].each do |model|
         link model do |opts|
           {
             href: "#{base_url(opts)}/#{model.to_s.pluralize}/{id}",
