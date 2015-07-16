@@ -9,6 +9,8 @@ class UserRank
   field :tau, type: Float, default: 0
   field :rank, type: Integer
 
+  scope :ranked, -> { where(:rank.ne => nil) }
+
   def self.from_user(user)
     UserRank.new.tap do |user_rank|
       user_rank.user = user

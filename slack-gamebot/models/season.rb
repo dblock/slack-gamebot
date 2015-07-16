@@ -50,7 +50,7 @@ class Season
 
   def create_user_ranks
     return if user_ranks.any?
-    User.asc(:rank).each do |user|
+    User.ranked.asc(:rank).each do |user|
       user_ranks << UserRank.from_user(user)
     end
   end

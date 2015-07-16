@@ -20,6 +20,8 @@ class User
 
   SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'user_name', '-user_name', 'rank', '-rank']
 
+  scope :ranked, -> { where(:rank.ne => nil) }
+
   def slack_mention
     "<@#{user_id}>"
   end
