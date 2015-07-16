@@ -166,7 +166,7 @@ We recommend [HyperClient](https://github.com/codegram/hyperclient) to query the
 
 ## Contributing
 
-See [CONTRIBUTING](CONTRIBUTING.md).
+This bot is built with [slack-ruby-bot](https://github.com/dblock/slack-ruby-bot). See [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Copyright and License
 
