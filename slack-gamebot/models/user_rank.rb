@@ -20,4 +20,8 @@ class UserRank
       user_rank.rank = user.rank
     end
   end
+
+  def to_s
+    "#{user_name}: #{wins} win#{wins != 1 ? 's' : ''}, #{losses} loss#{losses != 1 ? 'es' : ''} (elo: #{elo})"
+  end
 end

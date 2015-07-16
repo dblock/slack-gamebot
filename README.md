@@ -145,6 +145,10 @@ gamebot reset <secret>
 Welcome to the new season!
 ```
 
+#### gamebot seasons
+
+Display current and past seasons.
+
 ## API
 
 Slack-gamebot implements a Hypermedia API. Navigate to the application root to browse through available objects and methods. Artsy's Gamebot is [here](http://artsy-ping-pong-gamebot.herokuapp.com), you can see [dblock's current elo](http://artsy-ping-pong-gamebot.herokuapp.com/users/5543f64d6237640003000000).

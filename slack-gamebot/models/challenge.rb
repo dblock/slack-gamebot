@@ -30,6 +30,11 @@ class Challenge
   # current challenges are not in an archived season
   scope :current, -> { where(season_id: nil) }
 
+  # challenges scoped by state
+  ChallengeState.values.each do |state|
+    scope state.to_sym, -> { where(state: state) }
+  end
+
   # Given a challenger and a list of names splits into two groups, returns users.
   def self.split_teammates_and_opponents(challenger, names, separator = 'with')
     teammates = [challenger]

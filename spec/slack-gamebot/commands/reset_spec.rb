@@ -13,6 +13,7 @@ describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
     expect(message: "#{SlackRubyBot.config.user} reset invalid").to respond_with_error('Invalid secret.')
   end
   it 'resets with the correct secret' do
+    Fabricate(:match)
     expect(::User).to receive(:reset_all!).once
     expect(message: "#{SlackRubyBot.config.user} reset #{ENV['GAMEBOT_SECRET']}").to respond_with_slack_message('Welcome to the new season!')
   end
@@ -28,6 +29,7 @@ describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
     expect(accepted_challenge.reload.state).to eq ChallengeState::CANCELED
   end
   it 'resets user stats' do
+    Fabricate(:match)
     user = Fabricate(:user, elo: 48, losses: 1, wins: 2, tau: 0.5)
     expect(message: "#{SlackRubyBot.config.user} reset #{ENV['GAMEBOT_SECRET']}").to respond_with_slack_message('Welcome to the new season!')
     user.reload
