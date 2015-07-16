@@ -8,6 +8,10 @@ module SlackGamebot
       end
       super
     end
+
+    def self.instance
+      @instance ||= SlackGamebot::App.new
+    end
   end
 
   class << self
