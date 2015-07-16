@@ -150,6 +150,8 @@ Welcome to the new season!
 Display current and past seasons.
 
 ```
+gamebot seasons
+
 Current: william: 1 win, 0 losses (elo: 48), 1 game, 2 players
 2015-07-16: dblock: 28 wins, 19 losses (elo: 214), 206 games, 25 players
 ```
