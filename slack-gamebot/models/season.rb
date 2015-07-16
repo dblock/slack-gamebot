@@ -14,7 +14,7 @@ class Season
   private
 
   def create_user_ranks
-    User.desc(:rank).each do |user|
+    User.asc(:rank).each do |user|
       user_ranks << UserRank.from_user(user)
     end
   end
