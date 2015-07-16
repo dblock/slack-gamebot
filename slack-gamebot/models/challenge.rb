@@ -9,6 +9,7 @@ class Challenge
   field :state, type: String, default: ChallengeState::PROPOSED
   field :channel, type: String
 
+  belongs_to :season, inverse_of: :challenges, index: true
   belongs_to :created_by, class_name: 'User', inverse_of: nil, index: true
   belongs_to :updated_by, class_name: 'User', inverse_of: nil, index: true
 
@@ -25,6 +26,9 @@ class Challenge
 
   validate :validate_updated_by
   validates_presence_of :updated_by, if: ->(challenge) { challenge.state != ChallengeState::PROPOSED }
+
+  # current challenges are not in an archived season
+  scope :current, -> { where(season_id: nil) }
 
   # Given a challenger and a list of names splits into two groups, returns users.
   def self.split_teammates_and_opponents(challenger, names, separator = 'with')
