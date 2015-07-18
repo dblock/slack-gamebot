@@ -30,6 +30,10 @@ module Api
         }
       end
 
+      link :current_season do |opts|
+        "#{base_url(opts)}/seasons/current"
+      end
+
       link :seasons do |opts|
         {
           href: "#{base_url(opts)}/seasons/#{PAGINATION_PARAMS}",

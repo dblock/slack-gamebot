@@ -6,7 +6,7 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
   end
   context 'no seasons' do
     it 'seasons' do
-      expect(message: "#{SlackRubyBot.config.user} seasons").to respond_with_slack_message 'No seasons.'
+      expect(message: "#{SlackRubyBot.config.user} seasons").to respond_with_slack_message "There're no seasons."
     end
   end
   context 'one season' do

@@ -13,4 +13,15 @@ describe Api::Endpoints::SeasonsEndpoint do
       expect(season._links.self._url).to eq "http://example.org/seasons/#{existing_season.id}"
     end
   end
+
+  context 'current season' do
+    before do
+      Fabricate(:match)
+    end
+    it 'returns the current season' do
+      season = client.current_season
+      expect(season.id).to eq 'current'
+      expect(season._links.self._url).to eq 'http://example.org/seasons/current'
+    end
+  end
 end
