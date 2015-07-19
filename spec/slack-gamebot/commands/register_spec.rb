@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Register, vcr: { cassette_name: 'user_info' } do
-  def app
-    SlackGamebot::App.new
-  end
+  let(:app) { SlackGamebot::App.new }
   it 'registers a new user' do
     expect(message: "#{SlackRubyBot.config.user} register", user: 'user').to respond_with_slack_message("Welcome <@user>! You're ready to play.")
   end

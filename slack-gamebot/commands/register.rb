@@ -1,7 +1,7 @@
 module SlackGamebot
   module Commands
     class Register < SlackRubyBot::Commands::Base
-      def self.call(data, _command, _arguments)
+      def self.call(data, _match)
         ts = Time.now.utc
         user = ::User.find_create_or_update_by_slack_id!(data.user)
         message = if user.created_at >= ts

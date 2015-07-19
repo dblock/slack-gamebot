@@ -1,7 +1,7 @@
 module SlackGamebot
   module Commands
     class Challenges < SlackRubyBot::Commands::Base
-      def self.call(data, _command, _arguments)
+      def self.call(data, _match)
         challenges = ::Challenge.where(
           channel: data.channel,
           :state.in => [ChallengeState::PROPOSED, ChallengeState::ACCEPTED]

@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Default do
-  def app
-    SlackGamebot::App.new
-  end
+  let(:app) { SlackGamebot::App.new }
   it 'default' do
     expect(message: SlackRubyBot.config.user).to respond_with_slack_message(SlackGamebot::ASCII)
   end

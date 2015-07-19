@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe SlackRubyBot::Commands::Unknown, vcr: { cassette_name: 'user_info' } do
-  def app
-    SlackGamebot::App.new
-  end
+  let(:app) { SlackGamebot::App.new }
   it 'invalid command' do
     expect(message: "#{SlackRubyBot.config.user} foobar").to respond_with_slack_message("Sorry <@user>, I don't understand that command!")
   end

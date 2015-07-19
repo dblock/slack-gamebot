@@ -1,7 +1,7 @@
 module SlackGamebot
   module Commands
     class Lost < SlackRubyBot::Commands::Base
-      def self.call(data, _command, _arguments)
+      def self.call(data, _match)
         challenger = ::User.find_create_or_update_by_slack_id!(data.user)
         challenge = ::Challenge.find_by_user(data.channel, challenger)
         if challenge

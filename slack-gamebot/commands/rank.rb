@@ -1,9 +1,10 @@
 module SlackGamebot
   module Commands
     class Rank < SlackRubyBot::Commands::Base
-      def self.call(data, _command, arguments)
-        users = arguments
-        if arguments.any?
+      def self.call(data, match)
+        arguments = match[:expression].split.reject(&:blank?) if match.names.include?('expression')
+        users = arguments || []
+        if arguments && arguments.any?
           users = User.find_many_by_slack_mention!(users)
         else
           users << ::User.find_create_or_update_by_slack_id!(data.user)

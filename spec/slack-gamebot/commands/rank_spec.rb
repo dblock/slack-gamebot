@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Rank, vcr: { cassette_name: 'user_info' } do
-  def app
-    SlackGamebot::App.new
-  end
+  let(:app) { SlackGamebot::App.new }
   let!(:user_elo_12) { Fabricate(:user, elo: 12, wins: 0, losses: 25) }
   let!(:user_elo_38) { Fabricate(:user, elo: 38, wins: 3, losses: 3) }
   let!(:user_elo_42) { Fabricate(:user, elo: 42, wins: 3, losses: 2) }

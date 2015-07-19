@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
-  def app
-    SlackGamebot::App.new
-  end
+  let(:app) { SlackGamebot::App.new }
   it 'requires a secret' do
     expect(::User).to_not receive(:reset_all!)
     expect(message: "#{SlackRubyBot.config.user} reset").to respond_with_error('Missing secret.')

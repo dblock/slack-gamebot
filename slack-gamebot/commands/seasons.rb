@@ -1,7 +1,7 @@
 module SlackGamebot
   module Commands
     class Seasons < SlackRubyBot::Commands::Base
-      def self.call(data, _command, _arguments)
+      def self.call(data, _match)
         current_season = ::Season.new
         if current_season.valid?
           message = [current_season, ::Season.all.desc(:_id)].flatten.map(&:to_s).join("\n")
