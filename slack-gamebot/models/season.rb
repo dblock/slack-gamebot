@@ -33,7 +33,7 @@ class Season
   end
 
   def played_challenges
-    persisted? ? challenges.played : Challenge.current
+    persisted? ? challenges.played : Challenge.current.played
   end
 
   def label

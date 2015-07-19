@@ -34,5 +34,13 @@ describe Season do
     it 'to_s' do
       expect(season.to_s).to eq "Current: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 3 matches, 3 players"
     end
+    context 'with an unplayed challenge' do
+      before do
+        Fabricate(:challenge)
+      end
+      it 'only counts played matches' do
+        expect(season.to_s).to eq "Current: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 3 matches, 3 players"
+      end
+    end
   end
 end
