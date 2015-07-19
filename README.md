@@ -147,7 +147,7 @@ Welcome to the new season!
 
 #### gamebot season
 
-Display current seasons.
+Display current season's leader and game totals.
 
 ```
 gamebot season
@@ -157,7 +157,7 @@ Current: william: 1 win, 0 losses (elo: 48), 1 game, 2 players
 
 #### gamebot seasons
 
-Display current and past seasons.
+Display current season's leader, past seasons' winners and game totals.
 
 ```
 gamebot seasons
