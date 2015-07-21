@@ -3,7 +3,7 @@ module SlackGamebot
     class Leaderboard < SlackRubyBot::Commands::Base
       def self.call(data, match)
         max = 3
-        arguments = match[:expression].split.reject(&:blank?) if match.names.include?('expression')
+        arguments = match['expression'].split.reject(&:blank?) if match.names.include?('expression')
         arguments ||= []
         case arguments.first.downcase
         when 'infinity'

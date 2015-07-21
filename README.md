@@ -120,6 +120,26 @@ gamebot leaderboard
 
 The leaderboard contains 3 topmost players ranked by [Elo](http://en.wikipedia.org/wiki/Elo_rating_system), use _leaderboard 10_ or _leaderboard infinity_ to see 10 players or more, respectively.
 
+#### gamebot matches
+
+Displays match totals in the current season.
+
+```
+gamebot matches
+
+Victor Barna defeated Wang Hoe 3 times
+Deng Yaping defeated Victor Barna once
+```
+
+You can also get match totals for other users.
+
+```
+gamebot matches @WangHoe
+
+Victor Barna defeated Wang Hoe 5 times
+Wang Hoe defeated Deng Yaping twice
+```
+
 #### gamebot challenges
 
 Displays all outstanding (proposed and accepted) challenges.
@@ -152,7 +172,7 @@ Display current season's leader and game totals.
 ```
 gamebot season
 
-Current: william: 1 win, 0 losses (elo: 48), 1 game, 2 players
+Current: Deng Yaping: 1 win, 0 losses (elo: 48), 1 game, 2 players
 ```
 
 #### gamebot seasons
@@ -162,8 +182,8 @@ Display current season's leader, past seasons' winners and game totals.
 ```
 gamebot seasons
 
-Current: william: 1 win, 0 losses (elo: 48), 1 game, 2 players
-2015-07-16: dblock: 28 wins, 19 losses (elo: 214), 206 games, 25 players
+Current: Deng Yaping: 1 win, 0 losses (elo: 48), 1 game, 2 players
+2015-07-16: Wang Hoe: 28 wins, 19 losses (elo: 214), 206 games, 25 players
 ```
 
 ## API

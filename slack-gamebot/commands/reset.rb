@@ -3,7 +3,7 @@ module SlackGamebot
     class Reset < SlackRubyBot::Commands::Base
       def self.call(data, match)
         fail ArgumentError, "Missing ENV['GAMEBOT_SECRET']." unless SlackGamebot.config.secret.present?
-        arguments = match[:expression].split.reject(&:blank?) if match.names.include?('expression')
+        arguments = match['expression'].split.reject(&:blank?) if match.names.include?('expression')
         secret = arguments.first if arguments
         fail ArgumentError, 'Missing secret.' unless secret.present?
         fail ArgumentError, 'Invalid secret.' unless secret == SlackGamebot.config.secret
