@@ -131,7 +131,7 @@ Victor Barna defeated Wang Hoe 3 times
 Deng Yaping defeated Victor Barna once
 ```
 
-You can also get match totals for other users.
+You can also get match totals for specific players.
 
 ```
 gamebot matches @WangHoe

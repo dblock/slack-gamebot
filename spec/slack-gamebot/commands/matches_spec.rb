@@ -6,14 +6,16 @@ describe SlackGamebot::Commands::Matches, vcr: { cassette_name: 'user_info' } do
   let(:singles_challenge) { Fabricate(:challenge, challengers: [user]) }
   let(:doubles_challenge) { Fabricate(:doubles_challenge, challengers: [user, Fabricate(:user)]) }
   context 'with many matches' do
+    let!(:match0) { Fabricate(:match) }
     let!(:match1) { Fabricate(:match, challenge: singles_challenge) }
     let!(:match2) { Fabricate(:match, challenge: doubles_challenge) }
     let!(:match3) { Fabricate(:match, challenge: doubles_challenge) }
     let!(:match4) { Fabricate(:match, challenge: doubles_challenge) }
-    it 'displays user matches' do
+    it 'displays all matches' do
       expect(message: "#{SlackRubyBot.config.user} matches", user: user.user_id, channel: match1.challenge.channel).to respond_with_slack_message([
         "#{match2} 3 times",
-        "#{match1} once"
+        "#{match1} once",
+        "#{match0} once"
       ].join("\n"))
     end
     it 'displays only matches for requested users' do
