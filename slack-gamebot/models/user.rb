@@ -37,9 +37,9 @@ class User
   end
 
   # Find an existing record, update the username if necessary, otherwise create a user record.
-  def self.find_create_or_update_by_slack_id!(slack_id)
+  def self.find_create_or_update_by_slack_id!(client, slack_id)
     instance = User.where(user_id: slack_id).first
-    instance_info = Hashie::Mash.new(Slack.users_info(user: slack_id)).user
+    instance_info = Hashie::Mash.new(client.web_client.users_info(user: slack_id)).user
     instance.update_attributes!(user_name: instance_info.name) if instance && instance.user_name != instance_info.name
     instance ||= User.create!(user_id: slack_id, user_name: instance_info.name)
     instance

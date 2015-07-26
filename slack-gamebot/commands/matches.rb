@@ -1,7 +1,7 @@
 module SlackGamebot
   module Commands
     class Matches < SlackRubyBot::Commands::Base
-      def self.call(data, match)
+      def self.call(client, data, match)
         totals = {}
         totals.default = 0
         arguments = match['expression'].split.reject(&:blank?) if match.names.include?('expression')
@@ -23,7 +23,7 @@ module SlackGamebot
             "#{s} #{count} times"
           end
         end.join("\n")
-        send_message data.channel, message
+        send_message client, data.channel, message
       end
     end
   end
