@@ -86,6 +86,34 @@ gamebot accept
 Wang Hoe and Zhang Jike accepted Victor Barna and Deng Yaping's challenge.
 ```
 
+#### gamebot lost [score, ...]
+
+Record your loss.
+
+```
+gamebot lost
+
+Wang Hoe defeated Victor Barna.
+```
+
+You cannot record a win.
+
+Record your loss with a score, loser first.
+
+```
+gamebot lost 5:21
+
+Wang Hoe crushed Victor Barna.
+```
+
+You can record scores for an entire match.
+
+```
+gamebot lost 15:21 21:17 18:21
+
+Wang Hoe defeated Victor Barna.
+```
+
 #### gamebot decline
 
 Decline a challenge.
