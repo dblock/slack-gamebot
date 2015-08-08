@@ -6,6 +6,7 @@ module Api
       include Grape::Roar::Representer
 
       property :id, type: String, desc: 'Match ID.'
+      property :scores, type: Array, desc: 'Match scores.'
       property :created_at, type: DateTime, desc: 'Date/time when the match was created.'
 
       link :challenge do |opts|

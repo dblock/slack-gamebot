@@ -3,6 +3,7 @@ Fabricator(:match) do
   after_build do |match|
     match.winners = match.challenge.challengers if match.winners.none?
     match.losers = match.challenge.challenged if match.losers.none?
+    match.scores = [[15, 21]]
   end
   after_create do |match|
     match.winners.inc(wins: 1)
