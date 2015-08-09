@@ -102,16 +102,13 @@ class Challenge
     "a challenge between #{challengers.map(&:user_name).join(' and ')} and #{challenged.map(&:user_name).join(' and ')}"
   end
 
-  def self.find_by_user(channel, player)
+  def self.find_by_user(channel, player, states = [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
     Challenge.any_of(
       { challenger_ids: player._id },
       challenged_ids: player._id
     ).where(
       channel: channel,
-      :state.in => [
-        ChallengeState::PROPOSED,
-        ChallengeState::ACCEPTED
-      ]
+      :state.in => states
     ).first
   end
 

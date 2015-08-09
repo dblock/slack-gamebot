@@ -20,13 +20,13 @@ class Match
 
   def validate_scores
     return unless scores
-    return if scores.select { |score| score[0] < score[1] }.count > scores.count / 2
+    return if Score.valid?(scores)
     errors.add(:scores, 'Loser scores must come first.')
   end
 
   def score_verb
     return 'defeated' unless scores
-    lose, win = score_points
+    lose, win = Score.points(scores)
     ratio = lose.to_f / win
     if ratio > 0.9
       'narrowly defeated'
@@ -35,16 +35,6 @@ class Match
     else
       'crushed'
     end
-  end
-
-  def score_points
-    winning_score = 0
-    losing_score = 0
-    scores.each do |score|
-      losing_score += score[0]
-      winning_score += score[1]
-    end
-    [losing_score, winning_score]
   end
 
   def calculate_elo!

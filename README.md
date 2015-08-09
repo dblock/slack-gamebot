@@ -93,7 +93,7 @@ Record your loss.
 ```
 gamebot lost
 
-Wang Hoe defeated Victor Barna.
+Match has been recorded! Wang Hoe defeated Victor Barna.
 ```
 
 You cannot record a win.
@@ -103,7 +103,7 @@ Record your loss with a score, loser first.
 ```
 gamebot lost 5:21
 
-Wang Hoe crushed Victor Barna.
+Match has been recorded! Wang Hoe crushed Victor Barna.
 ```
 
 You can record scores for an entire match.
@@ -111,7 +111,19 @@ You can record scores for an entire match.
 ```
 gamebot lost 15:21 21:17 18:21
 
-Wang Hoe defeated Victor Barna.
+Match has been recorded! Wang Hoe defeated Victor Barna.
+```
+
+You can record scores for a match you have already lost.
+
+```
+gamebot lost
+
+Match has been recorded! Wang Hoe defeated Victor Barna.
+
+gamebot lost 15:21 21:17 18:21
+
+Match scores have been updated! Wang Hoe defeated Victor Barna.
 ```
 
 #### gamebot decline

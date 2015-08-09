@@ -45,4 +45,12 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
       "Match has been recorded! #{challenge.challengers.map(&:user_name).join(' and ')} narrowly defeated #{challenge.challenged.map(&:user_name).join(' and ')}."
     )
   end
+  it 'lost amending scores' do
+    challenge.lose!(challenged)
+    expect(message: "#{SlackRubyBot.config.user} lost 21:15 14:21 5:11", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
+      "Match scores have been updated! #{challenge.challengers.map(&:user_name).join(' and ')} defeated #{challenge.challenged.map(&:user_name).join(' and ')}."
+    )
+    challenge.reload
+    expect(challenge.match.scores).to eq [[21, 15], [14, 21], [5, 11]]
+  end
 end
