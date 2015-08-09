@@ -42,11 +42,7 @@ Get help.
 
 Registers a user.
 
-```
-gamebot register
-
-Welcome Victor Barna! You're ready to play.
-```
+![](screenshots/register.gif)
 
 This command can also update a user's registration, for example after the user has been renamed. The bot notices user renames, but this may be necessary if the bot wasn't running during that operation.
 
@@ -55,8 +51,6 @@ gamebot register
 
 Welcome back Victor Barna! I've updated your registration.
 ```
-
-![](screenshots/register.gif)
 
 #### gamebot challenge <opponent>, ... [with <teammate>, ...]
 
@@ -90,11 +84,7 @@ Wang Hoe and Zhang Jike accepted Victor Barna and Deng Yaping's challenge.
 
 Record your loss.
 
-```
-gamebot lost
-
-Match has been recorded! Wang Hoe defeated Victor Barna.
-```
+![](screenshots/lost.gif)
 
 You cannot record a win.
 
