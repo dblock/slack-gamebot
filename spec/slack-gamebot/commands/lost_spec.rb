@@ -53,4 +53,23 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     challenge.reload
     expect(challenge.match.scores).to eq [[21, 15], [14, 21], [5, 11]]
   end
+  it 'does not update a previously lost match' do
+    challenge.lose!(challenged, [[11, 21]])
+    challenge2 = Fabricate(:challenge, challenged: [challenged])
+    challenge2.accept!(challenged)
+    expect(message: "#{SlackRubyBot.config.user} lost", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
+      "Match has been recorded! #{challenge2.challengers.map(&:user_name).join(' and ')} defeated #{challenge2.challenged.map(&:user_name).join(' and ')}."
+    )
+    challenge.reload
+    expect(challenge.match.scores).to eq [[11, 21]]
+    challenge2.reload
+    expect(challenge2.state).to eq ChallengeState::PLAYED
+    expect(challenge2.match.scores).to be nil
+  end
+  it 'does not update a previously won match' do
+    challenge.lose!(challenge.challengers.first, [[11, 21]])
+    expect(message: "#{SlackRubyBot.config.user} lost", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
+      'No challenge to lose!'
+    )
+  end
 end
