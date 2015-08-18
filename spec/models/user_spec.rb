@@ -121,17 +121,6 @@ describe User do
     it 'returns an empty list' do
       expect(User.ranked).to eq []
     end
-    it 'ranks incrementally' do
-      user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
-      user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
-      expect(User.ranked).to eq [user2, user1]
-    end
-    it 'limits to max' do
-      Fabricate(:user, elo: 1, wins: 1, losses: 1)
-      user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)
-      Fabricate(:user, elo: 1, wins: 1, losses: 1)
-      expect(User.ranked(1)).to eq [user2]
-    end
     it 'ignores players without rank' do
       user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
       Fabricate(:user)

@@ -68,10 +68,6 @@ class User
     end
   end
 
-  def self.ranked(max = 3)
-    where(:rank.ne => nil).asc(:rank).limit(max)
-  end
-
   def self.rank_section(users)
     ranks = users.map(&:rank)
     where(:rank.gte => ranks.min, :rank.lte => ranks.max).asc(:rank).asc(:wins)

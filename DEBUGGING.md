@@ -7,7 +7,7 @@ heroku run irb --app=...
 
 Running `irb` attached to terminal... up, run.7593
 
-irb(main):002:0> $LOAD_PATH.unshift(File.dirname(__FILE__))
+irb(main):002:0> $LOAD_PATH.unshift('.')
 => [".", "/app/vendor/ruby-2.2.0/lib/ruby/site_ruby/2.2.0" ... ]
 
 irb(main):001:0> require 'slack-gamebot'

@@ -11,7 +11,7 @@ module SlackGamebot
         else
           max = Integer(arguments.first)
         end if arguments.any?
-        message = User.ranked(max).map do |user|
+        message = User.ranked.asc(:rank).limit(max).map do |user|
           "#{user.rank}. #{user}"
         end.join("\n")
         send_message client, data.channel, message
