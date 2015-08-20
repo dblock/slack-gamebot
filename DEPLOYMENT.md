@@ -29,7 +29,7 @@ heroku config:add GAMEBOT_SECRET=...
 Optional names for this bot.
 
 ```
-heroku config:add SLACK_RUBY_BOT_ALIASES=:pong: pp
+heroku config:add SLACK_RUBY_BOT_ALIASES=":pong: pp"
 ```
 
 #### GIPHY_API_KEY
