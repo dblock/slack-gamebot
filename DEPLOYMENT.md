@@ -24,6 +24,14 @@ DM Slack-Gamebot using this secret to perform a season reset. Only tell GameBot 
 heroku config:add GAMEBOT_SECRET=...
 ```
 
+#### SLACK_RUBY_BOT_ALIASES
+
+Optional names for this bot.
+
+```
+heroku config:add SLACK_RUBY_BOT_ALIASES=:pong: pp
+```
+
 #### GIPHY_API_KEY
 
 Slack-Gamebot replies with animated GIFs. While it's currently not necessary, uyou may need to set GIPHY_API_KEY in the future, see [github.com/Giphy/GiphyAPI](https://github.com/Giphy/GiphyAPI) for details.
