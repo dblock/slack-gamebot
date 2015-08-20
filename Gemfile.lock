@@ -92,7 +92,7 @@ GEM
       grape (>= 0.8.0)
       grape-entity
     hashie (3.4.2)
-    hyperclient (0.7.1)
+    hyperclient (0.7.0)
       faraday (~> 0.8)
       faraday-digestauth (~> 0.2)
       faraday_hal_middleware (~> 0.0.1)
@@ -224,7 +224,7 @@ DEPENDENCIES
   grape (= 0.12.0)
   grape-roar
   grape-swagger
-  hyperclient
+  hyperclient (= 0.7.0)
   kaminari (~> 0.16.1)
   mongoid (~> 4.x)
   mongoid-scroll

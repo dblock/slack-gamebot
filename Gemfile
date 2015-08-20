@@ -28,5 +28,5 @@ group :test do
   gem 'fabrication'
   gem 'faker'
   gem 'database_cleaner', '~> 1.4'
-  gem 'hyperclient'
+  gem 'hyperclient', '0.7.0'
 end
