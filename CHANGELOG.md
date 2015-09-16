@@ -1,5 +1,6 @@
 ### Changelog
 
+* Fix: correctly handle `user_change` event - [@dblock](https://github.com/dblock).
 * [#29](https://github.com/dblock/slack-gamebot/issues/29): Fix: `season` incorrectly reports number of players - [@dblock](https://github.com/dblock).
 * [#24](https://github.com/dblock/slack-gamebot/issues/24): Record game scores - [@dblock](https://github.com/dblock).
 * [#20](https://github.com/dblock/slack-gamebot/issues/20): Added support for matches - [@dblock](https://github.com/dblock).
