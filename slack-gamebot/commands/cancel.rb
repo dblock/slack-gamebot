@@ -13,8 +13,10 @@ module SlackGamebot
           else
             send_message_with_gif client, data.channel, "#{player.user_name} canceled #{challenge}.", 'chicken'
           end
+          logger.info "CANCEL: #{challenge}"
         else
           send_message client, data.channel, 'No challenge to cancel!'
+          logger.info "CANCEL: #{data.user}, N/A"
         end
       end
     end

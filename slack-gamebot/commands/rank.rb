@@ -13,6 +13,7 @@ module SlackGamebot
           user.rank ? "#{user.rank}. #{user}" : "#{user.user_name}: not ranked"
         end.join("\n")
         send_message client, data.channel, message
+        logger.info "RANK: #{users.map(&:user_name).join(', ')}"
       end
     end
   end

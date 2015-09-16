@@ -10,6 +10,7 @@ module SlackGamebot
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
         ::Season.create!(created_by: user)
         send_message_with_gif client, data.channel, 'Welcome to the new season!', 'season'
+        logger.info "RESET: #{data.user}"
       end
     end
   end
