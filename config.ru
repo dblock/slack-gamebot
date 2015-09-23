@@ -6,7 +6,7 @@ Thread.new do
   begin
     SlackGamebot::App.instance.run
   rescue Exception => e
-    STDERR.puts e
+    STDERR.puts "#{e.class}: #{e}"
     STDERR.puts e.backtrace
     raise e
   end
