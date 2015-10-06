@@ -15,10 +15,10 @@ describe Season do
       expect(User.all.detect { |u| u.wins != 0 || u.losses != 0 }).to be nil
     end
     it 'saves user ranks' do
-      expect(season.user_ranks.count).to eq 4
+      expect(season.user_ranks.count).to eq 6
     end
     it 'to_s' do
-      expect(season.to_s).to eq "#{season.created_at.strftime('%F')}: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 3 matches, 4 players"
+      expect(season.to_s).to eq "#{season.created_at.strftime('%F')}: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 3 matches, 6 players"
     end
   end
   context 'without challenges' do
@@ -28,11 +28,18 @@ describe Season do
       expect(season.errors.messages).to eq(challenges: ['No matches have been recorded.'])
     end
   end
-  context 'current season' do
+  context 'current season with one match' do
+    let!(:match) { Fabricate(:match) }
+    let(:season) { Season.new }
+    it 'to_s' do
+      expect(season.to_s).to eq "Current: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 1 match, 2 players"
+    end
+  end
+  context 'current season with multiple matches' do
     let!(:matches) { 3.times.map { Fabricate(:match) } }
     let(:season) { Season.new }
     it 'to_s' do
-      expect(season.to_s).to eq "Current: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 3 matches, 4 players"
+      expect(season.to_s).to eq "Current: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 3 matches, 6 players"
     end
     context 'with an unplayed challenge' do
       before do

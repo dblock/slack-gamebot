@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#35](https://github.com/dblock/slack-gamebot/issues/35): Fix: missing ranking and broken leaderboard in first game after reset - [@dblock](https://github.com/dblock).
 * [#34](https://github.com/dblock/slack-gamebot/issues/34): Fix: `season` incorrectly reports no seasons after reset - [@dblock](https://github.com/dblock).
 * Fix: correctly handle `user_change` event - [@dblock](https://github.com/dblock).
 * [#29](https://github.com/dblock/slack-gamebot/issues/29): Fix: `season` incorrectly reports number of players - [@dblock](https://github.com/dblock).

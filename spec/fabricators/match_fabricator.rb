@@ -8,6 +8,7 @@ Fabricator(:match) do
   after_create do |match|
     match.winners.inc(wins: 1)
     match.losers.inc(losses: 1)
+    User.rank!
     challenge.update_attributes!(state: ChallengeState::PLAYED, updated_by: match.losers.first)
   end
 end

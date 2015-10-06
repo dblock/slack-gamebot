@@ -95,6 +95,7 @@ class Challenge
     Match.create!(challenge: self, winners: winners, losers: losers, scores: scores)
     winners.inc(wins: 1)
     losers.inc(losses: 1)
+    User.rank!
     update_attributes!(state: ChallengeState::PLAYED)
   end
 
