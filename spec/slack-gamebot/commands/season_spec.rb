@@ -11,9 +11,17 @@ describe SlackGamebot::Commands::Season, vcr: { cassette_name: 'user_info' } do
     before do
       2.times.map { Fabricate(:match) }
     end
-    it 'returns past seasons and current season' do
+    it 'returns current season' do
       current_season = Season.new
       expect(message: "#{SlackRubyBot.config.user} season").to respond_with_slack_message current_season.to_s
+    end
+    context 'after reset' do
+      before do
+        ::Season.create!(created_by: User.first)
+      end
+      it 'returns current season' do
+        expect(message: "#{SlackRubyBot.config.user} season").to respond_with_slack_message 'No matches have been recorded.'
+      end
     end
   end
 end
