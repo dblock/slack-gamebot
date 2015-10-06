@@ -12,7 +12,7 @@ module Score
 
   # loser scores first
   def self.valid?(scores)
-    scores.select { |score| score[0] < score[1] }.count > scores.count / 2
+    scores.count { |score| score[0] < score[1] } > scores.count / 2
   end
 
   # parse scores from a string
