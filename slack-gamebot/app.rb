@@ -3,14 +3,36 @@ module SlackGamebot
     include SlackGamebot::Hooks::UserChange
 
     def initialize
-      SlackGamebot.configure do |config|
-        config.secret = ENV['GAMEBOT_SECRET'] || warn("Missing ENV['GAMEBOT_SECRET'].")
-      end
+      configure!
+      check_mongodb_provider!
+      check_database!
       super
     end
 
     def self.instance
       @instance ||= SlackGamebot::App.new
+    end
+
+    private
+
+    def configure!
+      SlackGamebot.configure do |config|
+        config.secret = ENV['GAMEBOT_SECRET'] || warn("Missing ENV['GAMEBOT_SECRET'].")
+      end
+    end
+
+    def check_mongodb_provider!
+      return unless ENV['RACK_ENV'] == 'production'
+      fail "Missing ENV['MONGOHQ_URI'] or ENV['MONGOLAB_URI']." unless ENV['MONGOHQ_URI'] || ENV['MONGOLAB_URI']
+    end
+
+    def check_database!
+      rc = Mongoid.default_session.command(ping: 1)
+      return if rc['ok'] == 1
+      fail rc['error'] || 'Unexpected error.'
+    rescue Exception => e
+      warn "Error connecting to MongoDB: #{e.message}"
+      raise e
     end
   end
 
