@@ -10,7 +10,7 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
   context 'one season' do
     before do
       2.times.map { Fabricate(:match) }
-      challenge = Fabricate(:challenge, challengers: [User.first], challenged: [User.last])
+      challenge = Fabricate(:challenge, challengers: [User.asc(:_id).first], challenged: [User.asc(:_id).last])
       Fabricate(:match, challenge: challenge)
     end
     let!(:season) { Fabricate(:season) }
@@ -23,7 +23,7 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
       2.times.map do |n|
         User.all.destroy
         (n + 1).times.map { Fabricate(:match) }
-        challenge = Fabricate(:challenge, challengers: [User.first], challenged: [User.last])
+        challenge = Fabricate(:challenge, challengers: [User.asc(:_id).first], challenged: [User.asc(:_id).last])
         Fabricate(:match, challenge: challenge)
         Fabricate(:season)
       end
@@ -44,7 +44,7 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
   context 'current and past season' do
     let!(:season1) do
       2.times.map { Fabricate(:match) }
-      challenge = Fabricate(:challenge, challengers: [User.first], challenged: [User.last])
+      challenge = Fabricate(:challenge, challengers: [User.asc(:_id).first], challenged: [User.asc(:_id).last])
       Fabricate(:match, challenge: challenge)
       Fabricate(:season)
     end

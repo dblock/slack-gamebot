@@ -1,5 +1,5 @@
 development:
-  sessions:
+  clients:
     default:
       database: gamebot_development
       hosts:
@@ -9,7 +9,7 @@ development:
     use_utc: true
 
 test:
-  sessions:
+  clients:
     default:
       database: gamebot_test
       hosts:
@@ -20,7 +20,7 @@ test:
     use_utc: true
 
 production:
-  sessions:
+  clients:
     default:
       uri: <%= ENV['MONGOHQ_URI'] || ENV['MONGOLAB_URI'] %>
   options:

@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 ruby '2.2.1'
 
 gem 'slack-ruby-bot', '~> 0.4.4'
-gem 'mongoid', '~> 4.x'
+gem 'mongoid', '~> 5.0.0'
 gem 'ruby-enum'
 gem 'puma'
 gem 'grape', '~> 0.13.0'
@@ -27,6 +27,6 @@ group :test do
   gem 'vcr'
   gem 'fabrication'
   gem 'faker'
-  gem 'database_cleaner', '~> 1.4.0'
+  gem 'database_cleaner'
   gem 'hyperclient'
 end

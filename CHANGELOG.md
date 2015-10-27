@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#38](https://github.com/dblock/slack-gamebot/issues/38): Fix: SystemStackError: stack level too deep w/ MongoLab - [@dblock](https://github.com/dblock).
 * [#35](https://github.com/dblock/slack-gamebot/issues/35): Fix: missing ranking and broken leaderboard in first game after reset - [@dblock](https://github.com/dblock).
 * [#34](https://github.com/dblock/slack-gamebot/issues/34): Fix: `season` incorrectly reports no seasons after reset - [@dblock](https://github.com/dblock).
 * Fix: correctly handle `user_change` event - [@dblock](https://github.com/dblock).

@@ -3,6 +3,7 @@ module SlackGamebot
     include SlackGamebot::Hooks::UserChange
 
     def initialize
+      silence_loggers!
       configure!
       check_mongodb_provider!
       check_database!
@@ -14,6 +15,11 @@ module SlackGamebot
     end
 
     private
+
+    def silence_loggers!
+      Mongoid.logger.level = Logger::INFO
+      Mongo::Logger.logger.level = Logger::INFO
+    end
 
     def configure!
       SlackGamebot.configure do |config|
@@ -27,9 +33,9 @@ module SlackGamebot
     end
 
     def check_database!
-      rc = Mongoid.default_session.command(ping: 1)
-      return if rc['ok'] == 1
-      fail rc['error'] || 'Unexpected error.'
+      rc = Mongoid.default_client.command(ping: 1)
+      return if rc && rc.ok?
+      fail rc.documents.first['error'] || 'Unexpected error.'
     rescue Exception => e
       warn "Error connecting to MongoDB: #{e.message}"
       raise e
