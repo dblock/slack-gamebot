@@ -14,7 +14,6 @@ test:
       database: gamebot_test
       hosts:
         - 127.0.0.1:27017
-        - 127.0.0.1:27017
   options:
     raise_not_found_error: false
     use_utc: true
