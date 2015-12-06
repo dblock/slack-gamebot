@@ -24,6 +24,7 @@ module SlackGamebot
     def configure!
       SlackGamebot.configure do |config|
         config.secret = ENV['GAMEBOT_SECRET'] || warn("Missing ENV['GAMEBOT_SECRET'].")
+        config.enable_gifs = [1, 'true'].include? ENV['GAMEBOT_ENABLE_GIFS']
       end
     end
 
