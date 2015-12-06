@@ -2,12 +2,17 @@ module SlackGamebot
   module Commands
     class Switchgifs < SlackRubyBot::Commands::Base
       def self.call(client, data, _match)
-        if :enable_gifs == true
+        # fail ArgumentError, "Missing ENV['GAMEBOT_SECRET']." unless SlackGamebot.config.secret.present?
+        # arguments = match['expression'].split.reject(&:blank?) if match.names.include?('expression')
+        # secret = arguments.first if arguments
+        # fail ArgumentError, 'Missing secret.' unless secret.present?
+        # fail ArgumentError, 'Invalid secret.' unless secret == SlackGamebot.config.secret
+        if SlackGamebot.config.enable_gifs == true
           message = "Thanks <@#{data.user}>! Gifs are off."
-          :enable_gifs = false
+          SlackGamebot.config.enable_gifs = false
         else
           message = "Thanks <@#{data.user}>! Gifs are on."
-          :enable_gifs = true
+          SlackGamebot.config.enable_gifs = true
         end
         send_message_with_gif client, data.channel, message, 'welcome'
         # logger.info "DISABLEGIFS: #{data.user}"
