@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#40](https://github.com/dblock/slack-gamebot/issues/40): You can disable GIFs via `ENV['SLACK_RUBY_BOT_SET_GIFS']` - [@dblock](https://github.com/dblock).
 * [#38](https://github.com/dblock/slack-gamebot/issues/38): Fix: SystemStackError: stack level too deep w/ MongoLab - [@dblock](https://github.com/dblock).
 * [#35](https://github.com/dblock/slack-gamebot/issues/35): Fix: missing ranking and broken leaderboard in first game after reset - [@dblock](https://github.com/dblock).
 * [#34](https://github.com/dblock/slack-gamebot/issues/34): Fix: `season` incorrectly reports no seasons after reset - [@dblock](https://github.com/dblock).
