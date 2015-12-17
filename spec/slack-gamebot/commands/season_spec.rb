@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Season, vcr: { cassette_name: 'user_info' } do
-  let(:app) { SlackGamebot::App.new }
+  let(:app) { SlackGamebot::Server.new }
   context 'no seasons' do
     it 'seasons' do
       expect(message: "#{SlackRubyBot.config.user} season").to respond_with_slack_message "There're no seasons."

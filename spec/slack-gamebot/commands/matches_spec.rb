@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Matches, vcr: { cassette_name: 'user_info' } do
-  let(:app) { SlackGamebot::App.new }
+  let(:app) { SlackGamebot::Server.new }
   let(:user) { Fabricate(:user, user_name: 'username') }
   let(:singles_challenge) { Fabricate(:challenge, challengers: [user]) }
   let(:doubles_challenge) { Fabricate(:doubles_challenge, challengers: [user, Fabricate(:user)]) }

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Cancel, vcr: { cassette_name: 'user_info' } do
-  let(:app) { SlackGamebot::App.new }
+  let(:app) { SlackGamebot::Server.new }
   context 'challenger' do
     let(:challenger) { Fabricate(:user, user_name: 'username') }
     let!(:challenge) { Fabricate(:challenge, challengers: [challenger]) }

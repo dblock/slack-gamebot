@@ -6,24 +6,6 @@
 
 Deploy slack-gamebot to Heroku and add a MongoLab or Compose MongoDB provider. You can use their free tiers.
 
-### Environment
-
-#### SLACK_API_TOKEN
-
-Set SLACK_API_TOKEN from the Bot integration settings on Slack.
-
-```
-heroku config:add SLACK_API_TOKEN=...
-```
-
-#### GAMEBOT_SECRET
-
-DM Slack-Gamebot using this secret to perform a season reset. Only tell GameBot admins.
-
-```
-heroku config:add GAMEBOT_SECRET=...
-```
-
 #### SLACK_RUBY_BOT_ALIASES
 
 Optional names for this bot.
@@ -40,4 +22,6 @@ Slack-Gamebot replies with animated GIFs. While it's currently not necessary, uy
 
 Heroku free tier applications will idle. Use [Kaffeine](https://kaffeine.herokuapp.com/#!) or similar to prevent your instance from sleeping or pay for a production dyno.
 
+### Register Your Team
 
+TODO

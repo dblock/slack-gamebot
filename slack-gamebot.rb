@@ -9,6 +9,7 @@ end
 
 Mongoid.load! File.expand_path('../config/mongoid.yml', __FILE__), ENV['RACK_ENV']
 
+require 'faye/websocket'
 require 'slack-ruby-bot'
 require 'slack-gamebot/hooks'
 require 'slack-gamebot/version'
@@ -16,5 +17,6 @@ require 'slack-gamebot/ascii'
 require 'slack-gamebot/models'
 require 'slack-gamebot/api'
 require 'slack-gamebot/app'
-require 'slack-gamebot/config'
+require 'slack-gamebot/server'
+require 'slack-gamebot/service'
 require 'slack-gamebot/commands'

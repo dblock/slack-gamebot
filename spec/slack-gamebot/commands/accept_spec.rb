@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Accept, vcr: { cassette_name: 'user_info' } do
-  let(:app) { SlackGamebot::App.new }
+  let(:app) { SlackGamebot::Server.new }
   let(:challenged) { Fabricate(:user, user_name: 'username') }
   let!(:challenge) { Fabricate(:challenge, challenged: [challenged]) }
   it 'accepts a challenge' do

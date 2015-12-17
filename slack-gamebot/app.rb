@@ -1,13 +1,10 @@
 module SlackGamebot
-  class App < SlackRubyBot::App
-    include SlackGamebot::Hooks::UserChange
-
-    def initialize
+  class App
+    def prepare!
       silence_loggers!
-      configure!
       check_mongodb_provider!
       check_database!
-      super
+      migrate_from_single_team!
     end
 
     def self.instance
@@ -16,15 +13,16 @@ module SlackGamebot
 
     private
 
+    def logger
+      @logger ||= begin
+        $stdout.sync = true
+        Logger.new(STDOUT)
+      end
+    end
+
     def silence_loggers!
       Mongoid.logger.level = Logger::INFO
       Mongo::Logger.logger.level = Logger::INFO
-    end
-
-    def configure!
-      SlackGamebot.configure do |config|
-        config.secret = ENV['GAMEBOT_SECRET'] || warn("Missing ENV['GAMEBOT_SECRET'].")
-      end
     end
 
     def check_mongodb_provider!
@@ -40,15 +38,13 @@ module SlackGamebot
       warn "Error connecting to MongoDB: #{e.message}"
       raise e
     end
-  end
 
-  class << self
-    def configure
-      block_given? ? yield(SlackGamebot::Config) : SlackGamebot::Config
-    end
-
-    def config
-      SlackGamebot::Config
+    def migrate_from_single_team!
+      return unless ENV.key?('SLACK_API_TOKEN')
+      logger.info 'Migrating from env SLACK_API_TOKEN ...'
+      team = Team.find_or_create_from_env!
+      logger.info "Automatically migrated team: #{team}."
+      logger.warn "Unset ENV['SLACK_API_TOKEN'] and ENV['GAMEBOT_SECRET']."
     end
   end
 end

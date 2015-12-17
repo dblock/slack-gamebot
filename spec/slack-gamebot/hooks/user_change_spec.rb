@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Hooks::UserChange do
-  let(:app) { SlackGamebot::App.new }
+  let(:app) { SlackGamebot::Server.new }
   context 'with a user' do
     before do
       @user = Fabricate(:user)
