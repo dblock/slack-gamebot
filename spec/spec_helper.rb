@@ -4,6 +4,8 @@ require 'fabrication'
 require 'faker'
 require 'hyperclient'
 
+ENV['RACK_ENV'] = 'test'
+
 require 'slack-ruby-bot/rspec'
 require 'slack-gamebot'
 
