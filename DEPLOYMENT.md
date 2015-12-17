@@ -38,4 +38,6 @@ Slack-Gamebot replies with animated GIFs. While it's currently not necessary, uy
 
 ### Heroku Idling
 
-Heroku free tier applications will idle. Use [UptimeRobot](http://uptimerobot.com) or similar to prevent your instance from sleeping or pay for a production dyno.
+Heroku free tier applications will idle. Use [Kaffeine](https://kaffeine.herokuapp.com/#!) or similar to prevent your instance from sleeping or pay for a production dyno.
+
+
