@@ -24,5 +24,21 @@ describe Api::Endpoints::TeamsEndpoint do
       expect(team._links.matches._url).to eq "http://example.org/matches?team_id=#{existing_team.id}"
       expect(team._links.seasons._url).to eq "http://example.org/seasons?team_id=#{existing_team.id}"
     end
+
+    it 'creates a team' do
+      expect(SlackGamebot::Service).to receive(:start!)
+      oauth_access = { 'bot' => { 'bot_access_token' => 'token' } }
+      allow_any_instance_of(Slack::Web::Client).to receive(:oauth_access).with(hash_including(code: 'code')).and_return(oauth_access)
+      allow_any_instance_of(Slack::Web::Client).to receive(:team_info).and_return('team' => { 'id' => 'id', 'name' => 'name', 'domain' => 'domain' })
+      expect do
+        team = client.teams._post(code: 'code')
+        expect(team.team_id).to eq 'id'
+        expect(team.name).to eq 'name'
+        expect(team.domain).to eq 'domain'
+        team = Team.find(team.id)
+        expect(team.token).to eq 'token'
+        expect(team.secret).to_not be_blank
+      end.to change(Team, :count).by(1)
+    end
   end
 end

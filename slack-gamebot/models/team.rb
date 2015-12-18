@@ -10,6 +10,10 @@ class Team
   field :token, type: String
   field :secret, type: String
 
+  validates_uniqueness_of :token
+  validates_presence_of :token
+  validates_presence_of :team_id
+
   has_many :users
   has_many :seasons
   has_many :matches

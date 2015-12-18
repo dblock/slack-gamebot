@@ -25,6 +25,35 @@ module Api
           teams = paginate_and_sort_by_cursor(Team, default_sort_order: '-_id')
           present teams, with: Api::Presenters::TeamsPresenter
         end
+
+        desc 'Create a team using an OAuth token.'
+        params do
+          requires :code, type: String
+        end
+        post do
+          client = Slack::Web::Client.new
+
+          rc = client.oauth_access(
+            client_id: ENV['SLACK_CLIENT_ID'],
+            client_secret: ENV['SLACK_CLIENT_SECRET'],
+            code: params[:code]
+          )
+
+          token = rc['bot']['bot_access_token']
+
+          info = Slack::Web::Client.new(token: token).team_info
+
+          team = Team.create!(
+            token: token,
+            team_id: info['team']['id'],
+            name: info['team']['name'],
+            domain: info['team']['domain'],
+            secret: SecureRandom.hex(16)
+          )
+
+          SlackGamebot::Service.start!(team)
+          present team, with: Api::Presenters::TeamPresenter
+        end
       end
     end
   end

@@ -6,6 +6,7 @@ module Api
       include Grape::Roar::Representer
 
       property :id, type: String, desc: 'Team ID.'
+      property :team_id, type: String, desc: 'Slack team ID.'
       property :name, type: String, desc: 'Team name.'
       property :domain, type: String, desc: 'Team domain.'
       property :created_at, type: DateTime, desc: 'Date/time when the team was created.'
