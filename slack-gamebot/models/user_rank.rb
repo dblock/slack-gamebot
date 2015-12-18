@@ -2,6 +2,7 @@ class UserRank
   include Mongoid::Document
 
   belongs_to :user
+
   field :user_name, type: String
   field :wins, type: Integer, default: 0
   field :losses, type: Integer, default: 0

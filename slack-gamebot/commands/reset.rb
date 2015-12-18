@@ -9,7 +9,7 @@ module SlackGamebot
         fail ArgumentError, 'Missing secret.' unless secret.present?
         fail ArgumentError, 'Invalid secret.' unless secret == team.secret
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
-        ::Season.create!(created_by: user)
+        ::Season.create!(team: team, created_by: user)
         send_message_with_gif client, data.channel, 'Welcome to the new season!', 'season'
         logger.info "RESET: #{data.user}"
       end

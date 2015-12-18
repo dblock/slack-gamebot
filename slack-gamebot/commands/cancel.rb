@@ -3,7 +3,7 @@ module SlackGamebot
     class Cancel < SlackRubyBot::Commands::Base
       def self.call(client, data, _match)
         player = ::User.find_create_or_update_by_slack_id!(client, data.user)
-        challenge = ::Challenge.find_by_user(data.channel, player)
+        challenge = ::Challenge.find_by_user(client.team, data.channel, player)
         if challenge
           challenge.cancel!(player)
           if challenge.challengers.include?(player)

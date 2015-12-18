@@ -1,19 +1,19 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
-  let(:app) { SlackGamebot::Server.new }
-  let!(:team) { Fabricate(:team) }
+  let(:team) { Team.first || Fabricate(:team) }
+  let(:app) { SlackGamebot::Server.new(team: team) }
   it 'requires a secret' do
-    expect(::User).to_not receive(:reset_all!)
+    expect(::User).to_not receive(:reset_all!).with(team)
     expect(message: "#{SlackRubyBot.config.user} reset").to respond_with_error('Missing secret.')
   end
   it 'requires a valid secret' do
-    expect(::User).to_not receive(:reset_all!)
+    expect(::User).to_not receive(:reset_all!).with(team)
     expect(message: "#{SlackRubyBot.config.user} reset invalid").to respond_with_error('Invalid secret.')
   end
   it 'resets with the correct secret' do
     Fabricate(:match)
-    expect(::User).to receive(:reset_all!).once
+    expect(::User).to receive(:reset_all!).with(team).once
     expect(message: "#{SlackRubyBot.config.user} reset #{team.secret}").to respond_with_slack_message('Welcome to the new season!')
   end
   it 'cancels open challenges' do

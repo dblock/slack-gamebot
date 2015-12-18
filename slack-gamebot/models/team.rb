@@ -8,6 +8,11 @@ class Team
   field :token, type: String
   field :secret, type: String
 
+  has_many :users
+  has_many :seasons
+  has_many :matches
+  has_many :challenges
+
   def to_s
     "name=#{name}, domain=#{domain}, id=#{team_id}, token=#{token[0..5]}..#{token[-5..-1]}"
   end

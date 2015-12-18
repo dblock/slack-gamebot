@@ -60,20 +60,21 @@ describe Match do
       end
     end
     context 'scores' do
+      let(:team) { Fabricate(:team) }
       it 'loser first' do
-        expect(Match.new(scores: [[15, 21]])).to be_valid
+        expect(Match.new(team: team, scores: [[15, 21]])).to be_valid
       end
       it 'loser first with 3 scores' do
-        expect(Match.new(scores: [[15, 21], [21, 5], [3, 11]])).to be_valid
+        expect(Match.new(team: team, scores: [[15, 21], [21, 5], [3, 11]])).to be_valid
       end
       it 'winner first' do
-        expect(Match.new(scores: [[21, 15]])).to_not be_valid
+        expect(Match.new(team: team, scores: [[21, 15]])).to_not be_valid
       end
       it 'winner first with 3 scores' do
-        expect(Match.new(scores: [[21, 15], [5, 21], [11, 3]])).to_not be_valid
+        expect(Match.new(team: team, scores: [[21, 15], [5, 21], [11, 3]])).to_not be_valid
       end
       pending 'draw' do
-        expect(Match.new(scores: [[15, 15]])).to be_valid
+        expect(Match.new(team: team, scores: [[15, 15]])).to be_valid
       end
     end
   end

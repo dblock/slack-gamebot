@@ -44,6 +44,10 @@ module SlackGamebot
       logger.info 'Migrating from env SLACK_API_TOKEN ...'
       team = Team.find_or_create_from_env!
       logger.info "Automatically migrated team: #{team}."
+      User.where(team: nil).update_all(team_id: team.id)
+      Challenge.where(team: nil).update_all(team_id: team.id)
+      Season.where(team: nil).update_all(team_id: team.id)
+      Match.where(team: nil).update_all(team_id: team.id)
       logger.warn "Unset ENV['SLACK_API_TOKEN'] and ENV['GAMEBOT_SECRET']."
     end
   end

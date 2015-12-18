@@ -4,10 +4,13 @@ class Match
 
   SORT_ORDERS = ['created_at', '-created_at']
 
+  belongs_to :team, index: true
   field :scores, type: Array
   belongs_to :challenge, index: true
   before_create :calculate_elo!
   validate :validate_scores
+  validates_presence_of :team
+  validate :validate_teams
 
   has_and_belongs_to_many :winners, class_name: 'User', inverse_of: nil
   has_and_belongs_to_many :losers, class_name: 'User', inverse_of: nil
@@ -17,6 +20,13 @@ class Match
   end
 
   private
+
+  def validate_teams
+    teams = [team]
+    teams << challenge.team if challenge
+    teams.uniq!
+    errors.add(:team, "Match can only be recorded for the same team.") if teams.count != 1
+  end
 
   def validate_scores
     return unless scores

@@ -5,7 +5,7 @@ module SlackGamebot
         totals = {}
         totals.default = 0
         arguments = match['expression'].split.reject(&:blank?) if match.names.include?('expression')
-        users = ::User.find_many_by_slack_mention!(arguments) if arguments && arguments.any?
+        users = ::User.find_many_by_slack_mention!(client.team, arguments) if arguments && arguments.any?
         user_ids = users.map(&:id) if users && users.any?
         matches = user_ids && user_ids.any? ? ::Match.any_of({ :winner_ids.in => user_ids }, :loser_ids.in => user_ids) : ::Match.all
         matches = matches.where(:challenge_id.in => ::Challenge.current.pluck(:_id))

@@ -6,36 +6,41 @@ describe User do
       @user = Fabricate(:user)
     end
     it 'finds by slack id' do
-      expect(User.find_by_slack_mention!("<@#{@user.user_id}>")).to eq @user
+      expect(User.find_by_slack_mention!(@user.team, "<@#{@user.user_id}>")).to eq @user
     end
     it 'finds by username' do
-      expect(User.find_by_slack_mention!(@user.user_name)).to eq @user
+      expect(User.find_by_slack_mention!(@user.team, @user.user_name)).to eq @user
     end
     it 'finds by username is case-insensitive' do
-      expect(User.find_by_slack_mention!(@user.user_name.capitalize)).to eq @user
+      expect(User.find_by_slack_mention!(@user.team, @user.user_name.capitalize)).to eq @user
     end
     it 'requires a known user' do
       expect do
-        User.find_by_slack_mention!('<@nobody>')
+        User.find_by_slack_mention!(@user.team, '<@nobody>')
       end.to raise_error ArgumentError, "I don't know who <@nobody> is! Ask them to _#{SlackRubyBot.config.user} register_."
     end
   end
   context '#find_many_by_slack_mention!' do
+    let(:team) { Fabricate(:team) }
     before do
-      @users = [Fabricate(:user), Fabricate(:user)]
+      @users = [Fabricate(:user, team: team), Fabricate(:user, team: team)]
     end
     it 'finds by slack_id or slack_mention' do
-      users = User.find_many_by_slack_mention! [@users.first.user_name, @users.last.slack_mention]
+      users = User.find_many_by_slack_mention!(team, [@users.first.user_name, @users.last.slack_mention])
       expect(users).to contain_exactly(*@users)
     end
     it 'requires known users' do
       expect do
-        User.find_many_by_slack_mention! %w(foo bar)
+        User.find_many_by_slack_mention!(team, %w(foo bar))
       end.to raise_error ArgumentError, "I don't know who foo is! Ask them to _#{SlackRubyBot.config.user} register_."
     end
   end
   context '#find_create_or_update_by_slack_id!', vcr: { cassette_name: 'user_info' } do
-    let(:client) { Slack::RealTime::Client.new }
+    let(:team) { Fabricate(:team) }
+    let(:client) { SlackRubyBot::Client.new }
+    before do
+      client.team = team
+    end
     context 'without a user' do
       it 'creates a user' do
         expect do
@@ -48,7 +53,7 @@ describe User do
     end
     context 'with a user' do
       before do
-        @user = Fabricate(:user)
+        @user = Fabricate(:user, team: team)
       end
       it 'creates another user' do
         expect do
@@ -67,7 +72,7 @@ describe User do
     it 'resets all user stats' do
       user1 = Fabricate(:user, elo: 48, losses: 1, wins: 2, tau: 0.5)
       user2 = Fabricate(:user, elo: 54, losses: 2, wins: 1, tau: 1.5)
-      User.reset_all!
+      User.reset_all!(user1.team)
       user1.reload
       user2.reload
       expect(user1.wins).to eq 0

@@ -22,8 +22,9 @@ describe Season do
     end
   end
   context 'without challenges' do
+    let(:team) { Fabricate(:team) }
     it 'cannot be created' do
-      season = Season.new
+      season = Season.new(team: team)
       expect(season).to_not be_valid
       expect(season.errors.messages).to eq(challenges: ['No matches have been recorded.'])
     end

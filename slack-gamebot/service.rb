@@ -4,12 +4,12 @@ module SlackGamebot
     @services = {}
 
     class << self
-      def start!(token)
-        fail 'Token already known.' if @services.key?(token)
+      def start!(team)
+        fail 'Token already known.' if @services.key?(team.token)
         EM.next_tick do
-          server = SlackGamebot::Server.new(token: token)
+          server = SlackGamebot::Server.new(team: team)
           LOCK.synchronize do
-            @services[token] = server
+            @services[team.token] = server
           end
           restart!(server)
         end
@@ -17,12 +17,12 @@ module SlackGamebot
         logger.error e
       end
 
-      def stop!(token)
+      def stop!(team)
         LOCK.synchronize do
-          fail 'Token unknown.' unless @services.key?(token)
+          fail 'Token unknown.' unless @services.key?(team.token)
           EM.next_tick do
-            @services[token].stop!
-            @services.delete(token)
+            @services[team.token].stop!
+            @services.delete(team.token)
           end
         end
       rescue StandardError => e
@@ -38,7 +38,7 @@ module SlackGamebot
 
       def start_from_database!
         Team.each do |team|
-          start!(team.token)
+          start!(team)
         end
       end
 

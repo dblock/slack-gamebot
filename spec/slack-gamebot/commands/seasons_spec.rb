@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
-  let(:app) { SlackGamebot::Server.new }
+  let(:team) { Team.first || Fabricate(:team) }
+  let(:app) { SlackGamebot::Server.new(team: team) }
   context 'no seasons' do
     it 'seasons' do
       expect(message: "#{SlackRubyBot.config.user} seasons").to respond_with_slack_message "There're no seasons."
@@ -37,7 +38,7 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
       2.times.map { Fabricate(:match) }
     end
     it 'returns past seasons and current season' do
-      current_season = Season.new
+      current_season = Season.new(team: team)
       expect(message: "#{SlackRubyBot.config.user} seasons").to respond_with_slack_message current_season.to_s
     end
   end
