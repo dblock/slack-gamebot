@@ -27,14 +27,12 @@ describe Api::Endpoints::TeamsEndpoint do
 
     it 'creates a team' do
       expect(SlackGamebot::Service).to receive(:start!)
-      oauth_access = { 'bot' => { 'bot_access_token' => 'token' } }
+      oauth_access = { 'bot' => { 'bot_access_token' => 'token' }, 'team_id' => 'team_id', 'team_name' => 'team_name' }
       allow_any_instance_of(Slack::Web::Client).to receive(:oauth_access).with(hash_including(code: 'code')).and_return(oauth_access)
-      allow_any_instance_of(Slack::Web::Client).to receive(:team_info).and_return('team' => { 'id' => 'id', 'name' => 'name', 'domain' => 'domain' })
       expect do
         team = client.teams._post(code: 'code')
-        expect(team.team_id).to eq 'id'
-        expect(team.name).to eq 'name'
-        expect(team.domain).to eq 'domain'
+        expect(team.team_id).to eq 'team_id'
+        expect(team.name).to eq 'team_name'
         team = Team.find(team.id)
         expect(team.token).to eq 'token'
         expect(team.secret).to_not be_blank

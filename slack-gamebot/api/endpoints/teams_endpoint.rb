@@ -39,15 +39,10 @@ module Api
             code: params[:code]
           )
 
-          token = rc['bot']['bot_access_token']
-
-          info = Slack::Web::Client.new(token: token).team_info
-
           team = Team.create!(
-            token: token,
-            team_id: info['team']['id'],
-            name: info['team']['name'],
-            domain: info['team']['domain'],
+            token: rc['bot']['bot_access_token'],
+            team_id: rc['team_id'],
+            name: rc['team_name'],
             secret: SecureRandom.hex(16)
           )
 

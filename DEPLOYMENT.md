@@ -17,3 +17,7 @@ heroku config:add SLACK_RUBY_BOT_ALIASES=":pong: pp"
 #### GIPHY_API_KEY
 
 Slack-Gamebot replies with animated GIFs. While it's currently not necessary, uyou may need to set GIPHY_API_KEY in the future, see [github.com/Giphy/GiphyAPI](https://github.com/Giphy/GiphyAPI) for details.
+
+#### SLACK_CLIENT_ID and SLACK_CLIENT_SECRET
+
+Register an aplication with Slack on https://api.slack.com. Note the client ID and secret.
