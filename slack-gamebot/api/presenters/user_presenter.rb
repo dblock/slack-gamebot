@@ -13,6 +13,11 @@ module Api
       property :rank, type: Integer, desc: 'Rank.'
       property :created_at, as: :registered_at, type: DateTime, desc: 'Date/time when the user has registered.'
 
+      link :team do |opts|
+        request = Grape::Request.new(opts[:env])
+        "#{request.base_url}/teams/#{represented.team.id}" if represented.team
+      end
+
       link :self do |opts|
         request = Grape::Request.new(opts[:env])
         "#{request.base_url}/users/#{id}"

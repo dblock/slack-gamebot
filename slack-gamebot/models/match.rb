@@ -25,7 +25,7 @@ class Match
     teams = [team]
     teams << challenge.team if challenge
     teams.uniq!
-    errors.add(:team, "Match can only be recorded for the same team.") if teams.count != 1
+    errors.add(:team, 'Match can only be recorded for the same team.') if teams.count != 1
   end
 
   def validate_scores

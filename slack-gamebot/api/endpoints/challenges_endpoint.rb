@@ -18,11 +18,13 @@ module Api
 
         desc 'Get all the challenges.'
         params do
+          requires :team_id, type: String
           use :pagination
         end
         sort Challenge::SORT_ORDERS
         get do
-          challenges = paginate_and_sort_by_cursor(Challenge, default_sort_order: '-_id')
+          query = Challenge.where(team_id: params[:team_id])
+          challenges = paginate_and_sort_by_cursor(query, default_sort_order: '-_id')
           present challenges, with: Api::Presenters::ChallengesPresenter
         end
       end

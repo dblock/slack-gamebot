@@ -8,6 +8,9 @@ module Api
 
       namespace :seasons do
         desc 'Get current season.'
+        params do
+          requires :team_id, type: String
+        end
         get 'current' do
           present Season.new, with: Api::Presenters::SeasonPresenter
         end
@@ -23,11 +26,13 @@ module Api
 
         desc 'Get all past seasons.'
         params do
+          requires :team_id, type: String
           use :pagination
         end
         sort Season::SORT_ORDERS
         get do
-          seasons = paginate_and_sort_by_cursor(Season, default_sort_order: '-_id')
+          query = Season.where(team_id: params[:team_id])
+          seasons = paginate_and_sort_by_cursor(query, default_sort_order: '-_id')
           present seasons, with: Api::Presenters::SeasonsPresenter
         end
       end

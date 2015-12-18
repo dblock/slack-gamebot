@@ -35,7 +35,7 @@ class Season
     teams = [team]
     teams.concat(challenges.map(&:team))
     teams.uniq!
-    errors.add(:team, "Season can only be recorded for one team.") if teams.count != 1
+    errors.add(:team, 'Season can only be recorded for one team.') if teams.count != 1
   end
 
   def winner
@@ -68,7 +68,7 @@ class Season
   def archive_challenges!
     Challenge.where(
       :state.in => [ChallengeState::PROPOSED, ChallengeState::ACCEPTED],
-      team: team,
+      team: team
     ).set(
       state: ChallengeState::CANCELED,
       updated_by_id: created_by && created_by.id

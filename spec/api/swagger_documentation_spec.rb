@@ -14,6 +14,7 @@ describe Api do
         '/challenges.{format}',
         '/matches.{format}',
         '/seasons.{format}',
+        '/teams.{format}',
         '/swagger_doc.{format}'
       ])
     end

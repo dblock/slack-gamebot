@@ -136,7 +136,7 @@ class Challenge
     teams << match.team if match
     teams << season.team if season
     teams.uniq!
-    errors.add(:team, "Can only play others on the same team.") if teams.count != 1
+    errors.add(:team, 'Can only play others on the same team.') if teams.count != 1
   end
 
   def validate_unique_challenge
