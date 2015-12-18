@@ -8,8 +8,6 @@ module Api
       property :id, type: String, desc: 'Team ID.'
       property :name, type: String, desc: 'Team name.'
       property :domain, type: String, desc: 'Team domain.'
-      property :token, type: String, desc: 'Team token.'
-      property :secret, type: String, desc: 'Team secret.'
       property :created_at, type: DateTime, desc: 'Date/time when the team was created.'
       property :updated_at, type: DateTime, desc: 'Date/time when the team was accepted, declined or canceled.'
 
