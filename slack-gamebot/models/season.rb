@@ -2,6 +2,7 @@ class Season
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
+  belongs_to :team, index: true
   belongs_to :created_by, class_name: 'User', inverse_of: nil, index: true
   has_many :challenges
   embeds_many :user_ranks
@@ -10,6 +11,8 @@ class Season
   after_create :reset_users!
 
   validate :validate_challenges
+  validate :validate_teams
+  validates_presence_of :team
 
   SORT_ORDERS = ['created_at', '-created_at']
 
@@ -27,6 +30,13 @@ class Season
   end
 
   private
+
+  def validate_teams
+    teams = [team]
+    teams.concat(challenges.map(&:team))
+    teams.uniq!
+    errors.add(:team, 'Season can only be recorded for one team.') if teams.count != 1
+  end
 
   def winner
     user_ranks.asc(:rank).first
@@ -57,15 +67,16 @@ class Season
 
   def archive_challenges!
     Challenge.where(
-      :state.in => [ChallengeState::PROPOSED, ChallengeState::ACCEPTED]
+      :state.in => [ChallengeState::PROPOSED, ChallengeState::ACCEPTED],
+      team: team
     ).set(
       state: ChallengeState::CANCELED,
       updated_by_id: created_by && created_by.id
     )
-    Challenge.current.set(season_id: id)
+    Challenge.current.where(team: team).set(season_id: id)
   end
 
   def reset_users!
-    User.reset_all!
+    User.reset_all!(team)
   end
 end

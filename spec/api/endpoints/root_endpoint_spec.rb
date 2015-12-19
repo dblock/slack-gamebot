@@ -7,7 +7,7 @@ describe Api::Endpoints::RootEndpoint do
     get '/'
     expect(last_response.status).to eq 200
     links = JSON.parse(last_response.body)['_links']
-    expect(links.keys.sort).to eq(%w(self user users challenge challenges match matches current_season season seasons).sort)
+    expect(links.keys.sort).to eq(%w(self team teams user users challenge challenges match matches current_season season seasons).sort)
   end
   it 'follows all links' do
     get '/'

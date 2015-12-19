@@ -3,6 +3,12 @@ require 'spec_helper'
 describe Api::Endpoints::ChallengesEndpoint do
   include Api::Test::EndpointTest
 
+  let(:team) { Team.first || Fabricate(:team) }
+
+  before do
+    @cursor_params = { team_id: team.id.to_s }
+  end
+
   it_behaves_like 'a cursor api', Challenge
 
   context 'challenge' do
@@ -11,6 +17,7 @@ describe Api::Endpoints::ChallengesEndpoint do
       challenge = client.challenge(id: existing_challenge.id)
       expect(challenge.id).to eq existing_challenge.id.to_s
       expect(challenge._links.self._url).to eq "http://example.org/challenges/#{existing_challenge.id}"
+      expect(challenge._links.team._url).to eq "http://example.org/teams/#{existing_challenge.team.id}"
     end
   end
 

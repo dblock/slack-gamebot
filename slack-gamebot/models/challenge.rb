@@ -9,6 +9,7 @@ class Challenge
   field :state, type: String, default: ChallengeState::PROPOSED
   field :channel, type: String
 
+  belongs_to :team, index: true
   belongs_to :season, inverse_of: :challenges, index: true
   belongs_to :created_by, class_name: 'User', inverse_of: nil, index: true
   belongs_to :updated_by, class_name: 'User', inverse_of: nil, index: true
@@ -23,9 +24,11 @@ class Challenge
   validate :validate_playing_against_themselves
   validate :validate_opponents_counts
   validate :validate_unique_challenge
+  validate :validate_teams
 
   validate :validate_updated_by
   validates_presence_of :updated_by, if: ->(challenge) { challenge.state != ChallengeState::PROPOSED }
+  validates_presence_of :team
 
   # current challenges are not in an archived season
   scope :current, -> { where(season_id: nil) }
@@ -36,7 +39,7 @@ class Challenge
   end
 
   # Given a challenger and a list of names splits into two groups, returns users.
-  def self.split_teammates_and_opponents(challenger, names, separator = 'with')
+  def self.split_teammates_and_opponents(team, challenger, names, separator = 'with')
     teammates = [challenger]
     opponents = []
     current_side = opponents
@@ -45,16 +48,17 @@ class Challenge
       if name == separator
         current_side = teammates
       else
-        current_side << ::User.find_by_slack_mention!(name)
+        current_side << ::User.find_by_slack_mention!(team, name)
       end
     end
 
     [teammates, opponents]
   end
 
-  def self.create_from_teammates_and_opponents!(channel, challenger, names, separator = 'with')
-    teammates, opponents = split_teammates_and_opponents(challenger, names, separator)
+  def self.create_from_teammates_and_opponents!(team, channel, challenger, names, separator = 'with')
+    teammates, opponents = split_teammates_and_opponents(team, challenger, names, separator)
     Challenge.create!(
+      team: team,
       channel: channel,
       created_by: challenger,
       challengers: teammates,
@@ -92,10 +96,10 @@ class Challenge
     else
       fail "Only #{(challenged + challengers).map(&:user_name).join(' or ')} can lose this challenge."
     end
-    Match.create!(challenge: self, winners: winners, losers: losers, scores: scores)
+    Match.create!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     winners.inc(wins: 1)
     losers.inc(losses: 1)
-    User.rank!
+    User.rank!(team)
     update_attributes!(state: ChallengeState::PLAYED)
   end
 
@@ -103,11 +107,12 @@ class Challenge
     "a challenge between #{challengers.map(&:user_name).join(' and ')} and #{challenged.map(&:user_name).join(' and ')}"
   end
 
-  def self.find_by_user(channel, player, states = [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
+  def self.find_by_user(team, channel, player, states = [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
     Challenge.any_of(
       { challenger_ids: player._id },
       challenged_ids: player._id
     ).where(
+      team: team,
       channel: channel,
       :state.in => states
     ).first
@@ -124,9 +129,19 @@ class Challenge
     errors.add(:challenged, "Number of teammates (#{challengers.count}) and opponents (#{challenged.count}) must match.") if challengers.count != challenged.count
   end
 
+  def validate_teams
+    teams = [team]
+    teams.concat(challengers.map(&:team))
+    teams.concat(challenged.map(&:team))
+    teams << match.team if match
+    teams << season.team if season
+    teams.uniq!
+    errors.add(:team, 'Can only play others on the same team.') if teams.count != 1
+  end
+
   def validate_unique_challenge
     (challengers + challenged).each do |player|
-      existing_challenge = ::Challenge.find_by_user(channel, player)
+      existing_challenge = ::Challenge.find_by_user(team, channel, player)
       next unless existing_challenge.present?
       next if existing_challenge == self
       errors.add(:challenge, "#{player.user_name} can't play. There's already #{existing_challenge}.")

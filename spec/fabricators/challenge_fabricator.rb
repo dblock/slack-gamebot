@@ -1,5 +1,6 @@
 Fabricator(:challenge) do
   channel 'gamebot'
+  team { Team.first || Fabricate(:team) }
   challengers { [Fabricate(:user)] }
   challenged { [Fabricate(:user)] }
   before_create do |instance|

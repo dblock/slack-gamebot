@@ -9,6 +9,11 @@ module Api
       property :scores, type: Array, desc: 'Match scores.'
       property :created_at, type: DateTime, desc: 'Date/time when the match was created.'
 
+      link :team do |opts|
+        request = Grape::Request.new(opts[:env])
+        "#{request.base_url}/teams/#{represented.team.id}" if represented.team
+      end
+
       link :challenge do |opts|
         request = Grape::Request.new(opts[:env])
         "#{request.base_url}/challenges/#{represented.challenge.id}" if represented.challenge

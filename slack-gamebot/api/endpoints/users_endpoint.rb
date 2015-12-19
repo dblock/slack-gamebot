@@ -18,11 +18,13 @@ module Api
 
         desc 'Get all the users.'
         params do
+          requires :team_id, type: String
           use :pagination
         end
         sort User::SORT_ORDERS
         get do
-          users = paginate_and_sort_by_cursor(User, default_sort_order: '-elo')
+          query = User.where(team_id: params[:team_id])
+          users = paginate_and_sort_by_cursor(query, default_sort_order: '-elo')
           present users, with: Api::Presenters::UsersPresenter
         end
       end
