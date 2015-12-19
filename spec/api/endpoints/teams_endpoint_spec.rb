@@ -25,18 +25,42 @@ describe Api::Endpoints::TeamsEndpoint do
       expect(team._links.seasons._url).to eq "http://example.org/seasons?team_id=#{existing_team.id}"
     end
 
-    it 'creates a team' do
-      expect(SlackGamebot::Service).to receive(:start!)
-      oauth_access = { 'bot' => { 'bot_access_token' => 'token' }, 'team_id' => 'team_id', 'team_name' => 'team_name' }
-      allow_any_instance_of(Slack::Web::Client).to receive(:oauth_access).with(hash_including(code: 'code')).and_return(oauth_access)
+    it 'cannot create a team without a SLACK_CLIENT_ID and SLACK_CLIENT_SECRET' do
       expect do
-        team = client.teams._post(code: 'code')
-        expect(team.team_id).to eq 'team_id'
-        expect(team.name).to eq 'team_name'
-        team = Team.find(team.id)
-        expect(team.token).to eq 'token'
-        expect(team.secret).to_not be_blank
-      end.to change(Team, :count).by(1)
+        expect do
+          client.teams._post(code: 'code')
+        end.to raise_error RuntimeError, 'Missing SLACK_CLIENT_ID and/or SLACK_CLIENT_SECRET.'
+      end.to_not change(Team, :count)
+    end
+
+    context 'with SLACK_CLIENT_ID and SLACK_CLIENT_SECRET' do
+      before do
+        ENV['SLACK_CLIENT_ID'] = 'client_id'
+        ENV['SLACK_CLIENT_SECRET'] = 'client_secret'
+      end
+      after do
+        ENV.delete 'SLACK_CLIENT_ID'
+        ENV.delete 'SLACK_CLIENT_SECRET'
+      end
+      it 'creates a team' do
+        expect(SlackGamebot::Service).to receive(:start!)
+        oauth_access = { 'bot' => { 'bot_access_token' => 'token' }, 'team_id' => 'team_id', 'team_name' => 'team_name' }
+        allow_any_instance_of(Slack::Web::Client).to receive(:oauth_access).with(
+          hash_including(
+            code: 'code',
+            client_id: 'client_id',
+            client_secret: 'client_secret'
+          )
+        ).and_return(oauth_access)
+        expect do
+          team = client.teams._post(code: 'code')
+          expect(team.team_id).to eq 'team_id'
+          expect(team.name).to eq 'team_name'
+          team = Team.find(team.id)
+          expect(team.token).to eq 'token'
+          expect(team.secret).to_not be_blank
+        end.to change(Team, :count).by(1)
+      end
     end
   end
 end

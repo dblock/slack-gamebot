@@ -31,6 +31,8 @@ module Api
           requires :code, type: String
         end
         post do
+          fail 'Missing SLACK_CLIENT_ID and/or SLACK_CLIENT_SECRET.' unless ENV['SLACK_CLIENT_ID'] && ENV['SLACK_CLIENT_SECRET']
+
           client = Slack::Web::Client.new
 
           rc = client.oauth_access(

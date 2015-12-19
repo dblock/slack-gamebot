@@ -48,4 +48,4 @@ Slack-Gamebot replies with animated GIFs. While it's currently not necessary, uy
 
 #### SLACK_CLIENT_ID and SLACK_CLIENT_SECRET
 
-If your bot is a service, like the one on [playplay.io](http://playplay.io), register an aplication with Slack on https://api.slack.com and set `SLACK_CLIENT_ID` and `SLACK_CLIENT_SECRET`.
+If your bot is a service, like the one on [playplay.io](http://playplay.io), register an aplication with Slack on https://api.slack.com and set `SLACK_CLIENT_ID` and `SLACK_CLIENT_SECRET`. This will allow you to create a team via `POST /teams?code=`, where the code is obtained via Slack OAuth workflow. You can make a website to onboard teams, see [playplay.io](https://github.com/playplayio/playplay.io) for an example.
