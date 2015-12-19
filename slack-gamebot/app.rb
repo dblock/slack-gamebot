@@ -48,7 +48,7 @@ module SlackGamebot
       Challenge.where(team: nil).update_all(team_id: team.id)
       Season.where(team: nil).update_all(team_id: team.id)
       Match.where(team: nil).update_all(team_id: team.id)
-      logger.warn "Unset ENV['SLACK_API_TOKEN'] and ENV['GAMEBOT_SECRET']."
+      logger.warn "You should unset ENV['SLACK_API_TOKEN'] and ENV['GAMEBOT_SECRET']."
     end
   end
 end
