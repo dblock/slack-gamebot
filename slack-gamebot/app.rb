@@ -5,6 +5,7 @@ module SlackGamebot
       check_mongodb_provider!
       check_database!
       migrate_from_single_team!
+      configure_aliases!
     end
 
     def self.instance
@@ -49,6 +50,16 @@ module SlackGamebot
       Season.where(team: nil).update_all(team_id: team.id)
       Match.where(team: nil).update_all(team_id: team.id)
       logger.warn "You should unset ENV['SLACK_API_TOKEN'] and ENV['GAMEBOT_SECRET']."
+    end
+
+    def configure_aliases!
+      SlackRubyBot.configure do |config|
+        aliases = ENV['GAMEBOT_ALIASES'] || ENV['SLACK_RUBY_BOT_ALIASES']
+        if aliases
+          config.aliases = aliases.split(' ')
+          logger.info "Also responding to #{config.aliases.join(', ')}."
+        end
+      end
     end
   end
 end

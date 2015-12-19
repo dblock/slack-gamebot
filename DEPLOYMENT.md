@@ -34,12 +34,12 @@ If your bot services one team, DM Slack-Gamebot using this secret to perform a s
 heroku config:add GAMEBOT_SECRET=...
 ```
 
-#### SLACK_RUBY_BOT_ALIASES
+#### GAMEBOT_ALIASES
 
 Optional names for this bot.
 
 ```
-heroku config:add SLACK_RUBY_BOT_ALIASES=":pong: pp"
+heroku config:add GAMEBOT_ALIASES=":pong: pp"
 ```
 
 #### GIPHY_API_KEY
