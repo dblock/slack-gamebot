@@ -10,7 +10,7 @@ class Team
   field :token, type: String
   field :secret, type: String
 
-  validates_uniqueness_of :token
+  validates_uniqueness_of :token, message: 'has already been used'
   validates_presence_of :token
   validates_presence_of :team_id
 

@@ -47,13 +47,6 @@ describe Api::Endpoints::TeamsEndpoint do
       before do
         ENV['SLACK_CLIENT_ID'] = 'client_id'
         ENV['SLACK_CLIENT_SECRET'] = 'client_secret'
-      end
-      after do
-        ENV.delete 'SLACK_CLIENT_ID'
-        ENV.delete 'SLACK_CLIENT_SECRET'
-      end
-      it 'creates a team' do
-        expect(SlackGamebot::Service).to receive(:start!)
         oauth_access = { 'bot' => { 'bot_access_token' => 'token' }, 'team_id' => 'team_id', 'team_name' => 'team_name' }
         allow_any_instance_of(Slack::Web::Client).to receive(:oauth_access).with(
           hash_including(
@@ -62,6 +55,13 @@ describe Api::Endpoints::TeamsEndpoint do
             client_secret: 'client_secret'
           )
         ).and_return(oauth_access)
+      end
+      after do
+        ENV.delete 'SLACK_CLIENT_ID'
+        ENV.delete 'SLACK_CLIENT_SECRET'
+      end
+      it 'creates a team' do
+        expect(SlackGamebot::Service).to receive(:start!)
         expect do
           team = client.teams._post(code: 'code')
           expect(team.team_id).to eq 'team_id'
@@ -70,6 +70,13 @@ describe Api::Endpoints::TeamsEndpoint do
           expect(team.token).to eq 'token'
           expect(team.secret).to_not be_blank
         end.to change(Team, :count).by(1)
+      end
+      it 'returns a useful error when team already exists' do
+        existing_team = Fabricate(:team, token: 'token')
+        expect { client.teams._post(code: 'code') }.to raise_error Faraday::ClientError do |e|
+          json = JSON.parse(e.response[:body])
+          expect(json['message']).to eq "Team #{existing_team.name} is already registered."
+        end
       end
     end
   end

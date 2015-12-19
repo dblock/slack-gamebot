@@ -41,6 +41,9 @@ module Api
             code: params[:code]
           )
 
+          existing_team = Team.where(token: rc['bot']['bot_access_token']).first
+          fail "Team #{existing_team.name} is already registered." if existing_team
+
           team = Team.create!(
             token: rc['bot']['bot_access_token'],
             team_id: rc['team_id'],
