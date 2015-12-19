@@ -1,5 +1,12 @@
 module Api
   class Middleware
+    def self.logger
+      @logger ||= begin
+        $stdout.sync = true
+        Logger.new(STDOUT)
+      end
+    end
+
     def self.instance
       @instance ||= Rack::Builder.new do
         use Rack::Cors do

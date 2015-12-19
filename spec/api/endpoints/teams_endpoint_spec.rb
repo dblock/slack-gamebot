@@ -27,10 +27,20 @@ describe Api::Endpoints::TeamsEndpoint do
 
     it 'cannot create a team without a SLACK_CLIENT_ID and SLACK_CLIENT_SECRET' do
       expect do
-        expect do
-          client.teams._post(code: 'code')
-        end.to raise_error RuntimeError, 'Missing SLACK_CLIENT_ID and/or SLACK_CLIENT_SECRET.'
+        expect { client.teams._post(code: 'code') }.to raise_error Faraday::ClientError do |e|
+          json = JSON.parse(e.response[:body])
+          expect(json['message']).to eq 'Missing SLACK_CLIENT_ID and/or SLACK_CLIENT_SECRET.'
+          expect(json['backtrace'].split("\n").count).to eq 6
+        end
       end.to_not change(Team, :count)
+    end
+
+    it 'requires code' do
+      expect { client.teams._post }.to raise_error Faraday::ClientError do |e|
+        json = JSON.parse(e.response[:body])
+        expect(json['message']).to eq 'Invalid parameters.'
+        expect(json['type']).to eq 'param_error'
+      end
     end
 
     context 'with SLACK_CLIENT_ID and SLACK_CLIENT_SECRET' do
