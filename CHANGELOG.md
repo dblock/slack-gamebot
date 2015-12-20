@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#49](https://github.com/dblock/slack-gamebot/issues/49): Disallow indexing by serving a robots.txt - [@dblock](https://github.com/dblock).
 * [#48](https://github.com/dblock/slack-gamebot/issues/48): API failures return 400 status code with a hypermedia response - [@dblock](https://github.com/dblock).
 * [#45](https://github.com/dblock/slack-gamebot/pull/45): Added support for multiple teams, rolled out [playplay.io](http://playplay.io) - [@dblock](https://github.com/dblock).
 * [#40](https://github.com/dblock/slack-gamebot/issues/40): You can disable GIFs via `ENV['SLACK_RUBY_BOT_SET_GIFS']` - [@dblock](https://github.com/dblock).

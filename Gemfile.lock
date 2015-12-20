@@ -145,6 +145,8 @@ GEM
     rack-cors (0.4.0)
     rack-mount (0.8.3)
       rack (>= 1.0.0)
+    rack-robotz (0.0.4)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails-deprecated_sanitizer (1.0.3)
@@ -234,6 +236,7 @@ DEPENDENCIES
   mongoid-scroll
   puma
   rack-cors
+  rack-robotz
   rack-test
   rake (~> 10.4)
   rspec

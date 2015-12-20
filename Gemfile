@@ -13,6 +13,7 @@ gem 'kaminari', '~> 0.16.1', require: 'kaminari/grape'
 gem 'grape-swagger'
 gem 'mongoid-scroll'
 gem 'time_ago_in_words'
+gem 'rack-robotz'
 
 group :development, :test do
   gem 'rake', '~> 10.4'

@@ -16,6 +16,8 @@ module Api
           end
         end
 
+        use Rack::Robotz, 'User-Agent' => '*', 'Disallow' => '/'
+
         run Api::Middleware.new
       end.to_app
     end
