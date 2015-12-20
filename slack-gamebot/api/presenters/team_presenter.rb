@@ -32,6 +32,11 @@ module Api
         "#{request.base_url}/users?team_id=#{represented.id}"
       end
 
+      link :admins do |opts|
+        request = Grape::Request.new(opts[:env])
+        "#{request.base_url}/users?team_id=#{represented.id}&is_admin=true"
+      end
+
       link :self do |opts|
         request = Grape::Request.new(opts[:env])
         "#{request.base_url}/teams/#{id}"

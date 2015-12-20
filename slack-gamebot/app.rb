@@ -5,6 +5,7 @@ module SlackGamebot
       check_mongodb_provider!
       check_database!
       migrate_from_single_team!
+      ensure_a_team_admin!
       configure_aliases!
     end
 
@@ -50,6 +51,15 @@ module SlackGamebot
       Season.where(team: nil).update_all(team_id: team.id)
       Match.where(team: nil).update_all(team_id: team.id)
       logger.warn "You should unset ENV['SLACK_API_TOKEN'] and ENV['GAMEBOT_SECRET']."
+    end
+
+    def ensure_a_team_admin!
+      Team.each do |team|
+        next if team.admins.count > 0
+        user = team.users.asc(:_id).first
+        user.update_attributes!(is_admin: true)
+        logger.info "#{team}: promoted #{user} to admin."
+      end
     end
 
     def configure_aliases!

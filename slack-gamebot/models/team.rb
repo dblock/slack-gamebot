@@ -19,6 +19,10 @@ class Team
   has_many :matches
   has_many :challenges
 
+  def admins
+    users.admins
+  end
+
   def to_s
     "name=#{name}, domain=#{domain}, id=#{team_id}, token=#{token[0..5]}..#{token[-5..-1]}"
   end

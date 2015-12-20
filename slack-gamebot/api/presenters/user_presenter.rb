@@ -12,6 +12,7 @@ module Api
       property :elo, type: Integer, desc: 'Elo.'
       property :rank, type: Integer, desc: 'Rank.'
       property :created_at, as: :registered_at, type: DateTime, desc: 'Date/time when the user has registered.'
+      property :is_admin, type: Boolean, desc: 'Team admin.'
 
       link :team do |opts|
         request = Grape::Request.new(opts[:env])

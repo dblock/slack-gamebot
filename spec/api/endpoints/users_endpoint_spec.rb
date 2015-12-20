@@ -22,7 +22,7 @@ describe Api::Endpoints::UsersEndpoint do
   end
 
   context 'users' do
-    let!(:user_elo1) { Fabricate(:user, elo: 1, wins: 1, team: team) }
+    let!(:user_elo1) { Fabricate(:user, elo: 1, wins: 1, team: team, is_admin: true) }
     let!(:user_elo3) { Fabricate(:user, elo: 3, wins: 3, team: team) }
     let!(:user_elo2) { Fabricate(:user, elo: 2, wins: 2, team: team) }
     it 'returns users sorted by elo' do
@@ -40,6 +40,10 @@ describe Api::Endpoints::UsersEndpoint do
     it 'returns users sorted by -rank' do
       users = client.users(team_id: team.id, sort: '-rank')
       expect(users.map(&:id)).to eq [user_elo1, user_elo2, user_elo3].map(&:id).map(&:to_s)
+    end
+    it 'returns admins' do
+      users = client.users(team_id: team.id, is_admin: true)
+      expect(users.map(&:id)).to eq [user_elo1].map(&:id).map(&:to_s)
     end
   end
 end
