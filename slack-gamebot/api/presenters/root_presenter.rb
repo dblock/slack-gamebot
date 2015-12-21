@@ -11,7 +11,7 @@ module Api
 
       link :users do |opts|
         {
-          href: "#{base_url(opts)}/users/#{params(Api::Helpers::PaginationParameters::ALL, :team_id, :is_admin)}",
+          href: "#{base_url(opts)}/users/#{params(Api::Helpers::PaginationParameters::ALL, :team_id, :captain)}",
           templated: true
         }
       end

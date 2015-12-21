@@ -19,8 +19,8 @@ class Team
   has_many :matches
   has_many :challenges
 
-  def admins
-    users.admins
+  def captains
+    users.captains
   end
 
   def to_s

@@ -6,15 +6,15 @@ module SlackGamebot
         if match['expression'] != 'me'
           send_message_with_gif client, data.channel, 'You can only demote yourself, try _demote me_.', 'help'
           logger.info "DEMOTE: #{user.user_name}, failed, not me"
-        elsif !user.is_admin?
-          send_message_with_gif client, data.channel, "You're not an admin, sorry.", 'sorry'
-          logger.info "DEMOTE: #{user.user_name}, failed, not admin"
-        elsif client.team.admins.count == 1
-          send_message_with_gif client, data.channel, "You cannot demote yourself, you're the last admin. Promote someone else first.", 'sorry'
-          logger.info "DEMOTE: #{user.user_name}, failed, last admin"
+        elsif !user.captain?
+          send_message_with_gif client, data.channel, "You're not a captain, sorry.", 'sorry'
+          logger.info "DEMOTE: #{user.user_name}, failed, not captain"
+        elsif client.team.captains.count == 1
+          send_message_with_gif client, data.channel, "You cannot demote yourself, you're the last captain. Promote someone else first.", 'sorry'
+          logger.info "DEMOTE: #{user.user_name}, failed, last captain"
         else
           user.demote!
-          send_message client, data.channel, "#{user.user_name} is no longer admin."
+          send_message client, data.channel, "#{user.user_name} is no longer captain."
           logger.info "DEMOTED: #{user.user_name}"
         end
       end

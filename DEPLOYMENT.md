@@ -28,7 +28,7 @@ heroku config:add SLACK_API_TOKEN=...
 
 #### GAMEBOT_SECRET
 
-If your bot services one team, DM Slack-Gamebot using this secret to perform a season reset. Only tell GameBot admins.
+If your bot services one team, DM Slack-Gamebot using this secret to perform a season reset. Only tell GameBot captains.
 
 ```
 heroku config:add GAMEBOT_SECRET=...

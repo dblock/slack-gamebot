@@ -32,9 +32,9 @@ module Api
         "#{request.base_url}/users?team_id=#{represented.id}"
       end
 
-      link :admins do |opts|
+      link :captains do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/users?team_id=#{represented.id}&is_admin=true"
+        "#{request.base_url}/users?team_id=#{represented.id}&captain=true"
       end
 
       link :self do |opts|

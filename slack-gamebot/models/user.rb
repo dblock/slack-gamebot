@@ -9,7 +9,7 @@ class User
   field :elo, type: Integer, default: 0
   field :tau, type: Float, default: 0
   field :rank, type: Integer
-  field :is_admin, type: Boolean, default: false
+  field :captain, type: Boolean, default: false
 
   belongs_to :team, index: true
   validates_presence_of :team
@@ -25,7 +25,7 @@ class User
   SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'user_name', '-user_name', 'rank', '-rank']
 
   scope :ranked, -> { where(:rank.ne => nil) }
-  scope :admins, -> { where(is_admin: true) }
+  scope :captains, -> { where(captain: true) }
 
   def slack_mention
     "<@#{user_id}>"
@@ -48,7 +48,7 @@ class User
     instance_info = Hashie::Mash.new(client.web_client.users_info(user: slack_id)).user
     instance.update_attributes!(user_name: instance_info.name) if instance && instance.user_name != instance_info.name
     instance ||= User.create!(team: client.team, user_id: slack_id, user_name: instance_info.name)
-    instance.promote! unless instance.is_admin? || client.team.admins.count > 0
+    instance.promote! unless instance.captain? || client.team.captains.count > 0
     instance
   end
 
@@ -61,11 +61,11 @@ class User
   end
 
   def promote!
-    update_attributes!(is_admin: true)
+    update_attributes!(captain: true)
   end
 
   def demote!
-    update_attributes!(is_admin: false)
+    update_attributes!(captain: false)
   end
 
   def rank!

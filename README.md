@@ -193,22 +193,22 @@ gamebot rank @WangHoe @DengYaping
 
 #### gamebot promote <user> ...
 
-Promotes other users to admin. Must be an admin to do that.
+Promotes other users to captain. Must be a captain to do that.
 
 ```
 gamebot promote @WangHoe @DengYaping
 
-Victor Barna promoted Wang Hoe and Deng Yaping to admin.
+Victor Barna promoted Wang Hoe and Deng Yaping to captain.
 ```
 
 #### gamebot demote me
 
-Demotes from admin to a normal user. Must be an admin and the team must have other admins to do that.
+Demotes from captain to a normal user. Must be a captain and the team must have other captains to do that.
 
 ```
 gamebot demote me
 
-Victor Barna is no longer admin.
+Victor Barna is no longer captain.
 ```
 
 #### gamebot reset [secret]
