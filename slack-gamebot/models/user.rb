@@ -48,7 +48,7 @@ class User
     instance_info = Hashie::Mash.new(client.web_client.users_info(user: slack_id)).user
     instance.update_attributes!(user_name: instance_info.name) if instance && instance.user_name != instance_info.name
     instance ||= User.create!(team: client.team, user_id: slack_id, user_name: instance_info.name)
-    instance.update_attributes!(is_admin: true) unless instance.is_admin? || client.team.admins.count > 0
+    instance.promote! unless instance.is_admin? || client.team.admins.count > 0
     instance
   end
 
@@ -58,6 +58,14 @@ class User
 
   def to_s
     "#{user_name}: #{wins} win#{wins != 1 ? 's' : ''}, #{losses} loss#{losses != 1 ? 'es' : ''} (elo: #{elo})"
+  end
+
+  def promote!
+    update_attributes!(is_admin: true)
+  end
+
+  def demote!
+    update_attributes!(is_admin: false)
   end
 
   def rank!

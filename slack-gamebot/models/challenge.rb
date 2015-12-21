@@ -94,7 +94,7 @@ class Challenge
       winners = challenged
       losers = challengers
     else
-      fail "Only #{(challenged + challengers).map(&:user_name).join(' or ')} can lose this challenge."
+      fail "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
     end
     Match.create!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     winners.inc(wins: 1)
@@ -104,7 +104,7 @@ class Challenge
   end
 
   def to_s
-    "a challenge between #{challengers.map(&:user_name).join(' and ')} and #{challenged.map(&:user_name).join(' and ')}"
+    "a challenge between #{challengers.map(&:user_name).and} and #{challenged.map(&:user_name).and}"
   end
 
   def self.find_by_user(team, channel, player, states = [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
@@ -152,13 +152,13 @@ class Challenge
     case state
     when ChallengeState::ACCEPTED
       return if updated_by && challenged.include?(updated_by)
-      errors.add(:accepted_by, "Only #{challenged.map(&:user_name).join(' and ')} can accept this challenge.")
+      errors.add(:accepted_by, "Only #{challenged.map(&:user_name).and} can accept this challenge.")
     when ChallengeState::DECLINED
       return if updated_by && challenged.include?(updated_by)
-      errors.add(:declined_by, "Only #{challenged.map(&:user_name).join(' and ')} can decline this challenge.")
+      errors.add(:declined_by, "Only #{challenged.map(&:user_name).and} can decline this challenge.")
     when ChallengeState::CANCELED
       return if updated_by && (challengers.include?(updated_by) || challenged.include?(updated_by))
-      errors.add(:declined_by, "Only #{challengers.map(&:user_name).join(' and ')} or #{challenged.map(&:user_name).join(' and ')} can cancel this challenge.")
+      errors.add(:declined_by, "Only #{challengers.map(&:user_name).and} or #{challenged.map(&:user_name).and} can cancel this challenge.")
     end
   end
 end

@@ -57,7 +57,7 @@ module SlackGamebot
       Team.each do |team|
         next if team.admins.count > 0
         user = team.users.asc(:_id).first
-        user.update_attributes!(is_admin: true)
+        user.promote!
         logger.info "#{team}: promoted #{user} to admin."
       end
     end
@@ -67,7 +67,7 @@ module SlackGamebot
         aliases = ENV['GAMEBOT_ALIASES'] || ENV['SLACK_RUBY_BOT_ALIASES']
         if aliases
           config.aliases = aliases.split(' ')
-          logger.info "Also responding to #{config.aliases.join(', ')}."
+          logger.info "Also responding to #{config.aliases.or}."
         end
       end
     end

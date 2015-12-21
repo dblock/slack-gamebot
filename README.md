@@ -180,7 +180,7 @@ Wang Hoe defeated Deng Yaping twice
 
 Displays all outstanding (proposed and accepted) challenges.
 
-#### gamebot rank [<user>, ...]
+#### gamebot rank [<user> ...]
 
 Show the smallest range of ranks for a list of players.  If no user is specified, your rank is shown.
 
@@ -189,6 +189,26 @@ gamebot rank @WangHoe @DengYaping
 
 2. Deng Yaping: 1 win, 3 losses (elo: 24)
 3. Wang Hoe: 0 wins, 1 loss (elo: -12)
+```
+
+#### gamebot promote <user> ...
+
+Promotes other users to admin. Must be an admin to do that.
+
+```
+gamebot promote @WangHoe @DengYaping
+
+Victor Barna promoted Wang Hoe and Deng Yaping to admin.
+```
+
+#### gamebot demote me
+
+Demotes from admin to a normal user. Must be an admin and the team must have other admins to do that.
+
+```
+gamebot demote me
+
+Victor Barna is no longer admin.
 ```
 
 #### gamebot reset [secret]

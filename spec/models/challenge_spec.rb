@@ -110,7 +110,7 @@ describe Challenge do
     it 'cannot be accepted by another player' do
       expect do
         @challenge.accept!(@challenge.challengers.first)
-      end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challenged.map(&:user_name).join(' ')} can accept this challenge./
+      end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challenged.map(&:user_name).or} can accept this challenge./
     end
     it 'cannot be accepted twice' do
       accepted_by = @challenge.challenged.first
@@ -137,7 +137,7 @@ describe Challenge do
     it 'cannot be declined by another player' do
       expect do
         @challenge.decline!(@challenge.challengers.first)
-      end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challenged.map(&:user_name).join(' ')} can decline this challenge./
+      end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challenged.map(&:user_name).or} can decline this challenge./
     end
     it 'cannot be declined twice' do
       declined_by = @challenge.challenged.first
@@ -171,7 +171,7 @@ describe Challenge do
       player = Fabricate(:user)
       expect do
         @challenge.cancel!(player)
-      end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challengers.map(&:user_name).join(' and ')} or #{@challenge.challenged.map(&:user_name).join(' ')} can cancel this challenge./
+      end.to raise_error Mongoid::Errors::Validations, /Only #{@challenge.challengers.map(&:user_name).and} or #{@challenge.challenged.map(&:user_name).and} can cancel this challenge./
     end
     it 'cannot be canceled_by twice' do
       canceled_by = @challenge.challengers.first

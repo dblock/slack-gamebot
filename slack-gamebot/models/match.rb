@@ -16,7 +16,7 @@ class Match
   has_and_belongs_to_many :losers, class_name: 'User', inverse_of: nil
 
   def to_s
-    "#{winners.map(&:user_name).join(' and ')} #{score_verb} #{losers.map(&:user_name).join(' and ')}"
+    "#{winners.map(&:user_name).and} #{score_verb} #{losers.map(&:user_name).and}"
   end
 
   private
