@@ -2,7 +2,7 @@ module SlackGamebot
   module Commands
     class Reset < SlackRubyBot::Commands::Base
       def self.call(client, data, match)
-        team = Team.first # TODO: locate a user's team
+        team = ::Team.first # TODO: locate a user's team
         fail ArgumentError, 'Missing team secret.' unless team && team.secret.present?
         arguments = match['expression'].split.reject(&:blank?) if match.names.include?('expression')
         secret = arguments.first if arguments

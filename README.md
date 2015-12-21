@@ -221,6 +221,16 @@ gamebot reset <secret>
 Welcome to the new season!
 ```
 
+#### gamebot team
+
+Display current team's info, including captains.
+
+```
+gamebot team
+
+Team _China_, captains Deng Yaping and Victor Barna.
+```
+
 #### gamebot season
 
 Display current season's leader and game totals.
