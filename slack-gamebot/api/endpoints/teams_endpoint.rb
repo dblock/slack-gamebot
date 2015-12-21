@@ -47,8 +47,7 @@ module Api
           team = Team.create!(
             token: rc['bot']['bot_access_token'],
             team_id: rc['team_id'],
-            name: rc['team_name'],
-            secret: SecureRandom.hex(16)
+            name: rc['team_name']
           )
 
           SlackGamebot::Service.start!(team)

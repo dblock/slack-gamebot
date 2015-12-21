@@ -8,7 +8,6 @@ class Team
   field :name, type: String
   field :domain, type: String
   field :token, type: String
-  field :secret, type: String
 
   validates_uniqueness_of :token, message: 'has already been used'
   validates_presence_of :token
@@ -36,7 +35,6 @@ class Team
     team.team_id = info['team']['id']
     team.name = info['team']['name']
     team.domain = info['team']['domain']
-    team.secret = ENV['GAMEBOT_SECRET']
     team.save!
     team
   end

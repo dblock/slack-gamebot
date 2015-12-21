@@ -203,22 +203,12 @@ Victor Barna promoted Wang Hoe and Deng Yaping to captain.
 
 #### gamebot demote me
 
-Demotes from captain to a normal user. Must be a captain and the team must have other captains to do that.
+Demotes from captain to a normal user. Must be a captain and the team must have other captains to do this.
 
 ```
 gamebot demote me
 
 Victor Barna is no longer captain.
-```
-
-#### gamebot reset [secret]
-
-Direct-message gamebot to reset all users and pending challenges.
-
-```
-gamebot reset <secret>
-
-Welcome to the new season!
 ```
 
 #### gamebot team
@@ -229,6 +219,16 @@ Display current team's info, including captains.
 gamebot team
 
 Team _China_, captains Deng Yaping and Victor Barna.
+```
+
+#### gamebot reset <team name>
+
+Direct-message gamebot to reset all users and pending challenges. Must be a captain to do this.
+
+```
+gamebot reset China
+
+Welcome to the new season!
 ```
 
 #### gamebot season

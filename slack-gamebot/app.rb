@@ -58,6 +58,7 @@ module SlackGamebot
         next if team.captains.count > 0
         user = team.users.asc(:_id).first
         user.promote!
+        team.unset :secret
         logger.info "#{team}: promoted #{user} to captain."
       end
     end

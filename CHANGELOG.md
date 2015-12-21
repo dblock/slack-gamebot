@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#46](https://github.com/dblock/slack-gamebot/issues/46): Captains can reset seasons by confirming the team name - [@dblock](https://github.com/dblock).
 * [#46](https://github.com/dblock/slack-gamebot/issues/46): Added `team`, `promote` and `demote` commands, selecting captains - [@dblock](https://github.com/dblock).
 * [#49](https://github.com/dblock/slack-gamebot/issues/49): Disallow indexing by serving a robots.txt - [@dblock](https://github.com/dblock).
 * [#48](https://github.com/dblock/slack-gamebot/issues/48): API failures return 400 status code with a hypermedia response - [@dblock](https://github.com/dblock).

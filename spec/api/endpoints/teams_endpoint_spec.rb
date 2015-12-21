@@ -68,7 +68,6 @@ describe Api::Endpoints::TeamsEndpoint do
           expect(team.name).to eq 'team_name'
           team = Team.find(team.id)
           expect(team.token).to eq 'token'
-          expect(team.secret).to_not be_blank
         end.to change(Team, :count).by(1)
       end
       it 'returns a useful error when team already exists' do

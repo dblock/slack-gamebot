@@ -3,7 +3,7 @@ module SlackGamebot
     class Demote < SlackRubyBot::Commands::Base
       def self.call(client, data, match)
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
-        if match['expression'] != 'me'
+        if !match.names.include?('expression') || match['expression'] != 'me'
           send_message_with_gif client, data.channel, 'You can only demote yourself, try _demote me_.', 'help'
           logger.info "DEMOTE: #{user.user_name}, failed, not me"
         elsif !user.captain?

@@ -13,7 +13,6 @@ describe Team do
         expect(team.team_id).to eq 'T04KB5WQH'
         expect(team.name).to eq 'dblock'
         expect(team.domain).to eq 'dblockdotorg'
-        expect(team.secret).to eq 'secret'
         expect(team.token).to eq 'token'
       end
     end
