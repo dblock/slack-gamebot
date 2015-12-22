@@ -6,6 +6,7 @@ class User
   field :user_name, type: String
   field :wins, type: Integer, default: 0
   field :losses, type: Integer, default: 0
+  field :ties, type: Integer, default: 0
   field :elo, type: Integer, default: 0
   field :tau, type: Float, default: 0
   field :rank, type: Integer
@@ -18,11 +19,12 @@ class User
   index(user_name: 1, team_id: 1)
   index(wins: 1, team_id: 1)
   index(losses: 1, team_id: 1)
+  index(ties: 1, team_id: 1)
   index(elo: 1, team_id: 1)
 
   after_save :rank!
 
-  SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'user_name', '-user_name', 'rank', '-rank']
+  SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'ties', '-ties', 'user_name', '-user_name', 'rank', '-rank']
 
   scope :ranked, -> { where(:rank.ne => nil) }
   scope :captains, -> { where(captain: true) }
@@ -53,11 +55,14 @@ class User
   end
 
   def self.reset_all!(team)
-    User.where(team: team).set(wins: 0, losses: 0, elo: 0, tau: 0, rank: nil)
+    User.where(team: team).set(wins: 0, losses: 0, ties: 0, elo: 0, tau: 0, rank: nil)
   end
 
   def to_s
-    "#{user_name}: #{wins} win#{wins != 1 ? 's' : ''}, #{losses} loss#{losses != 1 ? 'es' : ''} (elo: #{elo})"
+    wins_s = "#{wins} win#{wins != 1 ? 's' : ''}"
+    losses_s = "#{losses} loss#{losses != 1 ? 'es' : ''}"
+    ties_s = "#{ties} tie#{ties != 1 ? 's' : ''}" if ties && ties > 0
+    "#{user_name}: #{[wins_s, losses_s, ties_s].compact.join(', ')} (elo: #{elo})"
   end
 
   def promote!
@@ -76,7 +81,7 @@ class User
 
   def self.rank!(team)
     rank = 1
-    players = any_of({ :wins.gt => 0 }, :losses.gt => 0).where(team: team).desc(:elo).asc(:wins)
+    players = any_of({ :wins.gt => 0 }, { :losses.gt => 0 }, :ties.gt => 0).where(team: team).desc(:elo).asc(:wins).asc(:ties)
     players.each_with_index do |player, index|
       rank += 1 if index > 0 && players[index - 1].elo != player.elo
       player.update_attributes!(rank: rank) unless rank == player.rank
@@ -85,6 +90,6 @@ class User
 
   def self.rank_section(users)
     ranks = users.map(&:rank)
-    where(:rank.gte => ranks.min, :rank.lte => ranks.max).asc(:rank).asc(:wins)
+    where(:rank.gte => ranks.min, :rank.lte => ranks.max).asc(:rank).asc(:wins).asc(:ties)
   end
 end

@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#25](https://github.com/dblock/slack-gamebot/issues/25): Users can `draw` a challenge, all players have to `draw` - [@dblock](https://github.com/dblock).
 * [#46](https://github.com/dblock/slack-gamebot/issues/46): Captains can reset seasons by confirming the team name - [@dblock](https://github.com/dblock).
 * [#46](https://github.com/dblock/slack-gamebot/issues/46): Added `team`, `promote` and `demote` commands, selecting captains - [@dblock](https://github.com/dblock).
 * [#49](https://github.com/dblock/slack-gamebot/issues/49): Disallow indexing by serving a robots.txt - [@dblock](https://github.com/dblock).

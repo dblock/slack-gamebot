@@ -70,18 +70,20 @@ describe User do
   end
   context '#reset_all' do
     it 'resets all user stats' do
-      user1 = Fabricate(:user, elo: 48, losses: 1, wins: 2, tau: 0.5)
+      user1 = Fabricate(:user, elo: 48, losses: 1, wins: 2, ties: 3, tau: 0.5)
       user2 = Fabricate(:user, elo: 54, losses: 2, wins: 1, tau: 1.5)
       User.reset_all!(user1.team)
       user1.reload
       user2.reload
       expect(user1.wins).to eq 0
       expect(user1.losses).to eq 0
+      expect(user1.ties).to eq 0
       expect(user1.tau).to eq 0
       expect(user1.elo).to eq 0
       expect(user1.rank).to be nil
       expect(user2.wins).to eq 0
       expect(user2.losses).to eq 0
+      expect(user2.ties).to eq 0
       expect(user2.tau).to eq 0
       expect(user2.elo).to eq 0
       expect(user2.rank).to be nil
@@ -105,6 +107,7 @@ describe User do
       expect(user4.reload.rank).to eq 2
     end
     it 'ranks players with the same elo and different wins/losses'
+    it 'ranks players with the same elo and different wins/losses/ties'
     it 'ranks players with the same elo and wins/losses equally' do
       user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
       user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)

@@ -209,4 +209,25 @@ describe Challenge do
       expect(game.losers.all? { |player| player.wins == 0 && player.losses == 1 }).to be true
     end
   end
+  context '#draw!' do
+    before do
+      @challenge = Fabricate(:challenge)
+      @challenge.accept!(@challenge.challenged.first)
+    end
+    it 'requires both sides to draw' do
+      expect do
+        @challenge.draw!(@challenge.challengers.first)
+      end.to_not change(Match, :count)
+      expect do
+        @challenge.draw!(@challenge.challenged.first)
+      end.to change(Match, :count).by(1)
+      game = Match.last
+      expect(game.tied?).to be true
+      expect(game.challenge).to eq @challenge
+      expect(game.winners).to eq @challenge.challengers
+      expect(game.losers).to eq @challenge.challenged
+      expect(game.winners.all? { |player| player.wins == 0 && player.losses == 0 && player.ties == 1 }).to be true
+      expect(game.losers.all? { |player| player.wins == 0 && player.losses == 0 && player.ties == 1 }).to be true
+    end
+  end
 end

@@ -16,6 +16,7 @@ class Challenge
 
   has_and_belongs_to_many :challengers, class_name: 'User', inverse_of: nil
   has_and_belongs_to_many :challenged, class_name: 'User', inverse_of: nil
+  has_and_belongs_to_many :draw, class_name: 'User', inverse_of: nil
 
   has_one :match
 
@@ -99,6 +100,29 @@ class Challenge
     Match.create!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     winners.inc(wins: 1)
     losers.inc(losses: 1)
+    User.rank!(team)
+    update_attributes!(state: ChallengeState::PLAYED)
+  end
+
+  def draw!(player)
+    fail 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
+    fail "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+    fail "Already recorded a draw from #{player.user_name}." if draw.include?(player)
+    draw << player
+    return if draw.count != (challenged.count + challengers.count)
+    # in a draw, winners have a lower original elo
+    winners = nil
+    losers = nil
+    if Elo.team_elo(challenged) < Elo.team_elo(challengers)
+      winners = challenged
+      losers = challengers
+    else
+      losers = challenged
+      winners = challengers
+    end
+    Match.create!(team: team, challenge: self, winners: winners, losers: losers, tied: true)
+    challenged.inc(ties: 1)
+    challengers.inc(ties: 1)
     User.rank!(team)
     update_attributes!(state: ChallengeState::PLAYED)
   end

@@ -122,6 +122,20 @@ gamebot lost 15:21 21:17 18:21
 Match scores have been updated! Wang Hoe defeated Victor Barna.
 ```
 
+#### gamebot draw
+
+Draws a challenge, records a tie. All other players will also have to draw to record a match.
+
+```
+gamebot draw
+
+Match is a draw, waiting to hear from Victor Barna.
+
+gamebot draw
+
+Match has been recorded. Victor Barna tied with Zhang Jike.
+```
+
 #### gamebot decline
 
 Decline a challenge.

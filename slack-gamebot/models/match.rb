@@ -5,6 +5,7 @@ class Match
   SORT_ORDERS = ['created_at', '-created_at']
 
   belongs_to :team, index: true
+  field :tied, type: Boolean, default: false
   field :scores, type: Array
   belongs_to :challenge, index: true
   before_create :calculate_elo!
@@ -35,15 +36,20 @@ class Match
   end
 
   def score_verb
-    return 'defeated' unless scores
-    lose, win = Score.points(scores)
-    ratio = lose.to_f / win
-    if ratio > 0.9
-      'narrowly defeated'
-    elsif ratio > 0.4
+    if tied?
+      'tied with'
+    elsif !scores
       'defeated'
     else
-      'crushed'
+      lose, win = Score.points(scores)
+      ratio = lose.to_f / win
+      if ratio > 0.9
+        'narrowly defeated'
+      elsif ratio > 0.4
+        'defeated'
+      else
+        'crushed'
+      end
     end
   end
 
@@ -51,17 +57,25 @@ class Match
     winners_elo = Elo.team_elo(winners)
     losers_elo = Elo.team_elo(losers)
 
+    ratio = if winners_elo == losers_elo && tied?
+              0 # no elo updates when tied and elo is equal
+            elsif tied?
+              0.5 # half the elo in a tie
+            else
+              1 # whole elo
+            end
+
     winners.each do |winner|
       e = 100 - 1.0 / (1.0 + (10.0**((losers_elo - winner.elo) / 400.0))) * 100
       winner.tau += 0.5
-      winner.elo += e * (Elo::DELTA_TAU**winner.tau)
+      winner.elo += e * ratio * (Elo::DELTA_TAU**winner.tau)
       winner.save!
     end
 
     losers.each do |loser|
       e = 100 - 1.0 / (1.0 + (10.0**((loser.elo - winners_elo) / 400.0))) * 100
       loser.tau += 0.5
-      loser.elo -= e * (Elo::DELTA_TAU**loser.tau)
+      loser.elo -= e * ratio * (Elo::DELTA_TAU**loser.tau)
       loser.save!
     end
   end

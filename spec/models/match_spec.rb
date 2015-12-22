@@ -13,6 +13,17 @@ describe Match do
         expect(@match.challenge.challenged.map(&:tau)).to eq [0.5]
       end
     end
+    context 'singles tied' do
+      before do
+        @match = Fabricate(:match, tied: true)
+      end
+      it 'updates elo and tau' do
+        expect(@match.challenge.challengers.map(&:elo)).to eq [0.0]
+        expect(@match.challenge.challengers.map(&:tau)).to eq [0.5]
+        expect(@match.challenge.challenged.map(&:elo)).to eq [0.0]
+        expect(@match.challenge.challenged.map(&:tau)).to eq [0.5]
+      end
+    end
     context 'doubles' do
       before do
         @match = Fabricate(:match, challenge: Fabricate(:doubles_challenge))
