@@ -14,6 +14,20 @@ describe Api::Endpoints::TeamsEndpoint do
     end
   end
 
+  context 'teams' do
+    let!(:active_team) { Fabricate(:team, active: true) }
+    let!(:inactive_team) { Fabricate(:team, active: false) }
+    it 'returns all teams' do
+      teams = client.teams
+      expect(teams.count).to eq 2
+    end
+    it 'returns active teams' do
+      teams = client.teams(active: true)
+      expect(teams.count).to eq 1
+      expect(teams.to_a.first.team_id).to eq active_team.team_id
+    end
+  end
+
   context 'team' do
     let(:existing_team) { Fabricate(:team) }
     it 'returns a team with links to challenges, users and matches' do
@@ -69,6 +83,18 @@ describe Api::Endpoints::TeamsEndpoint do
           team = Team.find(team.id)
           expect(team.token).to eq 'token'
         end.to change(Team, :count).by(1)
+      end
+      it 'reactivates a deactivated team' do
+        existing_team = Fabricate(:team, token: 'token', active: false)
+        expect do
+          team = client.teams._post(code: 'code')
+          expect(team.team_id).to eq existing_team.team_id
+          expect(team.name).to eq existing_team.name
+          expect(team.active).to be true
+          team = Team.find(team.id)
+          expect(team.token).to eq 'token'
+          expect(team.active).to be true
+        end.to_not change(Team, :count)
       end
       it 'returns a useful error when team already exists' do
         existing_team = Fabricate(:team, token: 'token')

@@ -5,6 +5,7 @@ module SlackGamebot
       check_mongodb_provider!
       check_database!
       migrate_from_single_team!
+      mark_teams_as_active!
       ensure_a_team_captain!
       configure_aliases!
     end
@@ -51,6 +52,10 @@ module SlackGamebot
       Season.where(team: nil).update_all(team_id: team.id)
       Match.where(team: nil).update_all(team_id: team.id)
       logger.warn "You should unset ENV['SLACK_API_TOKEN'] and ENV['GAMEBOT_SECRET']."
+    end
+
+    def mark_teams_as_active!
+      Team.where(active: nil).update_all(active: true)
     end
 
     def ensure_a_team_captain!

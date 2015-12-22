@@ -43,7 +43,7 @@ module Api
 
       link :teams do |opts|
         {
-          href: "#{base_url(opts)}/teams/#{params(Api::Helpers::PaginationParameters::ALL)}",
+          href: "#{base_url(opts)}/teams/#{params(Api::Helpers::PaginationParameters::ALL, :active)}",
           templated: true
         }
       end

@@ -18,11 +18,14 @@ module Api
 
         desc 'Get all the teams.'
         params do
+          optional :active, type: Boolean, desc: 'Return active teams only.'
           use :pagination
         end
         sort Team::SORT_ORDERS
         get do
-          teams = paginate_and_sort_by_cursor(Team, default_sort_order: '-_id')
+          teams = Team.all
+          teams = teams.active if params[:active]
+          teams = paginate_and_sort_by_cursor(teams, default_sort_order: '-_id')
           present teams, with: Api::Presenters::TeamsPresenter
         end
 
@@ -41,14 +44,18 @@ module Api
             code: params[:code]
           )
 
-          existing_team = Team.where(token: rc['bot']['bot_access_token']).first
-          fail "Team #{existing_team.name} is already registered." if existing_team
-
-          team = Team.create!(
-            token: rc['bot']['bot_access_token'],
-            team_id: rc['team_id'],
-            name: rc['team_name']
-          )
+          team = Team.where(token: rc['bot']['bot_access_token']).first
+          if team && !team.active?
+            team.activate!
+          elsif team
+            fail "Team #{team.name} is already registered."
+          else
+            team = Team.create!(
+              token: rc['bot']['bot_access_token'],
+              team_id: rc['team_id'],
+              name: rc['team_name']
+            )
+          end
 
           SlackGamebot::Service.start!(team)
           present team, with: Api::Presenters::TeamPresenter

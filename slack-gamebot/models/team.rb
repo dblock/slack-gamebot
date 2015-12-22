@@ -8,6 +8,9 @@ class Team
   field :name, type: String
   field :domain, type: String
   field :token, type: String
+  field :active, type: Boolean, default: true
+
+  scope :active, -> { where(active: true) }
 
   validates_uniqueness_of :token, message: 'has already been used'
   validates_presence_of :token
@@ -20,6 +23,14 @@ class Team
 
   def captains
     users.captains
+  end
+
+  def deactivate!
+    update_attributes!(active: false)
+  end
+
+  def activate!
+    update_attributes!(active: true)
   end
 
   def to_s

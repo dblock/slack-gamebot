@@ -11,7 +11,7 @@ module SlackGamebot
           LOCK.synchronize do
             @services[team.token] = server
           end
-          restart!(server)
+          restart!(team, server)
         end
       rescue StandardError => e
         logger.error e
@@ -37,19 +37,25 @@ module SlackGamebot
       end
 
       def start_from_database!
-        Team.each do |team|
+        Team.active.each do |team|
           start!(team)
         end
       end
 
-      def restart!(server, wait = 1)
+      def restart!(team, server, wait = 1)
         server.auth!
         server.start_async
       rescue StandardError => e
-        logger.error "#{server.token[0..10]}***: #{e.message}, restarting in #{wait} second(s)."
-        sleep(wait)
-        EM.next_tick do
-          restart! server, [wait * 2, 60].min
+        case e.message
+        when 'account_inactive' then
+          logger.error "#{team.name}: #{e.message}, account_inactive, team will be deactivated."
+          team.deactivate!
+        else
+          logger.error "#{team.name}: #{e.message}, restarting in #{wait} second(s)."
+          sleep(wait)
+          EM.next_tick do
+            restart! team, server, [wait * 2, 60].min
+          end
         end
       end
     end
