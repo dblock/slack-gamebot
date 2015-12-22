@@ -53,6 +53,40 @@ describe Match do
         expect(@match.challenge.challenged.map(&:tau)).to eq [0.5, 0.5]
       end
     end
+    context 'a tie against previous losers' do
+      before do
+        challenge1 = Fabricate(:doubles_challenge)
+        challenge1.accept!(challenge1.challenged.first)
+        challenge1.lose!(challenge1.challengers.first)
+        challengers = challenge1.challengers
+        challenged = [Fabricate(:user), Fabricate(:user)]
+        @match = Fabricate(:match, challenge: Fabricate(:challenge, challengers: challengers, challenged: challenged), tied: true)
+        @match.reload
+      end
+      it 'updates elo and tau' do
+        expect(@match.challenge.challengers.map(&:elo)).to eq [-21, -21]
+        expect(@match.challenge.challengers.map(&:tau)).to eq [1, 1]
+        expect(@match.challenge.challenged.map(&:elo)).to eq [-27, -27]
+        expect(@match.challenge.challenged.map(&:tau)).to eq [0.5, 0.5]
+      end
+    end
+    context 'a tie against previous winners' do
+      before do
+        challenge1 = Fabricate(:doubles_challenge)
+        challenge1.accept!(challenge1.challenged.first)
+        challenge1.lose!(challenge1.challenged.first)
+        challengers = challenge1.challengers
+        challenged = [Fabricate(:user), Fabricate(:user)]
+        @match = Fabricate(:match, challenge: Fabricate(:challenge, challengers: challengers, challenged: challenged), tied: true)
+        @match.reload
+      end
+      it 'updates elo and tau' do
+        expect(@match.challenge.challengers.map(&:elo)).to eq [68, 68]
+        expect(@match.challenge.challengers.map(&:tau)).to eq [1, 1]
+        expect(@match.challenge.challenged.map(&:elo)).to eq [-20, -20]
+        expect(@match.challenge.challenged.map(&:tau)).to eq [0.5, 0.5]
+      end
+    end
     context 'two matches against previous winners' do
       before do
         challenge1 = Fabricate(:doubles_challenge)
