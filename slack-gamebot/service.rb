@@ -47,8 +47,8 @@ module SlackGamebot
         server.start_async
       rescue StandardError => e
         case e.message
-        when 'account_inactive' then
-          logger.error "#{team.name}: account_inactive, team will be deactivated."
+        when 'account_inactive', 'invalid_auth' then
+          logger.error "#{team.name}: #{e.message}, team will be deactivated."
           team.deactivate!
         else
           logger.error "#{team.name}: #{e.message}, restarting in #{wait} second(s)."
