@@ -16,4 +16,12 @@ describe SlackGamebot::Commands::Leaderboard do
     user_elo_44 = Fabricate(:user, elo: 44, wins: 2, losses: 3)
     expect(message: "#{SlackRubyBot.config.user} leaderboard infinity").to respond_with_slack_message "1. #{user_elo_48}\n2. #{user_elo_44}\n3. #{user_elo_43}\n4. #{user_elo_42}"
   end
+  context 'with another team' do
+    let!(:team2) { Fabricate(:team) }
+    let!(:user2_elo_42) { Fabricate(:user, team: team2, elo: 42, wins: 3, losses: 2) }
+    let!(:user2_elo_48) { Fabricate(:user, team: team2, elo: 48, wins: 2, losses: 3) }
+    it 'displays leaderboard sorted by elo for team 1' do
+      expect(message: "#{SlackRubyBot.config.user} leaderboard").to respond_with_slack_message "1. #{user_elo_48}\n2. #{user_elo_42}"
+    end
+  end
 end
