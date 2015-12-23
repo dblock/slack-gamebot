@@ -105,7 +105,7 @@ describe Match do
       end
     end
     context 'scores' do
-      let(:team) { Fabricate(:team) }
+      let!(:team) { Fabricate(:team) }
       it 'loser first' do
         expect(Match.new(team: team, scores: [[15, 21]])).to be_valid
       end

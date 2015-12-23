@@ -1,10 +1,11 @@
 require 'spec_helper'
 
 describe Season do
+  let!(:team) { Team.first || Fabricate(:team) }
   context 'with challenges' do
     let!(:open_challenge) { Fabricate(:challenge) }
     let!(:matches) { 3.times.map { Fabricate(:match) } }
-    let!(:season) { Fabricate(:season) }
+    let!(:season) { Fabricate(:season, team: team) }
     it 'archives challenges' do
       expect(season.challenges.count).to eq 4
     end
@@ -22,7 +23,7 @@ describe Season do
     end
   end
   context 'without challenges' do
-    let(:team) { Fabricate(:team) }
+    let!(:team) { Fabricate(:team) }
     it 'cannot be created' do
       season = Season.new(team: team)
       expect(season).to_not be_valid
@@ -31,14 +32,14 @@ describe Season do
   end
   context 'current season with one match' do
     let!(:match) { Fabricate(:match) }
-    let(:season) { Season.new }
+    let(:season) { Season.new(team: team) }
     it 'to_s' do
       expect(season.to_s).to eq "Current: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 1 match, 2 players"
     end
   end
   context 'current season with multiple matches' do
     let!(:matches) { 3.times.map { Fabricate(:match) } }
-    let(:season) { Season.new }
+    let(:season) { Season.new(team: team) }
     it 'to_s' do
       expect(season.to_s).to eq "Current: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 3 matches, 6 players"
     end

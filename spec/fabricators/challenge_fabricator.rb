@@ -1,16 +1,18 @@
 Fabricator(:challenge) do
   channel 'gamebot'
   team { Team.first || Fabricate(:team) }
-  challengers { [Fabricate(:user)] }
-  challenged { [Fabricate(:user)] }
   before_create do |instance|
+    instance.challengers << Fabricate(:user, team: instance.team) unless instance.challengers.any?
+    instance.challenged << Fabricate(:user, team: instance.team) unless instance.challenged.any?
     instance.created_by = instance.challengers.first
   end
 end
 
 Fabricator(:doubles_challenge, from: :challenge) do
-  challengers { [Fabricate(:user), Fabricate(:user)] }
-  challenged { [Fabricate(:user), Fabricate(:user)] }
+  after_build do |instance|
+    instance.challengers = [Fabricate(:user, team: instance.team), Fabricate(:user, team: instance.team)] unless instance.challengers.any?
+    instance.challenged = [Fabricate(:user, team: instance.team), Fabricate(:user, team: instance.team)] unless instance.challenged.any?
+  end
 end
 
 Fabricator(:accepted_challenge, from: :challenge) do

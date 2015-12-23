@@ -43,7 +43,7 @@ class Season
   end
 
   def played_challenges
-    persisted? ? challenges.played : Challenge.current.played
+    persisted? ? challenges.played : team.challenges.current.played
   end
 
   def label
@@ -55,25 +55,24 @@ class Season
   end
 
   def validate_challenges
-    errors.add(:challenges, 'No matches have been recorded.') unless Challenge.current.any?
+    errors.add(:challenges, 'No matches have been recorded.') unless team.challenges.current.any?
   end
 
   def create_user_ranks
     return if user_ranks.any?
-    User.ranked.asc(:rank).each do |user|
+    team.users.ranked.asc(:rank).each do |user|
       user_ranks << UserRank.from_user(user)
     end
   end
 
   def archive_challenges!
-    Challenge.where(
-      :state.in => [ChallengeState::PROPOSED, ChallengeState::ACCEPTED],
-      team: team
+    team.challenges.where(
+      :state.in => [ChallengeState::PROPOSED, ChallengeState::ACCEPTED]
     ).set(
       state: ChallengeState::CANCELED,
       updated_by_id: created_by && created_by.id
     )
-    Challenge.current.where(team: team).set(season_id: id)
+    team.challenges.current.set(season_id: id)
   end
 
   def reset_users!

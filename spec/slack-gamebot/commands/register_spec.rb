@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Register, vcr: { cassette_name: 'user_info' } do
-  let(:team) { Team.first || Fabricate(:team) }
+  let!(:team) { Team.first || Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
   it 'registers a new user and promotes them to captain' do
     Fabricate(:user, team: Fabricate(:team)) # another user in another team

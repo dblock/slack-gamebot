@@ -1,6 +1,6 @@
 Fabricator(:match) do
-  challenge { Fabricate(:challenge) }
   after_build do |match|
+    match.challenge ||= Fabricate(:challenge, team: match.team || Team.first || Fabricate(:team))
     match.team = challenge.team
     match.winners = match.challenge.challengers if match.winners.none?
     match.losers = match.challenge.challenged if match.losers.none?

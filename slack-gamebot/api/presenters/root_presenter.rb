@@ -31,7 +31,10 @@ module Api
       end
 
       link :current_season do |opts|
-        "#{base_url(opts)}/seasons/current?team_id"
+        {
+          href: "#{base_url(opts)}/seasons/current/{?team_id}",
+          templated: true
+        }
       end
 
       link :seasons do |opts|

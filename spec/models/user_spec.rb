@@ -21,7 +21,7 @@ describe User do
     end
   end
   context '#find_many_by_slack_mention!' do
-    let(:team) { Fabricate(:team) }
+    let!(:team) { Fabricate(:team) }
     before do
       @users = [Fabricate(:user, team: team), Fabricate(:user, team: team)]
     end
@@ -36,7 +36,7 @@ describe User do
     end
   end
   context '#find_create_or_update_by_slack_id!', vcr: { cassette_name: 'user_info' } do
-    let(:team) { Fabricate(:team) }
+    let!(:team) { Fabricate(:team) }
     let(:client) { SlackRubyBot::Client.new }
     before do
       client.team = team

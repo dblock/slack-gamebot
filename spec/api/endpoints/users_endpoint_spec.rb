@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Api::Endpoints::UsersEndpoint do
   include Api::Test::EndpointTest
 
-  let(:team) { Team.first || Fabricate(:team) }
+  let!(:team) { Team.first || Fabricate(:team) }
 
   before do
     @cursor_params = { team_id: team.id.to_s }

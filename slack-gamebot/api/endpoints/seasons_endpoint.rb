@@ -12,7 +12,8 @@ module Api
           requires :team_id, type: String
         end
         get 'current' do
-          present Season.new, with: Api::Presenters::SeasonPresenter
+          team = Team.find(params[:team_id]) || error!(404, 'Not Found')
+          present Season.new(team: team), with: Api::Presenters::SeasonPresenter
         end
 
         desc 'Get a season.'

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
-  let(:team) { Team.first || Fabricate(:team) }
+  let!(:team) { Team.first || Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
   it 'requires a captain' do
     Fabricate(:user, captain: true, team: team)
@@ -42,5 +42,25 @@ describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
     expect(user.losses).to eq 0
     expect(user.tau).to eq 0
     expect(user.elo).to eq 0
+  end
+  it 'resets user stats for the right team' do
+    Fabricate(:match)
+    user1 = Fabricate(:user, elo: 48, losses: 1, wins: 2, tau: 0.5, ties: 3)
+    team2 = Fabricate(:team)
+    Fabricate(:match, team: team2)
+    user2 = Fabricate(:user, team: team2, elo: 48, losses: 1, wins: 2, tau: 0.5, ties: 3)
+    expect(message: "#{SlackRubyBot.config.user} reset #{team.name}").to respond_with_slack_message('Welcome to the new season!')
+    user1.reload
+    expect(user1.wins).to eq 0
+    expect(user1.losses).to eq 0
+    expect(user1.tau).to eq 0
+    expect(user1.elo).to eq 0
+    expect(user1.ties).to eq 0
+    user2.reload
+    expect(user2.wins).to eq 2
+    expect(user2.losses).to eq 1
+    expect(user2.tau).to eq 0.5
+    expect(user2.elo).to eq 48
+    expect(user2.ties).to eq 3
   end
 end

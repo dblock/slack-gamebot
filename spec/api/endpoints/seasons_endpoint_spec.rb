@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Api::Endpoints::SeasonsEndpoint do
   include Api::Test::EndpointTest
 
-  let(:team) { Team.first || Fabricate(:team) }
+  let!(:team) { Team.first || Fabricate(:team) }
 
   before do
     @cursor_params = { team_id: team.id.to_s }
@@ -25,7 +25,7 @@ describe Api::Endpoints::SeasonsEndpoint do
       Fabricate(:match)
     end
     it 'returns the current season' do
-      season = client.current_season
+      season = client.current_season(team_id: team.id.to_s)
       expect(season.id).to eq 'current'
       expect(season._links.self._url).to eq 'http://example.org/seasons/current'
     end

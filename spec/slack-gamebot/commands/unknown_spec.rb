@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SlackRubyBot::Commands::Unknown, vcr: { cassette_name: 'user_info' } do
-  let(:team) { Team.first || Fabricate(:team) }
+  let!(:team) { Team.first || Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
   let(:client) { app.send(:client) }
   it 'invalid command' do
