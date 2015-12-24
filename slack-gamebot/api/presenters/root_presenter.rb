@@ -9,6 +9,10 @@ module Api
         "#{base_url(opts)}/"
       end
 
+      link :status do |opts|
+        "#{base_url(opts)}/status"
+      end
+
       link :users do |opts|
         {
           href: "#{base_url(opts)}/users/#{params(Api::Helpers::PaginationParameters::ALL, :team_id, :captain)}",

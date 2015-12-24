@@ -10,6 +10,7 @@ describe Api do
     end
     it 'documents root level apis' do
       expect(subject['apis'].map { |api| api['path'] }).to eq([
+        '/status.{format}',
         '/users.{format}',
         '/challenges.{format}',
         '/matches.{format}',

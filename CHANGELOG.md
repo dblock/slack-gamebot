@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#52](https://github.com/dblock/slack-gamebot/issues/52): Added an API `/status` endpoint that pings the first team - [@dblock](https://github.com/dblock).
 * [#50](https://github.com/dblock/slack-gamebot/issues/50): Automatically disable teams with `account_inactive` - [@dblock](https://github.com/dblock).
 * [#25](https://github.com/dblock/slack-gamebot/issues/25): Users can `draw` a challenge, all players have to `draw` - [@dblock](https://github.com/dblock).
 * [#46](https://github.com/dblock/slack-gamebot/issues/46): Captains can reset seasons by confirming the team name - [@dblock](https://github.com/dblock).

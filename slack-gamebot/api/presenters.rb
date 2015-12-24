@@ -3,6 +3,7 @@ require 'roar/json'
 require 'roar/json/hal'
 
 require 'slack-gamebot/api/presenters/paginated_presenter'
+require 'slack-gamebot/api/presenters/status_presenter'
 require 'slack-gamebot/api/presenters/challenge_presenter'
 require 'slack-gamebot/api/presenters/challenges_presenter'
 require 'slack-gamebot/api/presenters/user_presenter'

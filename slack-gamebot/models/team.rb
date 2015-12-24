@@ -37,6 +37,15 @@ class Team
     "name=#{name}, domain=#{domain}, id=#{team_id}, token=#{token[0..5]}..#{token[-5..-1]}"
   end
 
+  def ping!
+    client = Slack::Web::Client.new(token: token)
+    auth = client.auth_test
+    {
+      auth: auth,
+      presence: client.users_getPresence(user: auth['user_id'])
+    }
+  end
+
   def self.find_or_create_from_env!
     token = ENV['SLACK_API_TOKEN']
     return unless token

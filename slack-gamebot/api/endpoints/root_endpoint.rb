@@ -9,6 +9,7 @@ module Api
         present self, with: Api::Presenters::RootPresenter
       end
 
+      mount Api::Endpoints::StatusEndpoint
       mount Api::Endpoints::UsersEndpoint
       mount Api::Endpoints::ChallengesEndpoint
       mount Api::Endpoints::MatchesEndpoint
