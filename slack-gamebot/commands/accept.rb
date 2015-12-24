@@ -7,10 +7,10 @@ module SlackGamebot
         if challenge
           challenge.accept!(challenger)
           send_message_with_gif client, data.channel, "#{challenge.challenged.map(&:user_name).and} accepted #{challenge.challengers.map(&:user_name).and}'s challenge.", 'game'
-          logger.info "ACCEPT: #{challenge}"
+          logger.info "ACCEPT: #{client.team.name} - #{challenge}"
         else
           send_message client, data.channel, 'No challenge to accept!'
-          logger.info "ACCEPT: #{data.user}, N/A"
+          logger.info "ACCEPT: #{client.team.name} - #{data.user}, N/A"
         end
       end
     end
