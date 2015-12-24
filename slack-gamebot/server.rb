@@ -10,5 +10,9 @@ module SlackGamebot
       super(token: @team.token)
       client.team = @team
     end
+
+    def restart!(wait = 1)
+      logger.info "#{team.name}: socket closed, ignoring restart."
+    end
   end
 end
