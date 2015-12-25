@@ -40,7 +40,7 @@ describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } 
   end
   it 'does not butcher names with special characters' do
     expect(message: "#{SlackRubyBot.config.user} challenge Jung-hwa", user: user.user_id, channel: 'pongbot').to respond_with_error(
-      "I don't know who Jung-hwa is! Ask them to _#{SlackRubyBot.config.user} register_."
+      "I don't know who Jung-hwa is! Ask them to _register_."
     )
   end
 end
