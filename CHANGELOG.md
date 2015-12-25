@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#53](https://github.com/dblock/slack-gamebot/issues/53): Expanded help with complete command details - [@dblock](https://github.com/dblock).
 * [#51](https://github.com/dblock/slack-gamebot/issues/51): Automatically restart bot when Slack closes a connection - [@dblock](https://github.com/dblock).
 * [#52](https://github.com/dblock/slack-gamebot/issues/52): Added an API `/status` endpoint that pings the first team - [@dblock](https://github.com/dblock).
 * [#50](https://github.com/dblock/slack-gamebot/issues/50): Automatically disable teams with `account_inactive` - [@dblock](https://github.com/dblock).

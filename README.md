@@ -194,7 +194,7 @@ Wang Hoe defeated Deng Yaping twice
 
 Displays all outstanding (proposed and accepted) challenges.
 
-#### gamebot rank [<user> ...]
+#### gamebot rank [<player> ...]
 
 Show the smallest range of ranks for a list of players.  If no user is specified, your rank is shown.
 
@@ -205,7 +205,7 @@ gamebot rank @WangHoe @DengYaping
 3. Wang Hoe: 0 wins, 1 loss (elo: -12)
 ```
 
-#### gamebot promote <user> ...
+#### gamebot promote <player> ...
 
 Promotes other users to captain. Must be a captain to do that.
 
@@ -237,7 +237,7 @@ Team _China_, captains Deng Yaping and Victor Barna.
 
 #### gamebot reset <team name>
 
-Direct-message gamebot to reset all users and pending challenges. Must be a captain to do this.
+Reset all users and pending challenges and start a new season. Must be a captain to do this.
 
 ```
 gamebot reset China
