@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 ruby '2.2.1'
 
-gem 'slack-ruby-bot', github: 'dblock/slack-ruby-bot'
+gem 'slack-ruby-bot', '~> 0.5.2'
 gem 'mongoid', '~> 5.0.0'
 gem 'ruby-enum'
 gem 'puma'
