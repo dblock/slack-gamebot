@@ -1,3 +1,4 @@
+require 'slack-gamebot/models/game'
 require 'slack-gamebot/models/team'
 require 'slack-gamebot/models/elo'
 require 'slack-gamebot/models/user'

@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#56](https://github.com/dblock/slack-gamebot/issues/56): Support multiple games per instance - [@dblock](https://github.com/dblock).
 * [#53](https://github.com/dblock/slack-gamebot/issues/53): Expanded help with complete command details - [@dblock](https://github.com/dblock).
 * [#51](https://github.com/dblock/slack-gamebot/issues/51): Automatically restart bot when Slack closes a connection - [@dblock](https://github.com/dblock).
 * [#52](https://github.com/dblock/slack-gamebot/issues/52): Added an API `/status` endpoint that pings the first team - [@dblock](https://github.com/dblock).

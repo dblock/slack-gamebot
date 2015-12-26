@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Team do
+  let!(:game) { Fabricate(:game) }
   context '#find_or_create_from_env!' do
     before do
       ENV['SLACK_API_TOKEN'] = 'token'
@@ -14,6 +15,7 @@ describe Team do
         expect(team.name).to eq 'dblock'
         expect(team.domain).to eq 'dblockdotorg'
         expect(team.token).to eq 'token'
+        expect(team.game).to eq game
       end
     end
     after do

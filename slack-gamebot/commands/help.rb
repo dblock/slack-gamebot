@@ -39,7 +39,7 @@ Follow us on https://twitter.com/playplayio.
         EOS
       def self.call(client, data, _match)
         send_message_with_gif client, data.channel, HELP, 'help'
-        logger.info "HELP: #{client.team.name} - #{data.user}"
+        logger.info "HELP: #{client.team} - #{data.user}"
       end
     end
   end

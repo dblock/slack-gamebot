@@ -12,7 +12,7 @@ module Api
           requires :id, type: String, desc: 'Match ID.'
         end
         get ':id' do
-          match = Match.find(params[:id]) || error!(404, 'Not Found')
+          match = Match.find(params[:id]) || error!('Not Found', 404)
           present match, with: Api::Presenters::MatchPresenter
         end
 

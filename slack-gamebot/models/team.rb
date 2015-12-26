@@ -15,11 +15,14 @@ class Team
   validates_uniqueness_of :token, message: 'has already been used'
   validates_presence_of :token
   validates_presence_of :team_id
+  validates_presence_of :game_id
 
   has_many :users
   has_many :seasons
   has_many :matches
   has_many :challenges
+
+  belongs_to :game
 
   def captains
     users.captains
@@ -34,7 +37,7 @@ class Team
   end
 
   def to_s
-    "name=#{name}, domain=#{domain}, id=#{team_id}, token=#{token[0..5]}..#{token[-5..-1]}"
+    "game=#{game.try(:name)}, name=#{name}, domain=#{domain}, id=#{team_id}"
   end
 
   def ping!
@@ -55,6 +58,7 @@ class Team
     team.team_id = info['team']['id']
     team.name = info['team']['name']
     team.domain = info['team']['domain']
+    team.game = Game.first
     team.save!
     team
   end

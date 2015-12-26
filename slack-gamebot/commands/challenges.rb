@@ -15,7 +15,7 @@ module SlackGamebot
         else
           send_message_with_gif client, data.channel, 'All the challenges have been played.', 'boring'
         end
-        logger.info "CHALLENGES: #{client.team.name} - #{data.user}"
+        logger.info "CHALLENGES: #{client.team} - #{data.user}"
       end
     end
   end

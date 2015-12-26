@@ -10,7 +10,7 @@ module SlackGamebot
         else
           send_message_with_gif client, data.channel, "There're no seasons.", %w(winter summer fall spring).sample
         end
-        logger.info "SEASON: #{client.team.name} - #{data.user}"
+        logger.info "SEASON: #{client.team} - #{data.user}"
       end
     end
   end

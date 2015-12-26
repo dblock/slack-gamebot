@@ -9,7 +9,7 @@ module SlackGamebot
                      ", captains #{client.team.captains.map(&:user_name).and}"
         end
         send_message_with_gif client, data.channel, "Team _#{client.team.name}_#{captains}.", 'team'
-        logger.info "TEAM: #{client.team.name} - #{data.user}"
+        logger.info "TEAM: #{client.team} - #{data.user}"
       end
     end
   end

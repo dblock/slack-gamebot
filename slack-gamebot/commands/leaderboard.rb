@@ -15,7 +15,7 @@ module SlackGamebot
           "#{user.rank}. #{user}"
         end.join("\n")
         send_message client, data.channel, message
-        logger.info "LEADERBOARD #{max || '∞'}: #{client.team.name} - #{data.user}"
+        logger.info "LEADERBOARD #{max || '∞'}: #{client.team} - #{data.user}"
       end
     end
   end

@@ -12,7 +12,7 @@ module Api
           requires :team_id, type: String
         end
         get 'current' do
-          team = Team.find(params[:team_id]) || error!(404, 'Not Found')
+          team = Team.find(params[:team_id]) || error!('Not Found', 404)
           present Season.new(team: team), with: Api::Presenters::SeasonPresenter
         end
 
@@ -21,7 +21,7 @@ module Api
           requires :id, type: String, desc: 'Season ID.'
         end
         get ':id' do
-          season = Season.find(params[:id]) || error!(404, 'Not Found')
+          season = Season.find(params[:id]) || error!('Not Found', 404)
           present season, with: Api::Presenters::SeasonPresenter
         end
 

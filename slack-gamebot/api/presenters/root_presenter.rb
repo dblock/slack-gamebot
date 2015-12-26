@@ -50,12 +50,19 @@ module Api
 
       link :teams do |opts|
         {
-          href: "#{base_url(opts)}/teams/#{params(Api::Helpers::PaginationParameters::ALL, :active)}",
+          href: "#{base_url(opts)}/teams/#{params(Api::Helpers::PaginationParameters::ALL, :active, :game_id)}",
           templated: true
         }
       end
 
-      [:challenge, :match, :user, :season, :team].each do |model|
+      link :games do |opts|
+        {
+          href: "#{base_url(opts)}/games/#{params(Api::Helpers::PaginationParameters::ALL)}",
+          templated: true
+        }
+      end
+
+      [:challenge, :match, :user, :season, :team, :game].each do |model|
         link model do |opts|
           {
             href: "#{base_url(opts)}/#{model.to_s.pluralize}/{id}",

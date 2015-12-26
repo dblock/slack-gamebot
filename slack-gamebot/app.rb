@@ -7,7 +7,7 @@ module SlackGamebot
       migrate_from_single_team!
       mark_teams_as_active!
       ensure_a_team_captain!
-      configure_aliases!
+      migrate_from_single_game!
     end
 
     def self.instance
@@ -54,6 +54,15 @@ module SlackGamebot
       logger.warn "You should unset ENV['SLACK_API_TOKEN'] and ENV['GAMEBOT_SECRET']."
     end
 
+    def migrate_from_single_game!
+      return unless ENV.key?('SLACK_CLIENT_ID') && ENV.key?('SLACK_CLIENT_SECRET')
+      logger.info 'Migrating from env SLACK_CLIENT_ID and SLACK_CLIENT_SECRET ...'
+      game = Game.find_or_create_from_env!
+      logger.info "Automatically migrated game: #{game}."
+      Team.where(game: nil).update_all(game_id: game.id)
+      logger.warn "You should unset ENV['SLACK_CLIENT_ID'], ENV['SLACK_CLIENT_SECRET'] and ENV['SLACK_RUBY_BOT_ALIASES']."
+    end
+
     def mark_teams_as_active!
       Team.where(active: nil).update_all(active: true)
     end
@@ -66,16 +75,6 @@ module SlackGamebot
         next unless user
         user.promote!
         logger.info "#{team}: promoted #{user} to captain."
-      end
-    end
-
-    def configure_aliases!
-      SlackRubyBot.configure do |config|
-        aliases = ENV['GAMEBOT_ALIASES'] || ENV['SLACK_RUBY_BOT_ALIASES']
-        if aliases
-          config.aliases = aliases.split(' ')
-          logger.info "Also responding to #{config.aliases.or}."
-        end
       end
     end
   end

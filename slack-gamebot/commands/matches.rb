@@ -24,7 +24,7 @@ module SlackGamebot
           end
         end.join("\n")
         send_message client, data.channel, message
-        logger.info "MATCHES: #{client.team.name} - #{data.user}"
+        logger.info "MATCHES: #{client.team} - #{data.user}"
       end
     end
   end

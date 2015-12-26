@@ -12,7 +12,7 @@ module Api
           requires :id, type: String, desc: 'User ID.'
         end
         get ':id' do
-          user = User.find(params[:id]) || error!(404, 'Not Found')
+          user = User.find(params[:id]) || error!('Not Found', 404)
           present user, with: Api::Presenters::UserPresenter
         end
 

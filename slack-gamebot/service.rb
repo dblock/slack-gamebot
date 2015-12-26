@@ -37,6 +37,9 @@ module SlackGamebot
       end
 
       def start_from_database!
+        Game.each do |game|
+          logger.info "Starting game #{game}."
+        end
         Team.active.each do |team|
           start!(team)
         end

@@ -13,7 +13,7 @@ module SlackGamebot
         end
         message += " You're also team captain." if user.captain?
         send_message_with_gif client, data.channel, message, 'welcome'
-        logger.info "REGISTER: #{client.team.name} - #{data.user}"
+        logger.info "REGISTER: #{client.team} - #{data.user}"
         user
       end
     end

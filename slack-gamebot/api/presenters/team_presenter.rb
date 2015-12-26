@@ -38,6 +38,13 @@ module Api
         "#{request.base_url}/users?team_id=#{represented.id}&captain=true"
       end
 
+      link :game do |opts|
+        if represented.game_id
+          request = Grape::Request.new(opts[:env])
+          "#{request.base_url}/games/#{represented.game_id}"
+        end
+      end
+
       link :self do |opts|
         request = Grape::Request.new(opts[:env])
         "#{request.base_url}/teams/#{id}"

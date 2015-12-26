@@ -12,7 +12,7 @@ module Api
           requires :id, type: String, desc: 'Challenge ID.'
         end
         get ':id' do
-          challenge = Challenge.find(params[:id]) || error!(404, 'Not Found')
+          challenge = Challenge.find(params[:id]) || error!('Not Found', 404)
           present challenge, with: Api::Presenters::ChallengePresenter
         end
 

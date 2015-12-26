@@ -15,10 +15,10 @@ module SlackGamebot
               send_message_with_gif client, data.channel, "Match is a draw, waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:user_name).and}.", 'tie'
             end
           end
-          logger.info "DRAW: #{client.team.name} - #{challenge}"
+          logger.info "DRAW: #{client.team} - #{challenge}"
         else
           send_message client, data.channel, 'No challenge to draw!'
-          logger.info "DRAW: #{client.team.name} - #{data.user}, N/A"
+          logger.info "DRAW: #{client.team} - #{data.user}, N/A"
         end
       end
     end
