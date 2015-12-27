@@ -44,7 +44,7 @@ class Team
       id: team_id
     }.map do |k, v|
       "#{k}=#{v}" if v
-    end.join(', ')
+    end.compact.join(', ')
   end
 
   def ping!

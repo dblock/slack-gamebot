@@ -39,7 +39,7 @@ class Game
       aliases: aliases
     }.map do |k, v|
       "#{k}=#{v}" if v
-    end.join(', ')
+    end.compact.join(', ')
   end
 
   def self.find_or_create_from_env!
