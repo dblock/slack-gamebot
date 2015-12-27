@@ -20,7 +20,8 @@ class Challenge
 
   has_one :match
 
-  index({ challenger_ids: 1, challenged_ids: 1, state: 1 }, name: 'active_challenge_index')
+  index({ challenger_ids: 1, state: 1 }, name: 'active_challenger_index')
+  index({ challenged_ids: 1, state: 1 }, name: 'active_challenged_index')
 
   validate :validate_playing_against_themselves
   validate :validate_opponents_counts

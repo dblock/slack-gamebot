@@ -4,6 +4,7 @@ module SlackGamebot
       silence_loggers!
       check_mongodb_provider!
       check_database!
+      create_indexes!
       migrate_from_single_team!
       mark_teams_as_active!
       ensure_a_team_captain!
@@ -41,6 +42,10 @@ module SlackGamebot
     rescue Exception => e
       warn "Error connecting to MongoDB: #{e.message}"
       raise e
+    end
+
+    def create_indexes!
+      ::Mongoid::Tasks::Database.create_indexes
     end
 
     def migrate_from_single_team!
