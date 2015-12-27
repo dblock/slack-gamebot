@@ -17,6 +17,22 @@ class Game
 
   has_many :teams
 
+  def users
+    User.where(:team_id.in => teams.distinct(:_id))
+  end
+
+  def matches
+    Match.where(:team_id.in => teams.distinct(:_id))
+  end
+
+  def challenges
+    Challenge.where(:team_id.in => teams.distinct(:_id))
+  end
+
+  def seasons
+    Season.where(:team_id.in => teams.distinct(:_id))
+  end
+
   def to_s
     "name=#{name}, client_id=#{client_id}, aliases=#{aliases}"
   end
