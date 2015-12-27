@@ -8,7 +8,7 @@ module SlackGamebot
       @team = attrs[:team]
       fail 'Missing team' unless @team
       options = { token: @team.token }
-      options[:aliases] = ([team.game.name] + team.game.aliases).flatten.compact if team.game
+      options[:aliases] = ([team.game.name] + [team.game.aliases]).flatten.compact if team.game
       super(options)
       client.team = @team
     end

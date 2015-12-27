@@ -10,10 +10,9 @@ class Game
   field :bot_name, type: String
   field :client_id, type: String
   field :client_secret, type: String
-  field :aliases, type: Array
+  field :aliases, type: Array, default: []
 
   validates_uniqueness_of :client_id, message: 'already exists'
-  validates_presence_of :client_secret
 
   has_many :teams
 

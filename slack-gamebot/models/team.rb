@@ -58,7 +58,7 @@ class Team
     team.team_id = info['team']['id']
     team.name = info['team']['name']
     team.domain = info['team']['domain']
-    team.game = Game.first
+    team.game = Game.first || Game.create!(name: 'default')
     team.save!
     team
   end
