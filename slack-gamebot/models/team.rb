@@ -37,7 +37,14 @@ class Team
   end
 
   def to_s
-    "game=#{game.try(:name)}, name=#{name}, domain=#{domain}, id=#{team_id}"
+    {
+      game: game.name,
+      name: name,
+      domain: domain,
+      id: team_id
+    }.map do |k, v|
+      "#{k}=#{v}" if v
+    end.join(', ')
   end
 
   def ping!

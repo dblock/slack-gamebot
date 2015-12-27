@@ -8,6 +8,7 @@ module SlackGamebot
       mark_teams_as_active!
       ensure_a_team_captain!
       migrate_from_single_game!
+      ensure_a_team_game!
     end
 
     def self.instance
@@ -76,6 +77,11 @@ module SlackGamebot
         user.promote!
         logger.info "#{team}: promoted #{user} to captain."
       end
+    end
+
+    def ensure_a_team_game!
+      game = Game.first || Game.create!(name: 'default')
+      Team.where(game: nil).update_all(game_id: game.id)
     end
   end
 end

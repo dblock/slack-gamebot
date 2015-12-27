@@ -2,7 +2,7 @@ module SlackGamebot
   module Commands
     class Help < SlackRubyBot::Commands::Base
       HELP = <<-EOS
-I am your friendly GameBot, here to help.
+I am your friendly Gamebot, here to help.
 
 ```
 General
@@ -34,11 +34,10 @@ reset <team>: reset all stats, start a new season
 promote <player>: promote a user to captain
 demote me: demote you from captain
 ```
-Powered by the open-source https://github.com/dblock/slack-gamebot.
-Follow us on https://twitter.com/playplayio.
         EOS
       def self.call(client, data, _match)
-        send_message_with_gif client, data.channel, HELP, 'help'
+        send_message client, data.channel, [HELP, SlackGamebot::INFO].join("\n")
+        send_gif client, data.channel, 'help'
         logger.info "HELP: #{client.team} - #{data.user}"
       end
     end

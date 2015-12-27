@@ -33,7 +33,13 @@ class Game
   end
 
   def to_s
-    "name=#{name}, client_id=#{client_id}, aliases=#{aliases}"
+    {
+      name: name,
+      client_id: client_id,
+      aliases: aliases
+    }.map do |k, v|
+      "#{k}=#{v}" if v
+    end.join(', ')
   end
 
   def self.find_or_create_from_env!
