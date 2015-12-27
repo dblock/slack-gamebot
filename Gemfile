@@ -14,6 +14,8 @@ gem 'grape-swagger'
 gem 'mongoid-scroll'
 gem 'time_ago_in_words'
 gem 'rack-robotz'
+gem 'newrelic_rpm'
+gem 'newrelic-slack-ruby-bot'
 
 group :development, :test do
   gem 'rake', '~> 10.4'

@@ -131,6 +131,10 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     net-http-digest_auth (1.4)
+    newrelic-slack-ruby-bot (0.1.0)
+      newrelic_rpm
+      slack-ruby-bot
+    newrelic_rpm (3.14.0.305)
     nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
     oj (2.14.2)
@@ -234,6 +238,8 @@ DEPENDENCIES
   kaminari (~> 0.16.1)
   mongoid (~> 5.0.0)
   mongoid-scroll
+  newrelic-slack-ruby-bot
+  newrelic_rpm
   puma
   rack-cors
   rack-robotz

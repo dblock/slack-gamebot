@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#60](https://github.com/dblock/slack-gamebot/issues/60): Added NewRelic instrumentation - [@dblock](https://github.com/dblock).
 * [#59](https://github.com/dblock/slack-gamebot/issues/59): Ensure MongoDB indexes on start - [@dblock](https://github.com/dblock).
 * [#56](https://github.com/dblock/slack-gamebot/issues/56): Support multiple games per instance - [@dblock](https://github.com/dblock).
 * [#53](https://github.com/dblock/slack-gamebot/issues/53): Expanded help with complete command details - [@dblock](https://github.com/dblock).
