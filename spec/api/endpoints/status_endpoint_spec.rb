@@ -23,5 +23,12 @@ describe Api::Endpoints::StatusEndpoint do
         expect(game['active_teams_count']).to eq 0
       end
     end
+
+    it 'instruments endpoint with NewRelic' do
+      expect(::NewRelic::Agent::Instrumentation::GrapeInstrumentation).to receive(:handle_transaction).and_call_original
+      expect(::NewRelic::Agent.logger).to_not receive(:warn)
+      get '/status'
+      expect(last_response.status).to eq 200
+    end
   end
 end

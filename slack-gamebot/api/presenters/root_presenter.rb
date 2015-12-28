@@ -15,21 +15,21 @@ module Api
 
       link :users do |opts|
         {
-          href: "#{base_url(opts)}/users/#{params(Api::Helpers::PaginationParameters::ALL, :team_id, :captain)}",
+          href: "#{base_url(opts)}/users/#{link_params(Api::Helpers::PaginationParameters::ALL, :team_id, :captain)}",
           templated: true
         }
       end
 
       link :challenges do |opts|
         {
-          href: "#{base_url(opts)}/challenges/#{params(Api::Helpers::PaginationParameters::ALL, :team_id)}",
+          href: "#{base_url(opts)}/challenges/#{link_params(Api::Helpers::PaginationParameters::ALL, :team_id)}",
           templated: true
         }
       end
 
       link :matches do |opts|
         {
-          href: "#{base_url(opts)}/matches/#{params(Api::Helpers::PaginationParameters::ALL, :team_id)}",
+          href: "#{base_url(opts)}/matches/#{link_params(Api::Helpers::PaginationParameters::ALL, :team_id)}",
           templated: true
         }
       end
@@ -43,21 +43,21 @@ module Api
 
       link :seasons do |opts|
         {
-          href: "#{base_url(opts)}/seasons/#{params(Api::Helpers::PaginationParameters::ALL, :team_id)}",
+          href: "#{base_url(opts)}/seasons/#{link_params(Api::Helpers::PaginationParameters::ALL, :team_id)}",
           templated: true
         }
       end
 
       link :teams do |opts|
         {
-          href: "#{base_url(opts)}/teams/#{params(Api::Helpers::PaginationParameters::ALL, :active, :game_id)}",
+          href: "#{base_url(opts)}/teams/#{link_params(Api::Helpers::PaginationParameters::ALL, :active, :game_id)}",
           templated: true
         }
       end
 
       link :games do |opts|
         {
-          href: "#{base_url(opts)}/games/#{params(Api::Helpers::PaginationParameters::ALL)}",
+          href: "#{base_url(opts)}/games/#{link_params(Api::Helpers::PaginationParameters::ALL)}",
           templated: true
         }
       end
@@ -78,7 +78,7 @@ module Api
         request.base_url
       end
 
-      def params(*args)
+      def link_params(*args)
         "{?#{args.join(',')}}"
       end
     end

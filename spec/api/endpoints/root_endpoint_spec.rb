@@ -21,4 +21,10 @@ describe Api::Endpoints::RootEndpoint do
       expect(JSON.parse(last_response.body)).to_not eq({})
     end
   end
+  it 'instruments endpoint with NewRelic' do
+    expect(::NewRelic::Agent::Instrumentation::GrapeInstrumentation).to receive(:handle_transaction).and_call_original
+    expect(::NewRelic::Agent.logger).to_not receive(:warn)
+    get '/'
+    expect(last_response.status).to eq 200
+  end
 end
