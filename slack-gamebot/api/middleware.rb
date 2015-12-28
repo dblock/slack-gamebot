@@ -16,6 +16,11 @@ module Api
           end
         end
 
+        # rewrite HAL links to make them clickable in a browser
+        use Rack::Rewrite do
+          r302 %r{(\/\w*\/)(%7B|\{)?(.*)(%7D|\})}, '$1'
+        end
+
         use Rack::Robotz, 'User-Agent' => '*', 'Disallow' => '/'
 
         run Api::Middleware.new

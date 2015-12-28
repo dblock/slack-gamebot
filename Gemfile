@@ -16,6 +16,7 @@ gem 'time_ago_in_words'
 gem 'rack-robotz'
 gem 'newrelic_rpm'
 gem 'newrelic-slack-ruby-bot'
+gem 'rack-rewrite'
 
 group :development, :test do
   gem 'rake', '~> 10.4'

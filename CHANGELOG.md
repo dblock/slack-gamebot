@@ -1,5 +1,7 @@
 ### Changelog
 
+* [#64](https://github.com/dblock/slack-gamebot/issues/64): Rewrite links in the Hypermedia API root to make them clickable - [@dblock](https://github.com/dblock).
+* [#62](https://github.com/dblock/slack-gamebot/issues/62): Fix: NewRelic: NoMethodError: private method 'params' called for Grape::Endpoint - [@dblock](https://github.com/dblock).
 * [#61](https://github.com/dblock/slack-gamebot/issues/61): Added `rake db:heroku:backup[app]` - [@dblock](https://github.com/dblock).
 * [#60](https://github.com/dblock/slack-gamebot/issues/60): Added NewRelic instrumentation - [@dblock](https://github.com/dblock).
 * [#59](https://github.com/dblock/slack-gamebot/issues/59): Ensure MongoDB indexes on start - [@dblock](https://github.com/dblock).

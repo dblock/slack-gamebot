@@ -27,4 +27,14 @@ describe Api::Endpoints::RootEndpoint do
     get '/'
     expect(last_response.status).to eq 200
   end
+  it 'rewrites encoded HAL links to make them clickable' do
+    get '/teams/%7B?cursor,size%7D'
+    expect(last_response.status).to eq 302
+    expect(last_response.headers['Location']).to eq '/teams/'
+  end
+  it 'rewrites unencoded HAL links to make them clickable' do
+    get '/teams/%7B?cursor,size}'
+    expect(last_response.status).to eq 302
+    expect(last_response.headers['Location']).to eq '/teams/'
+  end
 end
