@@ -156,7 +156,7 @@ GEM
     newrelic-slack-ruby-bot (0.1.0)
       newrelic_rpm
       slack-ruby-bot
-    newrelic_rpm (3.14.0.305)
+    newrelic_rpm (3.14.1.311)
     nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
     oj (2.14.2)
@@ -219,7 +219,7 @@ GEM
     ruby-progressbar (1.7.5)
     rubyzip (1.1.7)
     safe_yaml (1.0.4)
-    slack-ruby-bot (0.5.2)
+    slack-ruby-bot (0.5.3)
       activesupport
       faye-websocket
       giphy (~> 2.0.2)
@@ -280,7 +280,7 @@ DEPENDENCIES
   rspec
   rubocop (= 0.34.2)
   ruby-enum
-  slack-ruby-bot (~> 0.5.2)
+  slack-ruby-bot (~> 0.5.3)
   time_ago_in_words
   vcr
   webmock
