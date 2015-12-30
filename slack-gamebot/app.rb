@@ -10,6 +10,7 @@ module SlackGamebot
       ensure_a_team_captain!
       migrate_from_single_game!
       ensure_a_team_game!
+      purge_inactive_teams!
     end
 
     def self.instance
@@ -87,6 +88,10 @@ module SlackGamebot
     def ensure_a_team_game!
       game = Game.first || Game.create!(name: 'default')
       Team.where(game: nil).update_all(game_id: game.id)
+    end
+
+    def purge_inactive_teams!
+      Team.purge!
     end
   end
 end
