@@ -1,6 +1,6 @@
 ## Use a Service
 
-Before deploying, consider using a game bot service and not worrying about installation or maintenance.
+Before deploying, consider using and sponsoring [a free game bot service](http://playplay.io) and not worrying about installation or maintenance.
 
 ### PlayPlay.io
 
@@ -12,13 +12,13 @@ Before deploying, consider using a game bot service and not worrying about insta
 
 ### MongoDB
 
-Deploy slack-gamebot to Heroku and add a MongoLab or Compose MongoDB provider.
+Deploy slack-gamebot to Heroku and add a MongoLab or Compose MongoDB provider. You can use both free and paid tiers.
 
 ### Environment
 
 #### SLACK_API_TOKEN
 
-If your bot servces one team, set SLACK_API_TOKEN from the Bot integration settings on Slack. The first time you start the service it will automatically create a team using this token.
+If your bot servces one team, create a new bot integration on Slack and set `SLACK_API_TOKEN` from the bot integration settings on Slack. The first time you start the service it will automatically create a team using this token.
 
 ```
 heroku config:add SLACK_API_TOKEN=...
@@ -32,30 +32,30 @@ Optional names for this bot.
 heroku config:add GAMEBOT_ALIASES=":pong: pp"
 ```
 
+Aliases can also be configured per-game. A default game will be created the first time the bot starts, you can update its aliases from a console.
+
+```ruby
+game = Game.first
+game.aliases << 'pp'
+game.save!
+```
+
 #### GIPHY_API_KEY
 
-Slack-Gamebot replies with animated GIFs. While it's currently not necessary, uyou may need to set GIPHY_API_KEY in the future, see [github.com/Giphy/GiphyAPI](https://github.com/Giphy/GiphyAPI) for details.
+Slack-Gamebot replies with animated GIFs. While it's currently not necessary, uyou may need to set `GIPHY_API_KEY` in the future, see [github.com/Giphy/GiphyAPI](https://github.com/Giphy/GiphyAPI) for details.
 
 #### Multi-Game Setup
 
 If your bot is a service, like the one on [playplay.io](http://playplay.io), register an aplication with Slack on https://api.slack.com and note the Slack client ID and secret. Create a game (currently console only).
 
 ```
-heroku run irb --app=...
+heroku run script/console --app=...
 
-Running `irb` attached to terminal... up, run.7593
-
-irb(main):002:0> $LOAD_PATH.unshift('.')
-=> [".", "/app/vendor/ruby-2.2.0/lib/ruby/site_ruby/2.2.0" ... ]
-
-irb(main):001:0> require 'slack-gamebot'
-=> true
-
-irb(main):006:0* Game.create!(name: 'pong', client_id: 'slack client id', client_secret: 'slack client secret', botname: 'pongbot', aliases: ['pp', 'pong'])
+2.2.1> Game.create!(name: 'pong', client_id: 'slack client id', client_secret: 'slack client secret', botname: 'pongbot', aliases: ['pp', 'pong'])
 => #<Game _id: 55c8f7da276eaa0003000000, ...>
 ```
 
-This will allow you to create a team via `POST /teams?game=pong&code=`, where the code is obtained via Slack OAuth workflow. You can make a website to onboard teams, see [playplay.io](https://github.com/playplayio/playplay.io) for an example.
+This will allow you to create a team via `POST /teams?game=pong&code=`, where the code is obtained via Slack OAuth workflow. You can make a website to onboard teams, see [playplay.io](https://github.com/playplayio/playplay.io) for an example. There's no authentication or authorization currently built-in.
 
 #### Database Backups
 

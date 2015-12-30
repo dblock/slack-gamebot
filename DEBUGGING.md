@@ -1,21 +1,33 @@
 ## Debugging
 
-You can debug your instance of slack-gamebot with Ruby. For example, on Heroku:
+### Locally
+
+You can debug your instance of slack-gamebot with a built-in console.
 
 ```
-heroku run irb --app=...
+2.2.1 > Game.map(&:name)
+=> ['pong', 'pool']
+```
 
-Running `irb` attached to terminal... up, run.7593
+### Silence Mongoid Logger
 
-irb(main):002:0> $LOAD_PATH.unshift('.')
-=> [".", "/app/vendor/ruby-2.2.0/lib/ruby/site_ruby/2.2.0" ... ]
+If Mongoid logging is annoying you.
 
-irb(main):001:0> require 'slack-gamebot'
-=> true
+```ruby
+Mongoid.logger.level = Logger::INFO
+Mongo::Logger.logger.level = Logger::INFO
+```
 
-irb(main):006:0* Challenge.last
-=> #<Challenge _id: 55c8f7da276eaa0003000000, ...>
+### Heroku
 
-irb(main):006:0* jordana = User.find_by_slack_mention!('jordana')
-=> #<User _id: 5547c7586166340003000000,  ...>
+```
+heroku run script/console --app=...
+
+Running `scrupt/console` attached to terminal... up, run.7593
+
+2.2.1 > Game.count
+=> 3
+
+2.2.1 > Game.last
+=> #<Game _id: 55c8f7da276eaa0003000000, ...>
 ```
