@@ -22,8 +22,19 @@ describe Score do
     it 'winner first with 3 scores' do
       expect(Score.valid?([[21, 15], [5, 21], [11, 3]])).to be false
     end
-    pending 'draw' do
-      expect(Score.valid?([[15, 15]])).to be true
+  end
+  context '#tie?' do
+    it 'tie with the same number of points' do
+      expect(Score.tie?([[15, 15]])).to be true
+    end
+    it 'tie with different number of points' do
+      expect(Score.tie?([[21, 15]])).to be false
+    end
+    it 'tie with multiple same number of points' do
+      expect(Score.tie?([[15, 14], [14, 15]])).to be true
+    end
+    it 'tie with multiple different number of points' do
+      expect(Score.tie?([[21, 15], [15, 14]])).to be false
     end
   end
   context '#parse' do

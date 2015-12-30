@@ -99,7 +99,7 @@ Record your loss with a score, loser first.
 ```
 gamebot lost 5:21
 
-Match has been recorded! Wang Hoe crushed Victor Barna.
+Match has been recorded! Wang Hoe crushed Victor Barna with the score of 5:21.
 ```
 
 You can record scores for an entire match.
@@ -107,7 +107,7 @@ You can record scores for an entire match.
 ```
 gamebot lost 15:21 21:17 18:21
 
-Match has been recorded! Wang Hoe defeated Victor Barna.
+Match has been recorded! Wang Hoe defeated Victor Barna with the scores of 15:21 21:17 18:21.
 ```
 
 You can record scores for a match you have already lost.
@@ -119,10 +119,10 @@ Match has been recorded! Wang Hoe defeated Victor Barna.
 
 gamebot lost 15:21 21:17 18:21
 
-Match scores have been updated! Wang Hoe defeated Victor Barna.
+Match scores have been updated! Wang Hoe defeated Victor Barna with the scores of 15:21 21:17 18:21.
 ```
 
-#### gamebot draw
+#### gamebot draw [score, ...]
 
 Draws a challenge, records a tie. All other players will also have to draw to record a match.
 
@@ -131,9 +131,9 @@ gamebot draw
 
 Match is a draw, waiting to hear from Victor Barna.
 
-gamebot draw
+gamebot draw 2:2
 
-Match has been recorded. Victor Barna tied with Zhang Jike.
+Match has been recorded. Victor Barna tied with Zhang Jike with a score of 2:2.
 ```
 
 #### gamebot decline

@@ -118,8 +118,8 @@ describe Match do
       it 'winner first with 3 scores' do
         expect(Match.new(team: team, scores: [[21, 15], [5, 21], [11, 3]])).to_not be_valid
       end
-      pending 'draw' do
-        expect(Match.new(team: team, scores: [[15, 15]])).to be_valid
+      it 'draw' do
+        expect(Match.new(team: team, tied: true, scores: [[15, 15]])).to be_valid
       end
     end
   end

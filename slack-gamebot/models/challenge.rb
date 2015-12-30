@@ -16,6 +16,8 @@ class Challenge
 
   has_and_belongs_to_many :challengers, class_name: 'User', inverse_of: nil
   has_and_belongs_to_many :challenged, class_name: 'User', inverse_of: nil
+
+  field :draw_scores, type: Array
   has_and_belongs_to_many :draw, class_name: 'User', inverse_of: nil
 
   has_one :match
@@ -29,6 +31,7 @@ class Challenge
   validate :validate_teams
 
   validate :validate_updated_by
+  validate :validate_draw_scores
   validates_presence_of :updated_by, if: ->(challenge) { challenge.state != ChallengeState::PROPOSED }
   validates_presence_of :team
 
@@ -105,11 +108,12 @@ class Challenge
     update_attributes!(state: ChallengeState::PLAYED)
   end
 
-  def draw!(player)
+  def draw!(player, scores = nil)
     fail 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
     fail "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
     fail "Already recorded a draw from #{player.user_name}." if draw.include?(player)
     draw << player
+    update_attributes!(draw_scores: scores) if scores
     return if draw.count != (challenged.count + challengers.count)
     # in a draw, winners have a lower original elo
     winners = nil
@@ -121,7 +125,7 @@ class Challenge
       losers = challenged
       winners = challengers
     end
-    Match.create!(team: team, challenge: self, winners: winners, losers: losers, tied: true)
+    Match.create!(team: team, challenge: self, winners: winners, losers: losers, tied: true, scores: scores)
     challenged.inc(ties: 1)
     challengers.inc(ties: 1)
     User.rank!(team)
@@ -141,6 +145,10 @@ class Challenge
       channel: channel,
       :state.in => states
     ).first
+  end
+
+  def draw_scores?
+    draw_scores && draw_scores.any?
   end
 
   private
@@ -185,5 +193,11 @@ class Challenge
       return if updated_by && (challengers.include?(updated_by) || challenged.include?(updated_by))
       errors.add(:declined_by, "Only #{challengers.map(&:user_name).and} or #{challenged.map(&:user_name).and} can cancel this challenge.")
     end
+  end
+
+  def validate_draw_scores
+    return unless draw_scores
+    return if Score.tie?(draw_scores)
+    errors.add(:scores, 'In a tie both sides must score the same number of points.')
   end
 end

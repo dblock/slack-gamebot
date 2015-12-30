@@ -9,15 +9,23 @@ class Match
   field :scores, type: Array
   belongs_to :challenge, index: true
   before_create :calculate_elo!
-  validate :validate_scores
+  validate :validate_scores, unless: :tied?
+  validate :validate_tied_scores, if: :tied?
   validates_presence_of :team
   validate :validate_teams
 
   has_and_belongs_to_many :winners, class_name: 'User', inverse_of: nil
   has_and_belongs_to_many :losers, class_name: 'User', inverse_of: nil
 
+  def scores?
+    scores && scores.any?
+  end
+
   def to_s
-    "#{winners.map(&:user_name).and} #{score_verb} #{losers.map(&:user_name).and}"
+    [
+      "#{winners.map(&:user_name).and} #{score_verb} #{losers.map(&:user_name).and}",
+      scores ? "with #{Score.scores_to_string(scores)}" : nil
+    ].compact.join(' ')
   end
 
   private
@@ -30,9 +38,13 @@ class Match
   end
 
   def validate_scores
-    return unless scores
-    return if Score.valid?(scores)
-    errors.add(:scores, 'Loser scores must come first.')
+    return unless scores && scores.any?
+    errors.add(:scores, 'Loser scores must come first.') unless Score.valid?(scores)
+  end
+
+  def validate_tied_scores
+    return unless scores && scores.any?
+    errors.add(:scores, 'In a tie both sides must have the same number of points.') unless Score.tie?(scores)
   end
 
   def score_verb

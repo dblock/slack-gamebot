@@ -15,6 +15,12 @@ module Score
     scores.count { |score| score[0] < score[1] } > scores.count / 2
   end
 
+  # draw scores?
+  def self.tie?(scores)
+    points = Score.points(scores)
+    points[0] == points[1]
+  end
+
   # parse scores from a string
   def self.parse(expression)
     return unless expression
@@ -34,5 +40,14 @@ module Score
       scores << pair_n
     end
     scores
+  end
+
+  def self.scores_to_string(scores)
+    [
+      scores.count > 1 ? 'the scores of' : 'the score of',
+      scores.map do |score|
+        "#{score[0]}:#{score[1]}"
+      end
+    ].flatten.join(' ')
   end
 end

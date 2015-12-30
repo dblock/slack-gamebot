@@ -1,24 +1,41 @@
 module SlackGamebot
   module Commands
     class Draw < SlackRubyBot::Commands::Base
-      def self.call(client, data, _match)
+      def self.call(client, data, match)
         challenger = ::User.find_create_or_update_by_slack_id!(client, data.user)
         challenge = ::Challenge.find_by_user(client.team, data.channel, challenger, [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
+        scores = Score.parse(match['expression']) if match.names.include?('expression')
         if challenge
           if challenge.draw.include?(challenger)
-            send_message_with_gif client, data.channel, "Match is a draw, still waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:user_name).and}.", 'tie'
+            challenge.update_attributes!(draw_scores: scores) if scores
+            messages = [
+              "Match is a draw, still waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:user_name).and}.",
+              challenge.draw_scores? ? "Recorded #{Score.scores_to_string(challenge.draw_scores)}." : nil
+            ].compact
+            send_message_with_gif client, data.channel, messages.join(' '), 'tie'
           else
-            challenge.draw!(challenger)
+            challenge.draw!(challenger, scores)
             if challenge.state == ChallengeState::PLAYED
               send_message_with_gif client, data.channel, "Match has been recorded! #{challenge.match}.", 'tie'
             else
-              send_message_with_gif client, data.channel, "Match is a draw, waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:user_name).and}.", 'tie'
+              messages = [
+                "Match is a draw, waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:user_name).and}.",
+                challenge.draw_scores? ? "Recorded #{Score.scores_to_string(challenge.draw_scores)}." : nil
+              ].compact
+              send_message_with_gif client, data.channel, messages.join(' '), 'tie'
             end
           end
           logger.info "DRAW: #{client.team} - #{challenge}"
         else
-          send_message client, data.channel, 'No challenge to draw!'
-          logger.info "DRAW: #{client.team} - #{data.user}, N/A"
+          match = ::Match.any_of({ winner_ids: challenger.id }, loser_ids: challenger.id).desc(:id).first
+          if match && match.tied?
+            match.update_attributes!(scores: scores)
+            send_message_with_gif client, data.channel, "Match scores have been updated! #{match}.", 'score'
+            logger.info "SCORED: #{client.team} - #{match}"
+          else
+            send_message client, data.channel, 'No challenge to draw!'
+            logger.info "DRAW: #{client.team} - #{data.user}, N/A"
+          end
         end
       end
     end
