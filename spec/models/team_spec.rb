@@ -23,4 +23,27 @@ describe Team do
       ENV.delete 'GAMEBOT_SECRET'
     end
   end
+  context '#destroy' do
+    let!(:team) { Fabricate(:team) }
+    let!(:match) { Fabricate(:match, team: team) }
+    let!(:season) { Fabricate(:season, team: team) }
+    it 'destroys dependent records' do
+      expect(Team.count).to eq 1
+      expect(User.count).to eq 2
+      expect(Challenge.count).to eq 1
+      expect(Match.count).to eq 1
+      expect(Season.count).to eq 1
+      expect do
+        expect do
+          expect do
+            expect do
+              expect do
+                team.destroy
+              end.to change(Team, :count).by(-1)
+            end.to change(User, :count).by(-2)
+          end.to change(Challenge, :count).by(-1)
+        end.to change(Match, :count).by(-1)
+      end.to change(Season, :count).by(-1)
+    end
+  end
 end

@@ -16,6 +16,8 @@ class Game
 
   has_many :teams
 
+  before_destroy :check_teams!
+
   def users
     User.where(:team_id.in => teams.distinct(:_id))
   end
@@ -53,5 +55,11 @@ class Game
     game.aliases = ENV['SLACK_RUBY_BOT_ALIASES'].split if ENV.key?('SLACK_RUBY_BOT_ALIASES')
     game.save!
     game
+  end
+
+  private
+
+  def check_teams!
+    fail 'The game has teams and cannot be destroyed.' if teams.any?
   end
 end

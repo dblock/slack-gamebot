@@ -17,10 +17,10 @@ class Team
   validates_presence_of :team_id
   validates_presence_of :game_id
 
-  has_many :users
-  has_many :seasons
-  has_many :matches
-  has_many :challenges
+  has_many :users, dependent: :destroy
+  has_many :seasons, dependent: :destroy
+  has_many :matches, dependent: :destroy
+  has_many :challenges, dependent: :destroy
 
   belongs_to :game
 
