@@ -1,8 +1,8 @@
 {
 	"name": "GameBot for Slack",
-	"description": "A game bot Slack integration.",
+	"description": "Stats and leaderboards for your favorite games in Slack.",
 	"respository": "https://github.com/dblock/slack-gamebot",
-	"keywords": ["slack", "integration"],
+	"keywords": ["slack", "games", "bot"],
 	"addons": [
 		"mongolab"
 	]
