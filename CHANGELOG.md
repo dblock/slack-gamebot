@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#68](https://github.com/dblock/slack-gamebot/issues/68): Fix: `matches` was displaying matches from other teams - [@dblock](https://github.com/dblock).
 * [#69](https://github.com/dblock/slack-gamebot/issues/69): Allow storing and scoring ties - [@dblock](https://github.com/dblock).
 * [#58](https://github.com/dblock/slack-gamebot/issues/58): Automatically purge teams inactive for two weeks - [@dblock](https://github.com/dblock).
 * [#66](https://github.com/dblock/slack-gamebot/issues/66): Added `script/console` - [@dblock](https://github.com/dblock).

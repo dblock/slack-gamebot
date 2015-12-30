@@ -5,10 +5,11 @@ module SlackGamebot
         totals = {}
         totals.default = 0
         arguments = match['expression'].split.reject(&:blank?) if match.names.include?('expression')
-        users = ::User.find_many_by_slack_mention!(client.team, arguments) if arguments && arguments.any?
+        team = client.team
+        users = ::User.find_many_by_slack_mention!(team, arguments) if arguments && arguments.any?
         user_ids = users.map(&:id) if users && users.any?
-        matches = user_ids && user_ids.any? ? ::Match.any_of({ :winner_ids.in => user_ids }, :loser_ids.in => user_ids) : ::Match.all
-        matches = matches.where(:challenge_id.in => ::Challenge.current.pluck(:_id))
+        matches = user_ids && user_ids.any? ? team.matches.any_of({ :winner_ids.in => user_ids }, :loser_ids.in => user_ids) : team.matches
+        matches = matches.where(:challenge_id.in => team.challenges.current.pluck(:_id))
         matches.includes(:challenge).each do |m|
           next if m.challenge.season_id
           totals[m.to_s] += 1
@@ -24,7 +25,7 @@ module SlackGamebot
           end
         end.join("\n")
         send_message client, data.channel, message
-        logger.info "MATCHES: #{client.team} - #{data.user}"
+        logger.info "MATCHES: #{team} - #{data.user}"
       end
     end
   end
