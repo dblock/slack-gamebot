@@ -26,8 +26,14 @@ module Score
     return unless expression
     scores = []
     expression.split.reject(&:blank?).each do |pair|
-      pair_n = pair.split(':')
-      fail "Invalid score: #{pair}." if pair_n.length != 2
+      pair_n = if pair.include?(':')
+                 pair.split(':') if pair.include?(':')
+               elsif pair.include?('-')
+                 pair.split('-')
+               elsif pair.include?(',')
+                 pair.split(',')
+               end
+      fail "Invalid score: #{pair}." unless pair_n && pair_n.length == 2
       pair_n = pair_n.map do |points|
         begin
           points = Integer(points)

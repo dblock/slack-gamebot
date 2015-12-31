@@ -53,6 +53,12 @@ describe Score do
     it '5:3' do
       expect(Score.parse('5:3')).to eq [[5, 3]]
     end
+    it '5-3' do
+      expect(Score.parse('5-3')).to eq [[5, 3]]
+    end
+    it '5,3' do
+      expect(Score.parse('5,3')).to eq [[5, 3]]
+    end
     it '5:3 9:11' do
       expect(Score.parse('5:3 9:11')).to eq [[5, 3], [9, 11]]
     end
