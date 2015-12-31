@@ -6,9 +6,12 @@ module SlackGamebot
         if !user.captain?
           send_message_with_gif client, data.channel, "You're not a captain, sorry.", 'sorry'
           logger.info "RESET: #{client.team} - #{user.user_name}, failed, not captain"
-        elsif !match.names.include?('expression') || match['expression'] != user.team.name
-          send_message_with_gif client, data.channel, "Invalid team name, confirm with _reset #{user.team.name}_.", 'help'
-          logger.info "RESET: #{client.team} - #{user.user_name}, failed, invalid team name"
+        elsif !match.names.include?('expression')
+          send_message_with_gif client, data.channel, "Missing team name, confirm with _reset #{user.team.team_id}_.", 'help'
+          logger.info "RESET: #{client.team} - #{user.user_name}, failed, missing team name"
+        elsif match['expression'] != user.team.name && match['expression'] != user.team.team_id
+          send_message_with_gif client, data.channel, "Invalid team name, confirm with _reset #{user.team.team_id}_.", 'help'
+          logger.info "RESET: #{client.team} - #{user.user_name}, failed, invalid team name '#{match['expression']}'"
         else
           ::Season.create!(team: user.team, created_by: user)
           send_message_with_gif client, data.channel, 'Welcome to the new season!', 'season'

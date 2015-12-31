@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#67](https://github.com/dblock/slack-gamebot/issues/67): Allow resetting seasons with team ID - [@dblock](https://github.com/dblock).
 * [#68](https://github.com/dblock/slack-gamebot/issues/68): Fix: `matches` was displaying matches from other teams - [@dblock](https://github.com/dblock).
 * [#69](https://github.com/dblock/slack-gamebot/issues/69): Allow storing and scoring ties - [@dblock](https://github.com/dblock).
 * [#58](https://github.com/dblock/slack-gamebot/issues/58): Automatically purge teams inactive for two weeks - [@dblock](https://github.com/dblock).

@@ -11,13 +11,24 @@ describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
   end
   it 'requires a team name' do
     expect(::User).to_not receive(:reset_all!).with(team)
-    expect(message: "#{SlackRubyBot.config.user} reset").to respond_with_slack_message("Invalid team name, confirm with _reset #{team.name}_.")
+    expect(message: "#{SlackRubyBot.config.user} reset").to respond_with_slack_message("Missing team name, confirm with _reset #{team.team_id}_.")
   end
   it 'requires a matching team name' do
     expect(::User).to_not receive(:reset_all!).with(team)
-    expect(message: "#{SlackRubyBot.config.user} reset invalid").to respond_with_slack_message("Invalid team name, confirm with _reset #{team.name}_.")
+    expect(message: "#{SlackRubyBot.config.user} reset invalid").to respond_with_slack_message("Invalid team name, confirm with _reset #{team.team_id}_.")
   end
   it 'resets with the correct team name' do
+    Fabricate(:match)
+    expect(::User).to receive(:reset_all!).with(team).once
+    expect(message: "#{SlackRubyBot.config.user} reset #{team.name}").to respond_with_slack_message('Welcome to the new season!')
+  end
+  it 'resets with the correct team id' do
+    Fabricate(:match)
+    expect(::User).to receive(:reset_all!).with(team).once
+    expect(message: "#{SlackRubyBot.config.user} reset #{team.team_id}").to respond_with_slack_message('Welcome to the new season!')
+  end
+  it 'resets a team that has a period and space in the name' do
+    team.update_attributes!(name: 'Pets.com Delivery')
     Fabricate(:match)
     expect(::User).to receive(:reset_all!).with(team).once
     expect(message: "#{SlackRubyBot.config.user} reset #{team.name}").to respond_with_slack_message('Welcome to the new season!')

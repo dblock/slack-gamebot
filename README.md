@@ -235,12 +235,12 @@ gamebot team
 Team _China_, captains Deng Yaping and Victor Barna.
 ```
 
-#### gamebot reset <team name>
+#### gamebot reset <team id|team name>
 
-Reset all users and pending challenges and start a new season. Must be a captain to do this.
+Reset all users and pending challenges and start a new season. Must be a captain to do this and confirm by specifying the team ID or name.
 
 ```
-gamebot reset China
+gamebot reset china
 
 Welcome to the new season!
 ```
