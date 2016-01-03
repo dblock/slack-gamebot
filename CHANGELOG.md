@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#70](https://github.com/dblock/slack-gamebot/issues/70): Added an optional limit to `matches` - [@dblock](https://github.com/dblock).
 * [#71](https://github.com/dblock/slack-gamebot/issues/71): Allow scores separated by dashes and commas - [@dblock](https://github.com/dblock).
 * [#67](https://github.com/dblock/slack-gamebot/issues/67): Allow resetting seasons with team ID - [@dblock](https://github.com/dblock).
 * [#68](https://github.com/dblock/slack-gamebot/issues/68): Fix: `matches` was displaying matches from other teams - [@dblock](https://github.com/dblock).

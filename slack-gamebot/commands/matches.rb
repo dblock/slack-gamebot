@@ -5,6 +5,21 @@ module SlackGamebot
         totals = {}
         totals.default = 0
         arguments = match['expression'].split.reject(&:blank?) if match.names.include?('expression')
+        # limit
+        max = 10
+        case arguments.last.downcase
+        when 'infinity'
+          max = nil
+        else
+          begin
+            Integer(arguments.last).tap do |value|
+              max = value
+              arguments.pop
+            end
+          rescue ArgumentError
+          end
+        end if arguments && arguments.any?
+        # users
         team = client.team
         users = ::User.find_many_by_slack_mention!(team, arguments) if arguments && arguments.any?
         user_ids = users.map(&:id) if users && users.any?
@@ -14,7 +29,9 @@ module SlackGamebot
           next if m.challenge.season_id
           totals[m.to_s] += 1
         end
-        message = totals.sort_by { |_, value| -value }.map do |s, count|
+        totals = totals.sort_by { |_, value| -value }
+        totals = totals.take(max) if max
+        message = totals.map do |s, count|
           case count
           when 1
             "#{s} once"

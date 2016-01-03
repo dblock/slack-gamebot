@@ -170,9 +170,9 @@ gamebot leaderboard
 
 The leaderboard contains 3 topmost players ranked by [Elo](http://en.wikipedia.org/wiki/Elo_rating_system), use _leaderboard 10_ or _leaderboard infinity_ to see 10 players or more, respectively.
 
-#### gamebot matches
+#### gamebot matches [number|infinity]
 
-Displays match totals in the current season.
+Displays top 10 match totals in the current season.
 
 ```
 gamebot matches
@@ -189,6 +189,8 @@ gamebot matches @WangHoe
 Victor Barna defeated Wang Hoe 5 times
 Wang Hoe defeated Deng Yaping twice
 ```
+
+Use _matches 3_ to see top 3 matches o _matches inifinity_ to see all matches in the season.
 
 #### gamebot challenges
 

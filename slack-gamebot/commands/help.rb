@@ -25,6 +25,7 @@ Stats
 -----
 leaderboard [number|infinity]: show the leaderboard, eg. leaderboard 10
 rank [<player> ...]: rank a player or a list of players
+matches [number|infinity]: show this season's matches
 seasons: show all seasons
 season: show current season
 
