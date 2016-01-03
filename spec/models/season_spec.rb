@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Season do
-  let!(:team) { Team.first || Fabricate(:team) }
+  let!(:team) { Fabricate(:team) }
   context 'with challenges' do
     let!(:open_challenge) { Fabricate(:challenge) }
     let!(:matches) { 3.times.map { Fabricate(:match) } }

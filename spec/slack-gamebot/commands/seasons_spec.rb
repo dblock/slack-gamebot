@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
-  let!(:team) { Team.first || Fabricate(:team) }
+  let!(:team) { Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
   shared_examples_for 'seasons' do
     context 'no seasons' do
