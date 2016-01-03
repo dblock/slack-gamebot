@@ -9,6 +9,7 @@ module SlackGamebot
       fail 'Missing team' unless @team
       options = { token: @team.token }
       options[:aliases] = ([team.game.name] + [team.game.aliases]).flatten.compact if team.game
+      options[:send_gifs] = team.gifs
       super(options)
       client.team = @team
     end

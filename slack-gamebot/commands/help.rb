@@ -31,6 +31,7 @@ season: show current season
 
 Captains
 --------
+set gifs on|off: enable/disable animated GIFs
 reset <team>: reset all stats, start a new season
 promote <player>: promote a user to captain
 demote me: demote you from captain

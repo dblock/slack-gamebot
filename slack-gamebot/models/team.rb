@@ -9,6 +9,7 @@ class Team
   field :domain, type: String
   field :token, type: String
   field :active, type: Boolean, default: true
+  field :gifs, type: Boolean, default: true
 
   scope :active, -> { where(active: true) }
 

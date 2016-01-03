@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 ruby '2.2.4'
 
-gem 'slack-ruby-bot', '~> 0.5.3'
+gem 'slack-ruby-bot', '~> 0.5.4'
 gem 'mongoid', '~> 5.0.0'
 gem 'ruby-enum'
 gem 'puma'
@@ -17,6 +17,7 @@ gem 'rack-robotz'
 gem 'newrelic_rpm'
 gem 'newrelic-slack-ruby-bot'
 gem 'rack-rewrite'
+gem 'wannabe_bool'
 
 group :development, :test do
   gem 'rake', '~> 10.4'

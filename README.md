@@ -247,6 +247,16 @@ gamebot reset china
 Welcome to the new season!
 ```
 
+#### gamebot set gifs on|off
+
+Enable/disable GIFs for your team.
+
+```
+gamebot set gifs off
+
+Disabled GIFs for team China, thanks captain!
+```
+
 #### gamebot season
 
 Display current season's leader and game totals.

@@ -11,6 +11,7 @@ module SlackGamebot
       migrate_from_single_game!
       ensure_a_team_game!
       purge_inactive_teams!
+      set_team_gifs_default!
     end
 
     def self.instance
@@ -92,6 +93,10 @@ module SlackGamebot
 
     def purge_inactive_teams!
       Team.purge!
+    end
+
+    def set_team_gifs_default!
+      Team.where(gifs: nil).update_all(gifs: true)
     end
   end
 end
