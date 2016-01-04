@@ -9,6 +9,11 @@ describe SlackGamebot::Commands::Sucks, vcr: { cassette_name: 'user_info' } do
       'No <@user>, you suck!'
     )
   end
+  it 'suck' do
+    expect(message: "#{SlackRubyBot.config.user} you sucks").to respond_with_slack_message(
+      'No <@user>, you suck!'
+    )
+  end
   it 'SUCKS' do
     expect(message: "#{SlackRubyBot.config.user} SUCKS").to respond_with_slack_message(
       'No <@user>, you suck!'
@@ -25,8 +30,8 @@ describe SlackGamebot::Commands::Sucks, vcr: { cassette_name: 'user_info' } do
     )
   end
   it 'does not conflict with a player name that contains suck' do
-    expect(message: "#{SlackRubyBot.config.user} challenge suck", user: user.user_id, channel: 'pongbot').to respond_with_error(
-      "I don't know who suck is! Ask them to _register_."
+    expect(message: "#{SlackRubyBot.config.user} challenge suckarov", user: user.user_id, channel: 'pongbot').to respond_with_error(
+      "I don't know who suckarov is! Ask them to _register_."
     )
   end
   it 'sucks for someone with many losses' do
