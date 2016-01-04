@@ -1,7 +1,8 @@
 module SlackGamebot
   module Commands
     class Sucks < SlackRubyBot::Commands::Base
-      match(/\bsuck|sucks\b/i)
+      match(/\bsuck\b/i)
+      match(/\bsucks\b/i)
 
       def self.call(client, data, _match)
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
