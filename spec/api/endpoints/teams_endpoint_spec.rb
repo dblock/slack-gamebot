@@ -95,6 +95,7 @@ describe Api::Endpoints::TeamsEndpoint do
           team = Team.find(team.id)
           expect(team.game).to eq game
           expect(team.token).to eq 'token'
+          expect(team.aliases).to eq game.aliases
         end.to change(Team, :count).by(1)
       end
       it 'creates a team with game id' do
@@ -106,10 +107,11 @@ describe Api::Endpoints::TeamsEndpoint do
           team = Team.find(team.id)
           expect(team.game).to eq game
           expect(team.token).to eq 'token'
+          expect(team.aliases).to eq game.aliases
         end.to change(Team, :count).by(1)
       end
       it 'reactivates a deactivated team' do
-        existing_team = Fabricate(:team, game: game, token: 'token', active: false)
+        existing_team = Fabricate(:team, game: game, token: 'token', active: false, aliases: %w(foo bar))
         expect do
           team = client.teams._post(code: 'code', game: existing_team.game.name)
           expect(team.team_id).to eq existing_team.team_id
@@ -118,6 +120,7 @@ describe Api::Endpoints::TeamsEndpoint do
           team = Team.find(team.id)
           expect(team.token).to eq 'token'
           expect(team.active).to be true
+          expect(team.aliases).to eq %w(foo bar)
         end.to_not change(Team, :count)
       end
       it 'cannot switch games' do

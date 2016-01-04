@@ -247,16 +247,6 @@ gamebot reset china
 Welcome to the new season!
 ```
 
-#### gamebot set gifs on|off
-
-Enable/disable GIFs for your team.
-
-```
-gamebot set gifs off
-
-Disabled GIFs for team China, thanks captain!
-```
-
 #### gamebot season
 
 Display current season's leader and game totals.
@@ -277,6 +267,28 @@ gamebot seasons
 Current: Deng Yaping: 1 win, 0 losses (elo: 48), 1 game, 2 players
 2015-07-16: Wang Hoe: 28 wins, 19 losses (elo: 214), 206 games, 25 players
 ```
+
+#### gamebot set gifs on|off
+
+Enable/disable GIFs for your team.
+
+```
+gamebot set gifs off
+
+GIFs for team China are off.
+```
+
+#### gamebot set aliases <alias|none> ...
+
+Set additional aliases for the bot. For example you could upload a custom emoji for :pong: and set an alias for it.
+
+```
+gamebot set aliases pp :pong:
+
+Team China aliases are set to pp and :pong:.
+```
+
+Remove all aliases with `set aliases none`.
 
 ## API
 

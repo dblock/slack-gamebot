@@ -10,6 +10,7 @@ class Team
   field :token, type: String
   field :active, type: Boolean, default: true
   field :gifs, type: Boolean, default: true
+  field :aliases, type: Array, default: []
 
   scope :active, -> { where(active: true) }
 

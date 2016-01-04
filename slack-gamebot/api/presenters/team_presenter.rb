@@ -11,6 +11,7 @@ module Api
       property :domain, type: String, desc: 'Team domain.'
       property :active, type: Boolean, desc: 'Team is active.'
       property :gifs, type: Boolean, desc: 'Team loves animated GIFs.'
+      property :aliases, type: Array, desc: 'Game aliases.'
       property :created_at, type: DateTime, desc: 'Date/time when the team was created.'
       property :updated_at, type: DateTime, desc: 'Date/time when the team was accepted, declined or canceled.'
 

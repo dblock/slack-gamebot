@@ -7,24 +7,37 @@ module SlackGamebot
           send_message_with_gif client, data.channel, 'Missing setting, eg. _set gifs off_.', 'help'
           logger.info "SET: #{client.team} - #{user.user_name}, failed, missing setting"
         else
-          k, v = match['expression'].split(/\W/, 2)
+          k, v = match['expression'].split(/\W+/, 2)
+          if !v.nil? && !user.captain?
+            send_message_with_gif client, data.channel, "You're not a captain, sorry.", 'sorry'
+            logger.info "SET: #{client.team} - #{user.user_name}, failed, not captain"
+            return
+          end
           case k
-          when 'gifs'
+          when 'gifs' then
             unless v.nil?
-              if !user.captain?
-                send_message_with_gif client, data.channel, "You're not a captain, sorry.", 'sorry'
-                logger.info "SET: #{client.team} - #{user.user_name}, failed, not captain"
-              else
-                client.team.update_attributes!(gifs: v.to_b)
-                client.send_gifs = client.team.gifs
-              end
+              client.team.update_attributes!(gifs: v.to_b)
+              client.send_gifs = client.team.gifs
             end
-            if v.nil? || user.captain?
-              send_message_with_gif client, data.channel, "GIFs for team #{client.team.name} are #{client.team.gifs? ? 'on!' : 'off.'}", 'fun'
-              logger.info "SET: #{client.team} - #{user.user_name} GIFs are #{client.team.gifs? ? 'on' : 'off'}."
+            send_message_with_gif client, data.channel, "GIFs for team #{client.team.name} are #{client.team.gifs? ? 'on!' : 'off.'}", 'fun'
+            logger.info "SET: #{client.team} - #{user.user_name} GIFs are #{client.team.gifs? ? 'on' : 'off'}"
+          when 'aliases' then
+            if v == 'none'
+              client.team.update_attributes!(aliases: [])
+              client.aliases = []
+            elsif !v.nil?
+              client.team.update_attributes!(aliases: v.split(/[\s,;]+/))
+              client.aliases = client.team.aliases
+            end
+            if client.team.aliases.any?
+              send_message_with_gif client, data.channel, "Bot aliases for team #{client.team.name} are #{client.team.aliases.and}.", 'name'
+              logger.info "SET: #{client.team} - #{user.user_name} Bot aliases are #{client.team.aliases.and}"
+            else
+              send_message_with_gif client, data.channel, "Team #{client.team.name} does not have any bot aliases.", 'name'
+              logger.info "SET: #{client.team} - #{user.user_name}, does not have any bot aliases"
             end
           else
-            send_message_with_gif client, data.channel, "Invalid setting #{k}, you can _set gifs on|off_.", 'help'
+            send_message_with_gif client, data.channel, "Invalid setting #{k}, you can _set gifs on|off_ and _aliases_.", 'help'
             logger.info "SET: #{client.team} - #{user.user_name}, failed, invalid setting #{k}"
           end
         end

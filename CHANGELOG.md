@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#65](https://github.com/dblock/slack-gamebot/issues/65): Allow setting per-team bot aliases with `set aliases <alias|none> ...` - [@dblock](https://github.com/dblock).
 * [#57](https://github.com/dblock/slack-gamebot/issues/57): Turn GIFs on/off with `set gifs on|off` - [@dblock](https://github.com/dblock).
 * [#70](https://github.com/dblock/slack-gamebot/issues/70): Added an optional limit to `matches` - [@dblock](https://github.com/dblock).
 * [#71](https://github.com/dblock/slack-gamebot/issues/71): Allow scores separated by dashes and commas - [@dblock](https://github.com/dblock).

@@ -22,4 +22,11 @@ describe SlackGamebot::Server do
       end
     end
   end
+  context 'aliases' do
+    let(:game) { Fabricate(:game, name: 'game', aliases: []) }
+    let(:team) { Fabricate(:team, game: game, aliases: %w(t1 t2)) }
+    it 'combines game name and team aliases' do
+      expect(app.send(:client).aliases).to eq %w(game t1 t2)
+    end
+  end
 end

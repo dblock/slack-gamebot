@@ -39,10 +39,56 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
         expect(app.send(:client).send_gifs?).to be false
       end
     end
+    context 'aliases' do
+      context 'with aliases' do
+        before do
+          team.update_attributes!(aliases: %w(foo bar))
+        end
+        it 'shows current value of aliases' do
+          expect(message: "#{SlackRubyBot.config.user} set aliases").to respond_with_slack_message(
+            "Bot aliases for team #{team.name} are foo and bar."
+          )
+        end
+        it 'sets aliases' do
+          expect(message: "#{SlackRubyBot.config.user} set aliases foo bar baz").to respond_with_slack_message(
+            "Bot aliases for team #{team.name} are foo, bar and baz."
+          )
+          expect(team.reload.aliases).to eq %w(foo bar baz)
+          expect(app.send(:client).aliases).to eq %w(foo bar baz)
+        end
+        it 'sets comma-separated aliases with extra spaces' do
+          expect(message: "#{SlackRubyBot.config.user} set aliases   foo,    bar").to respond_with_slack_message(
+            "Bot aliases for team #{team.name} are foo and bar."
+          )
+          expect(team.reload.aliases).to eq %w(foo bar)
+          expect(app.send(:client).aliases).to eq %w(foo bar)
+        end
+        it 'sets emoji aliases' do
+          expect(message: "#{SlackRubyBot.config.user} set aliases pp :pong:").to respond_with_slack_message(
+            "Bot aliases for team #{team.name} are pp and :pong:."
+          )
+          expect(team.reload.aliases).to eq ['pp', ':pong:']
+        end
+        it 'removes aliases' do
+          expect(message: "#{SlackRubyBot.config.user} set aliases none").to respond_with_slack_message(
+            "Team #{team.name} does not have any bot aliases."
+          )
+          expect(team.reload.aliases).to be_empty
+          expect(app.send(:client).aliases).to be_empty
+        end
+      end
+      context 'without aliases' do
+        it 'shows no aliases' do
+          expect(message: "#{SlackRubyBot.config.user} set aliases").to respond_with_slack_message(
+            "Team #{team.name} does not have any bot aliases."
+          )
+        end
+      end
+    end
     context 'invalid' do
       it 'error' do
         expect(message: "#{SlackRubyBot.config.user} set invalid on").to respond_with_slack_message(
-          'Invalid setting invalid, you can _set gifs on|off_.'
+          'Invalid setting invalid, you can _set gifs on|off_ and _aliases_.'
         )
       end
     end
@@ -52,15 +98,29 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
       Fabricate(:user, team: team, captain: true)
       captain.demote!
     end
-    it 'cannot set GIFs' do
-      expect(message: "#{SlackRubyBot.config.user} set gifs true").to respond_with_slack_message(
-        "You're not a captain, sorry."
-      )
+    context 'gifs' do
+      it 'cannot set GIFs' do
+        expect(message: "#{SlackRubyBot.config.user} set gifs true").to respond_with_slack_message(
+          "You're not a captain, sorry."
+        )
+      end
+      it 'can see GIFs value' do
+        expect(message: "#{SlackRubyBot.config.user} set gifs").to respond_with_slack_message(
+          "GIFs for team #{team.name} are on!"
+        )
+      end
     end
-    it 'can see GIFs value' do
-      expect(message: "#{SlackRubyBot.config.user} set gifs").to respond_with_slack_message(
-        "GIFs for team #{team.name} are on!"
-      )
+    context 'aliases' do
+      it 'cannot set aliases' do
+        expect(message: "#{SlackRubyBot.config.user} set aliases foo bar").to respond_with_slack_message(
+          "You're not a captain, sorry."
+        )
+      end
+      it 'can see aliases' do
+        expect(message: "#{SlackRubyBot.config.user} set aliases").to respond_with_slack_message(
+          "Team #{team.name} does not have any bot aliases."
+        )
+      end
     end
   end
 end

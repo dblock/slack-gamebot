@@ -12,6 +12,7 @@ module SlackGamebot
       ensure_a_team_game!
       purge_inactive_teams!
       set_team_gifs_default!
+      set_team_aliases!
     end
 
     def self.instance
@@ -95,8 +96,16 @@ module SlackGamebot
       Team.purge!
     end
 
+    # default team GIFs to true
     def set_team_gifs_default!
       Team.where(gifs: nil).update_all(gifs: true)
+    end
+
+    # game aliases get copied onto teams upon creation and can be modified by team captains
+    def set_team_aliases!
+      Game.each do |game|
+        game.teams.where(aliases: nil).update_all(aliases: game.aliases)
+      end
     end
   end
 end

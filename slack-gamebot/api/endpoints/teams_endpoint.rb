@@ -64,6 +64,7 @@ module Api
           else
             team = Team.create!(
               game: game,
+              aliases: game.aliases,
               token: rc['bot']['bot_access_token'],
               team_id: rc['team_id'],
               name: rc['team_name']
