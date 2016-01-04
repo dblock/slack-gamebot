@@ -46,7 +46,7 @@ describe SlackGamebot::Commands::Draw, vcr: { cassette_name: 'user_info' } do
       expect(challenge.match.scores).to eq [[3, 3]]
     end
     it 'with invalid score' do
-      expect(message: "#{SlackRubyBot.config.user} draw 21:15", user: challenged.user_id, channel: challenge.channel).to respond_with_error(
+      expect(message: "#{SlackRubyBot.config.user} draw 21:15", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
         'In a tie both sides must score the same number of points.'
       )
     end

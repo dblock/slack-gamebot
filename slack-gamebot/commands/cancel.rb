@@ -16,7 +16,7 @@ module SlackGamebot
           logger.info "CANCEL: #{client.team} - #{challenge}"
         else
           send_message client, data.channel, 'No challenge to cancel!'
-          logger.info "CANCEL:#{client.team} -  #{data.user}, N/A"
+          logger.info "CANCEL: #{client.team} -  #{data.user}, N/A"
         end
       end
     end

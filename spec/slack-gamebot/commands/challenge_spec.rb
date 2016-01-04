@@ -33,13 +33,13 @@ describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } 
   end
   it 'requires an opponent' do
     expect do
-      expect(message: "#{SlackRubyBot.config.user} challenge", user: user.user_id, channel: 'pongbot').to respond_with_error(
+      expect(message: "#{SlackRubyBot.config.user} challenge", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
         'Number of teammates (1) and opponents (0) must match.'
       )
     end.to_not change(Challenge, :count)
   end
   it 'does not butcher names with special characters' do
-    expect(message: "#{SlackRubyBot.config.user} challenge Jung-hwa", user: user.user_id, channel: 'pongbot').to respond_with_error(
+    expect(message: "#{SlackRubyBot.config.user} challenge Jung-hwa", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
       "I don't know who Jung-hwa is! Ask them to _register_."
     )
   end

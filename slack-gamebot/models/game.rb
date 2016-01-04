@@ -60,6 +60,6 @@ class Game
   private
 
   def check_teams!
-    fail 'The game has teams and cannot be destroyed.' if teams.any?
+    fail SlackGamebot::Error, 'The game has teams and cannot be destroyed.' if teams.any?
   end
 end

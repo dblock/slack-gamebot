@@ -19,7 +19,7 @@ describe SlackGamebot::Commands::Resigned, vcr: { cassette_name: 'user_info' } d
     expect(challenge.match.resigned?).to be true
   end
   it 'resigned with score' do
-    expect(message: "#{SlackRubyBot.config.user} resigned 15:21", user: challenged.user_id, channel: challenge.channel).to respond_with_error(
+    expect(message: "#{SlackRubyBot.config.user} resigned 15:21", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
       'Cannot score when resigning.'
     )
   end

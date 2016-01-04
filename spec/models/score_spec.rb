@@ -42,10 +42,10 @@ describe Score do
       expect(Score.parse(nil)).to be nil
     end
     it 'x:y' do
-      expect { Score.parse('x:y') }.to raise_error RuntimeError, 'Invalid score: x:y, invalid value for Integer(): "x".'
+      expect { Score.parse('x:y') }.to raise_error SlackGamebot::Error, 'Invalid score: x:y, invalid value for Integer(): "x".'
     end
     it '-1:5' do
-      expect { Score.parse('-1:5') }.to raise_error RuntimeError, 'Invalid score: -1:5, points must be greater or equal to zero.'
+      expect { Score.parse('-1:5') }.to raise_error SlackGamebot::Error, 'Invalid score: -1:5, points must be greater or equal to zero.'
     end
     it '21:0' do
       expect(Score.parse('21:0')).to eq [[21, 0]]

@@ -73,23 +73,23 @@ class Challenge
   end
 
   def accept!(challenger)
-    fail "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
+    fail SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
     update_attributes!(updated_by: challenger, state: ChallengeState::ACCEPTED)
   end
 
   def decline!(challenger)
-    fail "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
+    fail SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
     update_attributes!(updated_by: challenger, state: ChallengeState::DECLINED)
   end
 
   def cancel!(challenger)
-    fail "Challenge has already been #{state}." unless [ChallengeState::PROPOSED, ChallengeState::ACCEPTED].include?(state)
+    fail SlackGamebot::Error, "Challenge has already been #{state}." unless [ChallengeState::PROPOSED, ChallengeState::ACCEPTED].include?(state)
     update_attributes!(updated_by: challenger, state: ChallengeState::CANCELED)
   end
 
   def lose!(loser, scores = nil)
-    fail 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
-    fail "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+    fail SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
+    fail SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
     winners = nil
     losers = nil
     if challenged.include?(loser)
@@ -99,7 +99,7 @@ class Challenge
       winners = challenged
       losers = challengers
     else
-      fail "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
+      fail SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
     end
     Match.create!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     winners.inc(wins: 1)
@@ -109,8 +109,8 @@ class Challenge
   end
 
   def resign!(loser, scores = nil)
-    fail 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
-    fail "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+    fail SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
+    fail SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
     winners = nil
     losers = nil
     if challenged.include?(loser)
@@ -120,7 +120,7 @@ class Challenge
       winners = challenged
       losers = challengers
     else
-      fail "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
+      fail SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
     end
     Match.create!(team: team, challenge: self, winners: winners, losers: losers, scores: scores, resigned: true)
     winners.inc(wins: 1)
@@ -130,9 +130,9 @@ class Challenge
   end
 
   def draw!(player, scores = nil)
-    fail 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
-    fail "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
-    fail "Already recorded a draw from #{player.user_name}." if draw.include?(player)
+    fail SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
+    fail SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+    fail SlackGamebot::Error, "Already recorded a draw from #{player.user_name}." if draw.include?(player)
     draw << player
     update_attributes!(draw_scores: scores) if scores
     return if draw.count != (challenged.count + challengers.count)

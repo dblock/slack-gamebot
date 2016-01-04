@@ -8,11 +8,7 @@ module SlackGamebot
           logger.info "SET: #{client.team} - #{user.user_name}, failed, missing setting"
         else
           k, v = match['expression'].split(/\W+/, 2)
-          if !v.nil? && !user.captain?
-            send_message_with_gif client, data.channel, "You're not a captain, sorry.", 'sorry'
-            logger.info "SET: #{client.team} - #{user.user_name}, failed, not captain"
-            return
-          end
+          fail SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
           case k
           when 'gifs' then
             unless v.nil?
@@ -37,8 +33,7 @@ module SlackGamebot
               logger.info "SET: #{client.team} - #{user.user_name}, does not have any bot aliases"
             end
           else
-            send_message_with_gif client, data.channel, "Invalid setting #{k}, you can _set gifs on|off_ and _aliases_.", 'help'
-            logger.info "SET: #{client.team} - #{user.user_name}, failed, invalid setting #{k}"
+            fail SlackGamebot::Error, "Invalid setting #{k}, you can _set gifs on|off_ and _aliases_."
           end
         end
       end

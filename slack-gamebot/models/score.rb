@@ -33,14 +33,14 @@ module Score
                elsif pair.include?(',')
                  pair.split(',')
                end
-      fail "Invalid score: #{pair}." unless pair_n && pair_n.length == 2
+      fail SlackGamebot::Error, "Invalid score: #{pair}." unless pair_n && pair_n.length == 2
       pair_n = pair_n.map do |points|
         begin
           points = Integer(points)
-          fail 'points must be greater or equal to zero' if points < 0
+          fail SlackGamebot::Error, 'points must be greater or equal to zero' if points < 0
           points
         rescue StandardError => e
-          raise "Invalid score: #{pair}, #{e}."
+          raise SlackGamebot::Error, "Invalid score: #{pair}, #{e}."
         end
       end
       scores << pair_n

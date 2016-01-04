@@ -26,7 +26,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     expect(challenge.match.resigned?).to be false
   end
   it 'lost with invalid score' do
-    expect(message: "#{SlackRubyBot.config.user} lost 21:15", user: challenged.user_id, channel: challenge.channel).to respond_with_error(
+    expect(message: "#{SlackRubyBot.config.user} lost 21:15", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
       'Loser scores must come first.'
     )
   end

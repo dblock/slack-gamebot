@@ -40,7 +40,7 @@ describe Challenge do
     it 'requires known opponents' do
       expect do
         Challenge.split_teammates_and_opponents(@challenger.team, @challenger, ['username'])
-      end.to raise_error ArgumentError, "I don't know who username is! Ask them to _register_."
+      end.to raise_error SlackGamebot::Error, "I don't know who username is! Ask them to _register_."
     end
   end
   context '#create_from_teammates_and_opponents!' do
@@ -117,7 +117,7 @@ describe Challenge do
       @challenge.accept!(accepted_by)
       expect do
         @challenge.accept!(accepted_by)
-      end.to raise_error RuntimeError, /Challenge has already been accepted./
+      end.to raise_error SlackGamebot::Error, /Challenge has already been accepted./
     end
   end
   context '#decline!' do
@@ -144,7 +144,7 @@ describe Challenge do
       @challenge.decline!(declined_by)
       expect do
         @challenge.decline!(declined_by)
-      end.to raise_error RuntimeError, /Challenge has already been declined./
+      end.to raise_error SlackGamebot::Error, /Challenge has already been declined./
     end
   end
   context '#cancel!' do
@@ -178,7 +178,7 @@ describe Challenge do
       @challenge.cancel!(canceled_by)
       expect do
         @challenge.cancel!(canceled_by)
-      end.to raise_error RuntimeError, /Challenge has already been canceled./
+      end.to raise_error SlackGamebot::Error, /Challenge has already been canceled./
     end
   end
   context '#lose!' do

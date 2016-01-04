@@ -36,7 +36,7 @@ class User
   def self.find_by_slack_mention!(team, user_name)
     query = user_name =~ /^<@(.*)>$/ ? { user_id: Regexp.last_match[1] } : { user_name: Regexp.new("^#{user_name}$", 'i') }
     user = User.where(query.merge(team: team)).first
-    fail ArgumentError, "I don't know who #{user_name} is! Ask them to _register_." unless user
+    fail SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user
     user
   end
 
