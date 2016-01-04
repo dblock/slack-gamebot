@@ -44,6 +44,12 @@ Politely says 'hi' back.
 
 Get help.
 
+#### gamebot sucks
+
+You can tell the bot that it sucks. But it will talk back.
+
+![](screenshots/sucks.gif)
+
 #### gamebot register
 
 Registers a user.
@@ -136,15 +142,17 @@ gamebot draw 2:2
 Match has been recorded. Victor Barna tied with Zhang Jike with a score of 2:2.
 ```
 
-#### gamebot resign
+#### gamebot resigned
 
 Records your resignation, which is a special kind of `lost` without a score.
 
 ```
-gamebot resign
+gamebot resigned
 
 Match has been recorded! Victor Barna resigned against Wang Hoe.
 ```
+
+![](screenshots/resigned.gif)
 
 #### gamebot decline
 
@@ -288,6 +296,8 @@ gamebot set gifs off
 GIFs for team China are off.
 ```
 
+![](screenshots/gifs.gif)
+
 #### gamebot set aliases <alias|none> ...
 
 Set additional aliases for the bot. For example you could upload a custom emoji for :pong: and set an alias for it.
@@ -299,6 +309,8 @@ Team China aliases are set to pp and :pong:.
 ```
 
 Remove all aliases with `set aliases none`.
+
+![](screenshots/aliases.gif)
 
 ## API
 
