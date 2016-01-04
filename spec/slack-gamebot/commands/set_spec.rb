@@ -11,10 +11,21 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
       )
     end
     context 'gifs' do
+      it 'shows current value of GIFs on' do
+        expect(message: "#{SlackRubyBot.config.user} set gifs").to respond_with_slack_message(
+          "GIFs for team #{team.name} are on!"
+        )
+      end
+      it 'shows current value of GIFs off' do
+        team.update_attributes!(gifs: false)
+        expect(message: "#{SlackRubyBot.config.user} set gifs").to respond_with_slack_message(
+          "GIFs for team #{team.name} are off."
+        )
+      end
       it 'enables GIFs' do
         team.update_attributes!(gifs: false)
         expect(message: "#{SlackRubyBot.config.user} set gifs on").to respond_with_slack_message(
-          "Enabled GIFs for team #{team.name}, thanks captain!"
+          "GIFs for team #{team.name} are on!"
         )
         expect(team.reload.gifs).to be true
         expect(app.send(:client).send_gifs?).to be true
@@ -22,7 +33,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
       it 'disables GIFs' do
         team.update_attributes!(gifs: true)
         expect(message: "#{SlackRubyBot.config.user} set gifs off").to respond_with_slack_message(
-          "Disabled GIFs for team #{team.name}, thanks captain!"
+          "GIFs for team #{team.name} are off."
         )
         expect(team.reload.gifs).to be false
         expect(app.send(:client).send_gifs?).to be false
@@ -44,6 +55,11 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
     it 'cannot set GIFs' do
       expect(message: "#{SlackRubyBot.config.user} set gifs true").to respond_with_slack_message(
         "You're not a captain, sorry."
+      )
+    end
+    it 'can see GIFs value' do
+      expect(message: "#{SlackRubyBot.config.user} set gifs").to respond_with_slack_message(
+        "GIFs for team #{team.name} are on!"
       )
     end
   end
