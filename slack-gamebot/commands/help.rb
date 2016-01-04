@@ -11,6 +11,7 @@ hi: be nice, say hi to your bot
 team: show your team's info and captains
 register: register yourself as a player
 help: get this helpful message
+sucks: express some frustration
 
 Games
 -----
