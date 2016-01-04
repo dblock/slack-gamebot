@@ -6,11 +6,14 @@ class Match
 
   belongs_to :team, index: true
   field :tied, type: Boolean, default: false
+  field :resigned, type: Boolean, default: false
   field :scores, type: Array
   belongs_to :challenge, index: true
   before_create :calculate_elo!
   validate :validate_scores, unless: :tied?
   validate :validate_tied_scores, if: :tied?
+  validate :validate_resigned_scores, if: :resigned?
+  validate :validate_tied_resigned
   validates_presence_of :team
   validate :validate_teams
 
@@ -22,10 +25,14 @@ class Match
   end
 
   def to_s
-    [
-      "#{winners.map(&:user_name).and} #{score_verb} #{losers.map(&:user_name).and}",
-      scores ? "with #{Score.scores_to_string(scores)}" : nil
-    ].compact.join(' ')
+    if resigned?
+      "#{losers.map(&:user_name).and} resigned against #{winners.map(&:user_name).and}"
+    else
+      [
+        "#{winners.map(&:user_name).and} #{score_verb} #{losers.map(&:user_name).and}",
+        scores ? "with #{Score.scores_to_string(scores)}" : nil
+      ].compact.join(' ')
+    end
   end
 
   private
@@ -45,6 +52,15 @@ class Match
   def validate_tied_scores
     return unless scores && scores.any?
     errors.add(:scores, 'In a tie both sides must have the same number of points.') unless Score.tie?(scores)
+  end
+
+  def validate_resigned_scores
+    return unless scores && scores.any?
+    errors.add(:scores, 'Cannot score when resigning.')
+  end
+
+  def validate_tied_resigned
+    errors.add(:tied, 'Cannot be tied and resigned.') if tied? && resigned?
   end
 
   def score_verb

@@ -136,6 +136,16 @@ gamebot draw 2:2
 Match has been recorded. Victor Barna tied with Zhang Jike with a score of 2:2.
 ```
 
+#### gamebot resign
+
+Records your resignation, which is a special kind of `lost` without a score.
+
+```
+gamebot resign
+
+Match has been recorded! Victor Barna resigned against Wang Hoe.
+```
+
 #### gamebot decline
 
 Decline a challenge.

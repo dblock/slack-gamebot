@@ -23,6 +23,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     )
     challenge.reload
     expect(challenge.match.scores).to eq [[15, 21]]
+    expect(challenge.match.resigned?).to be false
   end
   it 'lost with invalid score' do
     expect(message: "#{SlackRubyBot.config.user} lost 21:15", user: challenged.user_id, channel: challenge.channel).to respond_with_error(

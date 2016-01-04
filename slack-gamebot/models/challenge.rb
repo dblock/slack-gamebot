@@ -108,6 +108,27 @@ class Challenge
     update_attributes!(state: ChallengeState::PLAYED)
   end
 
+  def resign!(loser, scores = nil)
+    fail 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
+    fail "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+    winners = nil
+    losers = nil
+    if challenged.include?(loser)
+      winners = challengers
+      losers = challenged
+    elsif
+      winners = challenged
+      losers = challengers
+    else
+      fail "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
+    end
+    Match.create!(team: team, challenge: self, winners: winners, losers: losers, scores: scores, resigned: true)
+    winners.inc(wins: 1)
+    losers.inc(losses: 1)
+    User.rank!(team)
+    update_attributes!(state: ChallengeState::PLAYED)
+  end
+
   def draw!(player, scores = nil)
     fail 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
     fail "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED

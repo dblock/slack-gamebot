@@ -16,10 +16,11 @@ Games
 -----
 challenge <opponent>, ... [with <teammate>, ...]: challenge opponent(s) to a game
 accept: accept a challenge
+decline: decline a previous challenge
+cancel: cancel a previous challenge
 lost [score, ...]: record your loss
+resigned: record a resignation
 draw: record a tie
-decline: decline a challenge
-cancel: cancel a challenge
 
 Stats
 -----
@@ -31,8 +32,8 @@ season: show current season
 
 Captains
 --------
-set gifs on|off: enable/disable animated GIFs
-set aliases <alias|none> ...: set additional bot aliases
+set gifs [on|off]: enable/disable animated GIFs
+set aliases [<alias|none> ...]: set additional bot aliases
 reset <team>: reset all stats, start a new season
 promote <player>: promote a user to captain
 demote me: demote you from captain
