@@ -20,6 +20,7 @@ module SlackGamebot
       EM.next_tick do
         logger.info "#{team.name}: socket closed, restarting ..."
         SlackGamebot::Service.restart! team, self, wait
+        client.team = team
       end
     end
   end
