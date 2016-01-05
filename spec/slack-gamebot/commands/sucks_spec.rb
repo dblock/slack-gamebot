@@ -4,18 +4,14 @@ describe SlackGamebot::Commands::Sucks, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
   let(:user) { Fabricate(:user) }
+  let(:client) { app.send(:client) }
   it 'sucks' do
     expect(message: "#{SlackRubyBot.config.user} sucks").to respond_with_slack_message(
       'No <@user>, you suck!'
     )
   end
   it 'suck' do
-    expect(message: "#{SlackRubyBot.config.user} you sucks").to respond_with_slack_message(
-      'No <@user>, you suck!'
-    )
-  end
-  it 'SUCKS' do
-    expect(message: "#{SlackRubyBot.config.user} SUCKS").to respond_with_slack_message(
+    expect(message: "#{SlackRubyBot.config.user} you suck").to respond_with_slack_message(
       'No <@user>, you suck!'
     )
   end
@@ -25,7 +21,7 @@ describe SlackGamebot::Commands::Sucks, vcr: { cassette_name: 'user_info' } do
     )
   end
   it 'really sucks!' do
-    expect(message: "#{SlackRubyBot.config.user} really sucks!").to respond_with_slack_message(
+    expect(message: "#{SlackRubyBot.config.user} you suck!").to respond_with_slack_message(
       'No <@user>, you suck!'
     )
   end

@@ -1,10 +1,7 @@
 module SlackGamebot
   module Commands
     class Sucks < SlackRubyBot::Commands::Base
-      match(/\bsuck\b/i)
-      match(/\bsucks\b/i)
-
-      def self.call(client, data, _match)
+      command 'sucks', 'suck', 'you suck', 'sucks!', 'you suck!' do |client, data, _match|
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
         if user.losses && user.losses > 5
           send_message_with_gif client, data.channel, "No <@#{data.user}>, with #{user.losses} losses, you suck!", 'loser'

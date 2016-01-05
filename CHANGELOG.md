@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#76](https://github.com/dblock/slack-gamebot/issues/76): Prevent multiple bots from responding to you suck - [@dblock](https://github.com/dblock).
 * [#75](https://github.com/dblock/slack-gamebot/issues/75): Nudge inactive teams every couple of weeks - [@dblock](https://github.com/dblock).
 * [#74](https://github.com/dblock/slack-gamebot/issues/74): Seasons may have multiple winners with the same elo, wins, losses and ties - [@dblock](https://github.com/dblock).
 * [#73](https://github.com/dblock/slack-gamebot/issues/73): Handled errors are no longer logged as fatal exceptions - [@dblock](https://github.com/dblock).
