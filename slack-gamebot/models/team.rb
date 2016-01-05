@@ -77,7 +77,7 @@ class Team
     channels = client.channels_list['channels'].select { |channel| channel['is_member'] }
     return unless channels.any?
     channel = channels.first
-    logger.info "Waking up #{self} on ##{channel['name']}."
+    logger.info "Nudging #{self} on ##{channel['name']}."
     gif = begin
       Giphy.random('nudge')
     rescue StandardError => e
