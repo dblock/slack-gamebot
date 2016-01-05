@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#74](https://github.com/dblock/slack-gamebot/issues/74): Seasons may have multiple winners with the same elo, wins, losses and ties - [@dblock](https://github.com/dblock).
 * [#73](https://github.com/dblock/slack-gamebot/issues/73): Handled errors are no longer logged as fatal exceptions - [@dblock](https://github.com/dblock).
 * [#32](https://github.com/dblock/slack-gamebot/issues/32): Players can express their frustration with `suck` - [@dblock](https://github.com/dblock).
 * [#26](https://github.com/dblock/slack-gamebot/issues/26): Players can `resign` a challenge - [@dblock](https://github.com/dblock).

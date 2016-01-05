@@ -19,7 +19,7 @@ describe Season do
       expect(season.user_ranks.count).to eq 6
     end
     it 'to_s' do
-      expect(season.to_s).to eq "#{season.created_at.strftime('%F')}: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 3 matches, 6 players"
+      expect(season.to_s).to eq "#{season.created_at.strftime('%F')}: #{season.winners.map(&:to_s).and}, 3 matches, 6 players"
     end
   end
   context 'without challenges' do
@@ -34,22 +34,39 @@ describe Season do
     let!(:match) { Fabricate(:match) }
     let(:season) { Season.new(team: team) }
     it 'to_s' do
-      expect(season.to_s).to eq "Current: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 1 match, 2 players"
+      expect(season.to_s).to eq "Current: #{season.winners.map(&:to_s).and}, 1 match, 2 players"
+    end
+    it 'has one winner' do
+      expect(season.winners.count).to eq 1
     end
   end
-  context 'current season with multiple matches' do
-    let!(:matches) { 3.times.map { Fabricate(:match) } }
+  context 'current season with multiple matches and one winner' do
+    let(:user) { Fabricate(:user, team: team) }
+    let!(:matches) { 3.times.map { Fabricate(:match, challenge: Fabricate(:challenge, challengers: [user])) } }
     let(:season) { Season.new(team: team) }
     it 'to_s' do
-      expect(season.to_s).to eq "Current: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 3 matches, 6 players"
+      expect(season.to_s).to eq "Current: #{season.winners.map(&:to_s).and}, 3 matches, 4 players"
+    end
+    it 'has one winner' do
+      expect(season.winners.count).to eq 1
+      expect(season.winners.first.wins).to eq 3
     end
     context 'with an unplayed challenge' do
       before do
         Fabricate(:challenge)
       end
       it 'only counts played matches' do
-        expect(season.to_s).to eq "Current: #{season.send(:winner).user_name}: 1 win, 0 losses (elo: 48), 3 matches, 6 players"
+        expect(season.to_s).to eq "Current: #{season.winners.map(&:to_s).and}, 3 matches, 4 players"
       end
+    end
+  end
+  context 'current season with two winners' do
+    let!(:matches) { 2.times.map { Fabricate(:match, team: team) } }
+    let!(:matches) { 2.times.map { Fabricate(:match, team: team) } }
+    let(:season) { Season.new(team: team) }
+    it 'has two winners' do
+      expect(season.winners.count).to eq 2
+      expect(season.winners.map(&:wins).uniq).to eq([1])
     end
   end
 end

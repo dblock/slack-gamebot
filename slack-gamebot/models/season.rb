@@ -23,10 +23,19 @@ class Season
 
   def to_s
     [
-      "#{label}: #{winner}",
+      "#{label}: #{winners.map(&:to_s).and}",
       "#{played_challenges.count} match#{played_challenges.count == 1 ? '' : 'es'}",
       "#{players.count} player#{players.count == 1 ? '' : 's'}"
     ].join(', ')
+  end
+
+  def winners
+    min = user_ranks.min(:rank)
+    user_ranks.asc(:id).where(rank: min) if min
+  end
+
+  def players
+    user_ranks.where(:rank.ne => nil)
   end
 
   private
@@ -38,20 +47,12 @@ class Season
     errors.add(:team, 'Season can only be recorded for one team.') if teams.count != 1
   end
 
-  def winner
-    user_ranks.asc(:rank).first
-  end
-
   def played_challenges
     persisted? ? challenges.played : team.challenges.current.played
   end
 
   def label
     persisted? ? created_at.strftime('%F') : 'Current'
-  end
-
-  def players
-    user_ranks.where(:rank.ne => nil)
   end
 
   def validate_challenges

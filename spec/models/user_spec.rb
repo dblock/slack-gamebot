@@ -106,8 +106,18 @@ describe User do
       expect(user3.reload.rank).to eq 3
       expect(user4.reload.rank).to eq 2
     end
-    it 'ranks players with the same elo and different wins/losses'
-    it 'ranks players with the same elo and different wins/losses/ties'
+    it 'ranks players with the same elo and different wins' do
+      user1 = Fabricate(:user, elo: 40, wins: 1, losses: 0)
+      user2 = Fabricate(:user, elo: 40, wins: 4, losses: 0)
+      expect(user1.reload.rank).to eq 2
+      expect(user2.reload.rank).to eq 1
+    end
+    it 'ranks players with the same elo, wins and losses and different ties' do
+      user1 = Fabricate(:user, elo: 40, wins: 1, losses: 0, ties: 0)
+      user2 = Fabricate(:user, elo: 40, wins: 1, losses: 0, ties: 1)
+      expect(user1.reload.rank).to eq 2
+      expect(user2.reload.rank).to eq 1
+    end
     it 'ranks players with the same elo and wins/losses equally' do
       user1 = Fabricate(:user, elo: 1, wins: 1, losses: 1)
       user2 = Fabricate(:user, elo: 2, wins: 1, losses: 1)

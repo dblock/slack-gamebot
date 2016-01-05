@@ -81,9 +81,9 @@ class User
 
   def self.rank!(team)
     rank = 1
-    players = any_of({ :wins.gt => 0 }, { :losses.gt => 0 }, :ties.gt => 0).where(team: team).desc(:elo).asc(:wins).asc(:ties)
+    players = any_of({ :wins.gt => 0 }, { :losses.gt => 0 }, :ties.gt => 0).where(team: team).desc(:elo).desc(:wins).asc(:losses).desc(:ties)
     players.each_with_index do |player, index|
-      rank += 1 if index > 0 && players[index - 1].elo != player.elo
+      rank += 1 if index > 0 && [:elo, :wins, :losses, :ties].any? { |property| players[index - 1].send(property) != player.send(property) }
       player.update_attributes!(rank: rank) unless rank == player.rank
     end
   end
