@@ -11,6 +11,7 @@ class Team
   field :active, type: Boolean, default: true
   field :gifs, type: Boolean, default: true
   field :aliases, type: Array, default: []
+  field :nudge_at, type: DateTime
 
   scope :active, -> { where(active: true) }
 
@@ -56,6 +57,36 @@ class Team
       auth: auth,
       presence: client.users_getPresence(user: auth['user_id'])
     }
+  end
+
+  def asleep?(dt = 2.weeks)
+    time_limit = Time.now - dt
+    return false if created_at > time_limit
+    recent_challenge = challenges.desc(:updated_at).limit(1).first
+    recent_challenge.nil? || recent_challenge.updated_at < time_limit
+  end
+
+  def nudge?(dt = 2.weeks)
+    time_limit = Time.now - dt
+    return false if nudge_at && nudge_at > time_limit
+    asleep?(dt)
+  end
+
+  def nudge!
+    client = Slack::Web::Client.new(token: token)
+    channels = client.channels_list['channels'].select { |channel| channel['is_member'] }
+    return unless channels.any?
+    channel = channels.first
+    logger.info "Waking up #{self} on ##{channel['name']}."
+    gif = begin
+      Giphy.random('nudge')
+    rescue StandardError => e
+      logger.warn "Giphy.random: #{e.message}"
+      nil
+    end if gifs?
+    text = ["Challenge someone to a game of #{game.name} today!", gif && gif.image_url.to_s].compact.join("\n")
+    client.chat_postMessage(text: text, channel: channel['id'], as_user: true)
+    update_attributes!(nudge_at: Time.now)
   end
 
   def self.find_or_create_from_env!

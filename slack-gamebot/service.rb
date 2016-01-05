@@ -13,6 +13,7 @@ module SlackGamebot
             @services[team.token] = server
           end
           restart!(team, server)
+          nudge!(team)
         end
       rescue StandardError => e
         logger.error e
@@ -44,6 +45,13 @@ module SlackGamebot
         Team.active.each do |team|
           start!(team)
         end
+      end
+
+      def nudge!(team)
+        return unless team.nudge?
+        team.nudge!
+      rescue StandardError => e
+        logger.warn "Error waking up team #{team}, #{e.message}."
       end
 
       def restart!(team, server, wait = 1)
