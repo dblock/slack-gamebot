@@ -51,7 +51,7 @@ module SlackGamebot
         return unless team.nudge?
         team.nudge!
       rescue StandardError => e
-        logger.warn "Error waking up team #{team}, #{e.message}."
+        logger.warn "Error nudging team #{team}, #{e.message}."
       end
 
       def restart!(team, server, wait = 1)
