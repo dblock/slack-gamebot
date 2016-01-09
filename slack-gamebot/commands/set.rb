@@ -4,7 +4,7 @@ module SlackGamebot
       def self.call(client, data, match)
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
         if !match.names.include?('expression')
-          send_message_with_gif client, data.channel, 'Missing setting, eg. _set gifs off_.', 'help'
+          client.say(channel: data.channel, text: 'Missing setting, eg. _set gifs off_.', gif: 'help')
           logger.info "SET: #{client.team} - #{user.user_name}, failed, missing setting"
         else
           k, v = match['expression'].split(/\W+/, 2)
@@ -15,7 +15,7 @@ module SlackGamebot
               client.team.update_attributes!(gifs: v.to_b)
               client.send_gifs = client.team.gifs
             end
-            send_message_with_gif client, data.channel, "GIFs for team #{client.team.name} are #{client.team.gifs? ? 'on!' : 'off.'}", 'fun'
+            client.say(channel: data.channel, text: "GIFs for team #{client.team.name} are #{client.team.gifs? ? 'on!' : 'off.'}", gif: 'fun')
             logger.info "SET: #{client.team} - #{user.user_name} GIFs are #{client.team.gifs? ? 'on' : 'off'}"
           when 'aliases' then
             if v == 'none'
@@ -26,10 +26,10 @@ module SlackGamebot
               client.aliases = client.team.aliases
             end
             if client.team.aliases.any?
-              send_message_with_gif client, data.channel, "Bot aliases for team #{client.team.name} are #{client.team.aliases.and}.", 'name'
+              client.say(channel: data.channel, text: "Bot aliases for team #{client.team.name} are #{client.team.aliases.and}.", gif: 'name')
               logger.info "SET: #{client.team} - #{user.user_name} Bot aliases are #{client.team.aliases.and}"
             else
-              send_message_with_gif client, data.channel, "Team #{client.team.name} does not have any bot aliases.", 'name'
+              client.say(channel: data.channel, text: "Team #{client.team.name} does not have any bot aliases.", gif: 'name')
               logger.info "SET: #{client.team} - #{user.user_name}, does not have any bot aliases"
             end
           else

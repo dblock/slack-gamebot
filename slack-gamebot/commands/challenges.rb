@@ -11,9 +11,9 @@ module SlackGamebot
           challenges_s = challenges.map do |challenge|
             "#{challenge} was #{challenge.state} #{(challenge.updated_at || challenge.created_at).ago_in_words}"
           end.join("\n")
-          send_message_with_gif client, data.channel, challenges_s, 'memories'
+          client.say(channel: data.channel, text: challenges_s, gif: 'memories')
         else
-          send_message_with_gif client, data.channel, 'All the challenges have been played.', 'boring'
+          client.say(channel: data.channel, text: 'All the challenges have been played.', gif: 'boring')
         end
         logger.info "CHALLENGES: #{client.team} - #{data.user}"
       end

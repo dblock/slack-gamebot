@@ -3,8 +3,10 @@ require 'spec_helper'
 describe SlackGamebot::Commands::Help do
   let!(:team) { Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:client) { app.send(:client) }
   it 'help' do
-    expect(SlackRubyBot::Commands::Base).to receive(:send_client_message).with(app.send(:client), channel: 'channel', text: '')
-    expect(message: "#{SlackRubyBot.config.user} help").to respond_with_slack_message([SlackGamebot::Commands::Help::HELP, SlackGamebot::INFO].join("\n"))
+    expect(client).to receive(:say).with(channel: 'channel', text: [SlackGamebot::Commands::Help::HELP, SlackGamebot::INFO].join("\n"))
+    expect(client).to receive(:say).with(channel: 'channel', gif: 'help')
+    app.send(:message, client, channel: 'channel', text: "#{SlackRubyBot.config.user} help")
   end
 end

@@ -7,10 +7,10 @@ module SlackGamebot
         scores = Score.parse(match['expression']) if match.names.include?('expression')
         if challenge
           challenge.resign!(challenger, scores)
-          send_message_with_gif client, data.channel, "Match has been recorded! #{challenge.match}.", 'coward'
+          client.say(channel: data.channel, text: "Match has been recorded! #{challenge.match}.", gif: 'coward')
           logger.info "RESIGNED: #{client.team} - #{challenge}"
         else
-          send_message client, data.channel, 'No challenge to resign!'
+          client.say(channel: data.channel, text: 'No challenge to resign!')
           logger.info "RESIGNED: #{client.team} - #{data.user}, N/A"
         end
       end

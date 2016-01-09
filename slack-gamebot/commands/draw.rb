@@ -12,17 +12,17 @@ module SlackGamebot
               "Match is a draw, still waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:user_name).and}.",
               challenge.draw_scores? ? "Recorded #{Score.scores_to_string(challenge.draw_scores)}." : nil
             ].compact
-            send_message_with_gif client, data.channel, messages.join(' '), 'tie'
+            client.say(channel: data.channel, text: messages.join(' '), gif: 'tie')
           else
             challenge.draw!(challenger, scores)
             if challenge.state == ChallengeState::PLAYED
-              send_message_with_gif client, data.channel, "Match has been recorded! #{challenge.match}.", 'tie'
+              client.say(channel: data.channel, text: "Match has been recorded! #{challenge.match}.", gif: 'tie')
             else
               messages = [
                 "Match is a draw, waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:user_name).and}.",
                 challenge.draw_scores? ? "Recorded #{Score.scores_to_string(challenge.draw_scores)}." : nil
               ].compact
-              send_message_with_gif client, data.channel, messages.join(' '), 'tie'
+              client.say(channel: data.channel, text: messages.join(' '), gif: 'tie')
             end
           end
           logger.info "DRAW: #{client.team} - #{challenge}"
@@ -30,10 +30,10 @@ module SlackGamebot
           match = ::Match.any_of({ winner_ids: challenger.id }, loser_ids: challenger.id).desc(:id).first
           if match && match.tied?
             match.update_attributes!(scores: scores)
-            send_message_with_gif client, data.channel, "Match scores have been updated! #{match}.", 'score'
+            client.say(channel: data.channel, text: "Match scores have been updated! #{match}.", gif: 'score')
             logger.info "SCORED: #{client.team} - #{match}"
           else
-            send_message client, data.channel, 'No challenge to draw!'
+            client.say(channel: data.channel, text: 'No challenge to draw!')
             logger.info "DRAW: #{client.team} - #{data.user}, N/A"
           end
         end

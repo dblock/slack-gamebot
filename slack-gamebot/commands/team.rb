@@ -8,7 +8,7 @@ module SlackGamebot
                    elsif client.team.captains.count > 1
                      ", captains #{client.team.captains.map(&:user_name).and}"
         end
-        send_message_with_gif client, data.channel, "Team _#{client.team.name}_#{captains}.", 'team'
+        client.say(channel: data.channel, text: "Team _#{client.team.name}_#{captains}.", gif: 'team')
         logger.info "TEAM: #{client.team} - #{data.user}"
       end
     end

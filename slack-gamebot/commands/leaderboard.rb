@@ -14,7 +14,7 @@ module SlackGamebot
         message = client.team.users.ranked.asc(:rank).limit(max).map do |user|
           "#{user.rank}. #{user}"
         end.join("\n")
-        send_message client, data.channel, message
+        client.say(channel: data.channel, text: message)
         logger.info "LEADERBOARD #{max || '∞'}: #{client.team} - #{data.user}"
       end
     end

@@ -7,16 +7,16 @@ module SlackGamebot
         scores = Score.parse(match['expression']) if match.names.include?('expression')
         if challenge
           challenge.lose!(challenger, scores)
-          send_message_with_gif client, data.channel, "Match has been recorded! #{challenge.match}.", 'loser'
+          client.say(channel: data.channel, text: "Match has been recorded! #{challenge.match}.", gif: 'loser')
           logger.info "LOST: #{client.team} - #{challenge}"
         else
           match = ::Match.where(loser_ids: challenger.id).desc(:_id).first
           if match
             match.update_attributes!(scores: scores)
-            send_message_with_gif client, data.channel, "Match scores have been updated! #{match}.", 'score'
+            client.say(channel: data.channel, text: "Match scores have been updated! #{match}.", gif: 'score')
             logger.info "SCORED: #{client.team} - #{match}"
           else
-            send_message client, data.channel, 'No challenge to lose!'
+            client.say(channel: data.channel, text: 'No challenge to lose!')
             logger.info "LOST: #{client.team} - #{data.user}, N/A"
           end
         end

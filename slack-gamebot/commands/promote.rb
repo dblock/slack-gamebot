@@ -7,20 +7,20 @@ module SlackGamebot
         users = User.find_many_by_slack_mention!(client.team, arguments) if arguments && arguments.any?
         captains = users.select(&:captain) if users
         if !users
-          send_message_with_gif client, data.channel, 'Try _promote @someone_.', 'help'
+          client.say(channel: data.channel, text: 'Try _promote @someone_.', gif: 'help')
           logger.info "PROMOTE: #{client.team} - #{user.user_name}, failed, no users"
         elsif !user.captain?
-          send_message_with_gif client, data.channel, "You're not a captain, sorry.", 'sorry'
+          client.say(channel: data.channel, text: "You're not a captain, sorry.", gif: 'sorry')
           logger.info "PROMOTE: #{client.team} - #{user.user_name} promoting #{users.map(&:user_name).and}, failed, not captain"
         elsif captains && captains.count > 1
-          send_message client, data.channel, "#{captains.map(&:user_name).and} are already captains."
+          client.say(channel: data.channel, text: "#{captains.map(&:user_name).and} are already captains.")
           logger.info "PROMOTE: #{client.team} - #{user.user_name} promoting #{users.map(&:user_name).and}, failed, #{captains.map(&:user_name).and} already captains"
         elsif captains && captains.count == 1
-          send_message client, data.channel, "#{captains.first.user_name} is already a captain."
+          client.say(channel: data.channel, text: "#{captains.first.user_name} is already a captain.")
           logger.info "PROMOTE: #{client.team} - #{user.user_name} promoting #{users.map(&:user_name).and}, failed, #{captains.first.user_name} already captain"
         else
           users.each(&:promote!)
-          send_message_with_gif client, data.channel, "#{users.map(&:user_name).and} #{users.count == 1 ? 'has' : 'have'} been promoted to captain.", 'power'
+          client.say(channel: data.channel, text: "#{users.map(&:user_name).and} #{users.count == 1 ? 'has' : 'have'} been promoted to captain.", gif: 'power')
           logger.info "PROMOTE: #{client.team} - #{user.user_name} promoted #{users.map(&:user_name).and}"
         end
       end

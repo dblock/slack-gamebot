@@ -55,7 +55,7 @@ describe SlackGamebot::Commands::Matches, vcr: { cassette_name: 'user_info' } do
     end
     context 'without matches' do
       it 'displays' do
-        expect(message: "#{SlackRubyBot.config.user} matches", user: user.user_id, channel: 'channel').to respond_with_slack_message('Nothing to see here.')
+        expect(message: "#{SlackRubyBot.config.user} matches", user: user.user_id, channel: 'channel').to respond_with_slack_message('No matches.')
       end
     end
     context 'matches in prior seasons' do
