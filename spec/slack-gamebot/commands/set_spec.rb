@@ -115,7 +115,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
     context 'invalid' do
       it 'error' do
         expect(message: "#{SlackRubyBot.config.user} set invalid on").to respond_with_slack_message(
-          'Invalid setting invalid, you can _set gifs on|off_ and _aliases_.'
+          'Invalid setting invalid, you can _set gifs on|off_, _api on|off_ and _aliases_.'
         )
       end
     end

@@ -37,7 +37,7 @@ module SlackGamebot
               logger.info "SET: #{client.team} - #{user.user_name}, does not have any bot aliases"
             end
           else
-            fail SlackGamebot::Error, "Invalid setting #{k}, you can _set gifs on|off_ and _aliases_."
+            fail SlackGamebot::Error, "Invalid setting #{k}, you can _set gifs on|off_, _api on|off_ and _aliases_."
           end
         end
       end
