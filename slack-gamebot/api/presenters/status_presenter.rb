@@ -23,6 +23,7 @@ module Api
           h[game.name] = {}
           h[game.name][:teams_count] = game.teams.count
           h[game.name][:active_teams_count] = game.teams.active.count
+          h[game.name][:api_teams_count] = game.teams.api.count
           h[game.name][:users_count] = game.users.count
           h[game.name][:challenges_count] = game.challenges.count
           h[game.name][:matches_count] = game.matches.count

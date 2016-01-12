@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Api::Endpoints::MatchesEndpoint do
   include Api::Test::EndpointTest
 
-  let!(:team) { Fabricate(:team) }
+  let!(:team) { Fabricate(:team, api: true) }
 
   before do
     @cursor_params = { team_id: team.id.to_s }
@@ -11,12 +11,27 @@ describe Api::Endpoints::MatchesEndpoint do
 
   it_behaves_like 'a cursor api', Match
 
+  it 'cannot return matches for a team with api off' do
+    team.update_attributes!(api: false)
+    expect { client.matches(team_id: team.id).resource }.to raise_error Faraday::ClientError do |e|
+      json = JSON.parse(e.response[:body])
+      expect(json['error']).to eq 'Not Found'
+    end
+  end
+
   context 'match' do
-    let(:existing_match) { Fabricate(:match) }
+    let(:existing_match) { Fabricate(:match, team: team) }
     it 'returns a match' do
       match = client.match(id: existing_match.id)
       expect(match.id).to eq existing_match.id.to_s
       expect(match._links.self._url).to eq "http://example.org/matches/#{existing_match.id}"
+    end
+    it 'cannot return a match for a team with api off' do
+      team.update_attributes!(api: false)
+      expect { client.match(id: existing_match.id).resource }.to raise_error Faraday::ClientError do |e|
+        json = JSON.parse(e.response[:body])
+        expect(json['error']).to eq 'Not Found'
+      end
     end
   end
 

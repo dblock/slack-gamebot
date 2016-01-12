@@ -13,6 +13,7 @@ module SlackGamebot
       purge_inactive_teams!
       set_team_gifs_default!
       set_team_aliases!
+      set_team_api_default!
     end
 
     def self.instance
@@ -106,6 +107,11 @@ module SlackGamebot
       Game.each do |game|
         game.teams.where(aliases: nil).update_all(aliases: game.aliases)
       end
+    end
+
+    # default team API to false
+    def set_team_api_default!
+      Team.where(api: nil).update_all(api: false)
     end
   end
 end

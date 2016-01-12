@@ -13,6 +13,7 @@ module Api
         end
         get ':id' do
           match = Match.find(params[:id]) || error!('Not Found', 404)
+          error!('Not Found', 404) unless match.team.api?
           present match, with: Api::Presenters::MatchPresenter
         end
 
@@ -23,8 +24,9 @@ module Api
         end
         sort Match::SORT_ORDERS
         get do
-          query = Match.where(team_id: params[:team_id])
-          matches = paginate_and_sort_by_cursor(query, default_sort_order: '-_id')
+          team = Team.find(params[:team_id]) || error!('Not Found', 404)
+          error!('Not Found', 404) unless team.api?
+          matches = paginate_and_sort_by_cursor(team.matches, default_sort_order: '-_id')
           present matches, with: Api::Presenters::MatchesPresenter
         end
       end

@@ -13,6 +13,7 @@ module Api
         end
         get ':id' do
           challenge = Challenge.find(params[:id]) || error!('Not Found', 404)
+          error!('Not Found', 404) unless challenge.team.api?
           present challenge, with: Api::Presenters::ChallengePresenter
         end
 
@@ -23,8 +24,9 @@ module Api
         end
         sort Challenge::SORT_ORDERS
         get do
-          query = Challenge.where(team_id: params[:team_id])
-          challenges = paginate_and_sort_by_cursor(query, default_sort_order: '-_id')
+          team = Team.find(params[:team_id]) || error!('Not Found', 404)
+          error!('Not Found', 404) unless team.api?
+          challenges = paginate_and_sort_by_cursor(team.challenges, default_sort_order: '-_id')
           present challenges, with: Api::Presenters::ChallengesPresenter
         end
       end

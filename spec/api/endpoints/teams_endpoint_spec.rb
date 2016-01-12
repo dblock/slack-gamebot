@@ -3,12 +3,14 @@ require 'spec_helper'
 describe Api::Endpoints::TeamsEndpoint do
   include Api::Test::EndpointTest
 
-  it_behaves_like 'a cursor api', Team
+  context 'cursor' do
+    it_behaves_like 'a cursor api', Team
+  end
 
   let!(:game) { Fabricate(:game) }
 
   context 'team' do
-    let(:existing_team) { Fabricate(:team, game: game) }
+    let(:existing_team) { Fabricate(:team, api: true, game: game) }
     it 'returns a team' do
       team = client.team(id: existing_team.id)
       expect(team.id).to eq existing_team.id.to_s
@@ -18,8 +20,8 @@ describe Api::Endpoints::TeamsEndpoint do
 
   context 'teams' do
     context 'active/inactive' do
-      let!(:active_team) { Fabricate(:team, game: game, active: true) }
-      let!(:inactive_team) { Fabricate(:team, game: game, active: false) }
+      let!(:active_team) { Fabricate(:team, api: true, game: game, active: true) }
+      let!(:inactive_team) { Fabricate(:team, api: true, game: game, active: false) }
       it 'returns all teams' do
         teams = client.teams
         expect(teams.count).to eq 2
@@ -31,8 +33,30 @@ describe Api::Endpoints::TeamsEndpoint do
       end
     end
     context 'game_id' do
-      let!(:team1) { Fabricate(:team, game: game) }
-      let!(:team2) { Fabricate(:team, game: Fabricate(:game)) }
+      let!(:team1) { Fabricate(:team, api: true, game: game) }
+      let!(:team2) { Fabricate(:team, api: true, game: Fabricate(:game)) }
+      it 'returns all teams' do
+        teams = client.teams
+        expect(teams.count).to eq 2
+      end
+      it 'returns team by game' do
+        teams = client.teams(game_id: game.id.to_s)
+        expect(teams.count).to eq 1
+        expect(teams.to_a.first.team_id).to eq team1.team_id
+      end
+    end
+    context 'api on/off' do
+      let!(:team_api_on) { Fabricate(:team, api: true, game: game) }
+      let!(:team_api_off) { Fabricate(:team, api: false, game: game) }
+      it 'only returns teams with api on' do
+        teams = client.teams
+        expect(teams.count).to eq 1
+        expect(teams.to_a.first.team_id).to eq team_api_on.team_id
+      end
+    end
+    context 'game_id' do
+      let!(:team1) { Fabricate(:team, api: true, game: game) }
+      let!(:team2) { Fabricate(:team, api: true, game: Fabricate(:game)) }
       it 'returns all teams' do
         teams = client.teams
         expect(teams.count).to eq 2
@@ -46,7 +70,7 @@ describe Api::Endpoints::TeamsEndpoint do
   end
 
   context 'team' do
-    let(:existing_team) { Fabricate(:team, game: game) }
+    let(:existing_team) { Fabricate(:team, api: true, game: game) }
     it 'returns a team with links to challenges, users and matches' do
       team = client.team(id: existing_team.id)
       expect(team.id).to eq existing_team.id.to_s
@@ -57,9 +81,17 @@ describe Api::Endpoints::TeamsEndpoint do
       expect(team._links.game._url).to eq "http://example.org/games/#{existing_team.game.id}"
     end
 
+    it 'cannot return a team with api off' do
+      existing_team.update_attributes!(api: false)
+      expect { client.team(id: existing_team.id).resource }.to raise_error Faraday::ClientError do |e|
+        json = JSON.parse(e.response[:body])
+        expect(json['error']).to eq 'Not Found'
+      end
+    end
+
     it 'cannot create a team without a game' do
       expect do
-        expect { client.teams._post(code: 'code') }.to raise_error Faraday::ClientError do |e|
+        expect { client.teams._post(code: 'code').resource }.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
           expect(json['message']).to eq 'Invalid parameters.'
           expect(json['detail']).to eq('game, game_id' => ['are missing, exactly one parameter must be provided'])
@@ -111,7 +143,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end.to change(Team, :count).by(1)
       end
       it 'reactivates a deactivated team' do
-        existing_team = Fabricate(:team, game: game, token: 'token', active: false, aliases: %w(foo bar))
+        existing_team = Fabricate(:team, api: true, game: game, token: 'token', active: false, aliases: %w(foo bar))
         expect do
           team = client.teams._post(code: 'code', game: existing_team.game.name)
           expect(team.team_id).to eq existing_team.team_id
@@ -124,14 +156,14 @@ describe Api::Endpoints::TeamsEndpoint do
         end.to_not change(Team, :count)
       end
       it 'cannot switch games' do
-        Fabricate(:team, game: Fabricate(:game), token: 'token', active: false)
+        Fabricate(:team, api: true, game: Fabricate(:game), token: 'token', active: false)
         expect { client.teams._post(code: 'code', game_id: game.id.to_s) }.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
           expect(json['error']).to eq 'Invalid Game'
         end
       end
       it 'returns a useful error when team already exists' do
-        existing_team = Fabricate(:team, game: game, token: 'token')
+        existing_team = Fabricate(:team, api: true, game: game, token: 'token')
         expect { client.teams._post(code: 'code', game: game.name) }.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
           expect(json['message']).to eq "Team #{existing_team.name} is already registered."

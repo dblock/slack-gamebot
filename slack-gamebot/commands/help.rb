@@ -33,8 +33,9 @@ season: show current season
 
 Captains
 --------
-set gifs [on|off]: enable/disable animated GIFs
+set gifs [on|off]: enable/disable animated GIFs, default is on
 set aliases [<alias|none> ...]: set additional bot aliases
+set api [on|off]: enable/disable team data in the public API, default is off
 reset <team>: reset all stats, start a new season
 promote <player>: promote a user to captain
 demote me: demote you from captain

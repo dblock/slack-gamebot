@@ -13,6 +13,7 @@ module Api
         end
         get ':id' do
           team = Team.find(params[:id]) || error!('Not Found', 404)
+          error!('Not Found', 404) unless team.api?
           present team, with: Api::Presenters::TeamPresenter
         end
 
@@ -29,6 +30,7 @@ module Api
           game = Game.find(params[:game_id]) if params.key?(:game_id)
           game ||= Game.where(name: params[:game]) if params.key?(:game)
           teams = game ? game.teams : Team.all
+          teams = teams.api
           teams = teams.active if params[:active]
           teams = paginate_and_sort_by_cursor(teams, default_sort_order: '-_id')
           present teams, with: Api::Presenters::TeamsPresenter

@@ -312,9 +312,21 @@ Remove all aliases with `set aliases none`.
 
 ![](screenshots/aliases.gif)
 
+#### gamebot set api on|off
+
+Enable/disable team data in the public API for your team.
+
+```
+gamebot set api on
+
+API for team China is on!
+```
+
 ## API
 
 Slack-gamebot implements a Hypermedia API. Navigate to the application root to browse through available objects and methods. PlayPlay.io's Gamebot is [here](http://bots.playplay.io), you can see [dblock's current ping-pong elo here](http://bots.playplay.io/users/5543f64d6237640003000000).
+
+A team captain must opt-in serving data via the API with `set api on`. The data served by the API includes team's Slack IDs, usernames and game stats.
 
 ![](screenshots/api.png)
 

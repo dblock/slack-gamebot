@@ -3,13 +3,21 @@ require 'spec_helper'
 describe Api::Endpoints::ChallengesEndpoint do
   include Api::Test::EndpointTest
 
-  let!(:team) { Fabricate(:team) }
+  let!(:team) { Fabricate(:team, api: true) }
 
   before do
     @cursor_params = { team_id: team.id.to_s }
   end
 
   it_behaves_like 'a cursor api', Challenge
+
+  it 'cannot return challenges for team with api off' do
+    team.update_attributes!(api: false)
+    expect { client.challenges(team_id: team.id).resource }.to raise_error Faraday::ClientError do |e|
+      json = JSON.parse(e.response[:body])
+      expect(json['error']).to eq 'Not Found'
+    end
+  end
 
   context 'challenge' do
     let(:existing_challenge) { Fabricate(:challenge) }
@@ -18,6 +26,13 @@ describe Api::Endpoints::ChallengesEndpoint do
       expect(challenge.id).to eq existing_challenge.id.to_s
       expect(challenge._links.self._url).to eq "http://example.org/challenges/#{existing_challenge.id}"
       expect(challenge._links.team._url).to eq "http://example.org/teams/#{existing_challenge.team.id}"
+    end
+    it 'cannot return a challenge for team with api off' do
+      team.update_attributes!(api: false)
+      expect { client.challenge(id: existing_challenge.id).resource }.to raise_error Faraday::ClientError do |e|
+        json = JSON.parse(e.response[:body])
+        expect(json['error']).to eq 'Not Found'
+      end
     end
   end
 

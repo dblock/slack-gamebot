@@ -13,6 +13,7 @@ module Api
         end
         get 'current' do
           team = Team.find(params[:team_id]) || error!('Not Found', 404)
+          error!('Not Found', 404) unless team.api?
           present Season.new(team: team), with: Api::Presenters::SeasonPresenter
         end
 
@@ -22,6 +23,7 @@ module Api
         end
         get ':id' do
           season = Season.find(params[:id]) || error!('Not Found', 404)
+          error!('Not Found', 404) unless season.team.api?
           present season, with: Api::Presenters::SeasonPresenter
         end
 
@@ -32,8 +34,9 @@ module Api
         end
         sort Season::SORT_ORDERS
         get do
-          query = Season.where(team_id: params[:team_id])
-          seasons = paginate_and_sort_by_cursor(query, default_sort_order: '-_id')
+          team = Team.find(params[:team_id]) || error!('Not Found', 404)
+          error!('Not Found', 404) unless team.api?
+          seasons = paginate_and_sort_by_cursor(team.seasons, default_sort_order: '-_id')
           present seasons, with: Api::Presenters::SeasonsPresenter
         end
       end

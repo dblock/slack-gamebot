@@ -17,6 +17,10 @@ module SlackGamebot
             end
             client.say(channel: data.channel, text: "GIFs for team #{client.team.name} are #{client.team.gifs? ? 'on!' : 'off.'}", gif: 'fun')
             logger.info "SET: #{client.team} - #{user.user_name} GIFs are #{client.team.gifs? ? 'on' : 'off'}"
+          when 'api' then
+            client.team.update_attributes!(api: v.to_b) unless v.nil?
+            client.say(channel: data.channel, text: "API for team #{client.team.name} is #{client.team.api? ? 'on!' : 'off.'}", gif: 'programmer')
+            logger.info "SET: #{client.team} - #{user.user_name} API is #{client.team.api? ? 'on' : 'off'}"
           when 'aliases' then
             if v == 'none'
               client.team.update_attributes!(aliases: [])

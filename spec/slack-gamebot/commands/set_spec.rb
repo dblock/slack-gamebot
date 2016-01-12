@@ -39,6 +39,33 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
         expect(app.send(:client).send_gifs?).to be false
       end
     end
+    context 'api' do
+      it 'shows current value of API on' do
+        team.update_attributes!(api: true)
+        expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
+          "API for team #{team.name} is on!"
+        )
+      end
+      it 'shows current value of API' do
+        team.update_attributes!(api: false)
+        expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
+          "API for team #{team.name} is off."
+        )
+      end
+      it 'enables API' do
+        expect(message: "#{SlackRubyBot.config.user} set api on").to respond_with_slack_message(
+          "API for team #{team.name} is on!"
+        )
+        expect(team.reload.api).to be true
+      end
+      it 'disables API' do
+        team.update_attributes!(api: true)
+        expect(message: "#{SlackRubyBot.config.user} set api off").to respond_with_slack_message(
+          "API for team #{team.name} is off."
+        )
+        expect(team.reload.api).to be false
+      end
+    end
     context 'aliases' do
       context 'with aliases' do
         before do
