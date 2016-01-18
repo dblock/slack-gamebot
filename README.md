@@ -64,7 +64,7 @@ gamebot register
 Welcome back Victor Barna! I've updated your registration.
 ```
 
-#### gamebot challenge <opponent> ... [with <teammate> ...]
+#### gamebot challenge &lt;opponent&gt; ... [with &lt;teammate&gt; ...]
 
 Creates a new challenge between you and an opponent.
 
@@ -92,7 +92,7 @@ gamebot accept
 Wang Hoe and Zhang Jike accepted Victor Barna and Deng Yaping's challenge.
 ```
 
-#### gamebot lost [to <opponent> [with <teammate>]] [score ...]
+#### gamebot lost [to &lt;opponent&gt; [with &lt;teammate&gt;]] [score ...]
 
 Record your loss.
 
@@ -159,7 +159,7 @@ gamebot draw 2:2
 Match has been recorded. Victor Barna tied with Zhang Jike with a score of 2:2.
 ```
 
-#### gamebot resigned [to <opponent> [with <teammate>]]
+#### gamebot resigned [to &lt;opponent&gt; [with &lt;teammate&gt;]]
 
 Records your resignation, which is a special kind of `lost` without a score.
 
@@ -239,7 +239,7 @@ Use _matches 3_ to see top 3 matches o _matches inifinity_ to see all matches in
 
 Displays all outstanding (proposed and accepted) challenges.
 
-#### gamebot rank [<player> ...]
+#### gamebot rank [&lt;player&gt; ...]
 
 Show the smallest range of ranks for a list of players.  If no user is specified, your rank is shown.
 
@@ -250,7 +250,7 @@ gamebot rank @WangHoe @DengYaping
 3. Wang Hoe: 0 wins, 1 loss (elo: -12)
 ```
 
-#### gamebot promote <player> ...
+#### gamebot promote &lt;player&gt; ...
 
 Promotes other users to captain. Must be a captain to do that.
 
@@ -280,7 +280,7 @@ gamebot team
 Team _China_, captains Deng Yaping and Victor Barna.
 ```
 
-#### gamebot reset <team id|team name>
+#### gamebot reset &lt;team id|team name&gt;
 
 Reset all users and pending challenges and start a new season. Must be a captain to do this and confirm by specifying the team ID or name.
 
@@ -323,7 +323,7 @@ GIFs for team China are off.
 
 ![](screenshots/gifs.gif)
 
-#### gamebot set aliases <alias|none> ...
+#### gamebot set aliases &t;alias|none&gt; ...
 
 Set additional aliases for the bot. For example you could upload a custom emoji for :pong: and set an alias for it.
 
