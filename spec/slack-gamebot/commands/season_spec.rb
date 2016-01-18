@@ -11,7 +11,7 @@ describe SlackGamebot::Commands::Season, vcr: { cassette_name: 'user_info' } do
     end
     context 'current season' do
       before do
-        2.times.map { Fabricate(:match) }
+        Fabricate(:match)
       end
       it 'returns current season' do
         current_season = Season.new(team: team)
