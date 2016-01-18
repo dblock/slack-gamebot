@@ -26,26 +26,29 @@ module Score
     return unless expression
     scores = []
     expression.split.reject(&:blank?).each do |pair|
-      pair_n = if pair.include?(':')
-                 pair.split(':') if pair.include?(':')
-               elsif pair.include?('-')
-                 pair.split('-')
-               elsif pair.include?(',')
-                 pair.split(',')
-               end
-      fail SlackGamebot::Error, "Invalid score: #{pair}." unless pair_n && pair_n.length == 2
-      pair_n = pair_n.map do |points|
-        begin
-          points = Integer(points)
-          fail SlackGamebot::Error, 'points must be greater or equal to zero' if points < 0
-          points
-        rescue StandardError => e
-          raise SlackGamebot::Error, "Invalid score: #{pair}, #{e}."
-        end
-      end
-      scores << pair_n
+      scores << check(pair)
     end
     scores
+  end
+
+  def self.check(pair)
+    pair_n = if pair.include?(':')
+               pair.split(':') if pair.include?(':')
+             elsif pair.include?('-')
+               pair.split('-')
+             elsif pair.include?(',')
+               pair.split(',')
+             end
+    fail SlackGamebot::Error, "Invalid score: #{pair}." unless pair_n && pair_n.length == 2
+    pair_n.map do |points|
+      begin
+        points = Integer(points)
+        fail SlackGamebot::Error, 'points must be greater or equal to zero' if points < 0
+        points
+      rescue StandardError => e
+        raise SlackGamebot::Error, "Invalid score: #{pair}, #{e}."
+      end
+    end
   end
 
   def self.scores_to_string(scores)

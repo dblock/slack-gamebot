@@ -101,10 +101,7 @@ class Challenge
     else
       fail SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
     end
-    Match.create!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
-    winners.inc(wins: 1)
-    losers.inc(losses: 1)
-    User.rank!(team)
+    Match.lose!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     update_attributes!(state: ChallengeState::PLAYED)
   end
 
@@ -122,10 +119,7 @@ class Challenge
     else
       fail SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
     end
-    Match.create!(team: team, challenge: self, winners: winners, losers: losers, scores: scores, resigned: true)
-    winners.inc(wins: 1)
-    losers.inc(losses: 1)
-    User.rank!(team)
+    Match.resign!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     update_attributes!(state: ChallengeState::PLAYED)
   end
 
@@ -146,10 +140,7 @@ class Challenge
       losers = challenged
       winners = challengers
     end
-    Match.create!(team: team, challenge: self, winners: winners, losers: losers, tied: true, scores: scores)
-    challenged.inc(ties: 1)
-    challengers.inc(ties: 1)
-    User.rank!(team)
+    Match.draw!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     update_attributes!(state: ChallengeState::PLAYED)
   end
 

@@ -35,6 +35,29 @@ class Match
     end
   end
 
+  def self.lose!(attrs)
+    match = Match.create!(attrs)
+    match.winners.inc(wins: 1)
+    match.losers.inc(losses: 1)
+    User.rank!(match.team)
+    match
+  end
+
+  def self.resign!(attrs)
+    match = Match.create!(attrs.merge(resigned: true))
+    match.winners.inc(wins: 1)
+    match.losers.inc(losses: 1)
+    User.rank!(match.team)
+    match
+  end
+
+  def self.draw!(attrs)
+    match = Match.create!(attrs.merge(tied: true))
+    match.winners.inc(ties: 1)
+    match.losers.inc(ties: 1)
+    User.rank!(match.team)
+  end
+
   private
 
   def validate_teams

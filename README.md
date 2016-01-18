@@ -64,7 +64,7 @@ gamebot register
 Welcome back Victor Barna! I've updated your registration.
 ```
 
-#### gamebot challenge <opponent>, ... [with <teammate>, ...]
+#### gamebot challenge <opponent> ... [with <teammate> ...]
 
 Creates a new challenge between you and an opponent.
 
@@ -92,7 +92,7 @@ gamebot accept
 Wang Hoe and Zhang Jike accepted Victor Barna and Deng Yaping's challenge.
 ```
 
-#### gamebot lost [score, ...]
+#### gamebot lost [to <opponent> [with <teammate>]] [score ...]
 
 Record your loss.
 
@@ -128,7 +128,24 @@ gamebot lost 15:21 21:17 18:21
 Match scores have been updated! Wang Hoe defeated Victor Barna with the scores of 15:21 21:17 18:21.
 ```
 
-#### gamebot draw [score, ...]
+You can record a loss without a challenge.
+
+```
+gamebot lost to @WangHoe
+
+Match has been recorded! Wang Hoe defeated Victor Barna.
+```
+
+You can also record scores and record lost matches with multiple players.
+
+```
+gamebot lost to @WangHoe @ZhangJike with @DengYaping 5:21
+
+Match has been recorded! Wang Hoe and Zhang Jike defeated Victor Barna and Deng Yaping with the score of 21:5.
+```
+
+
+#### gamebot draw [score ...]
 
 Draws a challenge, records a tie. All other players will also have to draw to record a match.
 
@@ -142,7 +159,7 @@ gamebot draw 2:2
 Match has been recorded. Victor Barna tied with Zhang Jike with a score of 2:2.
 ```
 
-#### gamebot resigned
+#### gamebot resigned [to <opponent> [with <teammate>]]
 
 Records your resignation, which is a special kind of `lost` without a score.
 
@@ -153,6 +170,14 @@ Match has been recorded! Victor Barna resigned against Wang Hoe.
 ```
 
 ![](screenshots/resigned.gif)
+
+You can resign without a prior challenge.
+
+```
+gamebot resigned to WangHoe
+
+Match has been recorded! Victor Barna resigned against Wang Hoe.
+```
 
 #### gamebot decline
 
