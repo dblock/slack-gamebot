@@ -323,7 +323,7 @@ GIFs for team China are off.
 
 ![](screenshots/gifs.gif)
 
-#### gamebot set aliases &t;alias|none&gt; ...
+#### gamebot set aliases &lt;alias|none&gt; ...
 
 Set additional aliases for the bot. For example you could upload a custom emoji for :pong: and set an alias for it.
 
