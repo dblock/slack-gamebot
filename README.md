@@ -105,7 +105,7 @@ Record your loss with a score, loser first.
 ```
 gamebot lost 5:21
 
-Match has been recorded! Wang Hoe crushed Victor Barna with the score of 5:21.
+Match has been recorded! Wang Hoe crushed Victor Barna with the score of 21:5.
 ```
 
 You can record scores for an entire match.
@@ -113,7 +113,7 @@ You can record scores for an entire match.
 ```
 gamebot lost 15:21 21:17 18:21
 
-Match has been recorded! Wang Hoe defeated Victor Barna with the scores of 15:21 21:17 18:21.
+Match has been recorded! Wang Hoe defeated Victor Barna with the scores of 21:15 17:21 21:18.
 ```
 
 You can record scores for a match you have already lost.
@@ -125,7 +125,7 @@ Match has been recorded! Wang Hoe defeated Victor Barna.
 
 gamebot lost 15:21 21:17 18:21
 
-Match scores have been updated! Wang Hoe defeated Victor Barna with the scores of 15:21 21:17 18:21.
+Match scores have been updated! Wang Hoe defeated Victor Barna with the scores of 21:15 17:21 21:18.
 ```
 
 You can record a loss without a challenge.

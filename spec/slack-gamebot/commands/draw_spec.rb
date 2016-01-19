@@ -52,7 +52,7 @@ describe SlackGamebot::Commands::Draw, vcr: { cassette_name: 'user_info' } do
     end
     it 'draw with scores' do
       expect(message: "#{SlackRubyBot.config.user} draw 21:15 15:21", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} tied with #{challenge.challenged.map(&:user_name).and} with the scores of 21:15 15:21."
+        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} tied with #{challenge.challenged.map(&:user_name).and} with the scores of 15:21 21:15."
       )
       challenge.reload
       expect(challenge.match.scores).to eq [[21, 15], [15, 21]]

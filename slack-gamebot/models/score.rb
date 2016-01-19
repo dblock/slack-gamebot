@@ -55,7 +55,7 @@ module Score
     [
       scores.count > 1 ? 'the scores of' : 'the score of',
       scores.map do |score|
-        "#{score[0]}:#{score[1]}"
+        "#{score[1]}:#{score[0]}"
       end
     ].flatten.join(' ')
   end
