@@ -130,11 +130,7 @@ Match scores have been updated! Wang Hoe defeated Victor Barna with the scores o
 
 You can record a loss without a challenge.
 
-```
-gamebot lost to @WangHoe
-
-Match has been recorded! Wang Hoe defeated Victor Barna.
-```
+![](screenshots/lost_to.gif)
 
 You can also record scores and record lost matches with multiple players.
 
@@ -143,7 +139,6 @@ gamebot lost to @WangHoe @ZhangJike with @DengYaping 5:21
 
 Match has been recorded! Wang Hoe and Zhang Jike defeated Victor Barna and Deng Yaping with the score of 21:5.
 ```
-
 
 #### gamebot draw [score ...]
 
