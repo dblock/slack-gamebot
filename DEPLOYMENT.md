@@ -66,6 +66,6 @@ MongoLab and MongoHQ ensure a system-level backup. You might find it handy to ba
 Replace `Procfile` with `Procfile.heroku` to split web and Slack workers into two separate processes. You can run these separately.
 
 ```
-foreman start api -f Procfile.heroku
+foreman start web -f Procfile.heroku
 foreman start worker -f Procfile.heroku
 ```
