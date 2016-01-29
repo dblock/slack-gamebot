@@ -1,0 +1,2 @@
+api: bundle exec rake ps:web:run[$PORT]
+worker: bundle exec rake ps:worker:run

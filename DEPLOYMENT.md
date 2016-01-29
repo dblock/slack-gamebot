@@ -60,3 +60,12 @@ This will allow you to create a team via `POST /teams?game=pong&code=`, where th
 #### Database Backups
 
 MongoLab and MongoHQ ensure a system-level backup. You might find it handy to backup the data elsewhere occasionally. If you can run `rake db:heroku:backup[app]` locally as long as you can execute `heroku config --app=...` as well. This creates a `.tar.gz` file from a MongoDB database configured on the Heroku `app` application.
+
+#### Separate Web from Workers
+
+Replace `Procfile` with `Procfile.heroku` to split web and Slack workers into two separate processes. You can run these separately.
+
+```
+foreman start api -f Procfile.heroku
+foreman start worker -f Procfile.heroku
+```
