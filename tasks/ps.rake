@@ -5,6 +5,8 @@ namespace :ps do
       args.with_defaults(port: ENV['PORT'] || 5000)
       require 'rack/handler/puma'
       NewRelic::Agent.manual_start
+      Mongoid.logger.level = Logger::INFO
+      Mongo::Logger.logger.level = Logger::INFO
       Rack::Handler::Puma.run Api::Middleware.instance, Port: args[:port]
     end
   end
