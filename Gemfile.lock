@@ -43,7 +43,7 @@ GEM
     diff-lcs (1.2.5)
     equalizer (0.0.11)
     erubis (2.7.0)
-    eventmachine (1.0.8)
+    eventmachine (1.0.9.1)
     excon (0.45.4)
     fabrication (2.14.1)
     faker (1.6.1)
@@ -126,7 +126,7 @@ GEM
       nokogiri (>= 1.5.9)
     mime-types (1.25.1)
     mini_portile2 (2.0.0)
-    minitest (5.8.3)
+    minitest (5.8.4)
     mongo (2.2.1)
       bson (~> 4.0)
     mongoid (5.0.2)
@@ -219,13 +219,13 @@ GEM
     ruby-progressbar (1.7.5)
     rubyzip (1.1.7)
     safe_yaml (1.0.4)
-    slack-ruby-bot (0.6.0)
+    slack-ruby-bot (0.6.1)
       activesupport
       faye-websocket
       giphy (~> 2.0.2)
       hashie
       slack-ruby-client (>= 0.5.0)
-    slack-ruby-client (0.5.2)
+    slack-ruby-client (0.5.4)
       faraday
       faraday_middleware
       gli
@@ -281,7 +281,7 @@ DEPENDENCIES
   rspec
   rubocop (= 0.34.2)
   ruby-enum
-  slack-ruby-bot (~> 0.6.0)
+  slack-ruby-bot (~> 0.6.1)
   time_ago_in_words
   vcr
   wannabe_bool
