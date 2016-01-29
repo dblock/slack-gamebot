@@ -11,14 +11,8 @@ module Api
 
       property :games_count
       property :games
-      property :gc
 
       private
-
-      def gc
-        GC.start
-        GC.stat
-      end
 
       def games_count
         Game.count
