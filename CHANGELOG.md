@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#83](https://github.com/dblock/slack-gamebot/issues/83): Added `Procfile.heroku` that splits the web app and worker processes - [@dblock](https://github.com/dblock).
 * [#79](https://github.com/dblock/slack-gamebot/issues/79): Fixed order of scores in messages, winners first - [@dblock](https://github.com/dblock).
 * [#78](https://github.com/dblock/slack-gamebot/issues/78): Losers can record a loss or a resignation without a prior challenge - [@dblock](https://github.com/dblock).
 * [#77](https://github.com/dblock/slack-gamebot/issues/77): Opt-in now required to expose team data via the public API - [@dblock](https://github.com/dblock).
