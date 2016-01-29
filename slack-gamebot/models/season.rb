@@ -23,7 +23,7 @@ class Season
 
   def to_s
     [
-      "#{label}: #{winners.map(&:to_s).and}",
+      "#{label}: #{winners ? winners.map(&:to_s).and : 'n/a'}",
       "#{played_challenges.count} match#{played_challenges.count == 1 ? '' : 'es'}",
       "#{players.count} player#{players.count == 1 ? '' : 's'}"
     ].join(', ')

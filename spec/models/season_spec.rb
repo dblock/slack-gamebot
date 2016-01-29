@@ -24,10 +24,13 @@ describe Season do
   end
   context 'without challenges' do
     let!(:team) { Fabricate(:team) }
+    let(:season) { Season.new(team: team) }
     it 'cannot be created' do
-      season = Season.new(team: team)
       expect(season).to_not be_valid
       expect(season.errors.messages).to eq(challenges: ['No matches have been recorded.'])
+    end
+    it 'to_s' do
+      expect(season.to_s).to eq 'Current: n/a, 0 matches, 0 players'
     end
   end
   context 'current season with one match' do
