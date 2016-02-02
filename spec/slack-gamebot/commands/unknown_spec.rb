@@ -9,6 +9,6 @@ describe SlackRubyBot::Commands::Unknown, vcr: { cassette_name: 'user_info' } do
   end
   it 'does not respond to sad face' do
     expect(SlackRubyBot::Commands::Base).to_not receive(:send_message)
-    SlackGamebot::Server.new(team: team).send(:message, client, text: ':((')
+    SlackGamebot::Server.new(team: team).send(:message, client, Hashie::Mash.new(text: ':(('))
   end
 end

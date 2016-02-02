@@ -7,6 +7,6 @@ describe SlackGamebot::Commands::Help do
   it 'help' do
     expect(client).to receive(:say).with(channel: 'channel', text: [SlackGamebot::Commands::Help::HELP, SlackGamebot::INFO].join("\n"))
     expect(client).to receive(:say).with(channel: 'channel', gif: 'help')
-    app.send(:message, client, channel: 'channel', text: "#{SlackRubyBot.config.user} help")
+    app.send(:message, client, Hashie::Mash.new(channel: 'channel', text: "#{SlackRubyBot.config.user} help"))
   end
 end
