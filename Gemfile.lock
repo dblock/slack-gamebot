@@ -1,27 +1,3 @@
-GIT
-  remote: git://github.com/dblock/slack-ruby-bot.git
-  revision: a63247d1734c123909bc82397d37a1314c82ab9d
-  branch: slack-ruby-client-0.6.0
-  specs:
-    slack-ruby-bot (0.6.2)
-      activesupport
-      faye-websocket
-      giphy (~> 2.0.2)
-      hashie
-      slack-ruby-client (>= 0.6.0)
-
-GIT
-  remote: git://github.com/dblock/slack-ruby-client.git
-  revision: 4dc71260486f9bfd5fa5ca76646081883c979fc7
-  specs:
-    slack-ruby-client (0.6.0)
-      faraday
-      faraday_middleware
-      gli
-      hashie
-      json
-      websocket-driver
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -243,6 +219,19 @@ GEM
     ruby-progressbar (1.7.5)
     rubyzip (1.1.7)
     safe_yaml (1.0.4)
+    slack-ruby-bot (0.6.2)
+      activesupport
+      faye-websocket
+      giphy (~> 2.0.2)
+      hashie
+      slack-ruby-client (>= 0.6.0)
+    slack-ruby-client (0.6.0)
+      faraday
+      faraday_middleware
+      gli
+      hashie
+      json
+      websocket-driver
     thor (0.19.1)
     thread_safe (0.3.5)
     time_ago_in_words (0.1.1)
@@ -293,8 +282,7 @@ DEPENDENCIES
   rspec
   rubocop (= 0.34.2)
   ruby-enum
-  slack-ruby-bot!
-  slack-ruby-client!
+  slack-ruby-bot (= 0.6.2)
   time_ago_in_words
   vcr
   wannabe_bool
