@@ -3,7 +3,7 @@ module SlackGamebot
     class Draw < SlackRubyBot::Commands::Base
       def self.call(client, data, match)
         challenger = ::User.find_create_or_update_by_slack_id!(client, data.user)
-        challenge = ::Challenge.find_by_user(client.team, data.channel, challenger, [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
+        challenge = ::Challenge.find_by_user(client.owner, data.channel, challenger, [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
         scores = Score.parse(match['expression']) if match.names.include?('expression')
         if challenge
           if challenge.draw.include?(challenger)
@@ -25,16 +25,16 @@ module SlackGamebot
               client.say(channel: data.channel, text: messages.join(' '), gif: 'tie')
             end
           end
-          logger.info "DRAW: #{client.team} - #{challenge}"
+          logger.info "DRAW: #{client.owner} - #{challenge}"
         else
           match = ::Match.any_of({ winner_ids: challenger.id }, loser_ids: challenger.id).desc(:id).first
           if match && match.tied?
             match.update_attributes!(scores: scores)
             client.say(channel: data.channel, text: "Match scores have been updated! #{match}.", gif: 'score')
-            logger.info "SCORED: #{client.team} - #{match}"
+            logger.info "SCORED: #{client.owner} - #{match}"
           else
             client.say(channel: data.channel, text: 'No challenge to draw!')
-            logger.info "DRAW: #{client.team} - #{data.user}, N/A"
+            logger.info "DRAW: #{client.owner} - #{data.user}, N/A"
           end
         end
       end

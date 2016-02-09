@@ -5,7 +5,7 @@ module SlackGamebot
         arguments = match['expression'].split.reject(&:blank?) if match.names.include?('expression')
         users = arguments || []
         if arguments && arguments.any?
-          users = User.find_many_by_slack_mention!(client.team, users)
+          users = User.find_many_by_slack_mention!(client.owner, users)
         else
           users << ::User.find_create_or_update_by_slack_id!(client, data.user)
         end
@@ -13,7 +13,7 @@ module SlackGamebot
           user.rank ? "#{user.rank}. #{user}" : "#{user.user_name}: not ranked"
         end.join("\n")
         client.say(channel: data.channel, text: message)
-        logger.info "RANK: #{client.team} - #{users.map(&:user_name).and}"
+        logger.info "RANK: #{client.owner} - #{users.map(&:user_name).and}"
       end
     end
   end

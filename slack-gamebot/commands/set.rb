@@ -5,36 +5,36 @@ module SlackGamebot
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
         if !match.names.include?('expression')
           client.say(channel: data.channel, text: 'Missing setting, eg. _set gifs off_.', gif: 'help')
-          logger.info "SET: #{client.team} - #{user.user_name}, failed, missing setting"
+          logger.info "SET: #{client.owner} - #{user.user_name}, failed, missing setting"
         else
           k, v = match['expression'].split(/\W+/, 2)
           fail SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
           case k
           when 'gifs' then
             unless v.nil?
-              client.team.update_attributes!(gifs: v.to_b)
-              client.send_gifs = client.team.gifs
+              client.owner.update_attributes!(gifs: v.to_b)
+              client.send_gifs = client.owner.gifs
             end
-            client.say(channel: data.channel, text: "GIFs for team #{client.team.name} are #{client.team.gifs? ? 'on!' : 'off.'}", gif: 'fun')
-            logger.info "SET: #{client.team} - #{user.user_name} GIFs are #{client.team.gifs? ? 'on' : 'off'}"
+            client.say(channel: data.channel, text: "GIFs for team #{client.owner.name} are #{client.owner.gifs? ? 'on!' : 'off.'}", gif: 'fun')
+            logger.info "SET: #{client.owner} - #{user.user_name} GIFs are #{client.owner.gifs? ? 'on' : 'off'}"
           when 'api' then
-            client.team.update_attributes!(api: v.to_b) unless v.nil?
-            client.say(channel: data.channel, text: "API for team #{client.team.name} is #{client.team.api? ? 'on!' : 'off.'}", gif: 'programmer')
-            logger.info "SET: #{client.team} - #{user.user_name} API is #{client.team.api? ? 'on' : 'off'}"
+            client.owner.update_attributes!(api: v.to_b) unless v.nil?
+            client.say(channel: data.channel, text: "API for team #{client.owner.name} is #{client.owner.api? ? 'on!' : 'off.'}", gif: 'programmer')
+            logger.info "SET: #{client.owner} - #{user.user_name} API is #{client.owner.api? ? 'on' : 'off'}"
           when 'aliases' then
             if v == 'none'
-              client.team.update_attributes!(aliases: [])
+              client.owner.update_attributes!(aliases: [])
               client.aliases = []
             elsif !v.nil?
-              client.team.update_attributes!(aliases: v.split(/[\s,;]+/))
-              client.aliases = client.team.aliases
+              client.owner.update_attributes!(aliases: v.split(/[\s,;]+/))
+              client.aliases = client.owner.aliases
             end
-            if client.team.aliases.any?
-              client.say(channel: data.channel, text: "Bot aliases for team #{client.team.name} are #{client.team.aliases.and}.", gif: 'name')
-              logger.info "SET: #{client.team} - #{user.user_name} Bot aliases are #{client.team.aliases.and}"
+            if client.owner.aliases.any?
+              client.say(channel: data.channel, text: "Bot aliases for team #{client.owner.name} are #{client.owner.aliases.and}.", gif: 'name')
+              logger.info "SET: #{client.owner} - #{user.user_name} Bot aliases are #{client.owner.aliases.and}"
             else
-              client.say(channel: data.channel, text: "Team #{client.team.name} does not have any bot aliases.", gif: 'name')
-              logger.info "SET: #{client.team} - #{user.user_name}, does not have any bot aliases"
+              client.say(channel: data.channel, text: "Team #{client.owner.name} does not have any bot aliases.", gif: 'name')
+              logger.info "SET: #{client.owner} - #{user.user_name}, does not have any bot aliases"
             end
           else
             fail SlackGamebot::Error, "Invalid setting #{k}, you can _set gifs on|off_, _api on|off_ and _aliases_."

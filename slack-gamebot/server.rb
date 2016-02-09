@@ -11,7 +11,7 @@ module SlackGamebot
       options[:aliases] = ([team.game.name] + [team.aliases]).flatten.compact
       options[:send_gifs] = team.gifs
       super(options)
-      client.team = @team
+      client.owner = @team
     end
 
     def restart!(wait = 1)
@@ -20,7 +20,7 @@ module SlackGamebot
       EM.next_tick do
         logger.info "#{team.name}: socket closed, restarting ..."
         SlackGamebot::Service.restart! team, self, wait
-        client.team = team
+        client.owner = team
       end
     end
   end

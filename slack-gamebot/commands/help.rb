@@ -44,7 +44,7 @@ demote me: demote you from captain
       def self.call(client, data, _match)
         client.say(channel: data.channel, text: [HELP, SlackGamebot::INFO].join("\n"))
         client.say(channel: data.channel, gif: 'help')
-        logger.info "HELP: #{client.team} - #{data.user}"
+        logger.info "HELP: #{client.owner} - #{data.user}"
       end
     end
   end

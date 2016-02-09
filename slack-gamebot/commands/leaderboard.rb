@@ -11,11 +11,11 @@ module SlackGamebot
         else
           max = Integer(arguments.first)
         end if arguments.any?
-        message = client.team.users.ranked.asc(:rank).limit(max).map do |user|
+        message = client.owner.users.ranked.asc(:rank).limit(max).map do |user|
           "#{user.rank}. #{user}"
         end.join("\n")
         client.say(channel: data.channel, text: message)
-        logger.info "LEADERBOARD #{max || '∞'}: #{client.team} - #{data.user}"
+        logger.info "LEADERBOARD #{max || '∞'}: #{client.owner} - #{data.user}"
       end
     end
   end

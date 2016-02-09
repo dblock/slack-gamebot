@@ -39,7 +39,7 @@ describe User do
     let!(:team) { Fabricate(:team) }
     let(:client) { SlackRubyBot::Client.new }
     before do
-      client.team = team
+      client.owner = team
     end
     context 'without a user' do
       it 'creates a user' do

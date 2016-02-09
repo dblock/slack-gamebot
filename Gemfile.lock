@@ -1,3 +1,14 @@
+GIT
+  remote: git://github.com/dblock/slack-ruby-bot.git
+  revision: 7f54f00cbcd17ff4fba0a3c95de332f9e81ec4cd
+  specs:
+    slack-ruby-bot (0.7.0)
+      activesupport
+      faye-websocket
+      giphy (~> 2.0.2)
+      hashie
+      slack-ruby-client (>= 0.6.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -159,7 +170,7 @@ GEM
     newrelic_rpm (3.14.2.312)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
-    oj (2.14.3)
+    oj (2.14.4)
     origin (2.2.0)
     parser (2.3.0.2)
       ast (~> 2.2)
@@ -219,12 +230,6 @@ GEM
     ruby-progressbar (1.7.5)
     rubyzip (1.1.7)
     safe_yaml (1.0.4)
-    slack-ruby-bot (0.6.2)
-      activesupport
-      faye-websocket
-      giphy (~> 2.0.2)
-      hashie
-      slack-ruby-client (>= 0.6.0)
     slack-ruby-client (0.6.0)
       faraday
       faraday_middleware
@@ -282,7 +287,7 @@ DEPENDENCIES
   rspec
   rubocop (= 0.34.2)
   ruby-enum
-  slack-ruby-bot (= 0.6.2)
+  slack-ruby-bot!
   time_ago_in_words
   vcr
   wannabe_bool

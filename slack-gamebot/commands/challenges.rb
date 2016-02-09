@@ -15,7 +15,7 @@ module SlackGamebot
         else
           client.say(channel: data.channel, text: 'All the challenges have been played.', gif: 'boring')
         end
-        logger.info "CHALLENGES: #{client.team} - #{data.user}"
+        logger.info "CHALLENGES: #{client.owner} - #{data.user}"
       end
     end
   end

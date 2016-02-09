@@ -10,7 +10,7 @@ module SlackGamebot
         else
           client.say(channel: data.channel, text: "No <@#{data.user}>, you suck!", gif: 'rude')
         end
-        logger.info "SUCKS: #{client.team} - #{data.user}"
+        logger.info "SUCKS: #{client.owner} - #{data.user}"
       end
     end
   end
