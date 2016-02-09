@@ -12,8 +12,12 @@ module SlackGamebot
           LOCK.synchronize do
             @services[team.token] = server
           end
-          restart!(team, server)
-          nudge!(team)
+          EM.defer do
+            restart!(team, server)
+            EM.next_tick do
+              nudge!(team)
+            end
+          end
         end
       rescue StandardError => e
         logger.error e
