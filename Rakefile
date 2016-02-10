@@ -21,6 +21,3 @@ unless ENV['RACK_ENV'] == 'production'
 
   import 'tasks/db.rake'
 end
-
-import 'tasks/env.rake'
-import 'tasks/ps.rake'

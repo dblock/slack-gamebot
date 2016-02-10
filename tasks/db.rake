@@ -1,11 +1,4 @@
 namespace :db do
-  def logger
-    @logger ||= begin
-      $stdout.sync = true
-      Logger.new(STDOUT)
-    end
-  end
-
   namespace :heroku do
     desc 'Mongodump the Gamebot database for a slack-gamebot Heroku app.'
     task :backup, [:app] do |_t, args|
