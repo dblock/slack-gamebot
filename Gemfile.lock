@@ -9,6 +9,18 @@ GIT
       hashie
       slack-ruby-client (>= 0.6.0)
 
+GIT
+  remote: git://github.com/dblock/slack-ruby-client.git
+  revision: 3b0e56c542f9ed3653efad58a637ba1a74c10f38
+  specs:
+    slack-ruby-client (0.6.1)
+      faraday
+      faraday_middleware
+      gli
+      hashie
+      json
+      websocket-driver
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -104,9 +116,9 @@ GEM
     grape-swagger (0.10.4)
       grape (>= 0.8.0)
       grape-entity (< 0.5.0)
-    hashdiff (0.2.3)
+    hashdiff (0.3.0)
     hashie (3.4.3)
-    heroku (3.42.33)
+    heroku (3.42.35)
       heroku-api (= 0.3.23)
       launchy (= 2.4.3)
       multi_json (= 1.11.2)
@@ -154,7 +166,7 @@ GEM
       i18n
       mongoid (>= 3.0)
       mongoid-compatibility
-    mongoid-shell (0.4.1)
+    mongoid-shell (0.4.2)
       i18n
       mongoid (>= 3.0.0)
       mongoid-compatibility
@@ -169,12 +181,12 @@ GEM
     newrelic-slack-ruby-bot (0.1.0)
       newrelic_rpm
       slack-ruby-bot
-    newrelic_rpm (3.14.2.312)
+    newrelic_rpm (3.14.3.313)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     oj (2.14.4)
     origin (2.2.0)
-    parser (2.3.0.2)
+    parser (2.3.0.4)
       ast (~> 2.2)
     powerpack (0.1.1)
     rack (1.6.4)
@@ -199,7 +211,7 @@ GEM
     rainbow (2.1.0)
     raindrops (0.15.0)
     rake (10.5.0)
-    rdoc (4.2.1)
+    rdoc (4.2.2)
       json (~> 1.4)
     representable (2.3.0)
       uber (~> 0.0.7)
@@ -232,13 +244,6 @@ GEM
     ruby-progressbar (1.7.5)
     rubyzip (1.1.7)
     safe_yaml (1.0.4)
-    slack-ruby-client (0.6.0)
-      faraday
-      faraday_middleware
-      gli
-      hashie
-      json
-      websocket-driver
     thor (0.19.1)
     thread_safe (0.3.5)
     time_ago_in_words (0.1.1)
@@ -294,6 +299,7 @@ DEPENDENCIES
   rubocop (= 0.34.2)
   ruby-enum
   slack-ruby-bot!
+  slack-ruby-client!
   time_ago_in_words
   unicorn
   vcr
