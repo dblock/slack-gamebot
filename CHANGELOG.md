@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#92](https://github.com/dblock/slack-gamebot/issues/92): Leaderboard without ranked players now says that there're no ranked players - [@dblock](https://github.com/dblock).
 * [#80](https://github.com/dblock/slack-gamebot/issues/80): Empty season produces `undefined method 'map' for nil:NilClass` error - [@dblock](https://github.com/dblock).
 * [#79](https://github.com/dblock/slack-gamebot/issues/79): Fixed order of scores in messages, winners first - [@dblock](https://github.com/dblock).
 * [#78](https://github.com/dblock/slack-gamebot/issues/78): Losers can record a loss or a resignation without a prior challenge - [@dblock](https://github.com/dblock).
