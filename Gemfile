@@ -18,6 +18,7 @@ gem 'newrelic_rpm'
 gem 'newrelic-slack-ruby-bot'
 gem 'rack-rewrite'
 gem 'wannabe_bool'
+gem 'gctools', require: 'gctools/oobgc'
 
 group :development, :test do
   gem 'rake', '~> 10.4'
