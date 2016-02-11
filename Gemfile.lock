@@ -131,6 +131,7 @@ GEM
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    kgio (2.10.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     loofah (2.0.3)
@@ -175,7 +176,6 @@ GEM
     parser (2.3.0.2)
       ast (~> 2.2)
     powerpack (0.1.1)
-    puma (2.16.0)
     rack (1.6.4)
     rack-accept (0.4.5)
       rack (>= 0.4)
@@ -196,6 +196,7 @@ GEM
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
     rainbow (2.1.0)
+    raindrops (0.15.0)
     rake (10.5.0)
     rdoc (4.2.1)
       json (~> 1.4)
@@ -243,6 +244,10 @@ GEM
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uber (0.0.15)
+    unicorn (5.0.1)
+      kgio (~> 2.6)
+      rack
+      raindrops (~> 0.7)
     uri_template (0.7.0)
     vcr (3.0.1)
     virtus (1.0.5)
@@ -278,7 +283,6 @@ DEPENDENCIES
   mongoid-shell
   newrelic-slack-ruby-bot
   newrelic_rpm
-  puma
   rack-cors
   rack-rewrite
   rack-robotz
@@ -289,6 +293,7 @@ DEPENDENCIES
   ruby-enum
   slack-ruby-bot!
   time_ago_in_words
+  unicorn
   vcr
   wannabe_bool
   webmock
