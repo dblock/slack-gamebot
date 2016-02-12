@@ -3,7 +3,7 @@ module SlackGamebot
     class Set < SlackRubyBot::Commands::Base
       def self.call(client, data, match)
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
-        if !match.names.include?('expression')
+        if !match['expression']
           client.say(channel: data.channel, text: 'Missing setting, eg. _set gifs off_.', gif: 'help')
           logger.info "SET: #{client.owner} - #{user.user_name}, failed, missing setting"
         else

@@ -3,7 +3,7 @@ module SlackGamebot
     class Lost < SlackRubyBot::Commands::Base
       def self.call(client, data, match)
         challenger = ::User.find_create_or_update_by_slack_id!(client, data.user)
-        expression = match['expression'] if match.names.include?('expression')
+        expression = match['expression'] if match['expression']
         arguments = expression.split.reject(&:blank?) if expression
 
         scores = nil

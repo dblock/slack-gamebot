@@ -6,7 +6,7 @@ module SlackGamebot
         if !user.captain?
           client.say(channel: data.channel, text: "You're not a captain, sorry.", gif: 'sorry')
           logger.info "RESET: #{client.owner} - #{user.user_name}, failed, not captain"
-        elsif !match.names.include?('expression')
+        elsif !match['expression']
           client.say(channel: data.channel, text: "Missing team name, confirm with _reset #{user.team.team_id}_.", gif: 'help')
           logger.info "RESET: #{client.owner} - #{user.user_name}, failed, missing team name"
         elsif match['expression'] != user.team.name && match['expression'] != user.team.team_id

@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/dblock/slack-ruby-bot.git
-  revision: 7f54f00cbcd17ff4fba0a3c95de332f9e81ec4cd
+  revision: 8ea9e940250788c3a2bda9d496c02b01a5b3ff24
   specs:
     slack-ruby-bot (0.7.0)
       activesupport
@@ -118,7 +118,7 @@ GEM
       grape-entity (< 0.5.0)
     hashdiff (0.3.0)
     hashie (3.4.3)
-    heroku (3.42.35)
+    heroku (3.42.36)
       heroku-api (= 0.3.23)
       launchy (= 2.4.3)
       multi_json (= 1.11.2)
@@ -186,7 +186,7 @@ GEM
       mini_portile2 (~> 2.0.0.rc2)
     oj (2.14.4)
     origin (2.2.0)
-    parser (2.3.0.4)
+    parser (2.3.0.5)
       ast (~> 2.2)
     powerpack (0.1.1)
     rack (1.6.4)

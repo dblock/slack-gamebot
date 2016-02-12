@@ -4,7 +4,7 @@ module SlackGamebot
       def self.call(client, data, match)
         totals = {}
         totals.default = 0
-        arguments = match['expression'].split.reject(&:blank?) if match.names.include?('expression')
+        arguments = match['expression'].split.reject(&:blank?) if match['expression']
         # limit
         max = 10
         case arguments.last.downcase

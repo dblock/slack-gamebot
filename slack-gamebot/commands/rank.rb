@@ -2,7 +2,7 @@ module SlackGamebot
   module Commands
     class Rank < SlackRubyBot::Commands::Base
       def self.call(client, data, match)
-        arguments = match['expression'].split.reject(&:blank?) if match.names.include?('expression')
+        arguments = match['expression'].split.reject(&:blank?) if match['expression']
         users = arguments || []
         if arguments && arguments.any?
           users = User.find_many_by_slack_mention!(client.owner, users)

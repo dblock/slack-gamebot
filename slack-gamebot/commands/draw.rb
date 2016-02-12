@@ -4,7 +4,7 @@ module SlackGamebot
       def self.call(client, data, match)
         challenger = ::User.find_create_or_update_by_slack_id!(client, data.user)
         challenge = ::Challenge.find_by_user(client.owner, data.channel, challenger, [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
-        scores = Score.parse(match['expression']) if match.names.include?('expression')
+        scores = Score.parse(match['expression']) if match['expression']
         if challenge
           if challenge.draw.include?(challenger)
             challenge.update_attributes!(draw_scores: scores) if scores
