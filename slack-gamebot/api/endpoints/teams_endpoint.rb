@@ -57,6 +57,7 @@ module Api
           )
 
           team = Team.where(token: rc['bot']['bot_access_token']).first
+          team ||= Team.where(team_id: rc['team_id'], game: game).first
           if team && !team.active?
             error!('Invalid Game', 400) unless team.game == game
             team.activate!

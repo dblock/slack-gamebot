@@ -170,5 +170,27 @@ describe Api::Endpoints::TeamsEndpoint do
         end
       end
     end
+
+    it 'reactivates a deactivated team with a different code' do
+      existing_team = Fabricate(:team, api: true, game: game, token: 'token', active: false, aliases: %w(foo bar))
+      oauth_access = { 'bot' => { 'bot_access_token' => 'another_token' }, 'team_id' => existing_team.team_id, 'team_name' => existing_team.name }
+      allow_any_instance_of(Slack::Web::Client).to receive(:oauth_access).with(
+        hash_including(
+          code: 'code',
+          client_id: game.client_id,
+          client_secret: game.client_secret
+        )
+      ).and_return(oauth_access)
+      expect do
+        team = client.teams._post(code: 'code', game: existing_team.game.name)
+        expect(team.team_id).to eq existing_team.team_id
+        expect(team.name).to eq existing_team.name
+        expect(team.active).to be true
+        team = Team.find(team.id)
+        expect(team.token).to eq 'token'
+        expect(team.active).to be true
+        expect(team.aliases).to eq %w(foo bar)
+      end.to_not change(Team, :count)
+    end
   end
 end
