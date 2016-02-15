@@ -23,8 +23,6 @@ module Api
 
         use Rack::Robotz, 'User-Agent' => '*', 'Disallow' => '/'
 
-        use GC::OOB::UnicornMiddleware
-
         run Api::Middleware.new
       end.to_app
     end
