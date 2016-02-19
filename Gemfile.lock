@@ -57,6 +57,8 @@ GEM
     bson (4.0.1)
     builder (3.2.2)
     chronic (0.10.2)
+    chronic_duration (0.10.6)
+      numerizer (~> 0.1.1)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     crack (0.4.3)
@@ -184,6 +186,7 @@ GEM
     newrelic_rpm (3.14.3.313)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
+    numerizer (0.1.1)
     oj (2.14.4)
     origin (2.2.0)
     parser (2.3.0.5)
@@ -276,6 +279,7 @@ PLATFORMS
 
 DEPENDENCIES
   chronic
+  chronic_duration
   database_cleaner
   fabrication
   faker

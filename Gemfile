@@ -20,6 +20,7 @@ gem 'newrelic-slack-ruby-bot'
 gem 'rack-rewrite'
 gem 'wannabe_bool'
 gem 'chronic'
+gem 'chronic_duration'
 
 group :development, :test do
   gem 'rake', '~> 10.4'

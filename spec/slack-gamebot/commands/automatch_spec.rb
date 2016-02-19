@@ -135,4 +135,23 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
       )
     end
   end
+
+  context 'for' do
+    it 'sets automatch time for relative time' do
+      Timecop.freeze(Time.now.beginning_of_minute) do
+        expect(message: "#{SlackRubyBot.config.user} automatch for 2 hours", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
+          'Automatch is on for username (1 users ready to play!)'
+        )
+
+        user1.reload
+        expect(user1.automatch_time).to eq(2.hours.from_now)
+      end
+    end
+
+    it 'indicates when the time cannot be interpreted' do
+      expect(message: "#{SlackRubyBot.config.user} automatch for a really really long time", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
+        "Can't understand time specified"
+      )
+    end
+  end
 end
