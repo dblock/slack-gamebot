@@ -22,7 +22,9 @@ module SlackGamebot
           state = 'off'
           gif_word = 'leave'
         end
-        client.say(channel: data.channel, text: "Automatch is #{state} for #{challenger.user_name}", gif: gif_word)
+
+        automatch_count = User.where(automatch: true).count
+        client.say(channel: data.channel, text: "Automatch is #{state} for #{challenger.user_name} (#{automatch_count} users ready to play!)", gif: gif_word)
         logger.info "AUTOMATCH: #{client.owner} - #{challenger.user_name}: #{state}"
       end
     end
