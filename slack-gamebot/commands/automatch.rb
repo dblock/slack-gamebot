@@ -25,7 +25,7 @@ module SlackGamebot
             client.say(channel: data.channel, text: 'No users currently have automatch turned on')
           else
             times = automatch_users.map do |user|
-              duration = ChronicDuration.output(user.automatch_time - Time.new, keep_zero: true)
+              duration = ChronicDuration.output((user.automatch_time - Time.new).to_i, keep_zero: true)
               "#{user.user_name} for #{duration}"
             end.join("\n")
 
