@@ -17,6 +17,7 @@ Games
 -----
 challenge <opponent>, ... [with <teammate>, ...]: challenge opponent(s) to a game
 accept: accept a challenge
+automatch: turn on automatch mode, eg. automatch for 10 minutes, or automatch until 8pm
 decline: decline a previous challenge
 cancel: cancel a previous challenge
 lost [score, ...]: record your loss
