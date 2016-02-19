@@ -153,7 +153,7 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
         user2.save
 
         expect(message: "#{SlackRubyBot.config.user} automatch", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
-          "username for 4 mins 0 secs"
+          'username for 4 mins 0 secs'
         )
       end
     end
