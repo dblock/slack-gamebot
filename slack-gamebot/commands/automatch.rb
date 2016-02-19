@@ -20,11 +20,19 @@ module SlackGamebot
 
           challenger.automatch_time = Time.now + parsed_time
         when nil
-          if challenger.automatch_time && challenger.automatch_time > Time.now
-            challenger.automatch_time = nil
+          automatch_users = User.where(:automatch_time.gt => Time.now).order(automatch_time: :asc)
+          if (automatch_users.count == 0)
+            client.say(channel: data.channel, text: 'No users currently have automatch turned on')
           else
-            challenger.automatch_time = 5.minutes.from_now
+            times = automatch_users.map do |user|
+              duration = ChronicDuration.output(user.automatch_time - Time.new, keep_zero: true)
+              "#{user.user_name} for #{duration}"
+            end.join("\n")
+
+            client.say(channel: data.channel, text: times)
           end
+
+          return
         else
           fail SlackGamebot::Error, "Invalid automatch argument '#{match['expression']}'"
         end
@@ -39,7 +47,7 @@ module SlackGamebot
           gif_word = 'gone'
         end
 
-        logger.info "AUTOMATCH: #{client.owner} - #{challenger.user_name}: #{state}"
+        logger.info "AUTOMATCH: #{client.owner} - #{challenger.user_name}: #{challenger.automatch_time}"
 
         automatch_users = User.where(:automatch_time.gt => Time.now).order(elo: :asc).limit(4)
         if automatch_users.count == 4

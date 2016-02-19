@@ -29,32 +29,6 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
     expect(user1.automatch_time).to be(nil)
   end
 
-  it 'toggles automatch flag from off to on when there is no argument' do
-    Timecop.freeze(Time.now.beginning_of_minute) do
-      user1.automatch_time = nil
-      user1.save!
-
-      expect(message: "#{SlackRubyBot.config.user} automatch", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
-        'Automatch is on for username (1 users ready to play!)'
-      )
-
-      user1.reload
-      expect(user1.automatch_time).to eq(5.minutes.from_now)
-    end
-  end
-
-  it 'toggles automatch flag from on to off when there is no argument' do
-    user1.automatch_time = 5.minutes.from_now
-    user1.save!
-
-    expect(message: "#{SlackRubyBot.config.user} automatch", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
-      'Automatch is off for username (0 users ready to play!)'
-    )
-
-    user1.reload
-    expect(user1.automatch_time).to be(nil)
-  end
-
   it 'creates a doubles match when four users have automatch on' do
     [user1, user2, user3].each do |user|
       user.automatch_time = 5.minutes.from_now
@@ -62,7 +36,7 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
     end
 
     expect do
-      expect(message: "#{SlackRubyBot.config.user} automatch", user: user4.user_id, channel: 'pongbot').to respond_with_slack_message(
+      expect(message: "#{SlackRubyBot.config.user} automatch on", user: user4.user_id, channel: 'pongbot').to respond_with_slack_message(
         'Automatch: username1 and username vs username2 and username3!'
       )
     end.to change(Challenge, :count).by(1)
@@ -74,7 +48,7 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
       user.save!
     end
 
-    expect(message: "#{SlackRubyBot.config.user} automatch", user: user4.user_id, channel: 'pongbot').to respond_with_slack_message(
+    expect(message: "#{SlackRubyBot.config.user} automatch on", user: user4.user_id, channel: 'pongbot').to respond_with_slack_message(
       'Automatch: username1 and username vs username2 and username3!'
     )
 
@@ -93,7 +67,7 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
       user.save!
     end
 
-    expect(message: "#{SlackRubyBot.config.user} automatch", user: user4.user_id, channel: 'pongbot').to respond_with_slack_message(
+    expect(message: "#{SlackRubyBot.config.user} automatch on", user: user4.user_id, channel: 'pongbot').to respond_with_slack_message(
       'Automatch: username1 and username vs username2 and username3!'
     )
 
@@ -125,7 +99,7 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
         )
 
         user1.reload
-        expect(user1.automatch_time).to eq(DateTime.parse('2016-06-20 20:00-07:00').to_s)
+        expect(user1.automatch_time).to eq(DateTime.parse('2016-06-20 20:00-07:00'))
       end
     end
 
@@ -152,6 +126,36 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
       expect(message: "#{SlackRubyBot.config.user} automatch for a really really long time", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
         "Can't understand time specified"
       )
+    end
+  end
+
+  context 'with no arguments' do
+    it 'lists users and the times they are set to automatch until' do
+      Timecop.freeze(Time.now.beginning_of_minute) do
+        user1.automatch_time = 4.minutes.from_now
+        user1.save
+
+        user2.automatch_time = 1.hour.from_now
+        user2.save
+
+        expect(message: "#{SlackRubyBot.config.user} automatch", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
+          "username for 4 mins 0 secs\nusername2 for 1 hr 0 secs"
+        )
+      end
+    end
+
+    it 'does not include users with times set in the past' do
+      Timecop.freeze(Time.now.beginning_of_minute) do
+        user1.automatch_time = 4.minutes.from_now
+        user1.save
+
+        user2.automatch_time = 1.minute.ago
+        user2.save
+
+        expect(message: "#{SlackRubyBot.config.user} automatch", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
+          "username for 4 mins 0 secs"
+        )
+      end
     end
   end
 end
