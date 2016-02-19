@@ -56,6 +56,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     bson (4.0.1)
     builder (3.2.2)
+    chronic (0.10.2)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     crack (0.4.3)
@@ -274,6 +275,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  chronic
   database_cleaner
   fabrication
   faker

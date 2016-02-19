@@ -105,4 +105,34 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
     expect(challenge.challenged.include?(user2)).to eq(true)
     expect(challenge.challenged.include?(user3)).to eq(true)
   end
+
+  context 'until' do
+    it 'sets automatch time for relative time' do
+      Timecop.freeze(Time.now.beginning_of_minute) do
+        expect(message: "#{SlackRubyBot.config.user} automatch until 30 minutes from now", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
+          'Automatch is on for username (1 users ready to play!)'
+        )
+
+        user1.reload
+        expect(user1.automatch_time).to eq(30.minutes.from_now)
+      end
+    end
+
+    it 'sets automatch time for specific time' do
+      Timecop.freeze(DateTime.parse('2016-1-1')) do
+        expect(message: "#{SlackRubyBot.config.user} automatch until June 20th, 2016 at 8pm", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
+          'Automatch is on for username (1 users ready to play!)'
+        )
+
+        user1.reload
+        expect(user1.automatch_time).to eq(DateTime.parse('2016-06-20 20:00-07:00').to_s)
+      end
+    end
+
+    it 'indicates when the time cannot be interpreted' do
+      expect(message: "#{SlackRubyBot.config.user} automatch until the cows come home", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
+        "Can't understand time specified"
+      )
+    end
+  end
 end

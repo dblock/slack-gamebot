@@ -9,6 +9,11 @@ module SlackGamebot
           challenger.automatch_time = 5.minutes.from_now
         when 'off'
           challenger.automatch_time = nil
+        when /^until\b/i
+          parsed_time = Chronic.parse(match['expression'].sub(/^until\W*/, ''))
+          fail SlackGamebot::Error, "Can't understand time specified" unless parsed_time
+
+          challenger.automatch_time = parsed_time
         when nil
           if challenger.automatch_time && challenger.automatch_time > Time.now
             challenger.automatch_time = nil
@@ -16,7 +21,7 @@ module SlackGamebot
             challenger.automatch_time = 5.minutes.from_now
           end
         else
-          fail "Invalid automatch argument #{match['expression']}"
+          fail SlackGamebot::Error, "Invalid automatch argument #{match['expression']}"
         end
 
         challenger.save!
