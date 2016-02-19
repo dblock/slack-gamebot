@@ -246,6 +246,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     time_ago_in_words (0.1.1)
+    timecop (0.8.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uber (0.0.15)
@@ -299,6 +300,7 @@ DEPENDENCIES
   slack-ruby-bot!
   slack-ruby-client!
   time_ago_in_words
+  timecop
   unicorn
   vcr
   wannabe_bool

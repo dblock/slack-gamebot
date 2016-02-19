@@ -11,7 +11,7 @@ class User
   field :tau, type: Float, default: 0
   field :rank, type: Integer
   field :captain, type: Boolean, default: false
-  field :automatch, type: Boolean, default: false
+  field :automatch_time, type: Time
 
   belongs_to :team, index: true
   validates_presence_of :team

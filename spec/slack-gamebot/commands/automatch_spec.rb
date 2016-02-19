@@ -9,13 +9,15 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
   let(:user4) { Fabricate(:user, user_name: 'username4', elo: 4) }
   let(:opponent) { Fabricate(:user) }
 
-  it 'sets automatch flag to true when user turns it on' do
-    expect(message: "#{SlackRubyBot.config.user} automatch on", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
-      'Automatch is on for username (1 users ready to play!)'
-    )
+  it 'sets automatch time to 5 minutes in the future when user turns it on' do
+    Timecop.freeze(Time.now.beginning_of_minute) do
+      expect(message: "#{SlackRubyBot.config.user} automatch on", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
+        'Automatch is on for username (1 users ready to play!)'
+      )
 
-    user1.reload
-    expect(user1.automatch).to be(true)
+      user1.reload
+      expect(user1.automatch_time).to eq(5.minutes.from_now)
+    end
   end
 
   it 'sets automatch flag to false when user turns it off' do
@@ -24,23 +26,25 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
     )
 
     user1.reload
-    expect(user1.automatch).to be(false)
+    expect(user1.automatch_time).to be(nil)
   end
 
   it 'toggles automatch flag from off to on when there is no argument' do
-    user1.automatch = false
-    user1.save!
+    Timecop.freeze(Time.now.beginning_of_minute) do
+      user1.automatch_time = nil
+      user1.save!
 
-    expect(message: "#{SlackRubyBot.config.user} automatch", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
-      'Automatch is on for username (1 users ready to play!)'
-    )
+      expect(message: "#{SlackRubyBot.config.user} automatch", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
+        'Automatch is on for username (1 users ready to play!)'
+      )
 
-    user1.reload
-    expect(user1.automatch).to be(true)
+      user1.reload
+      expect(user1.automatch_time).to eq(5.minutes.from_now)
+    end
   end
 
   it 'toggles automatch flag from on to off when there is no argument' do
-    user1.automatch = true
+    user1.automatch_time = 5.minutes.from_now
     user1.save!
 
     expect(message: "#{SlackRubyBot.config.user} automatch", user: user1.user_id, channel: 'pongbot').to respond_with_slack_message(
@@ -48,12 +52,12 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
     )
 
     user1.reload
-    expect(user1.automatch).to be(false)
+    expect(user1.automatch_time).to be(nil)
   end
 
   it 'creates a doubles match when four users have automatch on' do
     [user1, user2, user3].each do |user|
-      user.automatch = true
+      user.automatch_time = 5.minutes.from_now
       user.save!
     end
 
@@ -66,7 +70,26 @@ describe SlackGamebot::Commands::Automatch, vcr: { cassette_name: 'user_info' } 
 
   it 'matches top and bottom elo vs middle two elo' do
     [user1, user2, user3].each do |user|
-      user.automatch = true
+      user.automatch_time = 5.minutes.from_now
+      user.save!
+    end
+
+    expect(message: "#{SlackRubyBot.config.user} automatch", user: user4.user_id, channel: 'pongbot').to respond_with_slack_message(
+      'Automatch: username1 and username vs username2 and username3!'
+    )
+
+    challenge = Challenge.last
+    expect(challenge.challengers.length).to eq(2)
+    expect(challenge.challengers.include?(user1)).to eq(true)
+    expect(challenge.challengers.include?(user4)).to eq(true)
+    expect(challenge.challenged.length).to eq(2)
+    expect(challenge.challenged.include?(user2)).to eq(true)
+    expect(challenge.challenged.include?(user3)).to eq(true)
+  end
+
+  it 'times out after 5 minutes' do
+    [user1, user2, user3].each do |user|
+      user.automatch_time = 5.minutes.from_now
       user.save!
     end
 

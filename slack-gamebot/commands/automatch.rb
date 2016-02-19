@@ -6,18 +6,22 @@ module SlackGamebot
 
         case match['expression']
         when 'on'
-          challenger.automatch = true
+          challenger.automatch_time = 5.minutes.from_now
         when 'off'
-          challenger.automatch = false
+          challenger.automatch_time = nil
         when nil
-          challenger.automatch = !challenger.automatch
+          if challenger.automatch_time && challenger.automatch_time > Time.now
+            challenger.automatch_time = nil
+          else
+            challenger.automatch_time = 5.minutes.from_now
+          end
         else
           fail "Invalid automatch argument #{match['expression']}"
         end
 
         challenger.save!
 
-        if challenger.automatch
+        if challenger.automatch_time
           state = 'on'
           gif_word = 'ready'
         else
@@ -27,7 +31,7 @@ module SlackGamebot
 
         logger.info "AUTOMATCH: #{client.owner} - #{challenger.user_name}: #{state}"
 
-        automatch_users = User.where(automatch: true).order(elo: :asc).limit(4)
+        automatch_users = User.where(:automatch_time.gt => Time.now).order(elo: :asc).limit(4)
         if automatch_users.count == 4
           challenge = ::Challenge.create!(
             team: client.owner,
@@ -40,7 +44,7 @@ module SlackGamebot
           )
 
           automatch_users.each do |user|
-            user.automatch = false
+            user.automatch_time = nil
             user.save!
           end
 

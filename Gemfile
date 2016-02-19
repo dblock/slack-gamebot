@@ -24,6 +24,7 @@ group :development, :test do
   gem 'rake', '~> 10.4'
   gem 'rubocop', '0.34.2'
   gem 'foreman'
+  gem 'timecop'
 end
 
 group :development do
