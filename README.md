@@ -194,6 +194,58 @@ gamebot cancel
 Victor Barna and Deng Yaping canceled a challenge against Wang Hoe and Zhang Jike.
 ```
 
+#### gamebot automatch on|off
+
+Turn doubles automatch on for 5 minutes, or turn it off. When 4 players have automatch on, gamebot will create a new challenge with the players with the highest and lowest ELO scores vs the players with the middle scores.
+
+```
+gamebot automatch on
+
+Automatch is on for alf (1 users ready to play!)
+```
+
+```
+gamebot automatch off
+
+Automatch is off for alf (0 users ready to play!)
+```
+
+#### gamebot automatch for &lt;duration&gt;
+
+Turn doubles automatch on for the specified duration. Accepts natural language duration like "5 minutes".
+
+```
+gamebot automatch for 5 minutes
+
+Automatch is on for alf (1 users ready to play!)
+```
+
+#### gamebot automatch until &lt;time&gt;
+
+Turn doubles automatch on until the specified time. Accepts natural language times.
+
+```
+gamebot automatch until 10 minutes from now
+
+Automatch is on for alf (1 users ready to play!)
+```
+
+```
+gamebot automatch until 8pm
+
+Automatch is on for alf (1 users ready to play!)
+```
+
+#### gamebot automatch
+
+List players with automatch on, and the durations they have remaining.
+
+```
+gamebot automatch
+
+alf for 4 mins 57 secs
+```
+
 #### gamebot leaderboard [number|infinity]
 
 Get the leaderboard.

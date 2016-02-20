@@ -42,3 +42,14 @@ Fabricator(:played_challenge, from: :challenge) do
     instance.updated_by = instance.challenged.first
   end
 end
+
+Fabricator(:automatch_challenge, from: :challenge) do
+  state ChallengeState::ACCEPTED
+  after_build do |instance|
+    instance.challengers = [Fabricate(:user, team: instance.team), Fabricate(:user, team: instance.team)] unless instance.challengers.any?
+    instance.challenged = [Fabricate(:user, team: instance.team), Fabricate(:user, team: instance.team)] unless instance.challenged.any?
+  end
+  before_create do |instance|
+    instance.updated_by = instance.challenged.first
+  end
+end

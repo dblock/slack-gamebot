@@ -1,5 +1,6 @@
 ### Changelog
 
+* Added automatch support for doubles matches - [@amikula](https://github.com/amikula).
 * [#94](https://github.com/dblock/slack-gamebot/issues/94): De-registering and re-registering a team just reactivates the old team - [@dblock](https://github.com/dblock).
 * [#92](https://github.com/dblock/slack-gamebot/issues/92): Leaderboard without ranked players now says that there're no ranked players - [@dblock](https://github.com/dblock).
 * [#80](https://github.com/dblock/slack-gamebot/issues/80): Empty season produces `undefined method 'map' for nil:NilClass` error - [@dblock](https://github.com/dblock).

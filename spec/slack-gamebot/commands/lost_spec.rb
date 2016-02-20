@@ -5,7 +5,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
   let(:app) { SlackGamebot::Server.new(team: team) }
   context 'with an existing challenge' do
     let(:challenged) { Fabricate(:user, user_name: 'username') }
-    let!(:challenge) { Fabricate(:challenge, challenged: [challenged]) }
+    let(:challenge) { Fabricate(:challenge, challenged: [challenged]) }
     before do
       challenge.accept!(challenged)
     end
@@ -83,6 +83,20 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
       expect(message: "#{SlackRubyBot.config.user} lost", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
         'No challenge to lose!'
       )
+    end
+  end
+  context 'automatch challenge' do
+    let(:challenged) { Fabricate(:user, user_name: 'username') }
+    let(:teammate) { Fabricate(:user) }
+    let!(:challenge) { Fabricate(:automatch_challenge, challenged: [challenged, teammate]) }
+    it 'lost' do
+      expect(message: "#{SlackRubyBot.config.user} lost", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
+        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} defeated #{challenge.challenged.map(&:user_name).and}."
+      )
+      challenge.reload
+      expect(challenge.state).to eq ChallengeState::PLAYED
+      expect(challenge.match.winners).to eq challenge.challengers
+      expect(challenge.match.losers).to eq challenge.challenged
     end
   end
   context 'lost to' do

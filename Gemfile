@@ -19,11 +19,14 @@ gem 'newrelic_rpm'
 gem 'newrelic-slack-ruby-bot'
 gem 'rack-rewrite'
 gem 'wannabe_bool'
+gem 'chronic'
+gem 'chronic_duration'
 
 group :development, :test do
   gem 'rake', '~> 10.4'
   gem 'rubocop', '0.34.2'
   gem 'foreman'
+  gem 'timecop'
 end
 
 group :development do
