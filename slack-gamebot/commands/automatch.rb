@@ -7,18 +7,26 @@ module SlackGamebot
         case match['expression']
         when 'on'
           challenger.automatch_time = 5.minutes.from_now
+          challenger.save!
+          automatch_on(challenger, client, data)
         when 'off'
           challenger.automatch_time = nil
+          challenger.save!
+          automatch_off(challenger, client, data)
         when /^until\b/i
           parsed_time = Chronic.parse(match['expression'].sub(/^until\W*/, ''))
           fail SlackGamebot::Error, "Can't understand time specified" unless parsed_time
 
           challenger.automatch_time = parsed_time
+          challenger.save!
+          automatch_on(challenger, client, data)
         when /^for\b/i
           parsed_time = ChronicDuration.parse(match['expression'].sub(/^for\W*/, ''))
           fail SlackGamebot::Error, "Can't understand time specified" unless parsed_time
 
           challenger.automatch_time = Time.now + parsed_time
+          challenger.save!
+          automatch_on(challenger, client, data)
         when nil
           automatch_users = User.where(:automatch_time.gt => Time.now).order(automatch_time: :asc)
           if (automatch_users.count == 0)
@@ -31,22 +39,12 @@ module SlackGamebot
 
             client.say(channel: data.channel, text: times)
           end
-
-          return
         else
           fail SlackGamebot::Error, "Invalid automatch argument '#{match['expression']}'"
         end
+      end
 
-        challenger.save!
-
-        if challenger.automatch_time
-          state = 'on'
-          gif_word = 'ready'
-        else
-          state = 'off'
-          gif_word = 'gone'
-        end
-
+      def self.automatch_on(challenger, client, data)
         logger.info "AUTOMATCH: #{client.owner} - #{challenger.user_name}: #{challenger.automatch_time}"
 
         automatch_users = User.where(:automatch_time.gt => Time.now).order(elo: :asc).limit(4)
@@ -69,8 +67,15 @@ module SlackGamebot
           client.say(channel: data.channel, text: "Automatch: #{challenge.challengers.map(&:user_name).and} vs #{challenge.challenged.map(&:user_name).and}!", gif: 'challenge')
           logger.info "CHALLENGE: #{client.owner} - #{challenge}"
         else
-          client.say(channel: data.channel, text: "Automatch is #{state} for #{challenger.user_name} (#{automatch_users.count} users ready to play!)", gif: gif_word)
+          client.say(channel: data.channel, text: "Automatch is on for #{challenger.user_name} (#{automatch_users.count} users ready to play!)", gif: 'ready')
         end
+      end
+
+      def self.automatch_off(challenger, client, data)
+        automatch_count = User.where(:automatch_time.gt => Time.now).count
+        logger.info "AUTOMATCH: #{client.owner} - #{challenger.user_name}: OFF"
+
+        client.say(channel: data.channel, text: "Automatch is off for #{challenger.user_name} (#{automatch_count} users ready to play!)", gif: 'leave')
       end
     end
   end
