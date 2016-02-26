@@ -3,6 +3,7 @@ module SlackGamebot
     class Leaderboard < SlackRubyBot::Commands::Base
       def self.call(client, data, match)
         max = 3
+        reverse = false
         arguments = match['expression'].split.reject(&:blank?) if match['expression']
         arguments ||= []
         case arguments.first.downcase
@@ -10,11 +11,12 @@ module SlackGamebot
           max = nil
         else
           max = Integer(arguments.first)
-        end if arguments.any?
+        end if arguments.first
+        reverse = true if arguments.include? 'esrever' # This is a hidden magic trick which will reverse the ranks
         ranked_players = client.owner.users.ranked
         if ranked_players.any?
-          message = ranked_players.asc(:rank).limit(max).map do |user|
-            "#{user.rank}. #{user}"
+          message = ranked_players.send(reverse ? :desc : :asc, :rank).limit(max).each_with_index.map do |user, index|
+            "#{index + 1}. #{user}"
           end.join("\n")
           client.say(channel: data.channel, text: message)
         else
