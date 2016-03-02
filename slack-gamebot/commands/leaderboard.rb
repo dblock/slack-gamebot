@@ -6,13 +6,19 @@ module SlackGamebot
         reverse = false
         arguments = match['expression'].split.reject(&:blank?) if match['expression']
         arguments ||= []
-        case arguments.first.downcase
-        when 'infinity'
-          max = nil
-        else
-          max = Integer(arguments.first)
-        end if arguments.first
-        reverse = true if arguments.include? 'esrever' # This is a hidden magic trick which will reverse the ranks
+        number = arguments.shift
+        if number
+          if number[0] == '-'
+            reverse = true
+            number = number[1..-1]
+          end
+          case number.downcase
+          when 'infinity'
+            max = nil
+          else
+            max = Integer(number)
+          end
+        end
         ranked_players = client.owner.users.ranked
         if ranked_players.any?
           message = ranked_players.send(reverse ? :desc : :asc, :rank).limit(max).each_with_index.map do |user, index|

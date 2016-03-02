@@ -18,10 +18,14 @@ describe SlackGamebot::Commands::Leaderboard do
         user_elo_44 = Fabricate(:user, elo: 44, wins: 2, losses: 3)
         expect(message: "#{SlackRubyBot.config.user} leaderboard infinity").to respond_with_slack_message "1. #{user_elo_48}\n2. #{user_elo_44}\n3. #{user_elo_43}\n4. #{user_elo_42}"
       end
-      it 'supports esrever' do
+      it 'supports -infinity' do
         user_elo_43 = Fabricate(:user, elo: 43, wins: 2, losses: 3)
         user_elo_44 = Fabricate(:user, elo: 44, wins: 2, losses: 3)
-        expect(message: "#{SlackRubyBot.config.user} leaderboard infinity esrever").to respond_with_slack_message "1. #{user_elo_42}\n2. #{user_elo_43}\n3. #{user_elo_44}\n4. #{user_elo_48}"
+        expect(message: "#{SlackRubyBot.config.user} leaderboard -infinity").to respond_with_slack_message "1. #{user_elo_42}\n2. #{user_elo_43}\n3. #{user_elo_44}\n4. #{user_elo_48}"
+      end
+      it 'supports -number' do
+        user_elo_43 = Fabricate(:user, elo: 43, wins: 2, losses: 3)
+        expect(message: "#{SlackRubyBot.config.user} leaderboard -2").to respond_with_slack_message "1. #{user_elo_42}\n2. #{user_elo_43}"
       end
     end
     context 'without players' do

@@ -194,7 +194,7 @@ gamebot cancel
 Victor Barna and Deng Yaping canceled a challenge against Wang Hoe and Zhang Jike.
 ```
 
-#### gamebot leaderboard [number|infinity, esrever]
+#### gamebot leaderboard [number|infinity]
 
 Get the leaderboard.
 
@@ -208,9 +208,10 @@ gamebot leaderboard
 
 The leaderboard contains 3 topmost players ranked by [Elo](http://en.wikipedia.org/wiki/Elo_rating_system), use _leaderboard 10_ or _leaderboard infinity_ to see 10 players or more, respectively.
 
-In case you want to see leaderboard in reverse order (which would be totally wrong but motivational for people at the bottom of leaderboard) you can try passing `esrever` (reverse of "reverse"):
+In case you want to see leaderboard in reverse order (which would be totally wrong but motivational for people at the bottom of leaderboard), specify a negative number or `-infinity`:
+
 ```
-gamebot leaderboard infinity esrever
+gamebot leaderboard -5
 
 1. Wang Hoe: 0 wins, 1 loss (elo: -12)
 2. Deng Yaping: 1 win, 3 losses (elo: 24)
