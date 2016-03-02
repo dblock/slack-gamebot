@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#98](https://github.com/dblock/slack-gamebot/issues/98): Reactivating a team doesn't update auth token - [@dblock](https://github.com/dblock).
 * [#97](https://github.com/dblock/slack-gamebot/pull/97): Reverse leaderboard by specifying a negative number - [@ashkan18](https://github.com/ashkan18), [@dblock](https://github.com/dblock).
 * [#94](https://github.com/dblock/slack-gamebot/issues/94): De-registering and re-registering a team just reactivates the old team - [@dblock](https://github.com/dblock).
 * [#92](https://github.com/dblock/slack-gamebot/issues/92): Leaderboard without ranked players now says that there're no ranked players - [@dblock](https://github.com/dblock).

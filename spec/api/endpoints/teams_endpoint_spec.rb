@@ -155,6 +155,18 @@ describe Api::Endpoints::TeamsEndpoint do
           expect(team.aliases).to eq %w(foo bar)
         end.to_not change(Team, :count)
       end
+      it 'updates a reactivated team with a new token' do
+        existing_team = Fabricate(:team, api: true, game: game, token: 'old', team_id: 'team_id', active: false)
+        expect do
+          team = client.teams._post(code: 'code', game: existing_team.game.name)
+          expect(team.team_id).to eq existing_team.team_id
+          expect(team.name).to eq existing_team.name
+          expect(team.active).to be true
+          team = Team.find(team.id)
+          expect(team.token).to eq 'token'
+          expect(team.active).to be true
+        end.to_not change(Team, :count)
+      end
       it 'cannot switch games' do
         Fabricate(:team, api: true, game: Fabricate(:game), token: 'token', active: false)
         expect { client.teams._post(code: 'code', game_id: game.id.to_s) }.to raise_error Faraday::ClientError do |e|
@@ -187,7 +199,7 @@ describe Api::Endpoints::TeamsEndpoint do
         expect(team.name).to eq existing_team.name
         expect(team.active).to be true
         team = Team.find(team.id)
-        expect(team.token).to eq 'token'
+        expect(team.token).to eq 'another_token'
         expect(team.active).to be true
         expect(team.aliases).to eq %w(foo bar)
       end.to_not change(Team, :count)

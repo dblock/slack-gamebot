@@ -56,11 +56,12 @@ module Api
             code: params[:code]
           )
 
-          team = Team.where(token: rc['bot']['bot_access_token']).first
+          token = rc['bot']['bot_access_token']
+          team = Team.where(token: token).first
           team ||= Team.where(team_id: rc['team_id'], game: game).first
           if team && !team.active?
             error!('Invalid Game', 400) unless team.game == game
-            team.activate!
+            team.activate!(token)
           elsif team
             error!('Invalid Game', 400) unless team.game == game
             fail "Team #{team.name} is already registered."
@@ -68,7 +69,7 @@ module Api
             team = Team.create!(
               game: game,
               aliases: game.aliases,
-              token: rc['bot']['bot_access_token'],
+              token: token,
               team_id: rc['team_id'],
               name: rc['team_name']
             )
