@@ -27,6 +27,7 @@ module SlackGamebot
         LOCK.synchronize do
           fail 'Token unknown.' unless @services.key?(team.token)
           EM.next_tick do
+            logger.info "Stopping team #{team}."
             @services[team.token].stop!
             @services.delete(team.token)
           end
@@ -77,11 +78,20 @@ module SlackGamebot
 
       def deactivate!(team)
         team.deactivate!
+        LOCK.synchronize do
+          @services.delete(team.token)
+        end
       rescue Mongoid::Errors::Validations => e
         message = e.document.errors.full_messages.uniq.join(', ') + '.'
         logger.error "#{team.name}: #{e.message} (#{message}), ignored."
       rescue StandardError => e
         logger.error "#{team.name}: #{e.class}, #{e.message}, ignored."
+      end
+
+      def reset!
+        @services.values.to_a.each do |team|
+          stop!(team)
+        end
       end
     end
   end
