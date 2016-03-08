@@ -1,5 +1,7 @@
 module SlackGamebot
   class Service
+    include SlackRubyBot::Loggable
+
     LOCK = Mutex.new
     @services = {}
 
@@ -29,10 +31,6 @@ module SlackGamebot
         end
       rescue StandardError => e
         logger.error e
-      end
-
-      def logger
-        Slack::Config.logger
       end
 
       def start_from_database!

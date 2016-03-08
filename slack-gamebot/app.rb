@@ -1,5 +1,7 @@
 module SlackGamebot
   class App
+    include SlackRubyBot::Loggable
+
     def prepare!
       silence_loggers!
       check_mongodb_provider!
@@ -21,13 +23,6 @@ module SlackGamebot
     end
 
     private
-
-    def logger
-      @logger ||= begin
-        $stdout.sync = true
-        Logger.new(STDOUT)
-      end
-    end
 
     def silence_loggers!
       Mongoid.logger.level = Logger::INFO
