@@ -6,27 +6,22 @@ module SlackGamebot
     class << self
       def start!(team)
         fail 'Token already known.' if @services.key?(team.token)
-        EM.next_tick do
-          logger.info "Starting team #{team}."
-          server = SlackGamebot::Server.new(team: team)
-          LOCK.synchronize do
-            @services[team.token] = server
-          end
-          EM.defer do
-            restart!(team, server)
-            EM.next_tick do
-              nudge!(team)
-            end
-          end
+        logger.info "Starting team #{team}."
+        server = SlackGamebot::Server.new(team: team)
+        LOCK.synchronize do
+          @services[team.token] = server
+        end
+        EM.defer do
+          restart!(team, server)
         end
       rescue StandardError => e
         logger.error e
       end
 
       def stop!(team)
-        LOCK.synchronize do
-          fail 'Token unknown.' unless @services.key?(team.token)
-          EM.next_tick do
+        EM.defer do
+          LOCK.synchronize do
+            fail 'Token unknown.' unless @services.key?(team.token)
             logger.info "Stopping team #{team}."
             @services[team.token].stop!
             @services.delete(team.token)
@@ -37,10 +32,7 @@ module SlackGamebot
       end
 
       def logger
-        @logger ||= begin
-          $stdout.sync = true
-          Logger.new(STDOUT)
-        end
+        Slack::Config.logger
       end
 
       def start_from_database!
@@ -51,11 +43,16 @@ module SlackGamebot
         Team.active.each do |team|
           start!(team)
         end
+        Team.active.each do |team|
+          nudge!(team)
+        end
       end
 
       def nudge!(team)
         return unless team.nudge?
-        team.nudge!
+        EM.defer do
+          team.nudge!
+        end
       rescue StandardError => e
         logger.warn "Error nudging team #{team}, #{e.message}."
       end
