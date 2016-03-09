@@ -34,7 +34,6 @@ module SlackGamebot
       end
 
       def start_from_database!
-        until EM.reactor_running?; end
         Game.each do |game|
           logger.info "Starting game #{game}."
         end
