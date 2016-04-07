@@ -39,6 +39,7 @@ module SlackGamebot
         end
         EM.next_tick do
           Team.active.each do |team|
+            sleep 0.25
             start!(team)
           end
         end
