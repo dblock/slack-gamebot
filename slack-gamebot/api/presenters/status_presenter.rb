@@ -28,7 +28,7 @@ module Api
           h[game.name][:challenges_count] = game.challenges.count
           h[game.name][:matches_count] = game.matches.count
           h[game.name][:seasons_count] = game.seasons.count
-          team = game.teams.asc(:_id).first
+          team = game.teams.active.asc(:_id).first
           h[game.name][:ping] = team.ping! if team
         end
       end
