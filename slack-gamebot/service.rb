@@ -13,10 +13,8 @@ module SlackGamebot
         LOCK.synchronize do
           @services[team.token] = server
         end
-        EM.next_tick do
-          EM.defer do
-            restart!(team, server)
-          end
+        EM.defer do
+          restart!(team, server)
         end
       rescue StandardError => e
         logger.error e
@@ -39,8 +37,10 @@ module SlackGamebot
         Game.each do |game|
           logger.info "Starting game #{game}."
         end
-        Team.active.each do |team|
-          start!(team)
+        EM.next_tick do
+          Team.active.each do |team|
+            start!(team)
+          end
         end
       end
 
