@@ -95,7 +95,7 @@ module SlackGamebot
         next unless team.dead?
         begin
           team.deactivate!
-          team.inform! 'This leaderboard has been dead for over a month, deactivating. Your data will be purged in 2 weeks.'
+          team.inform! 'This leaderboard has been dead for over a month, deactivating. Your data will be purged in 2 weeks.', 'dead'
         rescue StandardError => e
           logger.warn "Error informing team #{team}, #{e.message}."
         end

@@ -14,7 +14,9 @@ module SlackGamebot
           @services[team.token] = server
         end
         EM.next_tick do
-          restart!(team, server)
+          EM.defer do
+            restart!(team, server)
+          end
         end
       rescue StandardError => e
         logger.error e

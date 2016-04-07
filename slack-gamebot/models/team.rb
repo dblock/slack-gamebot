@@ -74,7 +74,7 @@ class Team
     asleep?(dt)
   end
 
-  def dead?(dt = 8.weeks)
+  def dead?(dt = 4.weeks)
     asleep?(dt)
   end
 
