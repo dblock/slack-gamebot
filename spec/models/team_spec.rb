@@ -63,25 +63,28 @@ describe Team do
       expect(Team.find(inactive_team_a_month_ago.id)).to be nil
     end
   end
-  context '#nudge? and #asleep?' do
+  context '#nudge? #dead? and #asleep?' do
     context 'default' do
       let(:team) { Fabricate(:team) }
       it 'false' do
         expect(team.asleep?).to be false
         expect(team.nudge?).to be false
+        expect(team.dead?).to be false
       end
     end
     context 'team created three weeks ago' do
       let(:team) { Fabricate(:team, created_at: 3.weeks.ago) }
-      it 'true' do
+      it 'nudge=true dead=false' do
         expect(team.asleep?).to be true
         expect(team.nudge?).to be true
+        expect(team.dead?).to be false
       end
       context 'with a recent challenge' do
         let!(:challenge) { Fabricate(:challenge, team: team) }
         it 'false' do
           expect(team.asleep?).to be false
           expect(team.nudge?).to be false
+          expect(team.dead?).to be false
         end
         context 'awaken three weeks ago' do
           before do
@@ -97,6 +100,7 @@ describe Team do
         it 'true' do
           expect(team.asleep?).to be true
           expect(team.nudge?).to be true
+          expect(team.dead?).to be false
         end
         context 'recently awaken' do
           before do
@@ -113,6 +117,24 @@ describe Team do
           it 'nudge' do
             expect(team.nudge?).to be true
           end
+        end
+      end
+    end
+    context 'team created over a month ago' do
+      let(:team) { Fabricate(:team, created_at: 1.month.ago + 1.day) }
+      it 'dead=false' do
+        expect(team.dead?).to be true
+      end
+      context 'with a recent challenge' do
+        let!(:challenge) { Fabricate(:challenge, updated_at: 2.weeks.ago, team: team) }
+        it 'true' do
+          expect(team.dead?).to be false
+        end
+      end
+      context 'with an old challenge' do
+        let!(:challenge) { Fabricate(:challenge, updated_at: 5.weeks.ago, team: team) }
+        it 'true' do
+          expect(team.dead?).to be true
         end
       end
     end
