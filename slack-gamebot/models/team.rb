@@ -74,19 +74,27 @@ class Team
     asleep?(dt)
   end
 
+  def dead?(dt = 8.weeks)
+    asleep?(dt)
+  end
+
   def nudge!
+    inform! "Challenge someone to a game of #{game.name} today!", 'nudge'
+  end
+
+  def inform!(message, gif = nil)
     client = Slack::Web::Client.new(token: token)
     channels = client.channels_list['channels'].select { |channel| channel['is_member'] }
     return unless channels.any?
     channel = channels.first
-    logger.info "Nudging #{self} on ##{channel['name']}."
+    logger.info "Sending '#{message}' to #{self} on ##{channel['name']}."
     gif = begin
-      Giphy.random('nudge')
+      Giphy.random(gif)
     rescue StandardError => e
       logger.warn "Giphy.random: #{e.message}"
       nil
-    end if gifs?
-    text = ["Challenge someone to a game of #{game.name} today!", gif && gif.image_url.to_s].compact.join("\n")
+    end if gif && gifs?
+    text = [message, gif && gif.image_url.to_s].compact.join("\n")
     client.chat_postMessage(text: text, channel: channel['id'], as_user: true)
     update_attributes!(nudge_at: Time.now)
   end

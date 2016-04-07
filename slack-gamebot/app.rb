@@ -12,7 +12,9 @@ module SlackGamebot
       ensure_a_team_captain!
       migrate_from_single_game!
       ensure_a_team_game!
+      deactivate_dead_teams!
       purge_inactive_teams!
+      nudge_sleeping_teams!
       set_team_gifs_default!
       set_team_aliases!
       set_team_api_default!
@@ -88,8 +90,31 @@ module SlackGamebot
       Team.where(game: nil).update_all(game_id: game.id)
     end
 
+    def deactivate_dead_teams!
+      Team.active.each do |team|
+        next unless team.dead?
+        begin
+          team.deactivate!
+          team.inform! 'This leaderboard has been dead for over a month, deactivating. Your data will be purged in 2 weeks.'
+        rescue StandardError => e
+          logger.warn "Error informing team #{team}, #{e.message}."
+        end
+      end
+    end
+
     def purge_inactive_teams!
       Team.purge!
+    end
+
+    def nudge_sleeping_teams!
+      Team.active.each do |team|
+        next unless team.nudge?
+        begin
+          team.nudge!
+        rescue StandardError => e
+          logger.warn "Error nudging team #{team}, #{e.message}."
+        end
+      end
     end
 
     # default team GIFs to true

@@ -40,18 +40,6 @@ module SlackGamebot
         Team.active.each do |team|
           start!(team)
         end
-        Team.active.each do |team|
-          nudge!(team)
-        end
-      end
-
-      def nudge!(team)
-        return unless team.nudge?
-        EM.defer do
-          team.nudge!
-        end
-      rescue StandardError => e
-        logger.warn "Error nudging team #{team}, #{e.message}."
       end
 
       def restart!(team, server, wait = 1)
