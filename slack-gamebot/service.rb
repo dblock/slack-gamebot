@@ -13,7 +13,7 @@ module SlackGamebot
         LOCK.synchronize do
           @services[team.token] = server
         end
-        EM.defer do
+        EM.next_tick do
           restart!(team, server)
         end
       rescue StandardError => e
@@ -21,7 +21,7 @@ module SlackGamebot
       end
 
       def stop!(team)
-        EM.defer do
+        EM.next_tick do
           LOCK.synchronize do
             fail 'Token unknown.' unless @services.key?(team.token)
             logger.info "Stopping team #{team}."
