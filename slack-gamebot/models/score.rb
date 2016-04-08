@@ -25,7 +25,7 @@ module Score
   def self.parse(expression)
     return unless expression
     scores = []
-    expression.split.reject(&:blank?).each do |pair|
+    expression.split(/[\s\,\.]/).reject(&:blank?).each do |pair|
       scores << check(pair)
     end
     scores
