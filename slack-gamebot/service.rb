@@ -67,15 +67,14 @@ module SlackGamebot
           @services.delete(team.token)
         end
       rescue Mongoid::Errors::Validations => e
-        message = e.document.errors.full_messages.uniq.join(', ') + '.'
-        logger.error "#{team.name}: #{e.message} (#{message}), ignored."
+        logger.error "#{team.name}: #{e.message}, error - #{e.document.class}, #{e.document.errors.to_hash}, ignored."
       rescue StandardError => e
         logger.error "#{team.name}: #{e.class}, #{e.message}, ignored."
       end
 
       def reset!
-        @services.values.to_a.each do |team|
-          stop!(team)
+        @services.values.to_a.each do |server|
+          stop!(server.team)
         end
       end
     end
