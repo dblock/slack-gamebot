@@ -82,18 +82,18 @@ class Team
     inform! "Challenge someone to a game of #{game.name} today!", 'nudge'
   end
 
-  def inform!(message, gif = nil)
+  def inform!(message, gif_name = nil)
     client = Slack::Web::Client.new(token: token)
     channels = client.channels_list['channels'].select { |channel| channel['is_member'] }
     return unless channels.any?
     channel = channels.first
     logger.info "Sending '#{message}' to #{self} on ##{channel['name']}."
     gif = begin
-      Giphy.random(gif)
+      Giphy.random(gif_name)
     rescue StandardError => e
       logger.warn "Giphy.random: #{e.message}"
       nil
-    end if gif && gifs?
+    end if gif_name && gifs?
     text = [message, gif && gif.image_url.to_s].compact.join("\n")
     client.chat_postMessage(text: text, channel: channel['id'], as_user: true)
     update_attributes!(nudge_at: Time.now)
