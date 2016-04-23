@@ -230,4 +230,12 @@ describe Challenge do
       expect(game.losers.all? { |player| player.wins == 0 && player.losses == 0 && player.ties == 1 }).to be true
     end
   end
+  context 'a new challenge' do
+    let(:played_challenge) { Fabricate(:played_challenge) }
+    let(:new_challenge) { Fabricate(:challenge, challengers: played_challenge.challengers, challenged: played_challenge.challenged) }
+    it 'does not render the played challenge invalid' do
+      expect(new_challenge).to be_valid
+      expect(played_challenge).to be_valid
+    end
+  end
 end

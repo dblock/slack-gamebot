@@ -185,4 +185,17 @@ describe Team do
       end.to_not change(team, :nudge_at)
     end
   end
+  context 'gifs' do
+    let!(:team) { Fabricate(:team) }
+    context 'with a played challenge' do
+      let(:challenge) { Fabricate(:played_challenge) }
+      context 'with a new challenge' do
+        let!(:open_challenge) { Fabricate(:challenge, challengers: challenge.challengers, challenged: challenge.challenged) }
+        it 'can be set' do
+          expect(team.challenges.detect { |c| !c.valid? }).to be nil
+          expect { team.update_attributes!(gifs: !team.gifs) }.to_not raise_error
+        end
+      end
+    end
+  end
 end

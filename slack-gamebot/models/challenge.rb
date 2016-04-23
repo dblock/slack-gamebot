@@ -185,6 +185,7 @@ class Challenge
   end
 
   def validate_unique_challenge
+    return unless state == ChallengeState::PROPOSED || state == ChallengeState::ACCEPTED
     (challengers + challenged).each do |player|
       existing_challenge = ::Challenge.find_by_user(team, channel, player)
       next unless existing_challenge.present?
