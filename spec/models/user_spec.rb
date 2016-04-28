@@ -161,5 +161,11 @@ describe User do
       user = Fabricate(:user, elo: 100, wins: 4, losses: 0)
       expect(User.rank_section(Fabricate(:team), [user])).to eq []
     end
+    it 'only returns one unranked user' do
+      user1 = Fabricate(:user, team: team)
+      user2 = Fabricate(:user, team: team)
+      expect(User.rank_section(team, [user1])).to eq [user1]
+      expect(User.rank_section(team, [user1, user2])).to eq [user1, user2]
+    end
   end
 end

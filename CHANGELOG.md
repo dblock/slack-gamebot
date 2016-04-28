@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#105](https://github.com/dblock/slack-gamebot/issues/105): Fix: `rank` displays multiple unranked users - [@dblock](https://github.com/dblock).
 * [#104](https://github.com/dblock/slack-gamebot/issues/104): Fix: `rank` leaks users from other teams - [@dblock](https://github.com/dblock).
 * [#102](https://github.com/dblock/slack-gamebot/issues/102), [#101](https://github.com/dblock/slack-gamebot/issues/101): Unable to set options with existing challenges - [@dblock](https://github.com/dblock).
 * [#100](https://github.com/dblock/slack-gamebot/issues/100): Error re-registering and de-activating a team multiple times - [@dblock](https://github.com/dblock).

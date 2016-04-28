@@ -13,7 +13,18 @@ describe SlackGamebot::Commands::Rank, vcr: { cassette_name: 'user_info' } do
       expect(message: "#{SlackRubyBot.config.user} rank", user: user_elo_42.user_id).to respond_with_slack_message '3. username: 3 wins, 2 losses (elo: 42)'
     end
     it 'ranks someone who is not ranked' do
-      expect(message: "#{SlackRubyBot.config.user} rank", user: Fabricate(:user).user_id).to respond_with_slack_message 'username: not ranked'
+      user = Fabricate(:user, team: team)
+      expect(message: "#{SlackRubyBot.config.user} rank", user: user.user_id).to respond_with_slack_message 'username: not ranked'
+    end
+    it 'ranks someone who is not ranked by default' do
+      user1 = Fabricate(:user, team: team)
+      Fabricate(:user, team: team)
+      expect(message: "#{SlackRubyBot.config.user} rank", user: user1.user_id).to respond_with_slack_message 'username: not ranked'
+    end
+    it 'ranks someone who is not ranked by name' do
+      user1 = Fabricate(:user, team: team)
+      Fabricate(:user, team: team)
+      expect(message: "#{SlackRubyBot.config.user} rank #{user1.user_name}", user: user1.user_id).to respond_with_slack_message "#{user1.user_name}: not ranked"
     end
     it 'ranks one player by slack mention' do
       expect(message: "#{SlackRubyBot.config.user} rank #{user_elo_42.slack_mention}").to respond_with_slack_message "3. #{user_elo_42}"

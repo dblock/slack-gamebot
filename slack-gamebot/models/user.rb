@@ -90,6 +90,7 @@ class User
 
   def self.rank_section(team, users)
     ranks = users.map(&:rank)
+    return users unless ranks.min && ranks.max
     where(team: team, :rank.gte => ranks.min, :rank.lte => ranks.max).asc(:rank).asc(:wins).asc(:ties)
   end
 end
