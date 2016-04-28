@@ -19,7 +19,11 @@ module SlackGamebot
             logger.info "SET: #{client.owner} - #{user.user_name} GIFs are #{client.owner.gifs? ? 'on' : 'off'}"
           when 'api' then
             client.owner.update_attributes!(api: v.to_b) unless v.nil?
-            client.say(channel: data.channel, text: "API for team #{client.owner.name} is #{client.owner.api? ? 'on!' : 'off.'}", gif: 'programmer')
+            message = [
+              "API for team #{client.owner.name} is #{client.owner.api? ? 'on!' : 'off.'}",
+              client.owner.api_url
+            ].compact.join("\n")
+            client.say(channel: data.channel, text: message, gif: 'programmer')
             logger.info "SET: #{client.owner} - #{user.user_name} API is #{client.owner.api? ? 'on' : 'off'}"
           when 'aliases' then
             if v == 'none'

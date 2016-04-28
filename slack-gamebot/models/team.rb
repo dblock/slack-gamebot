@@ -82,6 +82,11 @@ class Team
     inform! "Challenge someone to a game of #{game.name} today!", 'nudge'
   end
 
+  def api_url
+    return unless api? && ENV.key?('API_URL')
+    "#{ENV['API_URL']}/teams/#{id}"
+  end
+
   def inform!(message, gif_name = nil)
     client = Slack::Web::Client.new(token: token)
     channels = client.channels_list['channels'].select { |channel| channel['is_member'] }

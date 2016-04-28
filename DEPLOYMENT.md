@@ -42,7 +42,11 @@ game.save!
 
 #### GIPHY_API_KEY
 
-Slack-Gamebot replies with animated GIFs. While it's currently not necessary, uyou may need to set `GIPHY_API_KEY` in the future, see [github.com/Giphy/GiphyAPI](https://github.com/Giphy/GiphyAPI) for details.
+Slack-Gamebot replies with animated GIFs. While it's currently not necessary, you may need to set `GIPHY_API_KEY` in the future, see [github.com/Giphy/GiphyAPI](https://github.com/Giphy/GiphyAPI) for details.
+
+#### API_URL
+
+The root of your API location, used when displaying the API URL for teams when invoking `set api`.
 
 #### Multi-Game Setup
 

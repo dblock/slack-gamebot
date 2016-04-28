@@ -344,12 +344,13 @@ Remove all aliases with `set aliases none`.
 
 #### gamebot set api on|off
 
-Enable/disable team data in the public API for your team.
+Enable/disable team data in the public API for your team and displays team API URL.
 
 ```
 gamebot set api on
 
 API for team China is on!
+http://bots.playplay.io/teams/57224e65bc526eac95bfe316
 ```
 
 ## API

@@ -46,7 +46,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
           "API for team #{team.name} is on!"
         )
       end
-      it 'shows current value of API' do
+      it 'shows current value of API off' do
         team.update_attributes!(api: false)
         expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
           "API for team #{team.name} is off."
@@ -64,6 +64,26 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
           "API for team #{team.name} is off."
         )
         expect(team.reload.api).to be false
+      end
+      context 'with API_URL' do
+        before do
+          ENV['API_URL'] = 'http://local.api'
+        end
+        after do
+          ENV.delete 'API_URL'
+        end
+        it 'shows current value of API on with API URL' do
+          team.update_attributes!(api: true)
+          expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
+            "API for team #{team.name} is on!\nhttp://local.api/teams/#{team.id}"
+          )
+        end
+        it 'shows current value of API off without API URL' do
+          team.update_attributes!(api: false)
+          expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
+            "API for team #{team.name} is off."
+          )
+        end
       end
     end
     context 'aliases' do
