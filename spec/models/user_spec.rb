@@ -146,15 +146,20 @@ describe User do
     end
   end
   context '.rank_section' do
+    let(:team) { Fabricate(:team) }
     it 'returns a section' do
-      user1 = Fabricate(:user, elo: 100, wins: 4, losses: 0)
-      user2 = Fabricate(:user, elo: 40, wins: 1, losses: 1)
-      user3 = Fabricate(:user, elo: 60, wins: 2, losses: 0)
-      user4 = Fabricate(:user, elo: 80, wins: 3, losses: 0)
+      user1 = Fabricate(:user, team: team, elo: 100, wins: 4, losses: 0)
+      user2 = Fabricate(:user, team: team, elo: 40, wins: 1, losses: 1)
+      user3 = Fabricate(:user, team: team, elo: 60, wins: 2, losses: 0)
+      user4 = Fabricate(:user, team: team, elo: 80, wins: 3, losses: 0)
       [user1, user2, user3, user4].each(&:reload)
-      expect(User.rank_section([user1])).to eq [user1]
-      expect(User.rank_section([user1, user3])).to eq [user1, user4, user3]
-      expect(User.rank_section([user1, user3, user4])).to eq [user1, user4, user3]
+      expect(User.rank_section(team, [user1])).to eq [user1]
+      expect(User.rank_section(team, [user1, user3])).to eq [user1, user4, user3]
+      expect(User.rank_section(team, [user1, user3, user4])).to eq [user1, user4, user3]
+    end
+    it 'limits by team' do
+      user = Fabricate(:user, elo: 100, wins: 4, losses: 0)
+      expect(User.rank_section(Fabricate(:team), [user])).to eq []
     end
   end
 end

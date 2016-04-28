@@ -88,8 +88,8 @@ class User
     end
   end
 
-  def self.rank_section(users)
+  def self.rank_section(team, users)
     ranks = users.map(&:rank)
-    where(:rank.gte => ranks.min, :rank.lte => ranks.max).asc(:rank).asc(:wins).asc(:ties)
+    where(team: team, :rank.gte => ranks.min, :rank.lte => ranks.max).asc(:rank).asc(:wins).asc(:ties)
   end
 end
