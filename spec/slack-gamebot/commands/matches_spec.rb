@@ -3,6 +3,7 @@ require 'spec_helper'
 describe SlackGamebot::Commands::Matches, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:client) { app.send(:client) }
   shared_examples_for 'matches' do
     let(:user) { Fabricate(:user, user_name: 'username') }
     let(:singles_challenge) { Fabricate(:challenge, challengers: [user]) }

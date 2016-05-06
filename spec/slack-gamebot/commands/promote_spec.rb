@@ -3,6 +3,7 @@ require 'spec_helper'
 describe SlackGamebot::Commands::Promote, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:client) { app.send(:client) }
   let(:user) { Fabricate(:user, team: team, user_name: 'username', captain: true) }
   it 'gives help' do
     expect(message: "#{SlackRubyBot.config.user} promote", user: user.user_id).to respond_with_slack_message(

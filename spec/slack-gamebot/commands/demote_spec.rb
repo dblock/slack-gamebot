@@ -3,6 +3,7 @@ require 'spec_helper'
 describe SlackGamebot::Commands::Demote, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:client) { app.send(:client) }
   context 'captain' do
     let(:user) { Fabricate(:user, team: team, user_name: 'username', captain: true) }
     it 'demotes self' do

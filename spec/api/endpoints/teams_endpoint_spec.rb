@@ -119,7 +119,7 @@ describe Api::Endpoints::TeamsEndpoint do
         ).and_return(oauth_access)
       end
       it 'creates a team with game name' do
-        expect(SlackGamebot::Service).to receive(:start!)
+        expect(SlackGamebot::Service.instance).to receive(:start!)
         expect do
           team = client.teams._post(code: 'code', game: game.name)
           expect(team.team_id).to eq 'team_id'
@@ -131,7 +131,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end.to change(Team, :count).by(1)
       end
       it 'creates a team with game id' do
-        expect(SlackGamebot::Service).to receive(:start!)
+        expect(SlackGamebot::Service.instance).to receive(:start!)
         expect do
           team = client.teams._post(code: 'code', game_id: game.id.to_s)
           expect(team.team_id).to eq 'team_id'
@@ -143,7 +143,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end.to change(Team, :count).by(1)
       end
       it 'reactivates a deactivated team' do
-        expect(SlackGamebot::Service).to receive(:start!)
+        expect(SlackGamebot::Service.instance).to receive(:start!)
         existing_team = Fabricate(:team, api: true, game: game, token: 'token', active: false, aliases: %w(foo bar))
         expect do
           team = client.teams._post(code: 'code', game: existing_team.game.name)
@@ -157,7 +157,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end.to_not change(Team, :count)
       end
       it 'updates a reactivated team with a new token' do
-        expect(SlackGamebot::Service).to receive(:start!)
+        expect(SlackGamebot::Service.instance).to receive(:start!)
         existing_team = Fabricate(:team, api: true, game: game, token: 'old', team_id: 'team_id', active: false)
         expect do
           team = client.teams._post(code: 'code', game: existing_team.game.name)
@@ -170,7 +170,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end.to_not change(Team, :count)
       end
       it 'cannot switch games' do
-        expect(SlackGamebot::Service).to_not receive(:start!)
+        expect(SlackGamebot::Service.instance).to_not receive(:start!)
         Fabricate(:team, api: true, game: Fabricate(:game), token: 'token', active: false)
         expect { client.teams._post(code: 'code', game_id: game.id.to_s) }.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
@@ -178,7 +178,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end
       end
       it 'returns a useful error when team already exists' do
-        expect(SlackGamebot::Service).to_not receive(:start!)
+        expect(SlackGamebot::Service.instance).to_not receive(:start!)
         existing_team = Fabricate(:team, api: true, game: game, token: 'token')
         expect { client.teams._post(code: 'code', game: game.name) }.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
@@ -188,7 +188,7 @@ describe Api::Endpoints::TeamsEndpoint do
     end
 
     it 'reactivates a deactivated team with a different code' do
-      expect(SlackGamebot::Service).to receive(:start!)
+      expect(SlackGamebot::Service.instance).to receive(:start!)
       existing_team = Fabricate(:team, api: true, game: game, token: 'token', active: false, aliases: %w(foo bar))
       oauth_access = { 'bot' => { 'bot_access_token' => 'another_token' }, 'team_id' => existing_team.team_id, 'team_name' => existing_team.name }
       allow_any_instance_of(Slack::Web::Client).to receive(:oauth_access).with(

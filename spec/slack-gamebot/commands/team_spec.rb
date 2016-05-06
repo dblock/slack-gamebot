@@ -3,6 +3,7 @@ require 'spec_helper'
 describe SlackGamebot::Commands::Team, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:client) { app.send(:client) }
   context 'no users' do
     it 'team' do
       allow(User).to receive(:find_create_or_update_by_slack_id!)

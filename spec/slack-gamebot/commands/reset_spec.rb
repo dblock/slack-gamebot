@@ -3,6 +3,7 @@ require 'spec_helper'
 describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:client) { app.send(:client) }
   it 'requires a captain' do
     Fabricate(:user, captain: true, team: team)
     Fabricate(:user, user_name: 'username')

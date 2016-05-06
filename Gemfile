@@ -2,7 +2,8 @@ source 'http://rubygems.org'
 
 ruby '2.2.4'
 
-gem 'slack-ruby-bot', '~> 0.7.0'
+gem 'slack-ruby-bot', '~> 0.8.0'
+gem 'celluloid-io', require: 'celluloid/current'
 gem 'mongoid', '~> 5.0.0'
 gem 'ruby-enum'
 gem 'unicorn'
@@ -33,7 +34,7 @@ end
 group :test do
   gem 'rspec'
   gem 'rack-test'
-  gem 'webmock', '~> 1.24'
+  gem 'webmock'
   gem 'vcr'
   gem 'fabrication'
   gem 'faker'

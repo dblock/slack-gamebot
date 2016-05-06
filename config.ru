@@ -15,12 +15,7 @@ SlackGamebot::App.instance.prepare!
 Thread.abort_on_exception = true
 
 Thread.new do
-  EM.run do
-    Thread.pass until EM.reactor_running?
-    EM.next_tick do
-      SlackGamebot::Service.start_from_database!
-    end
-  end
+  SlackGamebot::Service.instance.start_from_database!
 end
 
 run Api::Middleware.instance

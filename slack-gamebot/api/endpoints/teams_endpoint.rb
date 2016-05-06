@@ -75,7 +75,7 @@ module Api
             )
           end
 
-          SlackGamebot::Service.start!(team)
+          SlackGamebot::Service.instance.start!(team)
           present team, with: Api::Presenters::TeamPresenter
         end
       end

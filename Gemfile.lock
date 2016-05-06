@@ -33,6 +33,27 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     bson (4.1.1)
     builder (3.2.2)
+    celluloid (0.17.3)
+      celluloid-essentials
+      celluloid-extras
+      celluloid-fsm
+      celluloid-pool
+      celluloid-supervision
+      timers (>= 4.1.1)
+    celluloid-essentials (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-extras (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-fsm (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-io (0.17.3)
+      celluloid (>= 0.17.2)
+      nio4r (>= 1.1)
+      timers (>= 4.1.1)
+    celluloid-pool (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-supervision (0.20.5)
+      timers (>= 4.1.1)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     crack (0.4.3)
@@ -43,7 +64,6 @@ GEM
     diff-lcs (1.2.5)
     equalizer (0.0.11)
     erubis (2.7.0)
-    eventmachine (1.2.0.1)
     excon (0.49.0)
     fabrication (2.15.0)
     faker (1.6.3)
@@ -61,9 +81,6 @@ GEM
       faraday (~> 0.9.0)
       faraday_middleware (~> 0.9.1)
       oj (~> 2.0)
-    faye-websocket (0.10.3)
-      eventmachine (>= 0.12.0)
-      websocket-driver (>= 0.5.1)
     foreman (0.81.0)
       thor (~> 0.19.1)
     futuroscope (0.1.11)
@@ -93,8 +110,8 @@ GEM
       grape (>= 0.10.0)
       grape-entity (< 0.5.0)
     hashdiff (0.3.0)
-    hashie (3.4.3)
-    heroku (3.43.0)
+    hashie (3.4.4)
+    heroku (3.43.2)
       heroku-api (= 0.4.2)
       launchy (= 2.4.3)
       multi_json (= 1.11.2)
@@ -106,6 +123,7 @@ GEM
     heroku-api (0.4.2)
       excon (~> 0.45)
       multi_json (~> 1.8)
+    hitimes (1.2.4)
     hyperclient (0.8.1)
       faraday
       faraday-digestauth
@@ -128,7 +146,7 @@ GEM
     mime-types (1.25.1)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
-    mongo (2.2.4)
+    mongo (2.2.5)
       bson (~> 4.0)
     mongoid (5.0.2)
       activemodel (~> 4.0)
@@ -158,6 +176,7 @@ GEM
       newrelic_rpm
       slack-ruby-bot
     newrelic_rpm (3.15.2.317)
+    nio4r (1.2.1)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     oj (2.15.0)
@@ -220,13 +239,12 @@ GEM
     ruby-progressbar (1.8.0)
     rubyzip (1.1.7)
     safe_yaml (1.0.4)
-    slack-ruby-bot (0.7.0)
+    slack-ruby-bot (0.8.0)
       activesupport
-      faye-websocket
       giphy (~> 2.0.2)
       hashie
       slack-ruby-client (>= 0.6.0)
-    slack-ruby-client (0.7.0)
+    slack-ruby-client (0.7.2)
       activesupport
       faraday
       faraday_middleware
@@ -237,6 +255,8 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     time_ago_in_words (0.1.1)
+    timers (4.1.1)
+      hitimes
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uber (0.0.15)
@@ -251,7 +271,7 @@ GEM
       descendants_tracker (~> 0.0, >= 0.0.3)
       equalizer (~> 0.0, >= 0.0.9)
     wannabe_bool (0.5.0)
-    webmock (1.24.3)
+    webmock (2.0.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -263,6 +283,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  celluloid-io
   database_cleaner
   excon
   fabrication
@@ -287,12 +308,12 @@ DEPENDENCIES
   rspec
   rubocop (= 0.34.2)
   ruby-enum
-  slack-ruby-bot (~> 0.7.0)
+  slack-ruby-bot (~> 0.8.0)
   time_ago_in_words
   unicorn
   vcr
   wannabe_bool
-  webmock (~> 1.24)
+  webmock
 
 BUNDLED WITH
    1.11.2
