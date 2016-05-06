@@ -39,5 +39,12 @@ describe SlackGamebot::Server do
       end
       expect(user.reload.user_name).to eq('updated')
     end
+    it 'does not touch a user with the same name' do
+      allow(User).to receive(:where).and_return([user])
+      app.hooks.handlers[:user_change].each do |hook|
+        hook.call(client, Hashie::Mash.new(type: 'user_change', user: { id: user.user_id, name: user.user_name }))
+      end
+      expect(user).to_not receive(:update_attributes!)
+    end
   end
 end
