@@ -1,23 +1,23 @@
-module SlackGamebot
+# TODO: remove after https://github.com/dblock/slack-ruby-bot-server/issues/21
+module SlackRubyBotServer
   class Server < SlackRubyBot::Server
-    attr_accessor :team
-
     def initialize(attrs = {})
       @team = attrs[:team]
       fail 'Missing team' unless @team
-      options = { token: @team.token }
-      options[:aliases] = ([team.game.name] + [team.aliases]).flatten.compact
-      options[:send_gifs] = team.gifs
+      options = { token: @team.token }.merge(attrs)
       super(options)
       client.owner = @team
     end
+  end
+end
 
-    def restart!(wait = 1)
-      # when an integration is disabled, a live socket is closed, which causes the default behavior of the client to restart
-      # it would keep retrying without checking for account_inactive or such, we want to restart via service which will disable an inactive team
-      logger.info "#{team.name}: socket closed, restarting ..."
-      SlackGamebot::Service.instance.restart! team, self, wait
-      client.owner = team
+module SlackGamebot
+  class Server < SlackRubyBotServer::Server
+    def initialize(attrs = {})
+      attrs = attrs.dup
+      attrs[:aliases] = ([attrs[:team].game.name] + [attrs[:team].aliases]).flatten.compact
+      attrs[:send_gifs] = attrs[:team].gifs
+      super attrs
     end
 
     on :user_change do |client, data|

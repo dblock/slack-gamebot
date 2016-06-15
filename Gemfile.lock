@@ -89,8 +89,8 @@ GEM
       faraday_middleware (~> 0.9)
       faraday_middleware-parse_oj (~> 0.3)
       launchy (~> 2.4)
-    gli (2.13.4)
-    grape (0.13.0)
+    gli (2.14.0)
+    grape (0.15.0)
       activesupport
       builder
       hashie (>= 2.1.0)
@@ -144,7 +144,7 @@ GEM
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mime-types (1.25.1)
-    mini_portile2 (2.0.0)
+    mini_portile2 (2.1.0)
     minitest (5.8.4)
     mongo (2.2.5)
       bson (~> 4.0)
@@ -172,17 +172,16 @@ GEM
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
     netrc (0.10.3)
-    newrelic-slack-ruby-bot (0.1.0)
-      newrelic_rpm
-      slack-ruby-bot
     newrelic_rpm (3.15.2.317)
     nio4r (1.2.1)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
-    oj (2.15.0)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
+    oj (2.15.1)
     origin (2.2.0)
     parser (2.3.1.0)
       ast (~> 2.2)
+    pkg-config (1.1.7)
     powerpack (0.1.1)
     rack (1.6.4)
     rack-accept (0.4.5)
@@ -192,6 +191,8 @@ GEM
       rack (>= 1.0.0)
     rack-rewrite (1.5.1)
     rack-robotz (0.0.4)
+      rack
+    rack-server-pages (0.0.6)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -244,7 +245,21 @@ GEM
       giphy (~> 2.0.2)
       hashie
       slack-ruby-client (>= 0.6.0)
-    slack-ruby-client (0.7.3)
+    slack-ruby-bot-server (0.1.1)
+      celluloid-io
+      foreman
+      grape (~> 0.15.0)
+      grape-roar
+      grape-swagger (~> 0.10.0)
+      kaminari (~> 0.16.1)
+      mongoid (~> 5.0.0)
+      mongoid-scroll
+      rack-cors
+      rack-rewrite
+      rack-server-pages
+      slack-ruby-bot (~> 0.8.0)
+      unicorn
+    slack-ruby-client (0.7.4)
       activesupport
       faraday
       faraday_middleware
@@ -275,7 +290,7 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
-    websocket-driver (0.6.3)
+    websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
 
@@ -283,37 +298,30 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  celluloid-io
   database_cleaner
   excon
   fabrication
   faker
   foreman
-  grape (~> 0.13.0)
-  grape-roar
-  grape-swagger (~> 0.10.4)
   heroku
   hyperclient
-  kaminari (~> 0.16.1)
-  mongoid (~> 5.0.0)
   mongoid-scroll
   mongoid-shell
-  newrelic-slack-ruby-bot
   newrelic_rpm
-  rack-cors
-  rack-rewrite
   rack-robotz
   rack-test
   rake (~> 10.4)
   rspec
   rubocop (= 0.34.2)
   ruby-enum
-  slack-ruby-bot (~> 0.8.0)
+  slack-ruby-bot-server
   time_ago_in_words
-  unicorn
   vcr
   wannabe_bool
   webmock
 
+RUBY VERSION
+   ruby 2.2.4p230
+
 BUNDLED WITH
-   1.11.2
+   1.12.5
