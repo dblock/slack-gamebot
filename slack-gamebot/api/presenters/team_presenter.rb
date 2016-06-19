@@ -10,6 +10,7 @@ module Api
       property :name, type: String, desc: 'Team name.'
       property :domain, type: String, desc: 'Team domain.'
       property :active, type: Boolean, desc: 'Team is active.'
+      property :premium, type: Boolean, desc: 'Team is a premium subscriber.'
       property :gifs, type: Boolean, desc: 'Team loves animated GIFs.'
       property :aliases, type: Array, desc: 'Game aliases.'
       property :created_at, type: DateTime, desc: 'Date/time when the team was created.'

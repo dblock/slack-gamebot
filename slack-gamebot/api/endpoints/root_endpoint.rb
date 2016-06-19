@@ -17,6 +17,7 @@ module Api
       mount Api::Endpoints::SeasonsEndpoint
       mount Api::Endpoints::TeamsEndpoint
       mount Api::Endpoints::GamesEndpoint
+      mount Api::Endpoints::SubscriptionsEndpoint
 
       add_swagger_documentation
     end

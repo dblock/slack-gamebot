@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <title>PlayPlay.io - Upgrade</title>
+    <%= partial 'public/partials/_head.html' %>
+    <script src='https://checkout.stripe.com/checkout.js'></script>
+    <link rel='stylesheet' href='https://checkout.stripe.com/v3/checkout/button.css'></link>
+    <% game = Game.where(name: request['game']).first %>
+    <% team = game && game.teams.where(team_id: request['team_id']).first %>
+  </head>
+  <body style='text-align: center'>
+    <p style='margin: 50px;'>
+      <a href='/'><img src='img/<%= game ? game.name : 'pong' %>.png' width='120px'></a>
+    </p>
+    <p>
+      <h3>PlayPlay.io: Upgrade</h3>
+    </p>
+    <p id='messages' />
+    <p id='subscribe'>
+      <button id='subscribeButton' class='stripe-button-el'>
+          <span style='display: block; min-height: 30px;'>Pay $29.99 with Card</span>
+      </button>
+      <p>
+        <img src='/img/stripe.png' width='119' height='26'></img>
+      </p>
+      <script>
+        $(document).ready(function() {
+
+          var team = {
+            id: '<%= team && team.team_id %>',
+            game: '<%= game && game.name %>',
+            name: '<%= team && team.name %>',
+            premium: <%= !!(team && team.premium) %>,
+          }
+
+          if (team.premium) {
+            PlayPlay.message('Team <b>' + team.name + '</b> already has a premium <b>' + team.game + '</b> subscription, thank you for your support.');
+            $('#subscribeButton').remove();
+          } else if (team.id && team.name && team.game) {
+            PlayPlay.message('Upgrade team <b>' + team.name + '</b> to premium <b>' + team.game + '</b> for $29.99 a year!');
+          } else {
+            $('#subscribeButton').remove();
+            PlayPlay.message('Missing or invalid team ID and/or game.');
+          }
+
+          var handler = StripeCheckout.configure({
+            key: '<%= ENV['STRIPE_API_PUBLISHABLE_KEY'] %>',
+            image: '/img/<%= game ? game.name : 'pong' %>.png',
+            locale: 'auto',
+            token: function(token) {
+              $.ajax({
+                type: 'POST',
+                url: '/api/subscriptions',
+                data: {
+                  stripe_email: token.email,
+                  stripe_token: token.id,
+                  stripe_token_type: token.type,
+                  team_id: team.id
+                },
+                success: function(data) {
+                  PlayPlay.message('Team <b>' + team.name + '</b> successfully upgraded to premium <b>' + team.game + '</b>.<br><br>Thank you for your support!');
+                  $('#subscribeButton').remove();
+                },
+                error: PlayPlay.error
+              });
+            }
+          });
+
+          $('#subscribeButton').on('click', function(e) {
+            var amount = 2999;
+            handler.open({
+              name: 'PlayPlay.io Premium',
+              description: '1 Year Subscription',
+              amount: amount
+            });
+            e.preventDefault();
+          });
+
+          $(window).on('popstate', function() {
+            handler.close();
+          });
+        });
+      </script>
+    </p>
+  </body>
+</html>

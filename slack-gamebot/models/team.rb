@@ -4,6 +4,9 @@ class Team
   field :aliases, type: Array, default: []
   field :nudge_at, type: DateTime
 
+  field :stripe_customer_id, type: String
+  field :premium, type: Boolean, default: false
+
   scope :api, -> { where(api: true) }
 
   validates_presence_of :game_id
@@ -14,6 +17,10 @@ class Team
   has_many :challenges, dependent: :destroy
 
   belongs_to :game
+
+  def premium_text
+    "This is a premium feature. Subscribe your team for $29.99 a year at https://www.playplay.io/upgrade?team_id=#{team_id}&game=#{game.name}."
+  end
 
   def captains
     users.captains

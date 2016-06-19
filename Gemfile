@@ -10,6 +10,7 @@ gem 'rack-robotz'
 gem 'wannabe_bool'
 gem 'newrelic_rpm'
 gem 'rack-server-pages'
+gem 'stripe'
 
 group :development, :test do
   gem 'rake', '~> 10.4'

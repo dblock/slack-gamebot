@@ -62,6 +62,10 @@ module Api
         }
       end
 
+      link :subscriptions do |opts|
+        "#{base_url(opts)}/api/subscriptions"
+      end
+
       [:challenge, :match, :user, :season, :team, :game].each do |model|
         link model do |opts|
           {
