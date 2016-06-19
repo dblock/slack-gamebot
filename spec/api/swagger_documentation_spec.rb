@@ -5,7 +5,7 @@ describe Api do
 
   context 'swagger root' do
     subject do
-      get '/swagger_doc'
+      get '/api/swagger_doc'
       JSON.parse(last_response.body)
     end
     it 'documents root level apis' do
@@ -24,13 +24,13 @@ describe Api do
 
   context 'users' do
     subject do
-      get '/swagger_doc/users'
+      get '/api/swagger_doc/users'
       JSON.parse(last_response.body)
     end
     it 'documents users apis' do
       expect(subject['apis'].map { |api| api['path'] }).to eq([
-        '/users/{id}.{format}',
-        '/users.{format}'
+        '/api/users/{id}.{format}',
+        '/api/users.{format}'
       ])
     end
   end

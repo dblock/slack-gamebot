@@ -1,7 +1,7 @@
 Slack-Gamebot
 =============
 
-[![Add to Slack](https://platform.slack-edge.com/img/add_to_slack@2x.png)](http://playplay.io)
+[![Add to Slack](https://platform.slack-edge.com/img/add_to_slack@2x.png)](https://www.playplay.io)
 
 Or roll your own ...
 
@@ -350,12 +350,12 @@ Enable/disable team data in the public API for your team and displays team API U
 gamebot set api on
 
 API for team China is on!
-http://bots.playplay.io/teams/57224e65bc526eac95bfe316
+http://www.playplay.io/api/teams/57224e65bc526eac95bfe316
 ```
 
 ## API
 
-Slack-gamebot implements a Hypermedia API. Navigate to the application root to browse through available objects and methods. PlayPlay.io's Gamebot is [here](http://bots.playplay.io), you can see [dblock's current ping-pong elo here](http://bots.playplay.io/users/5543f64d6237640003000000).
+Slack-gamebot implements a Hypermedia API. Navigate to the application root to browse through available objects and methods. PlayPlay.io's Gamebot is [here](http://www.playplay.io/api), you can see [dblock's current ping-pong elo here](http://www.playplay.io/api/users/5543f64d6237640003000000).
 
 A team captain must opt-in serving data via the API with `set api on`. The data served by the API includes team's Slack IDs, usernames and game stats.
 

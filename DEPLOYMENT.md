@@ -1,10 +1,10 @@
 ## Use a Service
 
-Before deploying, consider using and sponsoring [a free game bot service](http://playplay.io) and not worrying about installation or maintenance.
+Before deploying, consider using and sponsoring [a free game bot service](https://www.playplay.io) and not worrying about installation or maintenance.
 
 ### PlayPlay.io
 
-[![Add to Slack](https://platform.slack-edge.com/img/add_to_slack@2x.png)](http://playplay.io)
+[![Add to Slack](https://platform.slack-edge.com/img/add_to_slack@2x.png)](https://www.playplay.io)
 
 ## Deploy Your Own Slack-Gamebot
 
@@ -50,7 +50,7 @@ The root of your API location, used when displaying the API URL for teams when i
 
 #### Multi-Game Setup
 
-If your bot is a service, like the one on [playplay.io](http://playplay.io), register an aplication with Slack on https://api.slack.com and note the Slack client ID and secret. Create a game (currently console only).
+If your bot is a service, like the one on [playplay.io](https://www.playplay.io), register an aplication with Slack on https://api.slack.com and note the Slack client ID and secret. Create a game (currently console only).
 
 ```
 heroku run script/console --app=...

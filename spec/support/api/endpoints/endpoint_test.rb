@@ -6,7 +6,7 @@ module Api
 
       included do
         let(:client) do
-          Hyperclient.new('http://example.org') do |client|
+          Hyperclient.new('http://example.org/api/') do |client|
             client.headers = {
               'Content-Type' => 'application/json',
               'Accept' => 'application/json,application/hal+json'

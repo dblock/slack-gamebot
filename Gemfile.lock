@@ -33,6 +33,13 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     bson (4.1.1)
     builder (3.2.2)
+    capybara (2.7.1)
+      addressable
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
     celluloid (0.17.3)
       celluloid-essentials
       celluloid-extras
@@ -54,6 +61,8 @@ GEM
       timers (>= 4.1.1)
     celluloid-supervision (0.20.5)
       timers (>= 4.1.1)
+    childprocess (0.5.9)
+      ffi (~> 1.0, >= 1.0.11)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     crack (0.4.3)
@@ -81,6 +90,7 @@ GEM
       faraday (~> 0.9.0)
       faraday_middleware (~> 0.9.1)
       oj (~> 2.0)
+    ffi (1.9.10)
     foreman (0.81.0)
       thor (~> 0.19.1)
     futuroscope (0.1.11)
@@ -145,7 +155,7 @@ GEM
       nokogiri (>= 1.5.9)
     mime-types (1.25.1)
     mini_portile2 (2.1.0)
-    minitest (5.8.4)
+    minitest (5.9.0)
     mongo (2.2.5)
       bson (~> 4.0)
     mongoid (5.0.2)
@@ -240,6 +250,10 @@ GEM
     ruby-progressbar (1.8.1)
     rubyzip (1.1.7)
     safe_yaml (1.0.4)
+    selenium-webdriver (2.53.0)
+      childprocess (~> 0.5)
+      rubyzip (~> 1.0)
+      websocket (~> 1.0)
     slack-ruby-bot (0.8.0)
       activesupport
       giphy (~> 2.0.2)
@@ -290,14 +304,18 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
+    websocket (1.2.3)
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
+    xpath (2.0.0)
+      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  capybara
   database_cleaner
   excon
   fabrication
@@ -309,19 +327,18 @@ DEPENDENCIES
   mongoid-shell
   newrelic_rpm
   rack-robotz
+  rack-server-pages
   rack-test
   rake (~> 10.4)
   rspec
   rubocop (= 0.34.2)
   ruby-enum
+  selenium-webdriver
   slack-ruby-bot-server
   time_ago_in_words
   vcr
   wannabe_bool
   webmock
-
-RUBY VERSION
-   ruby 2.2.4p230
 
 BUNDLED WITH
    1.12.5

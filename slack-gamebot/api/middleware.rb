@@ -18,10 +18,12 @@ module Api
 
         # rewrite HAL links to make them clickable in a browser
         use Rack::Rewrite do
-          r302 %r{(\/\w*\/)(%7B|\{)?(.*)(%7D|\})}, '$1'
+          r302 %r{(\/[\w\/]*\/)(%7B|\{)?(.*)(%7D|\})}, '$1'
         end
 
-        use Rack::Robotz, 'User-Agent' => '*', 'Disallow' => '/'
+        use Rack::Robotz, 'User-Agent' => '*', 'Disallow' => '/api'
+
+        use Rack::ServerPages
 
         run Api::Middleware.new
       end.to_app

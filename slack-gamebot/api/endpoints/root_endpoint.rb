@@ -3,6 +3,7 @@ module Api
     class RootEndpoint < Grape::API
       include Api::Helpers::ErrorHelpers
 
+      prefix :api
       format :json
       formatter :json, Grape::Formatter::Roar
       get do
