@@ -2,11 +2,9 @@ require 'spec_helper'
 
 describe 'Teams', js: true, type: :feature do
   before do
-    ENV['SLACK_CLIENT_ID'] = 'client_id'
     ENV['SLACK_CLIENT_SECRET'] = 'client_secret'
   end
   after do
-    ENV.delete 'SLACK_CLIENT_ID'
     ENV.delete 'SLACK_CLIENT_SECRET'
   end
   context 'oauth', vcr: { cassette_name: 'auth_test' } do
@@ -32,7 +30,7 @@ describe 'Teams', js: true, type: :feature do
       expect(title).to eq('PlayPlay.io - Ping Pong Bot, Chess Bot, Pool Bot and Tic Tac Toe Bot for Slack')
     end
     it 'includes a link to add to slack with the client id' do
-      expect(find("a[href='https://slack.com/oauth/authorize?scope=bot&client_id=#{ENV['SLACK_CLIENT_ID']}']"))
+      expect(find("a[href='https://slack.com/oauth/authorize?scope=bot&client_id=17032864353.17033629782']"))
     end
   end
 end
