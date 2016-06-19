@@ -1,12 +1,6 @@
 require 'spec_helper'
 
 describe 'Teams', js: true, type: :feature do
-  before do
-    ENV['SLACK_CLIENT_SECRET'] = 'client_secret'
-  end
-  after do
-    ENV.delete 'SLACK_CLIENT_SECRET'
-  end
   context 'oauth', vcr: { cassette_name: 'auth_test' } do
     before do
       Fabricate(:game, name: 'pong')
@@ -20,17 +14,6 @@ describe 'Teams', js: true, type: :feature do
         visit '/?code=code&game=pong'
         expect(page.find('#messages')).to have_content 'Team successfully registered!'
       end.to change(Team, :count).by(1)
-    end
-  end
-  context 'homepage' do
-    before do
-      visit '/'
-    end
-    it 'displays index.html page' do
-      expect(title).to eq('PlayPlay.io - Ping Pong Bot, Chess Bot, Pool Bot and Tic Tac Toe Bot for Slack')
-    end
-    it 'includes a link to add to slack with the client id' do
-      expect(find("a[href='https://slack.com/oauth/authorize?scope=bot&client_id=17032864353.17033629782']"))
     end
   end
 end

@@ -1,52 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Game bots for Slack teams. Ping pong bot, chess bot, pool bot and tic-tac-toe bot for Slack. Challenges and rankings.">
         <meta name="og:description" content="Game bots for Slack teams. Ping pong bot, chess bot, pool bot and tic-tac-toe bot for Slack. Challenges and rankings.">
         <meta name="keywords" content="slack,ping,pong,ping-pong,chess,pool,billiards,tic-tac-toe,slack,bot,leaderboard">
         <title>PlayPlay.io - Ping Pong Bot, Chess Bot, Pool Bot and Tic Tac Toe Bot for Slack</title>
-        <!-- Bootstrap Core CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <!-- Custom CSS -->
-        <link href="css/agency.css" rel="stylesheet">
-        <!-- Custom Fonts -->
-        <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-        <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-
-        <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel="stylesheet">
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-        <!-- Favicons -->
-
-        <link rel="apple-touch-icon" sizes="57x57" href="/img/favicons/apple-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="/img/favicons/apple-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="/img/favicons/apple-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="/img/favicons/apple-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="/img/favicons/apple-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="/img/favicons/apple-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="/img/favicons/apple-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="/img/favicons/apple-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-icon-180x180.png">
-        <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/img/favicons/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="/img/favicons/favicon-96x96.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/img/favicons/favicon-16x16.png">
-        <link rel="manifest" href="/img/favicons/manifest.json">
-        <meta name="msapplication-TileColor" content="#ffffff">
-        <meta name="msapplication-TileImage" content="/img/favicons/ms-icon-144x144.png">
-        <meta name="theme-color" content="#ffffff">
-
+        <%= partial 'public/partials/_head.html' %>
     </head>
     <body id="page-top" class="index">
         <!-- Navigation -->
@@ -100,15 +59,18 @@
             <div class="container">
                 <div class="intro-text">
                     <div class="intro-lead-in">Welcome to PlayPlay</div>
-                    <div class="intro-heading">Invite our game-bots for ping pong, chess, tictactoe and pong to your slack account! Our game-bots are fun and know how to keep scores!</div>
+                    <div class="intro-heading">
+                        Invite our game-bots for ping pong, chess, tictactoe and pong to your slack account!
+                        <br><br>
+                        Our game-bots are fun and know how to keep scores!
+                    </div>
                     <a id="uptime" href="https://twitter.com/playplayio">
-                            <h6 id="value" class="section-subheading text-center">&nbsp;</h6>
+                        <h6 id="value" class="section-subheading text-center">&nbsp;</h6>
                     </a>
                     <a href="#gotslack" class="page-scroll btn btn-xl">Get Started</a>
                 </div>
             </div>
         </header>
-
         <!--This section describes how to connect your slack account-->
         <section id= "gotslack" class="bg-light-gray">
             <div class="container">
@@ -162,12 +124,11 @@
                     </div>
                     <div class="row spacer"></div>
                     <h3 class="section-subheading text-muted text-center">
-                            Follow our <a href="#howtoplay" target="_blank">tutorial.</a>
+                    Follow our <a href="#howtoplay" target="_blank">tutorial.</a>
                     </h3>
                 </div>
             </div>
         </section>
-
         <!-- This section describes how to use the bots -->
         <section id="howtoplay">
             <div class="container">
@@ -186,7 +147,6 @@
                                     <img src="img/portfolio/welcomesnapshot.png" class="img-responsive" alt="">
                                 </div>
                             </div>
-
                         </a>
                         <div class="portfolio-caption">
                             <h4>Step 1</h4>
@@ -224,41 +184,39 @@
                 </div>
                 <div class="row spacer"></div>
                 <h3 class="section-subheading text-muted text-center">
-                    See <a href='https://github.com/dblock/slack-gamebot#usage' target="_blank">detailed usage</a> for other commands.
+                See <a href='https://github.com/dblock/slack-gamebot#usage' target="_blank">detailed usage</a> for other commands.
                 </h3>
             </div>
         </section>
-
         <section id="sponsors" class="bg-light-gray">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <h2 class="section-heading">Sponsors</h2>
                         <h3 class="section-subheading text-muted">
-                            Playplay.io is free and made possible by sponsors and open-source contributors.<br><br>
-                            <a class="sponsor" href="https://www.kickstarter.com/backing-and-hacking" target="_blank"><img src='img/sponsors/kickstarter.png' alt='Kickstarter'></a>
-                            <a class="sponsor" href="https://twitter.com/artsyopensource" target="_blank"><img src='img/sponsors/artsy.jpg' alt='Artsy Open Source'></a>
-                            <a class="sponsor" href="https://m.do.co/c/5b26011f9a9b" target="_blank"><img src='img/sponsors/do.png' alt='DigitalOcean'></a>
-                            <br><br>
-                            We want it to remain free. Please donate <b>$100</b> and add your company logo here for a year - cheaper than running your own instance!<br><br>
-                            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                                <input type="hidden" name="cmd" value="_s-xclick">
-                                <input type="hidden" name="hosted_button_id" value="GEXDDK46JKGWN">
-                                <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-                                <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-                            </form>
+                        Playplay.io is free and made possible by sponsors and open-source contributors.<br><br>
+                        <a class="sponsor" href="https://www.kickstarter.com/backing-and-hacking" target="_blank"><img src='img/sponsors/kickstarter.png' alt='Kickstarter'></a>
+                        <a class="sponsor" href="https://twitter.com/artsyopensource" target="_blank"><img src='img/sponsors/artsy.jpg' alt='Artsy Open Source'></a>
+                        <a class="sponsor" href="https://m.do.co/c/5b26011f9a9b" target="_blank"><img src='img/sponsors/do.png' alt='DigitalOcean'></a>
+                        <br><br>
+                        We want it to remain free. Please donate <b>$100</b> and add your company logo here for a year - cheaper than running your own instance!<br><br>
+                        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                            <input type="hidden" name="cmd" value="_s-xclick">
+                            <input type="hidden" name="hosted_button_id" value="GEXDDK46JKGWN">
+                            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                            <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                        </form>
                         </h3>
                         <h3 class="section-subheading text-muted">
-                            <small>
-                                All expenses and sponsor money are listed <a href="https://github.com/playplayio/playplay.io/blob/gh-pages/EXPENSES.md" target="_blank">here</a>.
-                                All the money currently goes to <a href='https://twitter.com/dblockdotorg' target="_blank">@dblockdotorg</a> who has a day job and isn't getting rich on this.
-                            </small>
+                        <small>
+                        All expenses and sponsor money are listed <a href="https://github.com/playplayio/playplay.io/blob/gh-pages/EXPENSES.md" target="_blank">here</a>.
+                        All the money currently goes to <a href='https://twitter.com/dblockdotorg' target="_blank">@dblockdotorg</a> who has a day job and isn't getting rich on this.
+                        </small>
                         </h3>
                     </div>
                 </div>
             </div>
         </section>
-
         <section id="oss">
             <div class="container">
                 <div class="row">
@@ -271,7 +229,6 @@
                 </div>
             </div>
         </section>
-
         <section id="api" class="bg-light-gray">
             <div class="container">
                 <div class="row">
@@ -284,7 +241,6 @@
                 </div>
             </div>
         </section>
-
         <section id="contact">
             <div class="container">
                 <div class="row">
@@ -295,17 +251,17 @@
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <h3 class="section-subheading text-muted">
-                            Having trouble? Like what you see?
-                            <br>
-                            <a href='https://github.com/dblock/slack-gamebot'>Fork me on Github</a>,
-                            <a href='https://github.com/dblock/slack-gamebot/issues/new'>open an issue</a>,
-                            <a href='https://twitter.com/playplayio'>tweet at @playplayio</a>,
-                            or <a href='mailto:dblock[at]dblock[dot]org'>e-mail dblock[at]dblock[dot]org</a>.
-                            <br><br>
-                            <a href="https://twitter.com/share" class="twitter-share-button"{count} data-url="https://www.playplay.io" data-text="Check out PlayPlay, a free ping pong, chess and pool bot for @SlackHQ @SlackAPI." data-via="playplayio" data-size="large" data-related="SlackAPI">Tweet</a>
-                            <br><br>
-                            Follow Us or DM <a href='https://twitter.com/playplayio' target="_blank">@playplayio on Twitter</a> and show us some love on <a href='https://www.producthunt.com/tech/playplay-io' target='_blank'>ProductHunt</a>.
-                            Playplay is <a href='https://twitter.com/dblockdotorg' target="_blank">@dblockdotorg</a>'s pet project and is work in progress.
+                        Having trouble? Like what you see?
+                        <br>
+                        <a href='https://github.com/dblock/slack-gamebot'>Fork me on Github</a>,
+                        <a href='https://github.com/dblock/slack-gamebot/issues/new'>open an issue</a>,
+                        <a href='https://twitter.com/playplayio'>tweet at @playplayio</a>,
+                        or <a href='mailto:dblock[at]dblock[dot]org'>e-mail dblock[at]dblock[dot]org</a>.
+                        <br><br>
+                        <a href="https://twitter.com/share" class="twitter-share-button"{count} data-url="https://www.playplay.io" data-text="Check out PlayPlay, a free ping pong, chess and pool bot for @SlackHQ @SlackAPI." data-via="playplayio" data-size="large" data-related="SlackAPI">Tweet</a>
+                        <br><br>
+                        Follow Us or DM <a href='https://twitter.com/playplayio' target="_blank">@playplayio on Twitter</a> and show us some love on <a href='https://www.producthunt.com/tech/playplay-io' target='_blank'>ProductHunt</a>.
+                        Playplay is <a href='https://twitter.com/dblockdotorg' target="_blank">@dblockdotorg</a>'s pet project and is work in progress.
                         <br /><br />
                         tl;dr: PlayPlay.io does not want to know who you are and tries to collect just enough data to enable our services. Read our <a href='privacy.html' target="_blank">Privacy Policy</a>.
                         </h3>
@@ -313,9 +269,7 @@
                 </div>
             </div>
         </section>
-
         <!-- Add your portfolio modal in this section -->
-
         <!-- Portfolio Modal 1 -->
         <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-content">
@@ -334,12 +288,8 @@
                                 <p class="item-intro text-muted">Invite the gamebot</p>
                                 <img class="img-responsive img-centered" src="img/portfolio/welcome.gif" alt="">
                                 <p>It's easy to join. Create a slack channel (#pong, #chess, #pool or #tictactoe) and invite the bot (@pongbot, @chessbot, @poolbot or @tictactoebot) to it. Then, from your slack account, invite friends to join your team.
-
-                                You should address your bot as @pongbot, @chessbot, @poolbot or @tictactoebot. In this tutorial, we will address your bot as @bot for the sake of simplicity.
-
-
+                                    You should address your bot as @pongbot, @chessbot, @poolbot or @tictactoebot. In this tutorial, we will address your bot as @bot for the sake of simplicity.
                                 Every user that wants to play says @bot register (so @pongbot register, @chessbot register or @poolbot register)</p>
-
                                 <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i>Close</button>
                             </div>
                         </div>
@@ -347,7 +297,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Portfolio Modal 2 -->
         <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-content">
@@ -373,7 +322,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Portfolio Modal 3 -->
         <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-content">
@@ -387,7 +335,6 @@
                     <div class="row">
                         <div class="col-lg-8 col-lg-offset-2">
                             <div class="modal-body">
-                                <!-- Project Details Go Here -->
                                 <h2>Results</h2>
                                 <p class="item-intro text-muted">Lost the game? Send: @bot lost, in a draw both say @bot draw</p>
                                 <img class="img-responsive img-centered" src="img/portfolio/gameresult.gif" alt="">
@@ -400,7 +347,6 @@
                 </div>
             </div>
         </div>
-
         <div id="register" style="display: none;">
             <div class="container">
                 <div class="row">
@@ -418,8 +364,7 @@
                 </div>
             </div>
         </div>
-
-            <!-- jQuery -->
+        <!-- jQuery -->
         <script src="js/jquery.js"></script>
         <script src="js/url.min.js"></script>
         <!-- Bootstrap Core JavaScript -->
