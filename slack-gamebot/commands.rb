@@ -1,3 +1,4 @@
+require 'slack-gamebot/commands/mixins'
 require 'slack-gamebot/commands/accept'
 require 'slack-gamebot/commands/cancel'
 require 'slack-gamebot/commands/challenge'

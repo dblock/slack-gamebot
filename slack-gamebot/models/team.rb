@@ -19,7 +19,11 @@ class Team
   belongs_to :game
 
   def premium_text
-    "This is a premium feature. Subscribe your team for $29.99 a year at https://www.playplay.io/upgrade?team_id=#{team_id}&game=#{game.name}."
+    "This is a premium feature. #{upgrade_text}"
+  end
+
+  def upgrade_text
+    "Upgrade your team to premium for $29.99 a year at https://www.playplay.io/upgrade?team_id=#{team_id}&game=#{game.name}."
   end
 
   def captains

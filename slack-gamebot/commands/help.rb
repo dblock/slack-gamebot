@@ -28,7 +28,7 @@ Stats
 leaderboard [number|infinity]: show the leaderboard, eg. leaderboard 10
 rank [<player> ...]: rank a player or a list of players
 matches [number|infinity]: show this season's matches
-seasons: show all seasons
+seasons: show all seasons (this is a premium command)
 season: show current season
 
 Captains
@@ -36,13 +36,17 @@ Captains
 set gifs [on|off]: enable/disable animated GIFs, default is on
 set aliases [<alias|none> ...]: set additional bot aliases
 set api [on|off]: enable/disable team data in the public API, default is off
-reset <team>: reset all stats, start a new season
+reset <team>: reset all stats, start a new season (this is a premium command)
 promote <player>: promote a user to captain
 demote me: demote you from captain
 ```
         EOS
       def self.call(client, data, _match)
-        client.say(channel: data.channel, text: [HELP, SlackGamebot::INFO].join("\n"))
+        client.say(channel: data.channel, text: [
+          HELP,
+          SlackGamebot::INFO,
+          client.owner.premium? ? nil : client.owner.upgrade_text
+        ].compact.join("\n"))
         client.say(channel: data.channel, gif: 'help')
         logger.info "HELP: #{client.owner} - #{data.user}"
       end
