@@ -5,6 +5,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
   let(:app) { SlackGamebot::Server.new(team: team) }
   let(:client) { app.send(:client) }
   let(:captain) { Fabricate(:user, team: team, user_name: 'username', captain: true) }
+  let(:message_hook) { SlackRubyBot::Hooks::Message.new }
   context 'captain' do
     it 'gives help' do
       expect(message: "#{SlackRubyBot.config.user} set").to respond_with_slack_message(
@@ -12,6 +13,11 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
       )
     end
     context 'gifs' do
+      it 'is a premium feature' do
+        expect(client).to receive(:say).with(channel: 'channel', text: team.premium_text)
+        expect(client).to receive(:say).with(channel: 'channel', text: "GIFs for team #{team.name} are on!", gif: 'fun')
+        message_hook.call(client, Hashie::Mash.new(channel: 'channel', user: 'user', text: "#{SlackRubyBot.config.user} set gifs on"))
+      end
       it 'shows current value of GIFs on' do
         expect(message: "#{SlackRubyBot.config.user} set gifs").to respond_with_slack_message(
           "GIFs for team #{team.name} are on!"
@@ -23,24 +29,45 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
           "GIFs for team #{team.name} are off."
         )
       end
-      it 'enables GIFs' do
-        team.update_attributes!(gifs: false)
-        expect(message: "#{SlackRubyBot.config.user} set gifs on").to respond_with_slack_message(
-          "GIFs for team #{team.name} are on!"
-        )
-        expect(team.reload.gifs).to be true
-        expect(app.send(:client).send_gifs?).to be true
-      end
-      it 'disables GIFs' do
-        team.update_attributes!(gifs: true)
-        expect(message: "#{SlackRubyBot.config.user} set gifs off").to respond_with_slack_message(
-          "GIFs for team #{team.name} are off."
-        )
-        expect(team.reload.gifs).to be false
-        expect(app.send(:client).send_gifs?).to be false
+      context 'premium team' do
+        before do
+          team.update_attributes!(premium: true)
+        end
+        it 'shows current value of GIFs on' do
+          expect(message: "#{SlackRubyBot.config.user} set gifs").to respond_with_slack_message(
+            "GIFs for team #{team.name} are on!"
+          )
+        end
+        it 'shows current value of GIFs off' do
+          team.update_attributes!(gifs: false)
+          expect(message: "#{SlackRubyBot.config.user} set gifs").to respond_with_slack_message(
+            "GIFs for team #{team.name} are off."
+          )
+        end
+        it 'enables GIFs' do
+          team.update_attributes!(gifs: false)
+          expect(message: "#{SlackRubyBot.config.user} set gifs on").to respond_with_slack_message(
+            "GIFs for team #{team.name} are on!"
+          )
+          expect(team.reload.gifs).to be true
+          expect(app.send(:client).send_gifs?).to be true
+        end
+        it 'disables GIFs' do
+          team.update_attributes!(gifs: true)
+          expect(message: "#{SlackRubyBot.config.user} set gifs off").to respond_with_slack_message(
+            "GIFs for team #{team.name} are off."
+          )
+          expect(team.reload.gifs).to be false
+          expect(app.send(:client).send_gifs?).to be false
+        end
       end
     end
     context 'api' do
+      it 'is a premium feature' do
+        expect(client).to receive(:say).with(channel: 'channel', text: team.premium_text)
+        expect(client).to receive(:say).with(channel: 'channel', text: "API for team #{team.name} is on!", gif: 'programmer')
+        message_hook.call(client, Hashie::Mash.new(channel: 'channel', user: 'user', text: "#{SlackRubyBot.config.user} set api on"))
+      end
       it 'shows current value of API on' do
         team.update_attributes!(api: true)
         expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
@@ -53,41 +80,63 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
           "API for team #{team.name} is off."
         )
       end
-      it 'enables API' do
-        expect(message: "#{SlackRubyBot.config.user} set api on").to respond_with_slack_message(
-          "API for team #{team.name} is on!"
-        )
-        expect(team.reload.api).to be true
-      end
-      it 'disables API' do
-        team.update_attributes!(api: true)
-        expect(message: "#{SlackRubyBot.config.user} set api off").to respond_with_slack_message(
-          "API for team #{team.name} is off."
-        )
-        expect(team.reload.api).to be false
-      end
-      context 'with API_URL' do
+      context 'premium team' do
         before do
-          ENV['API_URL'] = 'http://local.api'
+          team.update_attributes!(premium: true)
         end
-        after do
-          ENV.delete 'API_URL'
-        end
-        it 'shows current value of API on with API URL' do
+        it 'shows current value of API on' do
           team.update_attributes!(api: true)
           expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
-            "API for team #{team.name} is on!\nhttp://local.api/teams/#{team.id}"
+            "API for team #{team.name} is on!"
           )
         end
-        it 'shows current value of API off without API URL' do
+        it 'shows current value of API off' do
           team.update_attributes!(api: false)
           expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
             "API for team #{team.name} is off."
           )
         end
+        it 'enables API' do
+          expect(message: "#{SlackRubyBot.config.user} set api on").to respond_with_slack_message(
+            "API for team #{team.name} is on!"
+          )
+          expect(team.reload.api).to be true
+        end
+        it 'disables API' do
+          team.update_attributes!(api: true)
+          expect(message: "#{SlackRubyBot.config.user} set api off").to respond_with_slack_message(
+            "API for team #{team.name} is off."
+          )
+          expect(team.reload.api).to be false
+        end
+        context 'with API_URL' do
+          before do
+            ENV['API_URL'] = 'http://local.api'
+          end
+          after do
+            ENV.delete 'API_URL'
+          end
+          it 'shows current value of API on with API URL' do
+            team.update_attributes!(api: true)
+            expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
+              "API for team #{team.name} is on!\nhttp://local.api/teams/#{team.id}"
+            )
+          end
+          it 'shows current value of API off without API URL' do
+            team.update_attributes!(api: false)
+            expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
+              "API for team #{team.name} is off."
+            )
+          end
+        end
       end
     end
     context 'aliases' do
+      it 'is a premium feature' do
+        expect(client).to receive(:say).with(channel: 'channel', text: team.premium_text)
+        expect(client).to receive(:say).with(channel: 'channel', text: "API for team #{team.name} is on!", gif: 'programmer')
+        message_hook.call(client, Hashie::Mash.new(channel: 'channel', user: 'user', text: "#{SlackRubyBot.config.user} set api on"))
+      end
       context 'with aliases' do
         before do
           team.update_attributes!(aliases: %w(foo bar))
@@ -97,39 +146,54 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
             "Bot aliases for team #{team.name} are foo and bar."
           )
         end
-        it 'sets aliases' do
-          expect(message: "#{SlackRubyBot.config.user} set aliases foo bar baz").to respond_with_slack_message(
-            "Bot aliases for team #{team.name} are foo, bar and baz."
-          )
-          expect(team.reload.aliases).to eq %w(foo bar baz)
-          expect(app.send(:client).aliases).to eq %w(foo bar baz)
-        end
-        it 'sets comma-separated aliases with extra spaces' do
-          expect(message: "#{SlackRubyBot.config.user} set aliases   foo,    bar").to respond_with_slack_message(
-            "Bot aliases for team #{team.name} are foo and bar."
-          )
-          expect(team.reload.aliases).to eq %w(foo bar)
-          expect(app.send(:client).aliases).to eq %w(foo bar)
-        end
-        it 'sets emoji aliases' do
-          expect(message: "#{SlackRubyBot.config.user} set aliases pp :pong:").to respond_with_slack_message(
-            "Bot aliases for team #{team.name} are pp and :pong:."
-          )
-          expect(team.reload.aliases).to eq ['pp', ':pong:']
-        end
-        it 'removes aliases' do
-          expect(message: "#{SlackRubyBot.config.user} set aliases none").to respond_with_slack_message(
-            "Team #{team.name} does not have any bot aliases."
-          )
-          expect(team.reload.aliases).to be_empty
-          expect(app.send(:client).aliases).to be_empty
-        end
       end
-      context 'without aliases' do
-        it 'shows no aliases' do
-          expect(message: "#{SlackRubyBot.config.user} set aliases").to respond_with_slack_message(
-            "Team #{team.name} does not have any bot aliases."
-          )
+      context 'premium team' do
+        before do
+          team.update_attributes!(premium: true)
+        end
+        context 'with aliases' do
+          before do
+            team.update_attributes!(aliases: %w(foo bar))
+          end
+          it 'shows current value of aliases' do
+            expect(message: "#{SlackRubyBot.config.user} set aliases").to respond_with_slack_message(
+              "Bot aliases for team #{team.name} are foo and bar."
+            )
+          end
+          it 'sets aliases' do
+            expect(message: "#{SlackRubyBot.config.user} set aliases foo bar baz").to respond_with_slack_message(
+              "Bot aliases for team #{team.name} are foo, bar and baz."
+            )
+            expect(team.reload.aliases).to eq %w(foo bar baz)
+            expect(app.send(:client).aliases).to eq %w(foo bar baz)
+          end
+          it 'sets comma-separated aliases with extra spaces' do
+            expect(message: "#{SlackRubyBot.config.user} set aliases   foo,    bar").to respond_with_slack_message(
+              "Bot aliases for team #{team.name} are foo and bar."
+            )
+            expect(team.reload.aliases).to eq %w(foo bar)
+            expect(app.send(:client).aliases).to eq %w(foo bar)
+          end
+          it 'sets emoji aliases' do
+            expect(message: "#{SlackRubyBot.config.user} set aliases pp :pong:").to respond_with_slack_message(
+              "Bot aliases for team #{team.name} are pp and :pong:."
+            )
+            expect(team.reload.aliases).to eq ['pp', ':pong:']
+          end
+          it 'removes aliases' do
+            expect(message: "#{SlackRubyBot.config.user} set aliases none").to respond_with_slack_message(
+              "Team #{team.name} does not have any bot aliases."
+            )
+            expect(team.reload.aliases).to be_empty
+            expect(app.send(:client).aliases).to be_empty
+          end
+        end
+        context 'without aliases' do
+          it 'shows no aliases' do
+            expect(message: "#{SlackRubyBot.config.user} set aliases").to respond_with_slack_message(
+              "Team #{team.name} does not have any bot aliases."
+            )
+          end
         end
       end
     end

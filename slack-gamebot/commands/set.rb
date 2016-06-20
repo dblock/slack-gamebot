@@ -1,6 +1,8 @@
 module SlackGamebot
   module Commands
     class Set < SlackRubyBot::Commands::Base
+      include SlackGamebot::Commands::Mixins::Premium
+
       def self.call(client, data, match)
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
         if !match['expression']
@@ -12,13 +14,19 @@ module SlackGamebot
           case k
           when 'gifs' then
             unless v.nil?
-              client.owner.update_attributes!(gifs: v.to_b)
-              client.send_gifs = client.owner.gifs
+              premium client, data do
+                client.owner.update_attributes!(gifs: v.to_b)
+                client.send_gifs = client.owner.gifs
+              end
             end
             client.say(channel: data.channel, text: "GIFs for team #{client.owner.name} are #{client.owner.gifs? ? 'on!' : 'off.'}", gif: 'fun')
             logger.info "SET: #{client.owner} - #{user.user_name} GIFs are #{client.owner.gifs? ? 'on' : 'off'}"
           when 'api' then
-            client.owner.update_attributes!(api: v.to_b) unless v.nil?
+            unless v.nil?
+              premium client, data do
+                client.owner.update_attributes!(api: v.to_b)
+              end
+            end
             message = [
               "API for team #{client.owner.name} is #{client.owner.api? ? 'on!' : 'off.'}",
               client.owner.api_url
@@ -27,11 +35,15 @@ module SlackGamebot
             logger.info "SET: #{client.owner} - #{user.user_name} API is #{client.owner.api? ? 'on' : 'off'}"
           when 'aliases' then
             if v == 'none'
-              client.owner.update_attributes!(aliases: [])
-              client.aliases = []
+              premium client, data do
+                client.owner.update_attributes!(aliases: [])
+                client.aliases = []
+              end
             elsif !v.nil?
-              client.owner.update_attributes!(aliases: v.split(/[\s,;]+/))
-              client.aliases = client.owner.aliases
+              premium client, data do
+                client.owner.update_attributes!(aliases: v.split(/[\s,;]+/))
+                client.aliases = client.owner.aliases
+              end
             end
             if client.owner.aliases.any?
               client.say(channel: data.channel, text: "Bot aliases for team #{client.owner.name} are #{client.owner.aliases.and}.", gif: 'name')

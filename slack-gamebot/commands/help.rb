@@ -19,8 +19,8 @@ challenge <opponent>, ... [with <teammate>, ...]: challenge opponent(s) to a gam
 accept: accept a challenge
 decline: decline a previous challenge
 cancel: cancel a previous challenge
-lost [score, ...]: record your loss
-resigned: record a resignation
+lost [to <opponent>] [score, ...]: record your loss
+resigned [to <opponent>]: record a resignation
 draw: record a tie
 
 Stats
@@ -28,17 +28,20 @@ Stats
 leaderboard [number|infinity]: show the leaderboard, eg. leaderboard 10
 rank [<player> ...]: rank a player or a list of players
 matches [number|infinity]: show this season's matches
-seasons: show all seasons (this is a premium command)
 season: show current season
 
 Captains
 --------
+promote <player>: promote a user to captain
+demote me: demote you from captain
+
+Premium
+-------
+seasons: show all seasons
+reset <team>: reset all stats, start a new season
 set gifs [on|off]: enable/disable animated GIFs, default is on
 set aliases [<alias|none> ...]: set additional bot aliases
 set api [on|off]: enable/disable team data in the public API, default is off
-reset <team>: reset all stats, start a new season (this is a premium command)
-promote <player>: promote a user to captain
-demote me: demote you from captain
 ```
         EOS
       def self.call(client, data, _match)
