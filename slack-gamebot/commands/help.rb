@@ -45,7 +45,7 @@ demote me: demote you from captain
         client.say(channel: data.channel, text: [
           HELP,
           SlackGamebot::INFO,
-          client.owner.premium? ? nil : client.owner.upgrade_text
+          client.owner.reload.premium? ? nil : client.owner.upgrade_text
         ].compact.join("\n"))
         client.say(channel: data.channel, gif: 'help')
         logger.info "HELP: #{client.owner} - #{data.user}"
