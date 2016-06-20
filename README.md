@@ -365,10 +365,10 @@ We recommend [HyperClient](https://github.com/codegram/hyperclient) to query the
 
 ## Contributing
 
-This bot is built with [slack-ruby-bot](https://github.com/dblock/slack-ruby-bot). See [CONTRIBUTING](CONTRIBUTING.md).
+This bot is built with [slack-ruby-bot-server](https://github.com/dblock/slack-ruby-bot-server). See [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Copyright and License
 
-Copyright (c) 2015, Daniel Doubrovkine, Artsy and [Contributors](CHANGELOG.md).
+Copyright (c) 2015-2016, Daniel Doubrovkine, Artsy and [Contributors](CHANGELOG.md).
 
 This project is licensed under the [MIT License](LICENSE.md).

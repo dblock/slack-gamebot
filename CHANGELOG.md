@@ -1,5 +1,7 @@
 ### Changelog
 
+* Features such as `seasons` and `set` now require a premium subscription - [@dblock](https://github.com/dblock).
+* Merged playplay.io website, support SSL - [@dblock](https://github.com/dblock).
 * [#103](https://github.com/dblock/slack-gamebot/issues/103): The `set api` method will display team API URL when on - [@dblock](https://github.com/dblock).
 * [#105](https://github.com/dblock/slack-gamebot/issues/105): Fix: `rank` displays multiple unranked users - [@dblock](https://github.com/dblock).
 * [#104](https://github.com/dblock/slack-gamebot/issues/104): Fix: `rank` leaks users from other teams - [@dblock](https://github.com/dblock).
