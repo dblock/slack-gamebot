@@ -22,12 +22,6 @@ describe Api::Endpoints::RootEndpoint do
       expect(JSON.parse(last_response.body)).to_not eq({})
     end
   end
-  pending 'instruments endpoint with NewRelic' do
-    expect(::NewRelic::Agent::Instrumentation::GrapeInstrumentation).to receive(:handle_transaction).and_call_original
-    expect(::NewRelic::Agent.logger).to_not receive(:warn)
-    get '/api/'
-    expect(last_response.status).to eq 200
-  end
   it 'rewrites encoded HAL links to make them clickable' do
     get '/api/teams/%7B?cursor,size%7D'
     expect(last_response.status).to eq 302
