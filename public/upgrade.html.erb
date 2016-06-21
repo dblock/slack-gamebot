@@ -36,7 +36,7 @@
         $(document).ready(function() {
 
           var team = {
-            id: '<%= team && team.team_id %>',
+            id: '<%= team && team._id %>',
             game: '<%= game && game.name %>',
             name: '<%= team && team.name %>',
             premium: <%= !!(team && team.premium) %>,

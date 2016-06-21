@@ -12,7 +12,7 @@ module Api
           requires :team_id, type: String
         end
         post do
-          team = Team.where(team_id: params[:team_id]).first || error!('Team Not Found', 404)
+          team = Team.find(params[:team_id]) || error!('Not Found', 404)
           Api::Middleware.logger.info "Creating a subscription for team #{team}."
           error!('Already a Premium Subscription', 400) if team.premium
           error!('Customer Already Registered', 400) if team.stripe_customer_id

@@ -16,7 +16,7 @@ describe Api::Endpoints::SubscriptionsEndpoint do
       it 'fails to create a subscription' do
         expect do
           client.subscriptions._post(
-            team_id: team.team_id,
+            team_id: team._id,
             stripe_token: 'token',
             stripe_token_type: 'card',
             stripe_email: 'foo@bar.com')
@@ -31,7 +31,7 @@ describe Api::Endpoints::SubscriptionsEndpoint do
       it 'fails to create a subscription' do
         expect do
           client.subscriptions._post(
-            team_id: team.team_id,
+            team_id: team._id,
             stripe_token: 'token',
             stripe_token_type: 'card',
             stripe_email: 'foo@bar.com')
@@ -56,7 +56,7 @@ describe Api::Endpoints::SubscriptionsEndpoint do
           }
         ).and_return('id' => 'customer_id')
         client.subscriptions._post(
-          team_id: team.team_id,
+          team_id: team._id,
           stripe_token: 'token',
           stripe_token_type: 'card',
           stripe_email: 'foo@bar.com'
