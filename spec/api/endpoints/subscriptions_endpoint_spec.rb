@@ -60,6 +60,13 @@ describe Api::Endpoints::SubscriptionsEndpoint do
           expect(team.stripe_customer_id).to_not be_blank
           customer = Stripe::Customer.retrieve(team.stripe_customer_id)
           expect(customer).to_not be nil
+          expect(Hash[customer.metadata]).to eq(
+            id: team._id.to_s,
+            name: team.name,
+            team_id: team.team_id,
+            domain: team.domain,
+            game: team.game.name
+          )
           expect(customer.discount).to be nil
           subscriptions = customer.subscriptions
           expect(subscriptions.count).to eq 1

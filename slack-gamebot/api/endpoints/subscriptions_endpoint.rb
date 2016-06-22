@@ -23,10 +23,11 @@ module Api
             email: params[:stripe_email],
             coupon: params[:stripe_coupon],
             metadata: {
-              id: team._id,
+              id: team._id.to_s,
               team_id: team.team_id,
               name: team.name,
-              domain: team.domain
+              domain: team.domain,
+              game: team.game.name
             }
           )
           Api::Middleware.logger.info "Subscription for team #{team} created, stripe_customer_id=#{customer['id']}."
