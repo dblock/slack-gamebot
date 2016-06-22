@@ -16,6 +16,7 @@ group :development, :test do
   gem 'rake', '~> 10.4'
   gem 'rubocop', '0.34.2'
   gem 'foreman'
+  gem 'stripe-ruby-mock', require: 'stripe_mock'
 end
 
 group :development do

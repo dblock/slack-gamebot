@@ -42,28 +42,25 @@ describe Api::Endpoints::SubscriptionsEndpoint do
       end
     end
     context 'existing team' do
+      include_context :stripe_mock
       let!(:team) { Fabricate(:team) }
-      it 'creates a subscription' do
-        expect(Stripe::Customer).to receive(:create).with(
-          source: 'token',
-          plan: 'slack-playplay-yearly',
-          email: 'foo@bar.com',
-          metadata: {
-            id: team._id,
-            team_id: team.team_id,
-            name: team.name,
-            domain: team.domain
-          }
-        ).and_return('id' => 'customer_id')
+      before do
+        stripe_helper.create_plan(id: 'slack-playplay-yearly', amount: 2999)
         client.subscriptions._post(
           team_id: team._id,
-          stripe_token: 'token',
+          stripe_token: stripe_helper.generate_card_token,
           stripe_token_type: 'card',
           stripe_email: 'foo@bar.com'
         )
         team.reload
+      end
+      it 'creates a subscription' do
         expect(team.premium).to be true
-        expect(team.stripe_customer_id).to eq 'customer_id'
+        expect(team.stripe_customer_id).to_not be_blank
+        customer = Stripe::Customer.retrieve(team.stripe_customer_id)
+        expect(customer).to_not be nil
+        subscriptions = customer.subscriptions
+        expect(subscriptions.count).to eq 1
       end
     end
   end
