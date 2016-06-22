@@ -4,8 +4,16 @@
     <%= partial 'public/partials/_head.html' %>
     <script src='https://checkout.stripe.com/checkout.js'></script>
     <link rel='stylesheet' href='https://checkout.stripe.com/v3/checkout/button.css'></link>
-    <% game = Game.where(name: request['game']).first %>
-    <% team = game && game.teams.where(team_id: request['team_id']).first %>
+    <%
+      game = Game.where(name: request['game']).first
+      team = game && game.teams.where(team_id: request['team_id']).first
+      coupon = Stripe::Coupon.retrieve(request[:coupon]) if request[:coupon]
+      subscription_cents = 2999
+      subscription_dollars = subscription_cents.to_f / 100
+      amount_cents = subscription_cents
+      amount_cents -= coupon.amount_off if coupon
+      amount_dollars = amount_cents.to_f / 100
+    %>
   </head>
   <body style='text-align: center'>
     <p style='margin: 50px;'>
@@ -23,7 +31,7 @@
     <p id='messages' />
     <p id='subscribe'>
       <button id='subscribeButton' class='stripe-button-el'>
-          <span style='display: block; min-height: 30px;'>Pay $29.99 with Card</span>
+          <span style='display: block; min-height: 30px;'>Pay $<%= amount_dollars %> with Card</span>
       </button>
       <p>
         <img src='/img/stripe.png' width='119' height='26'></img>
@@ -36,15 +44,31 @@
         $(document).ready(function() {
 
           var team = {
-            id: '<%= team && team._id %>',
-            game: '<%= game && game.name %>',
-            name: '<%= team && team.name %>',
-            premium: <%= !!(team && team.premium) %>,
-          }
+            id: <%= team ? "'#{team._id}'" : 'null' %>,
+            game: <%= game ? "'#{game.name}'" : 'null' %>,
+            name: <%= team ? "'#{team.name}'" : 'null' %>,
+            premium: <%= !!(team && team.premium) %>
+          };
+
+          var coupon = {
+            code: <%= coupon ? "'#{coupon.id}'" : 'null' %>
+          };
+
+          var subscription = {
+            dollars: <%= subscription_dollars %>,
+            cents: <%= subscription_cents %>
+          };
+
+          var pay = {
+            dollars: <%= amount_dollars %>,
+            cents: <%= amount_cents %>
+          };
 
           if (team.premium) {
             PlayPlay.message('Team <b>' + team.name + '</b> already has a premium <b>' + team.game + '</b> subscription, thank you for your support.');
             $('#subscribeButton').remove();
+          } else if (team.id && team.name && team.game && coupon.code) {
+            PlayPlay.message('Upgrade team <b>' + team.name + '</b> to premium <b>' + team.game + '</b> for $' + pay.dollars + ' for the first year and $' + subscription.dollars + ' thereafter with coupon <b>' + coupon.code + '!');
           } else if (team.id && team.name && team.game) {
             PlayPlay.message('Upgrade team <b>' + team.name + '</b> to premium <b>' + team.game + '</b> for $29.99 a year!');
           } else {
@@ -64,6 +88,7 @@
                   stripe_email: token.email,
                   stripe_token: token.id,
                   stripe_token_type: token.type,
+                  stripe_coupon: coupon.code,
                   team_id: team.id
                 },
                 success: function(data) {
@@ -76,11 +101,10 @@
           });
 
           $('#subscribeButton').on('click', function(e) {
-            var amount = 2999;
             handler.open({
               name: 'PlayPlay.io Premium',
               description: '1 Year Subscription',
-              amount: amount
+              amount: pay.cents
             });
             e.preventDefault();
           });

@@ -39,6 +39,8 @@ describe 'Subscribe', js: true, type: :feature do
       expect(Stripe::Customer).to receive(:create).and_return('id' => 'customer_id')
 
       find('#subscribeButton').click
+      sleep 1
+
       stripe_iframe = all('iframe[name=stripe_checkout_app]').last
       Capybara.within_frame stripe_iframe do
         page.execute_script("$('input#email').val('foo@bar.com');")
@@ -78,6 +80,39 @@ describe 'Subscribe', js: true, type: :feature do
       let!(:team2) { Fabricate(:team) }
       let!(:team) { Fabricate(:team, team_id: team2.team_id, game: Fabricate(:game)) }
       it_behaves_like 'upgrades to premium'
+    end
+    context 'with a coupon' do
+      let!(:team) { Fabricate(:team) }
+      it 'applies the coupon' do
+        coupon = double(Stripe::Coupon, id: 'coupon-id', amount_off: 1200)
+        expect(Stripe::Coupon).to receive(:retrieve).with('coupon-id').and_return(coupon)
+        visit "/upgrade?team_id=#{team.team_id}&game=#{team.game.name}&coupon=coupon-id"
+        expect(find('#messages')).to have_text("Upgrade team #{team.name} to premium #{team.game.name} for $17.99 for the first year and $29.99 thereafter with coupon coupon-id!")
+        find('#subscribe', visible: true)
+
+        expect(Stripe::Customer).to receive(:create).with(hash_including(coupon: 'coupon-id')).and_return('id' => 'customer_id')
+
+        find('#subscribeButton').click
+        sleep 1
+
+        stripe_iframe = all('iframe[name=stripe_checkout_app]').last
+        Capybara.within_frame stripe_iframe do
+          page.execute_script("$('input#email').val('foo@bar.com');")
+          page.execute_script("$('input#card_number').val('4242 4242 4242 4242');")
+          page.execute_script("$('input#cc-exp').val('12/16');")
+          page.execute_script("$('input#cc-csc').val('123');")
+          page.execute_script("$('#submitButton').click();")
+        end
+
+        sleep 5
+
+        expect(find('#messages')).to have_text("Team #{team.name} successfully upgraded to premium #{team.game.name}. Thank you for your support!")
+        find('#subscribe', visible: false)
+
+        team.reload
+        expect(team.premium).to be true
+        expect(team.stripe_customer_id).to eq 'customer_id'
+      end
     end
   end
 end
