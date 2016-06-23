@@ -23,10 +23,9 @@ module SlackGamebot
         team = client.owner
         users = ::User.find_many_by_slack_mention!(team, arguments) if arguments && arguments.any?
         user_ids = users.map(&:id) if users && users.any?
-        matches = user_ids && user_ids.any? ? team.matches.any_of({ :winner_ids.in => user_ids }, :loser_ids.in => user_ids) : team.matches
-        matches = matches.where(:challenge_id.in => team.challenges.current.pluck(:_id))
-        matches.includes(:challenge).each do |m|
-          next if m.challenge.season_id
+        matches = team.matches.current
+        matches = matches.any_of({ :winner_ids.in => user_ids }, :loser_ids.in => user_ids) if user_ids && user_ids.any?
+        matches.each do |m|
           totals[m.to_s] += 1
         end
         totals = totals.sort_by { |_, value| -value }

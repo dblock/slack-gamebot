@@ -9,6 +9,7 @@ class Match
   field :resigned, type: Boolean, default: false
   field :scores, type: Array
   belongs_to :challenge, index: true
+  belongs_to :season, inverse_of: :matches, index: true
   before_create :calculate_elo!
   validate :validate_scores, unless: :tied?
   validate :validate_tied_scores, if: :tied?
@@ -19,6 +20,9 @@ class Match
 
   has_and_belongs_to_many :winners, class_name: 'User', inverse_of: nil
   has_and_belongs_to_many :losers, class_name: 'User', inverse_of: nil
+
+  # current matches are not in an archived season
+  scope :current, -> { where(season_id: nil) }
 
   def scores?
     scores && scores.any?

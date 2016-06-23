@@ -70,6 +70,18 @@ describe SlackGamebot::Commands::Matches, vcr: { cassette_name: 'user_info' } do
         )
       end
     end
+    context 'lost to' do
+      let(:loser) { Fabricate(:user, user_name: 'username') }
+      let(:winner) { Fabricate(:user) }
+      it 'a player' do
+        expect(message: "#{SlackRubyBot.config.user} lost to #{winner.user_name}", user: loser.user_id, channel: 'channel').to respond_with_slack_message(
+          "Match has been recorded! #{winner.user_name} defeated #{loser.user_name}."
+        )
+        expect(message: "#{SlackRubyBot.config.user} matches", user: loser.user_id, channel: 'channel').to respond_with_slack_message(
+          "#{team.matches.first} once"
+        )
+      end
+    end
   end
   it_behaves_like 'matches'
   context 'with another team' do

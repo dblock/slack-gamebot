@@ -5,6 +5,7 @@ class Season
   belongs_to :team, index: true
   belongs_to :created_by, class_name: 'User', inverse_of: nil, index: true
   has_many :challenges
+  has_many :matches
   embeds_many :user_ranks
 
   after_create :archive_challenges!
@@ -74,6 +75,7 @@ class Season
       updated_by_id: created_by && created_by.id
     )
     team.challenges.current.set(season_id: id)
+    team.matches.current.set(season_id: id)
   end
 
   def reset_users!

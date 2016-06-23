@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#112](https://github.com/dblock/slack-gamebot/issues/112): Fix: matches recorded with `lost to` are not displayed in `matches` - [@dblock](https://github.com/dblock).
 * [#118](https://github.com/dblock/slack-gamebot/issues/118): Fix: aliases - [@dblock](https://github.com/dblock).
 * Features such as `seasons` and `set` now require a premium subscription - [@dblock](https://github.com/dblock).
 * Merged playplay.io website, support SSL - [@dblock](https://github.com/dblock).
