@@ -1,16 +1,3 @@
-# TODO: remove after https://github.com/dblock/slack-ruby-bot-server/issues/21
-module SlackRubyBotServer
-  class Server < SlackRubyBot::Server
-    def initialize(attrs = {})
-      @team = attrs[:team]
-      fail 'Missing team' unless @team
-      options = { token: @team.token }.merge(attrs)
-      super(options)
-      client.owner = @team
-    end
-  end
-end
-
 module SlackGamebot
   class Server < SlackRubyBotServer::Server
     def initialize(attrs = {})

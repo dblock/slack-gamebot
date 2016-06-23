@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#118](https://github.com/dblock/slack-gamebot/issues/118): Fix: aliases - [@dblock](https://github.com/dblock).
 * Features such as `seasons` and `set` now require a premium subscription - [@dblock](https://github.com/dblock).
 * Merged playplay.io website, support SSL - [@dblock](https://github.com/dblock).
 * [#103](https://github.com/dblock/slack-gamebot/issues/103): The `set api` method will display team API URL when on - [@dblock](https://github.com/dblock).

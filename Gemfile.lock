@@ -1,3 +1,22 @@
+GIT
+  remote: git://github.com/dblock/slack-ruby-bot-server.git
+  revision: 30094049d0ee2c689f66c30415a1e9643229e276
+  specs:
+    slack-ruby-bot-server (0.2.1)
+      celluloid-io
+      foreman
+      grape
+      grape-roar
+      grape-swagger
+      kaminari-mongoid
+      mongoid
+      mongoid-scroll
+      rack-cors
+      rack-rewrite
+      rack-server-pages
+      slack-ruby-bot
+      unicorn
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -183,7 +202,7 @@ GEM
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mustermann19 (0.4.3)
+    mustermann19 (0.4.4)
       enumerable-lazy
     net-http-digest_auth (1.4)
     net-ssh (2.9.2)
@@ -195,7 +214,7 @@ GEM
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
-    oj (2.16.0)
+    oj (2.16.1)
     origin (2.2.0)
     parser (2.3.1.2)
       ast (~> 2.2)
@@ -265,20 +284,6 @@ GEM
       giphy (~> 2.0.2)
       hashie
       slack-ruby-client (>= 0.6.0)
-    slack-ruby-bot-server (0.2.0)
-      celluloid-io
-      foreman
-      grape
-      grape-roar
-      grape-swagger
-      kaminari-mongoid
-      mongoid
-      mongoid-scroll
-      rack-cors
-      rack-rewrite
-      rack-server-pages
-      slack-ruby-bot
-      unicorn
     slack-ruby-client (0.7.4)
       activesupport
       faraday
@@ -346,7 +351,7 @@ DEPENDENCIES
   rubocop (= 0.34.2)
   ruby-enum
   selenium-webdriver
-  slack-ruby-bot-server
+  slack-ruby-bot-server!
   stripe
   stripe-ruby-mock
   time_ago_in_words
