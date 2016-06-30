@@ -81,16 +81,21 @@
             image: '/img/<%= game ? game.name : 'pong' %>.png',
             locale: 'auto',
             token: function(token) {
+              data = {
+                stripe_email: token.email,
+                stripe_token: token.id,
+                stripe_token_type: token.type,
+                team_id: team.id
+              };
+
+              if (coupon.code) {
+                data.stripe_coupon = coupon.code;
+              };
+
               $.ajax({
                 type: 'POST',
                 url: '/api/subscriptions',
-                data: {
-                  stripe_email: token.email,
-                  stripe_token: token.id,
-                  stripe_token_type: token.type,
-                  stripe_coupon: coupon.code,
-                  team_id: team.id
-                },
+                data: data,
                 success: function(data) {
                   PlayPlay.message('Team <b>' + team.name + '</b> successfully upgraded to premium <b>' + team.game + '</b>.<br><br>Thank you for your support!');
                   $('#subscribeButton').remove();

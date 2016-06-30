@@ -160,3 +160,4 @@ section img { max-width: 100%; }
 a.sponsor img { margin: 15px; }
 .up { color: #33CC00; }
 .down { color: #FF6600; }
+.has-error { color: #FF6600; }

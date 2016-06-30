@@ -3,6 +3,7 @@ var PlayPlay = {};
 $(document).ready(function() {
 
   PlayPlay.message = function(text) {
+    $('#messages').removeClass('has-error');
     $('#messages').fadeOut('slow', function() {
       $('#messages').fadeIn('slow').html(text)
     });
@@ -30,5 +31,6 @@ $(document).ready(function() {
     }
 
     PlayPlay.message(message || xhr.statusText || xhr.responseText || 'Unexpected Error');
+    $('#messages').addClass('has-error');
   };
 });
