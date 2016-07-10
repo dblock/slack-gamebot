@@ -254,7 +254,7 @@ GEM
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
       websocket (~> 1.0)
-    slack-ruby-bot (0.8.1)
+    slack-ruby-bot (0.8.2)
       giphy (~> 2.0.2)
       hashie
       slack-ruby-client (>= 0.6.0)
