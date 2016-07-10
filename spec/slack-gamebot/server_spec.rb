@@ -3,6 +3,7 @@ require 'spec_helper'
 describe SlackGamebot::Server do
   let(:team) { Fabricate(:team) }
   let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:client) { app.send(:client) }
   context 'send_gifs' do
     context 'default' do
       let(:team) { Fabricate(:team) }
@@ -31,7 +32,6 @@ describe SlackGamebot::Server do
     end
   end
   context 'hooks' do
-    let(:client) { app.send(:client) }
     let(:user) { Fabricate(:user, team: team) }
     it 'renames user' do
       app.hooks.handlers[:user_change].each do |hook|
@@ -45,6 +45,17 @@ describe SlackGamebot::Server do
         hook.call(client, Hashie::Mash.new(type: 'user_change', user: { id: user.user_id, name: user.user_name }))
       end
       expect(user).to_not receive(:update_attributes!)
+    end
+  end
+  context '#channel_joined' do
+    it 'sends a welcome message' do
+      allow(client).to receive_message_chain(:self, :name).and_return('bot')
+      expect(client).to receive(:say).with(channel: 'C12345', text: [
+        'Hi! I am your friendly game bot. Register with `@bot register`.',
+        "Challenge someone to a game of #{team.game.name} with `@bot challenge @someone`.",
+        "Type `@bot help` fore more commands and don't forget to have fun at work!\n"
+      ].join("\n"))
+      client.send(:callback, Hashie::Mash.new('channel' => { 'id' => 'C12345' }), :channel_joined)
     end
   end
 end
