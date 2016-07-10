@@ -16,6 +16,10 @@ end
 
 NewRelic::Agent.manual_start
 
+SlackRubyBotServer.configure do |config|
+  config.server_class = SlackGamebot::Server
+end
+
 SlackGamebot::App.instance.prepare!
 
 Thread.abort_on_exception = true
