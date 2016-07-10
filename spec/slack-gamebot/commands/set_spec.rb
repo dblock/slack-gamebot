@@ -30,9 +30,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
         )
       end
       context 'premium team' do
-        before do
-          team.update_attributes!(premium: true)
-        end
+        let!(:team) { Fabricate(:team, premium: true) }
         it 'shows current value of GIFs on' do
           expect(message: "#{SlackRubyBot.config.user} set gifs").to respond_with_slack_message(
             "GIFs for team #{team.name} are on!"
@@ -81,9 +79,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
         )
       end
       context 'premium team' do
-        before do
-          team.update_attributes!(premium: true)
-        end
+        let!(:team) { Fabricate(:team, premium: true) }
         it 'shows current value of API on' do
           team.update_attributes!(api: true)
           expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
@@ -148,9 +144,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
         end
       end
       context 'premium team' do
-        before do
-          team.update_attributes!(premium: true)
-        end
+        let!(:team) { Fabricate(:team, premium: true) }
         context 'with aliases' do
           before do
             team.update_attributes!(aliases: %w(foo bar))

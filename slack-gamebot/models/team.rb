@@ -18,6 +18,8 @@ class Team
 
   belongs_to :game
 
+  after_update :inform_premium_changed!
+
   def premium_text
     "This is a premium feature. #{upgrade_text}"
   end
@@ -96,5 +98,12 @@ class Team
     team.game = Game.first || Game.create!(name: 'default')
     team.save!
     team
+  end
+
+  private
+
+  def inform_premium_changed!
+    return unless premium? && premium_changed?
+    inform! 'Your team has been upgraded, enjoy all premium features. Thanks for supporting open-source!', 'thanks'
   end
 end
