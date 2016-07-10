@@ -7,7 +7,7 @@ class User
   field :wins, type: Integer, default: 0
   field :losses, type: Integer, default: 0
   field :ties, type: Integer, default: 0
-  field :elo, type: Integer, default: 0
+  field :elo, type: Integer, default: nil
   field :tau, type: Float, default: 0
   field :rank, type: Integer
   field :captain, type: Boolean, default: false
@@ -22,6 +22,7 @@ class User
   index(ties: 1, team_id: 1)
   index(elo: 1, team_id: 1)
 
+  before_create :set_elo
   after_save :rank!
 
   SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'ties', '-ties', 'user_name', '-user_name', 'rank', '-rank']
@@ -55,7 +56,7 @@ class User
   end
 
   def self.reset_all!(team)
-    User.where(team: team).set(wins: 0, losses: 0, ties: 0, elo: 0, tau: 0, rank: nil)
+    User.where(team: team).set(wins: 0, losses: 0, ties: 0, elo: team.elo, tau: 0, rank: nil)
   end
 
   def to_s
@@ -92,5 +93,12 @@ class User
     ranks = users.map(&:rank)
     return users unless ranks.min && ranks.max
     where(team: team, :rank.gte => ranks.min, :rank.lte => ranks.max).asc(:rank).asc(:wins).asc(:ties)
+  end
+
+  private
+
+  def set_elo
+    return unless team && elo.nil?
+    self.elo = team.elo
   end
 end

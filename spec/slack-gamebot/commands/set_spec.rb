@@ -191,6 +191,70 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
         end
       end
     end
+    context 'elo' do
+      it 'is a premium feature' do
+        expect(client).to receive(:say).with(channel: 'channel', text: team.premium_text)
+        expect(client).to receive(:say).with(channel: 'channel', text: "Base elo for team #{team.name} is 0.", gif: 'score')
+        message_hook.call(client, Hashie::Mash.new(channel: 'channel', user: 'user', text: "#{SlackRubyBot.config.user} set elo 1000"))
+      end
+      context 'with a non-default base elo' do
+        before do
+          team.update_attributes!(elo: 1000)
+        end
+        it 'shows current value of elo' do
+          expect(message: "#{SlackRubyBot.config.user} set elo").to respond_with_slack_message(
+            "Base elo for team #{team.name} is 1000."
+          )
+        end
+      end
+      context 'premium team' do
+        let!(:team) { Fabricate(:team, premium: true) }
+        context 'with a match' do
+          let!(:match) { Fabricate(:match, team: team) }
+          it 'cannot set elo' do
+            expect(client).to receive(:say).with(channel: 'channel', text: "Base elo for team #{team.name} cannot be changed mid-season. Start a new season with `reset`.")
+            expect(client).to receive(:say).with(channel: 'channel', text: "Base elo for team #{team.name} is 0.", gif: 'score')
+            message_hook.call(client, Hashie::Mash.new(channel: 'channel', user: 'user', text: "#{SlackRubyBot.config.user} set elo 1000"))
+          end
+        end
+        context 'with a non-default base elo' do
+          before do
+            team.update_attributes!(elo: 1000)
+          end
+          it 'shows current value of elo' do
+            expect(message: "#{SlackRubyBot.config.user} set elo").to respond_with_slack_message(
+              "Base elo for team #{team.name} is 1000."
+            )
+          end
+          it 'sets elo' do
+            expect(message: "#{SlackRubyBot.config.user} set elo 200").to respond_with_slack_message(
+              "Base elo for team #{team.name} is 200."
+            )
+            expect(team.reload.elo).to eq 200
+          end
+          it 'updates users' do
+            user = Fabricate(:user, team: team)
+            expect(user.reload.elo).to eq 1000
+            expect(message: "#{SlackRubyBot.config.user} set elo 200").to respond_with_slack_message(
+              "Base elo for team #{team.name} is 200."
+            )
+            expect(user.reload.elo).to eq 200
+          end
+          it 'ignores errors' do
+            expect(message: "#{SlackRubyBot.config.user} set elo invalid").to respond_with_slack_message(
+              "Base elo for team #{team.name} is 1000."
+            )
+            expect(team.reload.elo).to eq 1000
+          end
+          it 'resets elo' do
+            expect(message: "#{SlackRubyBot.config.user} set elo 0").to respond_with_slack_message(
+              "Base elo for team #{team.name} is 0."
+            )
+            expect(team.reload.elo).to eq 0
+          end
+        end
+      end
+    end
     context 'invalid' do
       it 'error' do
         expect(message: "#{SlackRubyBot.config.user} set invalid on").to respond_with_slack_message(

@@ -328,6 +328,14 @@ GIFs for team China are off.
 
 ![](screenshots/gifs.gif)
 
+#### gamebot set elo [number]
+
+Set the base elo for new seasons. Default is 0.
+
+```
+gamebot set elo 1000
+```
+
 #### gamebot set aliases &lt;alias|none&gt; ...
 
 Set additional aliases for the bot. For example you could upload a custom emoji for :pong: and set an alias for it.

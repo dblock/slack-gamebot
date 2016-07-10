@@ -3,6 +3,7 @@ class Team
   field :api, type: Boolean, default: false
   field :aliases, type: Array, default: []
   field :nudge_at, type: DateTime
+  field :elo, type: Integer, default: 0
 
   field :stripe_customer_id, type: String
   field :premium, type: Boolean, default: false
