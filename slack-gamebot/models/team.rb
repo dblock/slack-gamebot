@@ -47,8 +47,11 @@ class Team
   def asleep?(dt = 2.weeks)
     time_limit = Time.now - dt
     return false if created_at > time_limit
+    recent_match = matches.desc(:updated_at).limit(1).first
+    return false if recent_match && recent_match.updated_at >= time_limit
     recent_challenge = challenges.desc(:updated_at).limit(1).first
-    recent_challenge.nil? || recent_challenge.updated_at < time_limit
+    return false if recent_challenge && recent_challenge.updated_at >= time_limit
+    true
   end
 
   def nudge?(dt = 2.weeks)

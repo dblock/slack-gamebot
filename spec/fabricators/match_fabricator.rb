@@ -1,3 +1,14 @@
+Fabricator(:match_lost_to, class_name: 'Match') do
+  after_build do |match|
+    match.scores = match.tied? ? [[3, 3]] : [[15, 21]]
+  end
+  after_create do |match|
+    match.winners.inc(wins: 1)
+    match.losers.inc(losses: 1)
+    User.rank!(match.team)
+  end
+end
+
 Fabricator(:match) do
   after_build do |match|
     match.challenge ||= Fabricate(:challenge, team: match.team || Team.first || Fabricate(:team))

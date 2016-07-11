@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#119](https://github.com/dblock/slack-gamebot/issues/119): Fix: teams reporting matches with `lost to` incorrectly marked as dead - [@dblock](https://github.com/dblock).
 * [#114](https://github.com/dblock/slack-gamebot/issues/114): Set a team base elo rating with `set elo` for new seasons - [@dblock](https://github.com/dblock).
 * [#116](https://github.com/dblock/slack-gamebot/issues/116): Notify that a team has been upgraded in Slack - [@dblock](https://github.com/dblock).
 * [#117](https://github.com/dblock/slack-gamebot/issues/117): Send a welcome message when the bot joins a channel - [@dblock](https://github.com/dblock).

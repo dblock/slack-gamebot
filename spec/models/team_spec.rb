@@ -95,6 +95,22 @@ describe Team do
           end
         end
       end
+      context 'with a recent match' do
+        let!(:match) { Fabricate(:match, team: team) }
+        it 'false' do
+          expect(team.asleep?).to be false
+          expect(team.nudge?).to be false
+          expect(team.dead?).to be false
+        end
+      end
+      context 'with a recent match lost to' do
+        let!(:match) { Fabricate(:match_lost_to, team: team) }
+        it 'false' do
+          expect(team.asleep?).to be false
+          expect(team.nudge?).to be false
+          expect(team.dead?).to be false
+        end
+      end
       context 'with an old challenge' do
         let!(:challenge) { Fabricate(:challenge, updated_at: 3.weeks.ago, team: team) }
         it 'true' do
