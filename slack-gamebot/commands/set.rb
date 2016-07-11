@@ -41,16 +41,7 @@ module SlackGamebot
                       rescue
                         nil
                       end
-                unless elo.nil?
-                  if client.owner.challenges.current.any?
-                    message = "Base elo for team #{client.owner.name} cannot be changed mid-season. Start a new season with `reset`."
-                    client.say(channel: data.channel, text: message)
-                    logger.info "SET: #{client.owner} - #{user.user_name} ELO cannot be changed mid-season"
-                  else
-                    client.owner.update_attributes!(elo: elo)
-                    client.owner.users.update_all(elo: elo)
-                  end
-                end
+                client.owner.update_attributes!(elo: elo) unless elo.nil?
               end
             end
             message = "Base elo for team #{client.owner.name} is #{client.owner.elo}."

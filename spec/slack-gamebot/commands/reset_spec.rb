@@ -84,13 +84,5 @@ describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
       expect(user2.elo).to eq 48
       expect(user2.ties).to eq 3
     end
-    it 'resets user stats to the team custom elo' do
-      team.update_attributes!(elo: 123)
-      Fabricate(:match)
-      user = Fabricate(:user, elo: 48, losses: 1, wins: 2, tau: 0.5)
-      expect(message: "#{SlackRubyBot.config.user} reset #{team.name}").to respond_with_slack_message('Welcome to the new season!')
-      user.reload
-      expect(user.elo).to eq 123
-    end
   end
 end

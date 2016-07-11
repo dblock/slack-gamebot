@@ -68,6 +68,12 @@ describe User do
       end
     end
   end
+  context '#to_s' do
+    let(:user) { Fabricate(:user, elo: 48, team: Fabricate(:team, elo: 2)) }
+    it 'respects team elo' do
+      expect(user.to_s).to include 'elo: 50'
+    end
+  end
   context '#reset_all' do
     it 'resets all user stats' do
       user1 = Fabricate(:user, elo: 48, losses: 1, wins: 2, ties: 3, tau: 0.5)

@@ -24,7 +24,11 @@ class UserRank
     end
   end
 
+  def team_elo
+    user && user.team ? elo + user.team.elo : elo
+  end
+
   def to_s
-    "#{user_name}: #{wins} win#{wins != 1 ? 's' : ''}, #{losses} loss#{losses != 1 ? 'es' : ''} (elo: #{elo})"
+    "#{user_name}: #{wins} win#{wins != 1 ? 's' : ''}, #{losses} loss#{losses != 1 ? 'es' : ''} (elo: #{team_elo})"
   end
 end

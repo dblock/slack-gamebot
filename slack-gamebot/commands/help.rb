@@ -41,7 +41,7 @@ seasons: show all seasons
 reset <team>: reset all stats, start a new season
 set gifs [on|off]: enable/disable animated GIFs, default is on
 set aliases [<alias|none> ...]: set additional bot aliases
-set elo [number]: set base elo for a new season
+set elo [number]: set base elo for the team
 set api [on|off]: enable/disable team data in the public API, default is off
 ```
         EOS
