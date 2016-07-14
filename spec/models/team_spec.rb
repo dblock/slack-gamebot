@@ -198,7 +198,7 @@ describe Team do
       expect(client).to_not receive(:chat_postMessage)
       expect do
         team.nudge!
-      end.to_not change(team, :nudge_at)
+      end.to change(team, :nudge_at)
     end
   end
   context 'gifs' do

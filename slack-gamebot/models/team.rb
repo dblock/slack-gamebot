@@ -66,6 +66,7 @@ class Team
 
   def nudge!
     inform! "Challenge someone to a game of #{game.name} today!", 'nudge'
+    update_attributes!(nudge_at: Time.now)
   end
 
   def api_url
@@ -87,7 +88,6 @@ class Team
     end if gif_name && gifs?
     text = [message, gif && gif.image_url.to_s].compact.join("\n")
     client.chat_postMessage(text: text, channel: channel['id'], as_user: true)
-    update_attributes!(nudge_at: Time.now)
   end
 
   def self.find_or_create_from_env!
@@ -106,8 +106,13 @@ class Team
 
   private
 
+  UPGRADED_TEXT = <<-EOS
+Your team has been upgraded, enjoy all premium features. Thanks for supporting open-source!
+Follow https://twitter.com/playplayio for news and updates.
+EOS
+
   def inform_premium_changed!
     return unless premium? && premium_changed?
-    inform! 'Your team has been upgraded, enjoy all premium features. Thanks for supporting open-source!', 'thanks'
+    inform! UPGRADED_TEXT, 'thanks'
   end
 end
