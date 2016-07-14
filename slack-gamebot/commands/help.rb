@@ -10,6 +10,7 @@ General
 hi: be nice, say hi to your bot
 team: show your team's info and captains
 register: register yourself as a player
+unregister: unregister yourself
 help: get this helpful message
 sucks: express some frustration
 
@@ -34,6 +35,7 @@ Captains
 --------
 promote <player>: promote a user to captain
 demote me: demote you from captain
+unregister <player>: remove a player from the leaderboard
 
 Premium
 -------

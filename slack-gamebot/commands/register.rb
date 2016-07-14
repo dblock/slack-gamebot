@@ -4,6 +4,7 @@ module SlackGamebot
       def self.call(client, data, _match)
         ts = Time.now.utc
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
+        user.register! if user && !user.registered?
         message = if user.created_at >= ts
                     "Welcome <@#{data.user}>! You're ready to play."
                   elsif user.updated_at >= ts

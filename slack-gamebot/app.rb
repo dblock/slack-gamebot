@@ -7,6 +7,7 @@ EOS
 
     def prepare!
       super
+      update_registered_users!
       deactivate_dead_teams!
       nudge_sleeping_teams!
     end
@@ -35,6 +36,10 @@ EOS
           logger.warn "Error nudging team #{team}, #{e.message}."
         end
       end
+    end
+
+    def update_registered_users!
+      User.where(registered: nil).update_all(registered: true)
     end
   end
 end

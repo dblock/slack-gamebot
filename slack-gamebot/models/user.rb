@@ -11,6 +11,7 @@ class User
   field :tau, type: Float, default: 0
   field :rank, type: Integer
   field :captain, type: Boolean, default: false
+  field :registered, type: Boolean, default: true
 
   belongs_to :team, index: true
   validates_presence_of :team
@@ -36,7 +37,7 @@ class User
   def self.find_by_slack_mention!(team, user_name)
     query = user_name =~ /^<@(.*)>$/ ? { user_id: Regexp.last_match[1] } : { user_name: Regexp.new("^#{user_name}$", 'i') }
     user = User.where(query.merge(team: team)).first
-    fail SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user
+    fail SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user && user.registered?
     user
   end
 
@@ -77,6 +78,18 @@ class User
     update_attributes!(captain: false)
   end
 
+  def register!
+    return if registered?
+    update_attributes!(registered: true)
+    User.rank!(team)
+  end
+
+  def unregister!
+    return unless registered?
+    update_attributes!(registered: false, rank: nil)
+    User.rank!(team)
+  end
+
   def rank!
     return unless elo_changed?
     User.rank!(team)
@@ -85,10 +98,12 @@ class User
 
   def self.rank!(team)
     rank = 1
-    players = any_of({ :wins.gt => 0 }, { :losses.gt => 0 }, :ties.gt => 0).where(team: team).desc(:elo).desc(:wins).asc(:losses).desc(:ties)
+    players = any_of({ :wins.gt => 0 }, { :losses.gt => 0 }, :ties.gt => 0).where(team: team, registered: true).desc(:elo).desc(:wins).asc(:losses).desc(:ties)
     players.each_with_index do |player, index|
-      rank += 1 if index > 0 && [:elo, :wins, :losses, :ties].any? { |property| players[index - 1].send(property) != player.send(property) }
-      player.update_attributes!(rank: rank) unless rank == player.rank
+      if player.registered?
+        rank += 1 if index > 0 && [:elo, :wins, :losses, :ties].any? { |property| players[index - 1].send(property) != player.send(property) }
+        player.set(rank: rank) unless rank == player.rank
+      end
     end
   end
 

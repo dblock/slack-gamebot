@@ -64,6 +64,9 @@ gamebot register
 Welcome back Victor Barna! I've updated your registration.
 ```
 
+You can also remove yourself from the leaderboard with `gamebot unregister me` and re-register youself again with `gamebot register`.
+The data is not removed, but the user will no longer appear in the leaderboards and cannot participate in challenges.
+
 #### gamebot challenge &lt;opponent&gt; ... [with &lt;teammate&gt; ...]
 
 Creates a new challenge between you and an opponent.
@@ -314,6 +317,16 @@ gamebot seasons
 
 Current: Deng Yaping: 1 win, 0 losses (elo: 48), 1 game, 2 players
 2015-07-16: Wang Hoe: 28 wins, 19 losses (elo: 214), 206 games, 25 players
+```
+
+#### gamebot unregister &lt;player&gt;
+
+Captains can remove users.
+
+```
+gamebot unregister @WangHoe
+
+I've removed @WangHoe from the leaderboard.
 ```
 
 #### gamebot set gifs on|off

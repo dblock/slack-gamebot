@@ -28,4 +28,11 @@ describe SlackGamebot::Commands::Register, vcr: { cassette_name: 'user_info' } d
       expect(message: "#{SlackRubyBot.config.user} register", user: 'user').to respond_with_slack_message("Welcome back <@user>, you're already registered. You're also team captain.")
     end.to_not change(User, :count)
   end
+  it 'registeres a previously unregistered existing user' do
+    user = Fabricate(:user, user_id: 'user', registered: false)
+    expect do
+      expect(message: "#{SlackRubyBot.config.user} register", user: 'user').to respond_with_slack_message("Welcome back <@user>, I've updated your registration. You're also team captain.")
+    end.to_not change(User, :count)
+    expect(user.reload.registered?).to be true
+  end
 end

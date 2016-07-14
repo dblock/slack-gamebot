@@ -140,6 +140,12 @@ describe User do
       expect(user1.rank).to eq 1
       expect(user2.reload.rank).to eq 2
     end
+    it 'does not rank unregistered users' do
+      user1 = Fabricate(:user, elo: 40, wins: 1, losses: 0, registered: false)
+      user2 = Fabricate(:user, elo: 40, wins: 4, losses: 0)
+      expect(user1.reload.rank).to be nil
+      expect(user2.reload.rank).to eq 1
+    end
   end
   context '.ranked' do
     it 'returns an empty list' do

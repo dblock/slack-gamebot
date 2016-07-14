@@ -58,4 +58,18 @@ describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } 
       "I don't know who Jung-hwa is! Ask them to _register_."
     )
   end
+  it 'requires the opponent to be registred' do
+    opponent.unregister!
+    expect(message: "#{SlackRubyBot.config.user} challenge <@#{opponent.user_name}>", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
+      "I don't know who <@#{opponent.user_name}> is! Ask them to _register_."
+    )
+  end
+  it 'requires the user account to be in a registered state' do
+    user.unregister!
+    expect do
+      expect(message: "#{SlackRubyBot.config.user} challenge foobar", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
+        "You aren't registered to play, please _register_ first."
+      )
+    end.to_not change(Challenge, :count)
+  end
 end
