@@ -18,7 +18,7 @@ A generic game bot for slack. Works for ping-pong (2, 4 or more players), chess,
 Create a new Bot Integration under [services/new/bot](http://slack.com/services/new/bot). Note the API token.
 You will be able to invoke gamebot by the name you give it in the UI above.
 
-Run `SLACK_API_TOKEN=<your API token> GAMEBOT_SECRET=secret foreman start`
+Run `SLACK_API_TOKEN=<your API token> foreman start`
 
 ## Production Deployment
 

@@ -5,7 +5,6 @@ describe Team do
   context '#find_or_create_from_env!' do
     before do
       ENV['SLACK_API_TOKEN'] = 'token'
-      ENV['GAMEBOT_SECRET'] = 'secret'
     end
     context 'team', vcr: { cassette_name: 'team_info' } do
       it 'creates a team' do
@@ -20,7 +19,6 @@ describe Team do
     end
     after do
       ENV.delete 'SLACK_API_TOKEN'
-      ENV.delete 'GAMEBOT_SECRET'
     end
   end
   context '#destroy' do

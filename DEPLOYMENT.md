@@ -48,6 +48,10 @@ Slack-Gamebot replies with animated GIFs. While it's currently not necessary, yo
 
 The root of your API location, used when displaying the API URL for teams when invoking `set api`.
 
+#### STRIPE_API_KEY and STRIPE_API_PUBLISHABLE_KEY
+
+The free service on [playplay.io](https://www.playplay.io) allows users to upgrade to a paid service and enable a number of premium features. The money is collected with Stripe, and requires two keys, a private key for creating subscriptions on the back-end, and a public key for tokenizing credit cards client-side.
+
 #### Multi-Game Setup
 
 If your bot is a service, like the one on [playplay.io](https://www.playplay.io), register an aplication with Slack on https://api.slack.com and note the Slack client ID and secret. Create a game (currently console only).
