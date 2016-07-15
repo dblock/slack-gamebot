@@ -73,6 +73,14 @@ describe User do
     it 'respects team elo' do
       expect(user.to_s).to include 'elo: 50'
     end
+    context 'unregistered user' do
+      before do
+        user.update_attributes!(registered: false)
+      end
+      it 'hides name' do
+        expect(user.to_s).to eq '<unregistered>: 0 wins, 0 losses (elo: 50)'
+      end
+    end
   end
   context '#reset_all' do
     it 'resets all user stats' do

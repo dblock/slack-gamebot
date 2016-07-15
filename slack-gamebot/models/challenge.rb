@@ -145,7 +145,7 @@ class Challenge
   end
 
   def to_s
-    "a challenge between #{challengers.map(&:user_name).and} and #{challenged.map(&:user_name).and}"
+    "a challenge between #{challengers.map(&:display_name).and} and #{challenged.map(&:display_name).and}"
   end
 
   def self.find_by_user(team, channel, player, states = [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])

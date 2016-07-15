@@ -30,10 +30,10 @@ class Match
 
   def to_s
     if resigned?
-      "#{losers.map(&:user_name).and} resigned against #{winners.map(&:user_name).and}"
+      "#{losers.map(&:display_name).and} resigned against #{winners.map(&:display_name).and}"
     else
       [
-        "#{winners.map(&:user_name).and} #{score_verb} #{losers.map(&:user_name).and}",
+        "#{winners.map(&:display_name).and} #{score_verb} #{losers.map(&:display_name).and}",
         scores ? "with #{Score.scores_to_string(scores)}" : nil
       ].compact.join(' ')
     end

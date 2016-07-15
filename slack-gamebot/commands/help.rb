@@ -35,12 +35,12 @@ Captains
 --------
 promote <player>: promote a user to captain
 demote me: demote you from captain
-unregister <player>: remove a player from the leaderboard
 
 Premium
 -------
 seasons: show all seasons
 reset <team>: reset all stats, start a new season
+unregister <player>: remove a player from the leaderboard
 set gifs [on|off]: enable/disable animated GIFs, default is on
 set aliases [<alias|none> ...]: set additional bot aliases
 set elo [number]: set base elo for the team

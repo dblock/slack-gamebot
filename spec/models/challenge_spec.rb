@@ -1,6 +1,20 @@
 require 'spec_helper'
 
 describe Challenge do
+  context '#to_s' do
+    let(:challenge) { Fabricate(:challenge) }
+    it 'displays challenge' do
+      expect(challenge.to_s).to eq "a challenge between #{challenge.challengers.first.user_name} and #{challenge.challenged.first.user_name}"
+    end
+    context 'unregistered users' do
+      before do
+        challenge.challengers.first.unregister!
+      end
+      it 'removes user name' do
+        expect(challenge.to_s).to eq "a challenge between <unregistered> and #{challenge.challenged.first.user_name}"
+      end
+    end
+  end
   context 'find_by_user' do
     before do
       @challenge = Fabricate(:challenge)

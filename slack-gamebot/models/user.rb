@@ -34,6 +34,10 @@ class User
     "<@#{user_id}>"
   end
 
+  def display_name
+    registered ? user_name : '<unregistered>'
+  end
+
   def self.find_by_slack_mention!(team, user_name)
     query = user_name =~ /^<@(.*)>$/ ? { user_id: Regexp.last_match[1] } : { user_name: Regexp.new("^#{user_name}$", 'i') }
     user = User.where(query.merge(team: team)).first
@@ -63,7 +67,7 @@ class User
     wins_s = "#{wins} win#{wins != 1 ? 's' : ''}"
     losses_s = "#{losses} loss#{losses != 1 ? 'es' : ''}"
     ties_s = "#{ties} tie#{ties != 1 ? 's' : ''}" if ties && ties > 0
-    "#{user_name}: #{[wins_s, losses_s, ties_s].compact.join(', ')} (elo: #{team_elo})"
+    "#{display_name}: #{[wins_s, losses_s, ties_s].compact.join(', ')} (elo: #{team_elo})"
   end
 
   def team_elo
