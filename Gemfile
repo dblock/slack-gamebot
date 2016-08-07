@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 ruby '2.3.1'
 
-gem 'slack-ruby-bot-server'
+gem 'slack-ruby-bot-server', github: 'dblock/slack-ruby-bot-server'
 gem 'ruby-enum'
 gem 'mongoid-scroll'
 gem 'time_ago_in_words'
