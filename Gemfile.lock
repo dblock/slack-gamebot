@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/dblock/slack-ruby-bot-server.git
-  revision: 9f5d84fb532b4df191a4fcf3f1ab73a63f8654ae
+  revision: cfa14a9046cdef9f51a005b8203abd4104c31830
   specs:
     slack-ruby-bot-server (0.4.0)
       celluloid-io
