@@ -161,6 +161,13 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
             expect(team.reload.aliases).to eq %w(foo bar baz)
             expect(app.send(:client).aliases).to eq %w(foo bar baz)
           end
+          it 'sets comma-separated aliases' do
+            expect(message: "#{SlackRubyBot.config.user} set aliases foo,bar").to respond_with_slack_message(
+              "Bot aliases for team #{team.name} are foo and bar."
+            )
+            expect(team.reload.aliases).to eq %w(foo bar)
+            expect(app.send(:client).aliases).to eq %w(foo bar)
+          end
           it 'sets comma-separated aliases with extra spaces' do
             expect(message: "#{SlackRubyBot.config.user} set aliases   foo,    bar").to respond_with_slack_message(
               "Bot aliases for team #{team.name} are foo and bar."
@@ -296,9 +303,15 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
       context 'without a nickname set' do
         it 'sets nickname' do
           expect(message: "#{SlackRubyBot.config.user} set nickname john doe", user: user.user_id).to respond_with_slack_message(
-            "Your nickname is now \"john doe\", #{user.user_name}."
+            "Your nickname is now *john doe*, #{user.slack_mention}."
           )
           expect(user.reload.nickname).to eq 'john doe'
+        end
+        it 'sets emoji nickname' do
+          expect(message: "#{SlackRubyBot.config.user} set nickname :dancer:", user: user.user_id).to respond_with_slack_message(
+            "Your nickname is now *:dancer:*, #{user.slack_mention}."
+          )
+          expect(user.reload.nickname).to eq ':dancer:'
         end
       end
       context 'with a nickname set' do
@@ -307,12 +320,12 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
         end
         it 'shows current value of nickname' do
           expect(message: "#{SlackRubyBot.config.user} set nickname", user: user.user_id).to respond_with_slack_message(
-            "Your nickname is \"bob\", #{user.user_name}."
+            "Your nickname is *bob*, #{user.slack_mention}."
           )
         end
         it 'sets nickname' do
           expect(message: "#{SlackRubyBot.config.user} set nickname john doe", user: user.user_id).to respond_with_slack_message(
-            "Your nickname is now \"john doe\", #{user.user_name}."
+            "Your nickname is now *john doe*, #{user.slack_mention}."
           )
           expect(user.reload.nickname).to eq 'john doe'
         end

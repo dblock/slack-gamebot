@@ -9,7 +9,7 @@ module SlackGamebot
           client.say(channel: data.channel, text: 'Missing setting, eg. _set gifs off_.', gif: 'help')
           logger.info "SET: #{client.owner} - #{user.user_name}, failed, missing setting"
         else
-          k, v = match['expression'].split(/\W+/, 2)
+          k, v = match['expression'].split(/[\s]+/, 2)
           case k
           when 'nickname' then
             unless v.nil?
@@ -21,7 +21,7 @@ module SlackGamebot
               client.say(channel: data.channel, text: "You don't have a nickname set, #{user.user_name}.", gif: 'anonymous')
               logger.info "SET: #{client.owner} - #{user.user_name} nickname is not set"
             else
-              client.say(channel: data.channel, text: "Your nickname is #{v.nil? ? '' : 'now '}\"#{user.nickname}\", #{user.user_name}.", gif: 'name')
+              client.say(channel: data.channel, text: "Your nickname is #{v.nil? ? '' : 'now '}*#{user.nickname}*, #{user.slack_mention}.", gif: 'name')
               logger.info "SET: #{client.owner} - #{user.user_name} nickname is #{user.nickname}"
             end
           when 'gifs' then
