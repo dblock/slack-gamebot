@@ -10,9 +10,22 @@ module SlackGamebot
           logger.info "SET: #{client.owner} - #{user.user_name}, failed, missing setting"
         else
           k, v = match['expression'].split(/\W+/, 2)
-          fail SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
           case k
+          when 'nickname' then
+            unless v.nil?
+              premium client, data do
+                user.update_attributes!(nickname: v)
+              end
+            end
+            if user.nickname.blank?
+              client.say(channel: data.channel, text: "You don't have a nickname set, #{user.user_name}.", gif: 'anonymous')
+              logger.info "SET: #{client.owner} - #{user.user_name} nickname is not set"
+            else
+              client.say(channel: data.channel, text: "Your nickname is #{v.nil? ? '' : 'now '}\"#{user.nickname}\", #{user.user_name}.", gif: 'name')
+              logger.info "SET: #{client.owner} - #{user.user_name} nickname is #{user.nickname}"
+            end
           when 'gifs' then
+            fail SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
             unless v.nil?
               premium client, data do
                 client.owner.update_attributes!(gifs: v.to_b)
@@ -22,6 +35,7 @@ module SlackGamebot
             client.say(channel: data.channel, text: "GIFs for team #{client.owner.name} are #{client.owner.gifs? ? 'on!' : 'off.'}", gif: 'fun')
             logger.info "SET: #{client.owner} - #{user.user_name} GIFs are #{client.owner.gifs? ? 'on' : 'off'}"
           when 'api' then
+            fail SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
             unless v.nil?
               premium client, data do
                 client.owner.update_attributes!(api: v.to_b)
@@ -34,6 +48,7 @@ module SlackGamebot
             client.say(channel: data.channel, text: message, gif: 'programmer')
             logger.info "SET: #{client.owner} - #{user.user_name} API is #{client.owner.api? ? 'on' : 'off'}"
           when 'elo' then
+            fail SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
             unless v.nil?
               premium client, data do
                 elo = begin
@@ -48,6 +63,7 @@ module SlackGamebot
             client.say(channel: data.channel, text: message, gif: 'score')
             logger.info "SET: #{client.owner} - #{user.user_name} ELO is #{client.owner.elo}"
           when 'aliases' then
+            fail SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
             if v == 'none'
               premium client, data do
                 client.owner.update_attributes!(aliases: [])
@@ -67,6 +83,7 @@ module SlackGamebot
               logger.info "SET: #{client.owner} - #{user.user_name}, does not have any bot aliases"
             end
           else
+            fail SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
             fail SlackGamebot::Error, "Invalid setting #{k}, you can _set gifs on|off_, _api on|off_ and _aliases_."
           end
         end

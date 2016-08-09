@@ -14,6 +14,14 @@ describe Match do
         expect(match.to_s).to eq "<unregistered> defeated #{match.losers.first.user_name} with #{Score.scores_to_string(match.scores)}"
       end
     end
+    context 'user with nickname' do
+      before do
+        match.winners.first.update_attributes!(nickname: 'bob')
+      end
+      it 'rewrites user name' do
+        expect(match.to_s).to eq "bob defeated #{match.losers.first.user_name} with #{Score.scores_to_string(match.scores)}"
+      end
+    end
   end
   context 'elo' do
     context 'singles' do

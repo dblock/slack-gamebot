@@ -14,6 +14,14 @@ describe Challenge do
         expect(challenge.to_s).to eq "a challenge between <unregistered> and #{challenge.challenged.first.user_name}"
       end
     end
+    context 'users with nickname' do
+      before do
+        challenge.challengers.first.update_attributes!(nickname: 'bob')
+      end
+      it 'rewrites user name' do
+        expect(challenge.to_s).to eq "a challenge between bob and #{challenge.challenged.first.user_name}"
+      end
+    end
   end
   context 'find_by_user' do
     before do

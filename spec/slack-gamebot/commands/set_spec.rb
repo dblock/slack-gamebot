@@ -277,4 +277,46 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
       end
     end
   end
+  context 'nickname' do
+    let(:user) { Fabricate(:user, team: team, user_name: 'username') }
+    it 'is a premium feature' do
+      expect(client).to receive(:say).with(channel: 'channel', text: team.premium_text)
+      expect(client).to receive(:say).with(channel: 'channel', text: "You don't have a nickname set, #{user.user_name}.", gif: 'anonymous')
+      message_hook.call(client, Hashie::Mash.new(channel: 'channel', user: 'user', text: "#{SlackRubyBot.config.user} set nickname bob"))
+    end
+    context 'with no nickname' do
+      it 'shows that the user has no nickname' do
+        expect(message: "#{SlackRubyBot.config.user} set nickname", user: user.user_id).to respond_with_slack_message(
+          "You don't have a nickname set, #{user.user_name}."
+        )
+      end
+    end
+    context 'premium team' do
+      let!(:team) { Fabricate(:team, premium: true) }
+      context 'without a nickname set' do
+        it 'sets nickname' do
+          expect(message: "#{SlackRubyBot.config.user} set nickname john doe", user: user.user_id).to respond_with_slack_message(
+            "Your nickname is now \"john doe\", #{user.user_name}."
+          )
+          expect(user.reload.nickname).to eq 'john doe'
+        end
+      end
+      context 'with a nickname set' do
+        before do
+          user.update_attributes!(nickname: 'bob')
+        end
+        it 'shows current value of nickname' do
+          expect(message: "#{SlackRubyBot.config.user} set nickname", user: user.user_id).to respond_with_slack_message(
+            "Your nickname is \"bob\", #{user.user_name}."
+          )
+        end
+        it 'sets nickname' do
+          expect(message: "#{SlackRubyBot.config.user} set nickname john doe", user: user.user_id).to respond_with_slack_message(
+            "Your nickname is now \"john doe\", #{user.user_name}."
+          )
+          expect(user.reload.nickname).to eq 'john doe'
+        end
+      end
+    end
+  end
 end

@@ -2,32 +2,31 @@ require 'spec_helper'
 
 describe User do
   context '#find_by_slack_mention!' do
-    before do
-      @user = Fabricate(:user)
-    end
+    let!(:user) { Fabricate(:user, nickname: 'bob') }
     it 'finds by slack id' do
-      expect(User.find_by_slack_mention!(@user.team, "<@#{@user.user_id}>")).to eq @user
+      expect(User.find_by_slack_mention!(user.team, "<@#{user.user_id}>")).to eq user
     end
     it 'finds by username' do
-      expect(User.find_by_slack_mention!(@user.team, @user.user_name)).to eq @user
+      expect(User.find_by_slack_mention!(user.team, user.user_name)).to eq user
     end
     it 'finds by username is case-insensitive' do
-      expect(User.find_by_slack_mention!(@user.team, @user.user_name.capitalize)).to eq @user
+      expect(User.find_by_slack_mention!(user.team, user.user_name.capitalize)).to eq user
     end
     it 'requires a known user' do
       expect do
-        User.find_by_slack_mention!(@user.team, '<@nobody>')
+        User.find_by_slack_mention!(user.team, '<@nobody>')
       end.to raise_error SlackGamebot::Error, "I don't know who <@nobody> is! Ask them to _register_."
+    end
+    it 'finds by nickname' do
+      expect(User.find_by_slack_mention!(user.team, user.nickname)).to eq user
     end
   end
   context '#find_many_by_slack_mention!' do
     let!(:team) { Fabricate(:team) }
-    before do
-      @users = [Fabricate(:user, team: team), Fabricate(:user, team: team)]
-    end
+    let!(:users) { [Fabricate(:user, team: team), Fabricate(:user, team: team)] }
     it 'finds by slack_id or slack_mention' do
-      users = User.find_many_by_slack_mention!(team, [@users.first.user_name, @users.last.slack_mention])
-      expect(users).to contain_exactly(*@users)
+      results = User.find_many_by_slack_mention!(team, [users.first.user_name, users.last.slack_mention])
+      expect(results).to contain_exactly(*users)
     end
     it 'requires known users' do
       expect do
@@ -52,9 +51,7 @@ describe User do
       end
     end
     context 'with a user' do
-      before do
-        @user = Fabricate(:user, team: team)
-      end
+      let!(:user) { Fabricate(:user, team: team) }
       it 'creates another user' do
         expect do
           User.find_create_or_update_by_slack_id!(client, 'U42')
@@ -62,9 +59,9 @@ describe User do
       end
       it 'updates the username of the existing user' do
         expect do
-          User.find_create_or_update_by_slack_id!(client, @user.user_id)
+          User.find_create_or_update_by_slack_id!(client, user.user_id)
         end.to_not change(User, :count)
-        expect(@user.reload.user_name).to eq 'username'
+        expect(user.reload.user_name).to eq 'username'
       end
     end
   end
@@ -79,6 +76,14 @@ describe User do
       end
       it 'hides name' do
         expect(user.to_s).to eq '<unregistered>: 0 wins, 0 losses (elo: 50)'
+      end
+    end
+    context 'user with nickname' do
+      before do
+        user.update_attributes!(nickname: 'bob')
+      end
+      it 'rewrites user name' do
+        expect(user.to_s).to eq 'bob: 0 wins, 0 losses (elo: 50)'
       end
     end
   end

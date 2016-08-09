@@ -12,6 +12,7 @@ class User
   field :rank, type: Integer
   field :captain, type: Boolean, default: false
   field :registered, type: Boolean, default: true
+  field :nickname, type: String
 
   belongs_to :team, index: true
   validates_presence_of :team
@@ -35,12 +36,16 @@ class User
   end
 
   def display_name
-    registered ? user_name : '<unregistered>'
+    registered ? nickname || user_name : '<unregistered>'
   end
 
   def self.find_by_slack_mention!(team, user_name)
-    query = user_name =~ /^<@(.*)>$/ ? { user_id: Regexp.last_match[1] } : { user_name: Regexp.new("^#{user_name}$", 'i') }
-    user = User.where(query.merge(team: team)).first
+    user = if user_name =~ /^<@(.*)>$/
+             User.where(user_id: Regexp.last_match[1], team: team).first
+           else
+             regexp = Regexp.new("^#{user_name}$", 'i')
+             User.where(team: team).or({ user_name: regexp }, nickname: regexp).first
+           end
     fail SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user && user.registered?
     user
   end

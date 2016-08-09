@@ -41,6 +41,7 @@ Premium
 seasons: show all seasons
 reset <team>: reset all stats, start a new season
 unregister <player>: remove a player from the leaderboard
+set nickname [name]: set your nickname displayed in leaderboards
 set gifs [on|off]: enable/disable animated GIFs, default is on
 set aliases [<alias|none> ...]: set additional bot aliases
 set elo [number]: set base elo for the team

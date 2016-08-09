@@ -329,6 +329,14 @@ gamebot unregister @WangHoe
 I've removed @WangHoe from the leaderboard.
 ```
 
+#### gamebot set nickname [name]
+
+Sets a nickname for display purposes.
+
+```
+gamebot set nickname John Doe
+```
+
 #### gamebot set gifs on|off
 
 Enable/disable GIFs for your team.
