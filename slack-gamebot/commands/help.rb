@@ -35,6 +35,7 @@ Captains
 --------
 promote <player>: promote a user to captain
 demote me: demote you from captain
+set nickname <player> [name]: set someone's nickname
 
 Premium
 -------

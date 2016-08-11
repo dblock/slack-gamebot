@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#123](https://github.com/dblock/slack-gamebot/issues/123): Captains can set other user's nicknames - [@dblock](https://github.com/dblock).
 * [#88](https://github.com/dblock/slack-gamebot/issues/88): Set `nickname` to obfuscate your username in leaderboard output - [@dblock](https://github.com/dblock).
 * [#86](https://github.com/dblock/slack-gamebot/issues/86): Added `unregister` to remove yourself or another player from the leaderboard - [@dblock](https://github.com/dblock).
 * [#119](https://github.com/dblock/slack-gamebot/issues/119): Fix: teams reporting matches with `lost to` incorrectly marked as dead - [@dblock](https://github.com/dblock).

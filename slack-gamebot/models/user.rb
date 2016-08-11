@@ -39,9 +39,14 @@ class User
     registered ? nickname || user_name : '<unregistered>'
   end
 
+  def self.slack_mention?(user_name)
+    Regexp.last_match[1] if user_name =~ /^<@(.*)>$/
+  end
+
   def self.find_by_slack_mention!(team, user_name)
-    user = if user_name =~ /^<@(.*)>$/
-             User.where(user_id: Regexp.last_match[1], team: team).first
+    slack_id = slack_mention?(user_name)
+    user = if slack_id
+             User.where(user_id: slack_id, team: team).first
            else
              regexp = Regexp.new("^#{user_name}$", 'i')
              User.where(team: team).or({ user_name: regexp }, nickname: regexp).first

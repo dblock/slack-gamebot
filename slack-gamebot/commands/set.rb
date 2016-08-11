@@ -12,17 +12,24 @@ module SlackGamebot
           k, v = match['expression'].split(/[\s]+/, 2)
           case k
           when 'nickname' then
+            target_user = user
+            slack_mention = v.split.first if v
+            if v && User.slack_mention?(slack_mention)
+              fail SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
+              target_user = ::User.find_by_slack_mention!(client.owner, slack_mention)
+              v = v[slack_mention.length + 1..-1]
+            end
             unless v.nil?
               premium client, data do
-                user.update_attributes!(nickname: v)
+                target_user.update_attributes!(nickname: v)
               end
             end
-            if user.nickname.blank?
-              client.say(channel: data.channel, text: "You don't have a nickname set, #{user.user_name}.", gif: 'anonymous')
-              logger.info "SET: #{client.owner} - #{user.user_name} nickname is not set"
+            if target_user.nickname.blank?
+              client.say(channel: data.channel, text: "You don't have a nickname set, #{target_user.user_name}.", gif: 'anonymous')
+              logger.info "SET: #{client.owner} - #{user.user_name}: nickname #{target_user == user ? '' : ' for ' + target_user.user_name}is not set"
             else
-              client.say(channel: data.channel, text: "Your nickname is #{v.nil? ? '' : 'now '}*#{user.nickname}*, #{user.slack_mention}.", gif: 'name')
-              logger.info "SET: #{client.owner} - #{user.user_name} nickname is #{user.nickname}"
+              client.say(channel: data.channel, text: "Your nickname is #{v.nil? ? '' : 'now '}*#{target_user.nickname}*, #{target_user.slack_mention}.", gif: 'name')
+              logger.info "SET: #{client.owner} - #{user.user_name} nickname #{target_user == user ? '' : ' for ' + target_user.user_name}is #{target_user.nickname}"
             end
           when 'gifs' then
             fail SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?

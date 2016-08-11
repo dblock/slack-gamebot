@@ -21,7 +21,6 @@ end
 
 group :development do
   gem 'mongoid-shell'
-  gem 'heroku'
 end
 
 group :test do

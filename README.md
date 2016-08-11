@@ -337,6 +337,12 @@ Sets a nickname for display purposes.
 gamebot set nickname John Doe
 ```
 
+Captains can set nicknames of users by using a Slack mention.
+
+```
+gamebot set nickname @WangHoe John Doe
+```
+
 #### gamebot set gifs on|off
 
 Enable/disable GIFs for your team.

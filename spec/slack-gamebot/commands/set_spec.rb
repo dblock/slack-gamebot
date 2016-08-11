@@ -329,6 +329,17 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
           )
           expect(user.reload.nickname).to eq 'john doe'
         end
+        it 'cannot set nickname unless captain' do
+          expect(message: "#{SlackRubyBot.config.user} set nickname #{captain.slack_mention} :dancer:", user: user.user_id).to respond_with_slack_message(
+            "You're not a captain, sorry."
+          )
+        end
+        it 'sets nickname for another user' do
+          expect(message: "#{SlackRubyBot.config.user} set nickname #{user.slack_mention} john doe", user: captain.user_id).to respond_with_slack_message(
+            "Your nickname is now *john doe*, #{user.slack_mention}."
+          )
+          expect(user.reload.nickname).to eq 'john doe'
+        end
       end
     end
   end
