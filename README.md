@@ -337,10 +337,22 @@ Sets a nickname for display purposes.
 gamebot set nickname John Doe
 ```
 
+Unset a nickname.
+
+```
+gamebot unset nickname
+```
+
 Captains can set nicknames of users by using a Slack mention.
 
 ```
 gamebot set nickname @WangHoe John Doe
+```
+
+Captains can unset nicknames, too.
+
+```
+gamebot unset nickname @WangHoe
 ```
 
 #### gamebot set gifs on|off
@@ -355,12 +367,18 @@ GIFs for team China are off.
 
 ![](screenshots/gifs.gif)
 
+Using `unset gifs` is equivalent to `set gifs off`.
+
 #### gamebot set elo [number]
 
-Set the base elo for new seasons. Default is 0.
+Set and resets the base elo for new seasons. Default is 0.
 
 ```
 gamebot set elo 1000
+```
+
+```
+gamebot unset elo
 ```
 
 #### gamebot set aliases &lt;alias|none&gt; ...
@@ -373,9 +391,9 @@ gamebot set aliases pp :pong:
 Team China aliases are set to pp and :pong:.
 ```
 
-Remove all aliases with `set aliases none`.
-
 ![](screenshots/aliases.gif)
+
+Remove all aliases with `unset aliases`.
 
 #### gamebot set api on|off
 
@@ -386,6 +404,12 @@ gamebot set api on
 
 API for team China is on!
 http://www.playplay.io/api/teams/57224e65bc526eac95bfe316
+```
+
+```
+gamebot unset api
+
+API for team China is off.
 ```
 
 ## API

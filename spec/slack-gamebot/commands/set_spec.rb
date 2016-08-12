@@ -50,9 +50,17 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
           expect(team.reload.gifs).to be true
           expect(app.send(:client).send_gifs?).to be true
         end
-        it 'disables GIFs' do
+        it 'disables GIFs with set' do
           team.update_attributes!(gifs: true)
           expect(message: "#{SlackRubyBot.config.user} set gifs off").to respond_with_slack_message(
+            "GIFs for team #{team.name} are off."
+          )
+          expect(team.reload.gifs).to be false
+          expect(app.send(:client).send_gifs?).to be false
+        end
+        it 'disables GIFs with unset' do
+          team.update_attributes!(gifs: true)
+          expect(message: "#{SlackRubyBot.config.user} unset gifs").to respond_with_slack_message(
             "GIFs for team #{team.name} are off."
           )
           expect(team.reload.gifs).to be false
@@ -98,9 +106,16 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
           )
           expect(team.reload.api).to be true
         end
-        it 'disables API' do
+        it 'disables API with set' do
           team.update_attributes!(api: true)
           expect(message: "#{SlackRubyBot.config.user} set api off").to respond_with_slack_message(
+            "API for team #{team.name} is off."
+          )
+          expect(team.reload.api).to be false
+        end
+        it 'disables API with unset' do
+          team.update_attributes!(api: true)
+          expect(message: "#{SlackRubyBot.config.user} unset api").to respond_with_slack_message(
             "API for team #{team.name} is off."
           )
           expect(team.reload.api).to be false
@@ -182,8 +197,8 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
             expect(team.reload.aliases).to eq ['pp', ':pong:']
           end
           it 'removes aliases' do
-            expect(message: "#{SlackRubyBot.config.user} set aliases none").to respond_with_slack_message(
-              "Team #{team.name} does not have any bot aliases."
+            expect(message: "#{SlackRubyBot.config.user} unset aliases").to respond_with_slack_message(
+              "Team #{team.name} no longer has bot aliases."
             )
             expect(team.reload.aliases).to be_empty
             expect(app.send(:client).aliases).to be_empty
@@ -237,9 +252,15 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
             )
             expect(team.reload.elo).to eq 1000
           end
-          it 'resets elo' do
+          it 'resets elo with set' do
             expect(message: "#{SlackRubyBot.config.user} set elo 0").to respond_with_slack_message(
               "Base elo for team #{team.name} is 0."
+            )
+            expect(team.reload.elo).to eq 0
+          end
+          it 'resets elo with unset' do
+            expect(message: "#{SlackRubyBot.config.user} unset elo").to respond_with_slack_message(
+              "Base elo for team #{team.name} has been unset."
             )
             expect(team.reload.elo).to eq 0
           end
@@ -247,9 +268,14 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
       end
     end
     context 'invalid' do
-      it 'error' do
+      it 'errors set' do
         expect(message: "#{SlackRubyBot.config.user} set invalid on").to respond_with_slack_message(
-          'Invalid setting invalid, you can _set gifs on|off_, _api on|off_ and _aliases_.'
+          'Invalid setting invalid, you can _set gifs on|off_, _api on|off_, _elo_, _nickname_ and _aliases_.'
+        )
+      end
+      it 'errors unset' do
+        expect(message: "#{SlackRubyBot.config.user} unset invalid").to respond_with_slack_message(
+          'Invalid setting invalid, you can _unset gifs_, _api_, _elo_, _nickname_ and _aliases_.'
         )
       end
     end
@@ -307,6 +333,12 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
           )
           expect(user.reload.nickname).to eq 'john doe'
         end
+        it 'does not unset nickname' do
+          expect(message: "#{SlackRubyBot.config.user} unset nickname", user: user.user_id).to respond_with_slack_message(
+            "You don't have a nickname set, #{user.slack_mention}."
+          )
+          expect(user.reload.nickname).to be nil
+        end
         it 'sets emoji nickname' do
           expect(message: "#{SlackRubyBot.config.user} set nickname :dancer:", user: user.user_id).to respond_with_slack_message(
             "Your nickname is now *:dancer:*, #{user.slack_mention}."
@@ -329,6 +361,12 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
           )
           expect(user.reload.nickname).to eq 'john doe'
         end
+        it 'unsets nickname' do
+          expect(message: "#{SlackRubyBot.config.user} unset nickname", user: user.user_id).to respond_with_slack_message(
+            "You don't have a nickname set anymore, #{user.slack_mention}."
+          )
+          expect(user.reload.nickname).to be nil
+        end
         it 'cannot set nickname unless captain' do
           expect(message: "#{SlackRubyBot.config.user} set nickname #{captain.slack_mention} :dancer:", user: user.user_id).to respond_with_slack_message(
             "You're not a captain, sorry."
@@ -339,6 +377,13 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
             "Your nickname is now *john doe*, #{user.slack_mention}."
           )
           expect(user.reload.nickname).to eq 'john doe'
+        end
+        it 'unsets nickname for another user' do
+          user.update_attributes!(nickname: 'bob')
+          expect(message: "#{SlackRubyBot.config.user} unset nickname #{user.slack_mention}", user: captain.user_id).to respond_with_slack_message(
+            "You don't have a nickname set anymore, #{user.slack_mention}."
+          )
+          expect(user.reload.nickname).to be nil
         end
       end
     end
