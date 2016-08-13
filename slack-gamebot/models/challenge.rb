@@ -171,7 +171,8 @@ class Challenge
   end
 
   def validate_opponents_counts
-    errors.add(:challenged, "Number of teammates (#{challengers.count}) and opponents (#{challenged.count}) must match.") if challengers.count != challenged.count
+    return if challengers.any? && challenged.any? && (challengers.count == challenged.count || team.unbalanced)
+    errors.add(:challenged, "Number of teammates (#{challengers.count}) and opponents (#{challenged.count}) must match.")
   end
 
   def validate_teams

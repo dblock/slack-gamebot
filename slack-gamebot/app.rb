@@ -7,7 +7,7 @@ EOS
 
     def prepare!
       super
-      update_registered_users!
+      update_unbalanced_teams!
       deactivate_dead_teams!
       nudge_sleeping_teams!
     end
@@ -38,8 +38,8 @@ EOS
       end
     end
 
-    def update_registered_users!
-      User.where(registered: nil).update_all(registered: true)
+    def update_unbalanced_teams!
+      Team.where(unbalanced: nil).update_all(unbalanced: false)
     end
   end
 end

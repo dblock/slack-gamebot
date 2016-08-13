@@ -412,6 +412,16 @@ gamebot unset api
 API for team China is off.
 ```
 
+#### gamebot set unbalanced on|off
+
+Allow unbalanced challenges with different number of opponents.
+
+```
+gamebot set unbalanced on
+
+Unbalanced challenges for team China are on!
+```
+
 ## API
 
 Slack-gamebot implements a Hypermedia API. Navigate to the application root to browse through available objects and methods. PlayPlay.io's Gamebot is [here](http://www.playplay.io/api), you can see [dblock's current ping-pong elo here](http://www.playplay.io/api/users/5543f64d6237640003000000).

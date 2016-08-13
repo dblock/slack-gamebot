@@ -18,6 +18,12 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
       expect(challenge.state).to eq ChallengeState::PLAYED
       expect(challenge.match.winners).to eq challenge.challengers
       expect(challenge.match.losers).to eq challenge.challenged
+      winner = challenge.match.winners.first
+      loser = challenge.match.losers.first
+      expect(winner.elo).to eq 48
+      expect(winner.tau).to eq 0.5
+      expect(loser.elo).to eq(-48)
+      expect(loser.tau).to eq 0.5
     end
     it 'updates existing challenge when lost to' do
       expect(message: "#{SlackRubyBot.config.user} lost to #{challenge.challengers.first.user_name}", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
@@ -84,6 +90,30 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
       expect(message: "#{SlackRubyBot.config.user} lost", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
         'No challenge to lose!'
       )
+    end
+  end
+  context 'with an existing unbalanced challenge' do
+    let(:challenged1) { Fabricate(:user, user_name: 'username') }
+    let(:challenged2) { Fabricate(:user) }
+    let(:challenge) { Fabricate(:challenge, challenged: [challenged1, challenged2]) }
+    before do
+      team.update_attributes!(unbalanced: true)
+      challenge.accept!(challenged1)
+    end
+    it 'lost' do
+      expect(message: "#{SlackRubyBot.config.user} lost", user: challenged1.user_id, channel: challenge.channel).to respond_with_slack_message(
+        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} defeated #{challenge.challenged.map(&:user_name).and}."
+      )
+      challenge.reload
+      expect(challenge.state).to eq ChallengeState::PLAYED
+      expect(challenge.match.winners).to eq challenge.challengers
+      expect(challenge.match.losers).to eq challenge.challenged
+      winner = challenge.match.winners.first
+      loser = challenge.match.losers.first
+      expect(winner.elo).to eq 48
+      expect(winner.tau).to eq 0.5
+      expect(loser.elo).to eq(-24)
+      expect(loser.tau).to eq 0.5
     end
   end
   context 'lost to' do

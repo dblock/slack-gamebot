@@ -53,6 +53,32 @@ describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } 
       )
     end.to_not change(Challenge, :count)
   end
+  it 'requires the same number of opponents' do
+    opponent1 = Fabricate(:user)
+    opponent2 = Fabricate(:user)
+    expect do
+      expect(message: "#{SlackRubyBot.config.user} challenge #{opponent1.slack_mention} #{opponent2.slack_mention}", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
+        'Number of teammates (1) and opponents (2) must match.'
+      )
+    end.to_not change(Challenge, :count)
+  end
+  context 'with unbalanced option enabled' do
+    before do
+      team.update_attributes!(unbalanced: true)
+    end
+    it 'allows different number of opponents' do
+      opponent1 = Fabricate(:user)
+      opponent2 = Fabricate(:user)
+      expect do
+        expect(message: "#{SlackRubyBot.config.user} challenge #{opponent1.slack_mention} #{opponent2.slack_mention}", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
+          "#{user.user_name} challenged #{opponent1.user_name} and #{opponent2.user_name} to a match!"
+        )
+      end.to change(Challenge, :count).by(1)
+      challenge = Challenge.last
+      expect(challenge.challengers).to eq [user]
+      expect(challenge.challenged).to eq [opponent1, opponent2]
+    end
+  end
   it 'does not butcher names with special characters' do
     expect(message: "#{SlackRubyBot.config.user} challenge Jung-hwa", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
       "I don't know who Jung-hwa is! Ask them to _register_."

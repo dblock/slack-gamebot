@@ -68,6 +68,59 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
         end
       end
     end
+    context 'unbalanced' do
+      it 'is a premium feature' do
+        expect(client).to receive(:say).with(channel: 'channel', text: team.premium_text)
+        expect(client).to receive(:say).with(channel: 'channel', text: "Unbalanced challenges for team #{team.name} are off.", gif: 'balance')
+        message_hook.call(client, Hashie::Mash.new(channel: 'channel', user: 'user', text: "#{SlackRubyBot.config.user} set unbalanced on"))
+      end
+      it 'shows current value of unbalanced off' do
+        expect(message: "#{SlackRubyBot.config.user} set unbalanced").to respond_with_slack_message(
+          "Unbalanced challenges for team #{team.name} are off."
+        )
+      end
+      it 'shows current value of unbalanced off' do
+        team.update_attributes!(unbalanced: false)
+        expect(message: "#{SlackRubyBot.config.user} set unbalanced").to respond_with_slack_message(
+          "Unbalanced challenges for team #{team.name} are off."
+        )
+      end
+      context 'premium team' do
+        let!(:team) { Fabricate(:team, premium: true) }
+        it 'shows current value of unbalanced off' do
+          expect(message: "#{SlackRubyBot.config.user} set unbalanced").to respond_with_slack_message(
+            "Unbalanced challenges for team #{team.name} are off."
+          )
+        end
+        it 'shows current value of unbalanced off' do
+          team.update_attributes!(unbalanced: false)
+          expect(message: "#{SlackRubyBot.config.user} set unbalanced").to respond_with_slack_message(
+            "Unbalanced challenges for team #{team.name} are off."
+          )
+        end
+        it 'enables unbalanced' do
+          team.update_attributes!(unbalanced: false)
+          expect(message: "#{SlackRubyBot.config.user} set unbalanced on").to respond_with_slack_message(
+            "Unbalanced challenges for team #{team.name} are on!"
+          )
+          expect(team.reload.unbalanced).to be true
+        end
+        it 'disables unbalanced with set' do
+          team.update_attributes!(unbalanced: true)
+          expect(message: "#{SlackRubyBot.config.user} set unbalanced off").to respond_with_slack_message(
+            "Unbalanced challenges for team #{team.name} are off."
+          )
+          expect(team.reload.unbalanced).to be false
+        end
+        it 'disables unbalanced with unset' do
+          team.update_attributes!(unbalanced: true)
+          expect(message: "#{SlackRubyBot.config.user} unset unbalanced").to respond_with_slack_message(
+            "Unbalanced challenges for team #{team.name} are off."
+          )
+          expect(team.reload.unbalanced).to be false
+        end
+      end
+    end
     context 'api' do
       it 'is a premium feature' do
         expect(client).to receive(:say).with(channel: 'channel', text: team.premium_text)
@@ -270,7 +323,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
     context 'invalid' do
       it 'errors set' do
         expect(message: "#{SlackRubyBot.config.user} set invalid on").to respond_with_slack_message(
-          'Invalid setting invalid, you can _set gifs on|off_, _api on|off_, _elo_, _nickname_ and _aliases_.'
+          'Invalid setting invalid, you can _set gifs on|off_, _set unbalanced on|off_, _api on|off_, _elo_, _nickname_ and _aliases_.'
         )
       end
       it 'errors unset' do

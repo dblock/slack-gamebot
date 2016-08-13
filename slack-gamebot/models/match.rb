@@ -112,6 +112,9 @@ class Match
     winners_elo = Elo.team_elo(winners)
     losers_elo = Elo.team_elo(losers)
 
+    losers_ratio = losers.any? ? [winners.size.to_f / losers.size, 1].min : 1
+    winners_ratio = winners.any? ? [losers.size.to_f / winners.size, 1].min : 1
+
     ratio = if winners_elo == losers_elo && tied?
               0 # no elo updates when tied and elo is equal
             elsif tied?
@@ -123,14 +126,14 @@ class Match
     winners.each do |winner|
       e = 100 - 1.0 / (1.0 + (10.0**((losers_elo - winner.elo) / 400.0))) * 100
       winner.tau += 0.5
-      winner.elo += e * ratio * (Elo::DELTA_TAU**winner.tau)
+      winner.elo += e * ratio * (Elo::DELTA_TAU**winner.tau) * winners_ratio
       winner.save!
     end
 
     losers.each do |loser|
       e = 100 - 1.0 / (1.0 + (10.0**((loser.elo - winners_elo) / 400.0))) * 100
       loser.tau += 0.5
-      loser.elo -= e * ratio * (Elo::DELTA_TAU**loser.tau)
+      loser.elo -= e * ratio * (Elo::DELTA_TAU**loser.tau) * losers_ratio
       loser.save!
     end
   end

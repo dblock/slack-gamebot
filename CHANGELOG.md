@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#124](https://github.com/dblock/slack-gamebot/issues/124): Allow unbalanced challenges via `set unbalanced on` - [@dblock](https://github.com/dblock).
 * [#130](https://github.com/dblock/slack-gamebot/issues/130): Added `unset` to unset settings - [@dblock](https://github.com/dblock).
 * [#123](https://github.com/dblock/slack-gamebot/issues/123): Captains can set other user's nicknames - [@dblock](https://github.com/dblock).
 * [#88](https://github.com/dblock/slack-gamebot/issues/88): Set `nickname` to obfuscate your username in leaderboard output - [@dblock](https://github.com/dblock).

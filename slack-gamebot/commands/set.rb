@@ -63,6 +63,26 @@ module SlackGamebot
           logger.info "UNSET: #{client.owner} - #{user.user_name} GIFs are off"
         end
 
+        def set_unbalanced(client, data, user, v)
+          fail SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
+          unless v.nil?
+            premium client, data do
+              client.owner.update_attributes!(unbalanced: v.to_b)
+            end
+          end
+          client.say(channel: data.channel, text: "Unbalanced challenges for team #{client.owner.name} are #{client.owner.unbalanced? ? 'on!' : 'off.'}", gif: 'balance')
+          logger.info "SET: #{client.owner} - #{user.user_name} unbalanced challenges are #{client.owner.unbalanced? ? 'on' : 'off'}"
+        end
+
+        def unset_unbalanced(client, data, user)
+          fail SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
+          premium client, data do
+            client.owner.update_attributes!(unbalanced: false)
+          end
+          client.say(channel: data.channel, text: "Unbalanced challenges for team #{client.owner.name} are off.", gif: 'balance')
+          logger.info "UNSET: #{client.owner} - #{user.user_name} unbalanced challenges are off"
+        end
+
         def set_api(client, data, user, v)
           fail SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
           unless v.nil?
@@ -146,6 +166,8 @@ module SlackGamebot
             set_nickname client, data, user, v
           when 'gifs' then
             set_gifs client, data, user, v
+          when 'unbalanced' then
+            set_unbalanced client, data, user, v
           when 'api' then
             set_api client, data, user, v
           when 'elo' then
@@ -153,7 +175,7 @@ module SlackGamebot
           when 'aliases' then
             set_aliases client, data, user, v
           else
-            fail SlackGamebot::Error, "Invalid setting #{k}, you can _set gifs on|off_, _api on|off_, _elo_, _nickname_ and _aliases_."
+            fail SlackGamebot::Error, "Invalid setting #{k}, you can _set gifs on|off_, _set unbalanced on|off_, _api on|off_, _elo_, _nickname_ and _aliases_."
           end
         end
 
@@ -163,6 +185,8 @@ module SlackGamebot
             unset_nickname client, data, user, v
           when 'gifs' then
             unset_gifs client, data, user
+          when 'unbalanced' then
+            unset_unbalanced client, data, user
           when 'api' then
             unset_api client, data, user
           when 'elo' then
