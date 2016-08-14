@@ -86,6 +86,30 @@ describe User do
         expect(user.to_s).to eq 'bob: 0 wins, 0 losses (elo: 50)'
       end
     end
+    context 'with a longest winning streak >= 3' do
+      before do
+        user.update_attributes!(winning_streak: 3)
+      end
+      it 'displays lws' do
+        expect(user.to_s).to eq "#{user.user_name}: 0 wins, 0 losses (elo: 50, lws: 3)"
+      end
+    end
+    context 'equal streaks' do
+      before do
+        user.update_attributes!(winning_streak: 5, losing_streak: 5)
+      end
+      it 'prefers winning streak' do
+        expect(user.to_s).to eq "#{user.user_name}: 0 wins, 0 losses (elo: 50, lws: 5)"
+      end
+    end
+    context 'with a longest losing streak >= 3' do
+      before do
+        user.update_attributes!(losing_streak: 3, winning_streak: 2)
+      end
+      it 'displays lls' do
+        expect(user.to_s).to eq "#{user.user_name}: 0 wins, 0 losses (elo: 50, lls: 3)"
+      end
+    end
   end
   context '#reset_all' do
     it 'resets all user stats' do
@@ -100,12 +124,16 @@ describe User do
       expect(user1.tau).to eq 0
       expect(user1.elo).to eq 0
       expect(user1.rank).to be nil
+      expect(user1.winning_streak).to eq 0
+      expect(user1.losing_streak).to eq 0
       expect(user2.wins).to eq 0
       expect(user2.losses).to eq 0
       expect(user2.ties).to eq 0
       expect(user2.tau).to eq 0
       expect(user2.elo).to eq 0
       expect(user2.rank).to be nil
+      expect(user2.winning_streak).to eq 0
+      expect(user2.losing_streak).to eq 0
     end
   end
   context '#rank!' do
@@ -191,6 +219,18 @@ describe User do
       user2 = Fabricate(:user, team: team)
       expect(User.rank_section(team, [user1])).to eq [user1]
       expect(User.rank_section(team, [user1, user2])).to eq [user1, user2]
+    end
+  end
+  context '#calculate_streaks!' do
+    let(:user) { Fabricate(:user) }
+    it 'is 0 by default' do
+      expect(user.winning_streak).to eq 0
+      expect(user.losing_streak).to eq 0
+    end
+    it 'is 0 without matches' do
+      user.calculate_streaks!
+      expect(user.winning_streak).to eq 0
+      expect(user.losing_streak).to eq 0
     end
   end
 end

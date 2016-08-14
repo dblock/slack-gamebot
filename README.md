@@ -204,12 +204,12 @@ Get the leaderboard.
 ```
 gamebot leaderboard
 
-1. Victor Barna: 3 wins, 2 losses (elo: 148)
+1. Victor Barna: 3 wins, 2 losses (elo: 148, lws: 5)
 2. Deng Yaping: 1 win, 3 losses (elo: 24)
 3. Wang Hoe: 0 wins, 1 loss (elo: -12)
 ```
 
-The leaderboard contains 3 topmost players ranked by [Elo](http://en.wikipedia.org/wiki/Elo_rating_system), use _leaderboard 10_ or _leaderboard infinity_ to see 10 players or more, respectively.
+The leaderboard contains 3 topmost players ranked by [Elo](http://en.wikipedia.org/wiki/Elo_rating_system), use _leaderboard 10_ or _leaderboard infinity_ to see 10 players or more, respectively. It also shows the longest winning (lws) and losing (lls) streaks of at least 3.
 
 In case you want to see leaderboard in reverse order (which would be totally wrong but motivational for people at the bottom of leaderboard), specify a negative number or `-infinity`:
 
@@ -218,7 +218,7 @@ gamebot leaderboard -5
 
 1. Wang Hoe: 0 wins, 1 loss (elo: -12)
 2. Deng Yaping: 1 win, 3 losses (elo: 24)
-3. Victor Barna: 3 wins, 2 losses (elo: 148)
+3. Victor Barna: 3 wins, 2 losses (elo: 148, lws: 5)
 ```
 
 #### gamebot matches [number|infinity]

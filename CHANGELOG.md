@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#129](https://github.com/dblock/slack-gamebot/issues/129): Added longest winning and losing streaks in leaderboard - [@dblock](https://github.com/dblock).
 * [#124](https://github.com/dblock/slack-gamebot/issues/124): Allow unbalanced challenges via `set unbalanced on` - [@dblock](https://github.com/dblock).
 * [#130](https://github.com/dblock/slack-gamebot/issues/130): Added `unset` to unset settings - [@dblock](https://github.com/dblock).
 * [#123](https://github.com/dblock/slack-gamebot/issues/123): Captains can set other user's nicknames - [@dblock](https://github.com/dblock).

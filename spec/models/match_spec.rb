@@ -27,28 +27,71 @@ describe Match do
     context 'singles' do
       let(:match) { Fabricate(:match) }
       it 'updates elo and tau' do
-        expect(match.challenge.challengers.map(&:elo)).to eq [48]
-        expect(match.challenge.challengers.map(&:tau)).to eq [0.5]
-        expect(match.challenge.challenged.map(&:elo)).to eq [-48]
-        expect(match.challenge.challenged.map(&:tau)).to eq [0.5]
+        expect(match.winners.map(&:elo)).to eq [48]
+        expect(match.winners.map(&:tau)).to eq [0.5]
+        expect(match.losers.map(&:elo)).to eq [-48]
+        expect(match.losers.map(&:tau)).to eq [0.5]
+      end
+      it 'updates streaks' do
+        expect(match.winners.map(&:winning_streak)).to eq [1]
+        expect(match.winners.map(&:losing_streak)).to eq [0]
+        expect(match.losers.map(&:winning_streak)).to eq [0]
+        expect(match.losers.map(&:losing_streak)).to eq [1]
       end
     end
     context 'singles tied' do
       let(:match) { Fabricate(:match, tied: true) }
       it 'updates elo and tau' do
-        expect(match.challenge.challengers.map(&:elo)).to eq [0.0]
-        expect(match.challenge.challengers.map(&:tau)).to eq [0.5]
-        expect(match.challenge.challenged.map(&:elo)).to eq [0.0]
-        expect(match.challenge.challenged.map(&:tau)).to eq [0.5]
+        expect(match.winners.map(&:elo)).to eq [0.0]
+        expect(match.winners.map(&:tau)).to eq [0.5]
+        expect(match.losers.map(&:elo)).to eq [0.0]
+        expect(match.losers.map(&:tau)).to eq [0.5]
+      end
+      it 'updates streaks' do
+        expect(match.winners.map(&:winning_streak)).to eq [0]
+        expect(match.winners.map(&:losing_streak)).to eq [0]
+        expect(match.losers.map(&:winning_streak)).to eq [0]
+        expect(match.losers.map(&:losing_streak)).to eq [0]
+      end
+    end
+    context 'two consecutive losses' do
+      let!(:match) { Fabricate(:match) }
+      before do
+        Fabricate(:match, winners: match.winners, losers: match.losers)
+      end
+      it 'updates streaks' do
+        expect(match.winners.map(&:winning_streak)).to eq [2]
+        expect(match.winners.map(&:losing_streak)).to eq [0]
+        expect(match.losers.map(&:winning_streak)).to eq [0]
+        expect(match.losers.map(&:losing_streak)).to eq [2]
+      end
+    end
+    context 'three consecutive losses, then a break for losers preserves losing streak' do
+      let!(:match) { Fabricate(:match) }
+      before do
+        2.times { Fabricate(:match, winners: match.winners, losers: match.losers) }
+        Fabricate(:match, winners: match.losers)
+      end
+      it 'updates streaks' do
+        expect(match.winners.map(&:winning_streak)).to eq [3]
+        expect(match.winners.map(&:losing_streak)).to eq [0]
+        expect(match.losers.map(&:winning_streak)).to eq [1]
+        expect(match.losers.map(&:losing_streak)).to eq [3]
       end
     end
     context 'doubles' do
       let(:match) { Fabricate(:match, challenge: Fabricate(:doubles_challenge)) }
       it 'updates elo and tau' do
-        expect(match.challenge.challengers.map(&:elo)).to eq [48, 48]
-        expect(match.challenge.challengers.map(&:tau)).to eq [0.5, 0.5]
-        expect(match.challenge.challenged.map(&:elo)).to eq [-48, -48]
-        expect(match.challenge.challenged.map(&:tau)).to eq [0.5, 0.5]
+        expect(match.winners.map(&:elo)).to eq [48, 48]
+        expect(match.winners.map(&:tau)).to eq [0.5, 0.5]
+        expect(match.losers.map(&:elo)).to eq [-48, -48]
+        expect(match.losers.map(&:tau)).to eq [0.5, 0.5]
+      end
+      it 'updates streaks' do
+        expect(match.winners.map(&:winning_streak)).to eq [1, 1]
+        expect(match.winners.map(&:losing_streak)).to eq [0, 0]
+        expect(match.losers.map(&:winning_streak)).to eq [0, 0]
+        expect(match.losers.map(&:losing_streak)).to eq [1, 1]
       end
     end
     context 'two matches against previous losers' do
@@ -61,10 +104,16 @@ describe Match do
         challenge1.lose!(challenge1.challengers.first)
       end
       it 'updates elo and tau' do
-        expect(match.challenge.challengers.map(&:elo)).to eq [5, 5]
-        expect(match.challenge.challengers.map(&:tau)).to eq [1, 1]
-        expect(match.challenge.challenged.map(&:elo)).to eq [-55, -55]
-        expect(match.challenge.challenged.map(&:tau)).to eq [0.5, 0.5]
+        expect(match.winners.map(&:elo)).to eq [5, 5]
+        expect(match.winners.map(&:tau)).to eq [1, 1]
+        expect(match.losers.map(&:elo)).to eq [-55, -55]
+        expect(match.losers.map(&:tau)).to eq [0.5, 0.5]
+      end
+      it 'updates streaks' do
+        expect(match.winners.map(&:winning_streak)).to eq [1, 1]
+        expect(match.winners.map(&:losing_streak)).to eq [1, 1]
+        expect(match.losers.map(&:winning_streak)).to eq [0, 0]
+        expect(match.losers.map(&:losing_streak)).to eq [1, 1]
       end
     end
     context 'a tie against previous losers' do
@@ -77,10 +126,16 @@ describe Match do
         challenge1.lose!(challenge1.challengers.first)
       end
       it 'updates elo and tau' do
-        expect(match.challenge.challengers.map(&:elo)).to eq [-21, -21]
-        expect(match.challenge.challengers.map(&:tau)).to eq [1, 1]
-        expect(match.challenge.challenged.map(&:elo)).to eq [-27, -27]
-        expect(match.challenge.challenged.map(&:tau)).to eq [0.5, 0.5]
+        expect(match.winners.map(&:elo)).to eq [-21, -21]
+        expect(match.winners.map(&:tau)).to eq [1, 1]
+        expect(match.losers.map(&:elo)).to eq [-27, -27]
+        expect(match.losers.map(&:tau)).to eq [0.5, 0.5]
+      end
+      it 'updates streaks' do
+        expect(match.winners.map(&:winning_streak)).to eq [0, 0]
+        expect(match.winners.map(&:losing_streak)).to eq [1, 1]
+        expect(match.losers.map(&:winning_streak)).to eq [0, 0]
+        expect(match.losers.map(&:losing_streak)).to eq [0, 0]
       end
     end
     context 'a tie against previous winners' do
@@ -93,10 +148,16 @@ describe Match do
         challenge1.lose!(challenge1.challenged.first)
       end
       it 'updates elo and tau' do
-        expect(match.challenge.challengers.map(&:elo)).to eq [68, 68]
-        expect(match.challenge.challengers.map(&:tau)).to eq [1, 1]
-        expect(match.challenge.challenged.map(&:elo)).to eq [-20, -20]
-        expect(match.challenge.challenged.map(&:tau)).to eq [0.5, 0.5]
+        expect(match.winners.map(&:elo)).to eq [68, 68]
+        expect(match.winners.map(&:tau)).to eq [1, 1]
+        expect(match.losers.map(&:elo)).to eq [-20, -20]
+        expect(match.losers.map(&:tau)).to eq [0.5, 0.5]
+      end
+      it 'updates streaks' do
+        expect(match.winners.map(&:winning_streak)).to eq [1, 1]
+        expect(match.winners.map(&:losing_streak)).to eq [0, 0]
+        expect(match.losers.map(&:winning_streak)).to eq [0, 0]
+        expect(match.losers.map(&:losing_streak)).to eq [0, 0]
       end
     end
     context 'two matches against previous winners' do
@@ -109,10 +170,10 @@ describe Match do
         challenge1.lose!(challenge1.challengers.first)
       end
       it 'updates elo and tau' do
-        expect(match.challenge.challengers.map(&:elo)).to eq [88, 88]
-        expect(match.challenge.challengers.map(&:tau)).to eq [1, 1]
-        expect(match.challenge.challenged.map(&:elo)).to eq [-41, -41]
-        expect(match.challenge.challenged.map(&:tau)).to eq [0.5, 0.5]
+        expect(match.winners.map(&:elo)).to eq [88, 88]
+        expect(match.winners.map(&:tau)).to eq [1, 1]
+        expect(match.losers.map(&:elo)).to eq [-41, -41]
+        expect(match.losers.map(&:tau)).to eq [0.5, 0.5]
       end
     end
     context 'scores' do

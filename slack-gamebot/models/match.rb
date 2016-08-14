@@ -11,6 +11,7 @@ class Match
   belongs_to :challenge, index: true
   belongs_to :season, inverse_of: :matches, index: true
   before_create :calculate_elo!
+  after_create :update_users!
   validate :validate_scores, unless: :tied?
   validate :validate_tied_scores, if: :tied?
   validate :validate_resigned_scores, if: :resigned?
@@ -40,26 +41,28 @@ class Match
   end
 
   def self.lose!(attrs)
-    match = Match.create!(attrs)
-    match.winners.inc(wins: 1)
-    match.losers.inc(losses: 1)
-    User.rank!(match.team)
-    match
+    Match.create!(attrs)
   end
 
   def self.resign!(attrs)
-    match = Match.create!(attrs.merge(resigned: true))
-    match.winners.inc(wins: 1)
-    match.losers.inc(losses: 1)
-    User.rank!(match.team)
-    match
+    Match.create!(attrs.merge(resigned: true))
   end
 
   def self.draw!(attrs)
-    match = Match.create!(attrs.merge(tied: true))
-    match.winners.inc(ties: 1)
-    match.losers.inc(ties: 1)
-    User.rank!(match.team)
+    Match.create!(attrs.merge(tied: true))
+  end
+
+  def update_users!
+    if tied?
+      winners.inc(ties: 1)
+      losers.inc(ties: 1)
+    else
+      winners.inc(wins: 1)
+      losers.inc(losses: 1)
+    end
+    winners.each(&:calculate_streaks!)
+    losers.each(&:calculate_streaks!)
+    User.rank!(team)
   end
 
   private

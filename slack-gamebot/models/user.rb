@@ -6,6 +6,8 @@ class User
   field :user_name, type: String
   field :wins, type: Integer, default: 0
   field :losses, type: Integer, default: 0
+  field :losing_streak, type: Integer, default: 0
+  field :winning_streak, type: Integer, default: 0
   field :ties, type: Integer, default: 0
   field :elo, type: Integer, default: 0
   field :tau, type: Float, default: 0
@@ -30,6 +32,10 @@ class User
 
   scope :ranked, -> { where(:rank.ne => nil) }
   scope :captains, -> { where(captain: true) }
+
+  def current_matches
+    Match.current.where(team: team).or({ winner_ids: _id }, loser_ids: _id)
+  end
 
   def slack_mention
     "<@#{user_id}>"
@@ -70,14 +76,26 @@ class User
   end
 
   def self.reset_all!(team)
-    User.where(team: team).set(wins: 0, losses: 0, ties: 0, elo: 0, tau: 0, rank: nil)
+    User.where(team: team).set(
+      wins: 0,
+      losses: 0,
+      ties: 0,
+      elo: 0,
+      tau: 0,
+      rank: nil,
+      losing_streak: 0,
+      winning_streak: 0
+    )
   end
 
   def to_s
     wins_s = "#{wins} win#{wins != 1 ? 's' : ''}"
     losses_s = "#{losses} loss#{losses != 1 ? 'es' : ''}"
     ties_s = "#{ties} tie#{ties != 1 ? 's' : ''}" if ties && ties > 0
-    "#{display_name}: #{[wins_s, losses_s, ties_s].compact.join(', ')} (elo: #{team_elo})"
+    elo_s = "elo: #{team_elo}"
+    lws_s = "lws: #{winning_streak}" if winning_streak >= losing_streak && winning_streak >= 3
+    lls_s = "lls: #{losing_streak}" if losing_streak > winning_streak && losing_streak >= 3
+    "#{display_name}: #{[wins_s, losses_s, ties_s].compact.join(', ')} (#{[elo_s, lws_s, lls_s].compact.join(', ')})"
   end
 
   def team_elo
@@ -119,6 +137,29 @@ class User
         player.set(rank: rank) unless rank == player.rank
       end
     end
+  end
+
+  def calculate_streaks!
+    longest_winning_streak = 0
+    longest_losing_streak = 0
+    current_winning_streak = 0
+    current_losing_streak = 0
+    current_matches.asc(:_id).each do |match|
+      if match.tied?
+        current_winning_streak = 0
+        current_losing_streak = 0
+      elsif match.winner_ids.include?(_id)
+        current_losing_streak = 0
+        current_winning_streak += 1
+      else
+        current_winning_streak = 0
+        current_losing_streak += 1
+      end
+      longest_losing_streak = current_losing_streak if current_losing_streak > longest_losing_streak
+      longest_winning_streak = current_winning_streak if current_winning_streak > longest_winning_streak
+    end
+    return if losing_streak == longest_losing_streak && winning_streak == longest_winning_streak
+    update_attributes!(losing_streak: longest_losing_streak, winning_streak: longest_winning_streak)
   end
 
   def self.rank_section(team, users)

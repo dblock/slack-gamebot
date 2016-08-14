@@ -12,6 +12,8 @@ module Api
       property :losses, type: Integer, desc: 'Number of losses.'
       property :elo, type: Integer, desc: 'Elo.'
       property :rank, type: Integer, desc: 'Rank.'
+      property :winning_streak, type: Integer, desc: 'Longest winning streak this season.'
+      property :losing_streak, type: Integer, desc: 'Longest losing streak this season.'
       property :registered, type: Boolean, desc: 'User registered or unregistered.'
       property :created_at, as: :registered_at, type: DateTime, desc: 'Date/time when the user has registered.'
       property :captain, type: Boolean, desc: 'Team captain.'
