@@ -126,6 +126,7 @@ describe User do
       expect(user1.rank).to be nil
       expect(user1.winning_streak).to eq 0
       expect(user1.losing_streak).to eq 0
+      expect(user1.elo_history).to eq []
       expect(user2.wins).to eq 0
       expect(user2.losses).to eq 0
       expect(user2.ties).to eq 0
@@ -134,6 +135,7 @@ describe User do
       expect(user2.rank).to be nil
       expect(user2.winning_streak).to eq 0
       expect(user2.losing_streak).to eq 0
+      expect(user2.elo_history).to eq []
     end
   end
   context '#rank!' do
@@ -142,6 +144,13 @@ describe User do
       expect(user.rank).to be nil
       user.update_attributes!(elo: 65, wins: 1)
       expect(user.rank).to eq 1
+    end
+    it 'stores elo history' do
+      user = Fabricate(:user)
+      user.update_attributes!(elo: 65, wins: 1)
+      expect(user.elo_history).to eq [0, 65]
+      user.update_attributes!(elo: 45, wins: 2)
+      expect(user.elo_history).to eq [0, 65, 45]
     end
     it 'ranks four players' do
       user1 = Fabricate(:user, elo: 100, wins: 4, losses: 0)

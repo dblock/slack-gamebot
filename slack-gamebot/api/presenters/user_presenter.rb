@@ -11,6 +11,7 @@ module Api
       property :wins, type: Integer, desc: 'Number of wins.'
       property :losses, type: Integer, desc: 'Number of losses.'
       property :elo, type: Integer, desc: 'Elo.'
+      property :elo_history, type: Array[Integer], desc: 'Elo history.'
       property :rank, type: Integer, desc: 'Rank.'
       property :winning_streak, type: Integer, desc: 'Longest winning streak this season.'
       property :losing_streak, type: Integer, desc: 'Longest losing streak this season.'

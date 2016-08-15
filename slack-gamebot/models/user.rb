@@ -10,6 +10,7 @@ class User
   field :winning_streak, type: Integer, default: 0
   field :ties, type: Integer, default: 0
   field :elo, type: Integer, default: 0
+  field :elo_history, type: Array, default: []
   field :tau, type: Float, default: 0
   field :rank, type: Integer
   field :captain, type: Boolean, default: false
@@ -26,6 +27,7 @@ class User
   index(ties: 1, team_id: 1)
   index(elo: 1, team_id: 1)
 
+  before_save :update_elo_history!
   after_save :rank!
 
   SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'ties', '-ties', 'user_name', '-user_name', 'rank', '-rank']
@@ -81,6 +83,7 @@ class User
       losses: 0,
       ties: 0,
       elo: 0,
+      elo_history: [],
       tau: 0,
       rank: nil,
       losing_streak: 0,
@@ -126,6 +129,11 @@ class User
     return unless elo_changed?
     User.rank!(team)
     reload.rank
+  end
+
+  def update_elo_history!
+    return unless elo_changed?
+    elo_history << elo
   end
 
   def self.rank!(team)

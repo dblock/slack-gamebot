@@ -11,6 +11,7 @@ describe UserRank do
       expect(user_rank.losses).to eq user.losses
       expect(user_rank.tau).to eq user.tau
       expect(user_rank.elo).to eq user.elo
+      expect(user_rank.elo_history).to eq user.elo_history
       expect(user_rank.rank).to eq user.rank
     end
   end
