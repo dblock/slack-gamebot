@@ -17,26 +17,39 @@ GIT
       slack-ruby-bot
       unicorn
 
+GIT
+  remote: git://github.com/slack-ruby/slack-ruby-client.git
+  revision: b2e6d92dab0da9f4d576b1e711a94bc7b2c5f593
+  specs:
+    slack-ruby-client (0.7.7)
+      activesupport
+      faraday
+      faraday_middleware
+      gli
+      hashie
+      json
+      websocket-driver
+
 GEM
   remote: http://rubygems.org/
   specs:
-    actionpack (4.2.7)
-      actionview (= 4.2.7)
-      activesupport (= 4.2.7)
+    actionpack (4.2.7.1)
+      actionview (= 4.2.7.1)
+      activesupport (= 4.2.7.1)
       rack (~> 1.6)
       rack-test (~> 0.6.2)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    actionview (4.2.7)
-      activesupport (= 4.2.7)
+    actionview (4.2.7.1)
+      activesupport (= 4.2.7.1)
       builder (~> 3.1)
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    activemodel (4.2.7)
-      activesupport (= 4.2.7)
+    activemodel (4.2.7.1)
+      activesupport (= 4.2.7.1)
       builder (~> 3.1)
-    activesupport (4.2.7)
+    activesupport (4.2.7.1)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
@@ -52,7 +65,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     bson (4.1.1)
     builder (3.2.2)
-    capybara (2.7.1)
+    capybara (2.8.1)
       addressable
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -91,10 +104,12 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
+    domain_name (0.5.20160615)
+      unf (>= 0.0.5, < 1.0.0)
     enumerable-lazy (0.0.1)
     equalizer (0.0.11)
     erubis (2.7.0)
-    excon (0.51.0)
+    excon (0.52.0)
     fabrication (2.15.2)
     faker (1.6.6)
       i18n (~> 0.5)
@@ -139,6 +154,8 @@ GEM
     hashdiff (0.3.0)
     hashie (3.4.4)
     hitimes (1.2.4)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     hyperclient (0.8.1)
       faraday
       faraday-digestauth
@@ -160,12 +177,14 @@ GEM
       addressable (~> 2.3)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
-    mime-types (1.25.1)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
     minitest (5.9.0)
-    mongo (2.2.7)
-      bson (~> 4.0)
-    mongoid (5.1.3)
+    mongo (2.3.0)
+      bson (~> 4.1)
+    mongoid (5.1.4)
       activemodel (~> 4.0)
       mongo (~> 2.1)
       origin (~> 2.2)
@@ -181,18 +200,19 @@ GEM
       i18n
       mongoid (>= 3.0.0)
       mongoid-compatibility
-    multi_json (1.11.2)
+    multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     mustermann19 (0.4.4)
       enumerable-lazy
     net-http-digest_auth (1.4)
-    newrelic_rpm (3.16.0.318)
+    netrc (0.11.0)
+    newrelic_rpm (3.16.2.321)
     nio4r (1.2.1)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
-    oj (2.17.1)
+    oj (2.17.3)
     origin (2.2.0)
     parser (2.3.1.2)
       ast (~> 2.2)
@@ -220,13 +240,12 @@ GEM
     rainbow (2.1.0)
     raindrops (0.17.0)
     rake (10.5.0)
-    rdoc (4.2.2)
-      json (~> 1.4)
     representable (2.3.0)
       uber (~> 0.0.7)
-    rest-client (1.6.8)
-      mime-types (~> 1.16)
-      rdoc (>= 2.4.2)
+    rest-client (2.0.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     roar (1.0.4)
       representable (>= 2.0.1, < 2.4.0)
     rspec (3.5.0)
@@ -251,7 +270,7 @@ GEM
     ruby-enum (0.5.0)
       i18n
     ruby-progressbar (1.8.1)
-    rubyzip (1.1.7)
+    rubyzip (1.2.0)
     safe_yaml (1.0.4)
     selenium-webdriver (2.53.4)
       childprocess (~> 0.5)
@@ -261,20 +280,12 @@ GEM
       giphy (~> 2.0.2)
       hashie
       slack-ruby-client (>= 0.6.0)
-    slack-ruby-client (0.7.6)
-      activesupport
-      faraday
-      faraday_middleware
-      gli
-      hashie
-      json
-      websocket-driver
-    stripe (1.43.0)
-      rest-client (~> 1.4)
-    stripe-ruby-mock (2.3.0)
+    stripe (1.50.1)
+      rest-client (>= 1.4, < 3.0)
+    stripe-ruby-mock (2.3.1)
       dante (>= 0.2.0)
-      multi_json (>= 1.0.0)
-      stripe (>= 1.31.0, <= 1.43)
+      multi_json (~> 1.0)
+      stripe (~> 1.31)
     thor (0.19.1)
     thread_safe (0.3.5)
     time_ago_in_words (0.1.1)
@@ -283,6 +294,9 @@ GEM
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uber (0.0.15)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.2)
     unicorn (5.1.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
@@ -328,6 +342,7 @@ DEPENDENCIES
   ruby-enum
   selenium-webdriver
   slack-ruby-bot-server!
+  slack-ruby-client!
   stripe
   stripe-ruby-mock
   time_ago_in_words
