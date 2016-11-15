@@ -25,6 +25,16 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
       expect(loser.elo).to eq(-48)
       expect(loser.tau).to eq 0.5
     end
+    it 'moves elo every time' do
+      challenge.challenged.first.update_attributes!(elo: 0, wins: 83, losses: 89, tau: 87.0)
+      challenge.challengers.first.update_attributes!(elo: -102, wins: 6, losses: 12, tau: 9.5)
+      expect(message: "#{SlackRubyBot.config.user} lost", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
+        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} defeated #{challenge.challenged.map(&:user_name).and}."
+      )
+      challenge.reload
+      expect(challenge.challengers.first.elo).to_not eq(-102)
+      expect(challenge.challenged.first.elo).to_not eq(0)
+    end
     it 'updates existing challenge when lost to' do
       expect(message: "#{SlackRubyBot.config.user} lost to #{challenge.challengers.first.user_name}", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
         "Match has been recorded! #{challenge.challengers.map(&:user_name).and} defeated #{challenge.challenged.map(&:user_name).and}."
