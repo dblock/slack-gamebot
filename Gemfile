@@ -2,8 +2,10 @@ source 'http://rubygems.org'
 
 ruby '2.3.1'
 
-gem 'slack-ruby-client', github: 'slack-ruby/slack-ruby-client'
-gem 'slack-ruby-bot-server', github: 'dblock/slack-ruby-bot-server'
+gem 'slack-ruby-client'
+gem 'slack-ruby-bot-server'
+gem 'roar', '~> 1.0.4'
+gem 'mongoid', '~> 5.1.4'
 gem 'ruby-enum'
 gem 'mongoid-scroll'
 gem 'time_ago_in_words'
@@ -12,6 +14,8 @@ gem 'wannabe_bool'
 gem 'newrelic_rpm'
 gem 'rack-server-pages'
 gem 'stripe'
+gem 'kaminari-grape'
+gem 'giphy'
 
 group :development, :test do
   gem 'rake', '~> 10.4'
