@@ -84,5 +84,12 @@ describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
       expect(user2.elo).to eq 48
       expect(user2.ties).to eq 3
     end
+    it 'cannot be reset unless any games have been played' do
+      expect(message: "#{SlackRubyBot.config.user} reset #{team.name}").to respond_with_slack_message('No matches have been recorded.')
+    end
+    it 'can be reset with a match lost' do
+      ::Match.lose!(team: team, winners: [Fabricate(:user, team: team)], losers: [Fabricate(:user, team: team)])
+      expect(message: "#{SlackRubyBot.config.user} reset #{team.name}").to respond_with_slack_message('Welcome to the new season!')
+    end
   end
 end

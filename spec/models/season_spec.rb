@@ -33,6 +33,24 @@ describe Season do
       expect(season.to_s).to eq 'Current: n/a, 0 matches, 0 players'
     end
   end
+  context 'without challenges and a lost match' do
+    let!(:team) { Fabricate(:team) }
+    let(:challenger) { Fabricate(:user, team: team) }
+    let(:challenged) { Fabricate(:user, team: team) }
+    let(:season) { Season.new(team: team) }
+    before do
+      ::Match.lose!(team: team, winners: [challenger], losers: [challenged])
+    end
+    it 'can be created' do
+      expect(season).to be_valid
+    end
+    it 'to_s' do
+      expect(season.to_s).to eq "Current: #{season.winners.map(&:to_s).and}, 1 match, 2 players"
+    end
+    it 'has one winner' do
+      expect(season.winners.count).to eq 1
+    end
+  end
   context 'current season with one match' do
     let!(:match) { Fabricate(:match) }
     let(:season) { Season.new(team: team) }

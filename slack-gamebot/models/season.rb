@@ -25,7 +25,7 @@ class Season
   def to_s
     [
       "#{label}: #{winners ? winners.map(&:to_s).and : 'n/a'}",
-      "#{played_challenges.count} match#{played_challenges.count == 1 ? '' : 'es'}",
+      "#{team.matches.count} match#{team.matches.count == 1 ? '' : 'es'}",
       "#{players.count} player#{players.count == 1 ? '' : 's'}"
     ].join(', ')
   end
@@ -57,7 +57,8 @@ class Season
   end
 
   def validate_challenges
-    errors.add(:challenges, 'No matches have been recorded.') unless team.challenges.current.any?
+    return if team.matches.current.any? || team.challenges.current.any?
+    errors.add(:challenges, 'No matches have been recorded.')
   end
 
   def create_user_ranks
