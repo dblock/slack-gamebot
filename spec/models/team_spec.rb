@@ -135,8 +135,8 @@ describe Team do
       end
     end
     context 'team created over a month ago' do
-      let(:team) { Fabricate(:team, created_at: 1.month.ago + 1.day) }
-      it 'dead=false' do
+      let(:team) { Fabricate(:team, created_at: 32.days.ago) }
+      it 'dead=true' do
         expect(team.dead?).to be true
       end
       context 'with a recent challenge' do

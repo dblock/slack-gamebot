@@ -46,7 +46,7 @@ class Team
   end
 
   def asleep?(dt = 2.weeks)
-    time_limit = Time.now - dt
+    time_limit = Time.now.utc - dt
     return false if created_at > time_limit
     recent_match = matches.desc(:updated_at).limit(1).first
     return false if recent_match && recent_match.updated_at >= time_limit
@@ -61,7 +61,7 @@ class Team
     asleep?(dt)
   end
 
-  def dead?(dt = 4.weeks)
+  def dead?(dt = 1.month)
     asleep?(dt)
   end
 
