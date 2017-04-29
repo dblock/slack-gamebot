@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 ruby '2.3.1'
 
-gem 'slack-ruby-client'
+gem 'slack-ruby-client', github: 'slack-ruby/slack-ruby-client'
 gem 'slack-ruby-bot-server'
 gem 'roar', '~> 1.0.4'
 gem 'mongoid', '~> 5.1.4'

@@ -1,3 +1,16 @@
+GIT
+  remote: git://github.com/slack-ruby/slack-ruby-client.git
+  revision: e6438f622f908865e44764f046bcb16153746cc2
+  specs:
+    slack-ruby-client (0.9.0)
+      activesupport
+      faraday (>= 0.9)
+      faraday_middleware
+      gli
+      hashie
+      json
+      websocket-driver
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -89,7 +102,7 @@ GEM
       faraday_middleware (~> 0.9)
       faraday_middleware-parse_oj (~> 0.3)
       launchy (~> 2.4)
-    gli (2.15.0)
+    gli (2.16.0)
     grape (0.19.1)
       activesupport
       builder
@@ -240,14 +253,6 @@ GEM
       rack-server-pages
       slack-ruby-bot
       unicorn
-    slack-ruby-client (0.7.8)
-      activesupport
-      faraday (>= 0.9)
-      faraday_middleware
-      gli
-      hashie
-      json
-      websocket-driver
     stripe (1.58.0)
       rest-client (>= 1.4, < 4.0)
     stripe-ruby-mock (2.4.0)
@@ -315,7 +320,7 @@ DEPENDENCIES
   ruby-enum
   selenium-webdriver
   slack-ruby-bot-server
-  slack-ruby-client
+  slack-ruby-client!
   stripe
   stripe-ruby-mock
   time_ago_in_words
@@ -327,4 +332,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.14.0
+   1.14.4
