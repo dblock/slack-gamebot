@@ -16,6 +16,7 @@ gem 'rack-server-pages'
 gem 'stripe'
 gem 'kaminari-grape'
 gem 'giphy'
+gem 'hashie', '3.4.6'
 
 group :development, :test do
   gem 'rake', '~> 10.4'

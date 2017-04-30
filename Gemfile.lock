@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/slack-ruby/slack-ruby-client.git
-  revision: e6438f622f908865e44764f046bcb16153746cc2
+  revision: 9ed4d21a5fced74734eb43cf7371509fbf27d388
   specs:
     slack-ruby-client (0.9.0)
       activesupport
@@ -131,7 +131,7 @@ GEM
       futuroscope
       net-http-digest_auth
       uri_template
-    i18n (0.7.0)
+    i18n (0.8.1)
     ice_nine (0.11.2)
     json (1.8.6)
     kaminari-core (1.0.1)
@@ -260,12 +260,12 @@ GEM
       multi_json (~> 1.0)
       stripe (~> 1.31)
     thor (0.19.4)
-    thread_safe (0.3.5)
+    thread_safe (0.3.6)
     time_ago_in_words (0.1.1)
     timers (4.1.2)
       hitimes
     tool (0.2.3)
-    tzinfo (1.2.2)
+    tzinfo (1.2.3)
       thread_safe (~> 0.1)
     uber (0.0.15)
     unf (0.1.4)
@@ -304,6 +304,7 @@ DEPENDENCIES
   faker
   foreman
   giphy
+  hashie (= 3.4.6)
   hyperclient
   kaminari-grape
   mongoid (~> 5.1.4)
