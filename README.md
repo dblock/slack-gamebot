@@ -1,29 +1,5 @@
 Slack-Gamebot
 =============
-
-[![Add to Slack](https://platform.slack-edge.com/img/add_to_slack@2x.png)](https://www.playplay.io)
-
-Or roll your own ...
-
-[![Build Status](https://travis-ci.org/dblock/slack-gamebot.svg)](https://travis-ci.org/dblock/slack-gamebot)
-[![Code Climate](https://codeclimate.com/github/dblock/slack-gamebot/badges/gpa.svg)](https://codeclimate.com/github/dblock/slack-gamebot)
-[![Dependency Status](https://gemnasium.com/dblock/slack-gamebot.svg)](https://gemnasium.com/dblock/slack-gamebot)
-
-A generic game bot for slack. Works for ping-pong (2, 4 or more players), chess, etc. Inspired by [slack-pongbot](https://github.com/andrewvy/slack-pongbot), but more robust, generic and easier to improve and contribute to.
-
-![](screenshots/game.gif)
-
-## Installation
-
-Create a new Bot Integration under [services/new/bot](http://slack.com/services/new/bot). Note the API token.
-You will be able to invoke gamebot by the name you give it in the UI above.
-
-Run `SLACK_API_TOKEN=<your API token> foreman start`
-
-## Production Deployment
-
-See [DEPLOYMENT](DEPLOYMENT.md)
-
 ## Usage
 
 Start talking to your bot!
@@ -32,25 +8,25 @@ Start talking to your bot!
 
 ### Commands
 
-#### gamebot
+#### pp
 
 Shows GameBot version and links.
 
-#### gamebot hi
+#### pp hi
 
 Politely says 'hi' back.
 
-#### gamebot help
+#### pp help
 
 Get help.
 
-#### gamebot sucks
+#### pp sucks
 
 You can tell the bot that it sucks. But it will talk back.
 
 ![](screenshots/sucks.gif)
 
-#### gamebot register
+#### pp register
 
 Registers a user.
 
@@ -67,7 +43,7 @@ Welcome back Victor Barna! I've updated your registration.
 You can also remove yourself from the leaderboard with `gamebot unregister me` and re-register youself again with `gamebot register`.
 The data is not removed, but the user will no longer appear in the leaderboards and cannot participate in challenges.
 
-#### gamebot challenge &lt;opponent&gt; ... [with &lt;teammate&gt; ...]
+#### pp challenge &lt;opponent&gt; ... [with &lt;teammate&gt; ...]
 
 Creates a new challenge between you and an opponent.
 
@@ -85,7 +61,7 @@ gamebot challenge @WangHoe @ZhangJike with @DengYaping
 Victor Barna and Deng Yaping challenged Wang Hoe and Zhang Jike to a match!
 ```
 
-#### gamebot accept
+#### pp accept
 
 Accept a challenge.
 
@@ -95,7 +71,7 @@ gamebot accept
 Wang Hoe and Zhang Jike accepted Victor Barna and Deng Yaping's challenge.
 ```
 
-#### gamebot lost [to &lt;opponent&gt; [with &lt;teammate&gt;]] [score ...]
+#### pp lost [to &lt;opponent&gt; [with &lt;teammate&gt;]] [score ...]
 
 Record your loss.
 
@@ -143,7 +119,7 @@ gamebot lost to @WangHoe @ZhangJike with @DengYaping 5:21
 Match has been recorded! Wang Hoe and Zhang Jike defeated Victor Barna and Deng Yaping with the score of 21:5.
 ```
 
-#### gamebot draw [score ...]
+#### pp draw [score ...]
 
 Draws a challenge, records a tie. All other players will also have to draw to record a match.
 
@@ -157,7 +133,7 @@ gamebot draw 2:2
 Match has been recorded. Victor Barna tied with Zhang Jike with a score of 2:2.
 ```
 
-#### gamebot resigned [to &lt;opponent&gt; [with &lt;teammate&gt;]]
+#### pp resigned [to &lt;opponent&gt; [with &lt;teammate&gt;]]
 
 Records your resignation, which is a special kind of `lost` without a score.
 
@@ -177,7 +153,7 @@ gamebot resigned to WangHoe
 Match has been recorded! Victor Barna resigned against Wang Hoe.
 ```
 
-#### gamebot decline
+#### pp decline
 
 Decline a challenge.
 
@@ -187,7 +163,7 @@ gamebot decline
 Wang Hoe and Zhang Jike declined Victor Barna and Deng Yaping's challenge.
 ```
 
-#### gamebot cancel
+#### pp cancel
 
 Cancel a challenge.
 
@@ -197,7 +173,7 @@ gamebot cancel
 Victor Barna and Deng Yaping canceled a challenge against Wang Hoe and Zhang Jike.
 ```
 
-#### gamebot leaderboard [number|infinity]
+#### pp leaderboard [number|infinity]
 
 Get the leaderboard.
 
@@ -221,7 +197,7 @@ gamebot leaderboard -5
 3. Victor Barna: 3 wins, 2 losses (elo: 148, lws: 5)
 ```
 
-#### gamebot matches [number|infinity]
+#### pp matches [number|infinity]
 
 Displays top 10 match totals in the current season.
 
@@ -243,11 +219,11 @@ Wang Hoe defeated Deng Yaping twice
 
 Use _matches 3_ to see top 3 matches o _matches inifinity_ to see all matches in the season.
 
-#### gamebot challenges
+#### pp challenges
 
 Displays all outstanding (proposed and accepted) challenges.
 
-#### gamebot rank [&lt;player&gt; ...]
+#### pp rank [&lt;player&gt; ...]
 
 Show the smallest range of ranks for a list of players.  If no user is specified, your rank is shown.
 
@@ -258,7 +234,7 @@ gamebot rank @WangHoe @DengYaping
 3. Wang Hoe: 0 wins, 1 loss (elo: -12)
 ```
 
-#### gamebot promote &lt;player&gt; ...
+#### pp promote &lt;player&gt; ...
 
 Promotes other users to captain. Must be a captain to do that.
 
@@ -268,7 +244,7 @@ gamebot promote @WangHoe @DengYaping
 Victor Barna promoted Wang Hoe and Deng Yaping to captain.
 ```
 
-#### gamebot demote me
+#### pp demote me
 
 Demotes from captain to a normal user. Must be a captain and the team must have other captains to do this.
 
@@ -278,7 +254,7 @@ gamebot demote me
 Victor Barna is no longer captain.
 ```
 
-#### gamebot team
+#### pp team
 
 Display current team's info, including captains.
 
@@ -288,7 +264,7 @@ gamebot team
 Team _China_, captains Deng Yaping and Victor Barna.
 ```
 
-#### gamebot reset &lt;team id|team name&gt;
+#### pp reset &lt;team id|team name&gt;
 
 Reset all users and pending challenges and start a new season. Must be a captain to do this and confirm by specifying the team ID or name.
 
@@ -298,7 +274,7 @@ gamebot reset china
 Welcome to the new season!
 ```
 
-#### gamebot season
+#### pp season
 
 Display current season's leader and game totals.
 
@@ -308,7 +284,7 @@ gamebot season
 Current: Deng Yaping: 1 win, 0 losses (elo: 48), 1 game, 2 players
 ```
 
-#### gamebot seasons
+#### pp seasons
 
 Display current season's leader, past seasons' winners and game totals.
 
@@ -319,7 +295,7 @@ Current: Deng Yaping: 1 win, 0 losses (elo: 48), 1 game, 2 players
 2015-07-16: Wang Hoe: 28 wins, 19 losses (elo: 214), 206 games, 25 players
 ```
 
-#### gamebot unregister &lt;player&gt;
+#### pp unregister &lt;player&gt;
 
 Captains can remove users.
 
@@ -329,7 +305,7 @@ gamebot unregister @WangHoe
 I've removed @WangHoe from the leaderboard.
 ```
 
-#### gamebot set nickname [name]
+#### pp set nickname [name]
 
 Sets a nickname for display purposes.
 
@@ -355,7 +331,7 @@ Captains can unset nicknames, too.
 gamebot unset nickname @WangHoe
 ```
 
-#### gamebot set gifs on|off
+#### pp set gifs on|off
 
 Enable/disable GIFs for your team.
 
@@ -369,7 +345,7 @@ GIFs for team China are off.
 
 Using `unset gifs` is equivalent to `set gifs off`.
 
-#### gamebot set elo [number]
+#### pp set elo [number]
 
 Set and resets the base elo for new seasons. Default is 0.
 
@@ -381,7 +357,7 @@ gamebot set elo 1000
 gamebot unset elo
 ```
 
-#### gamebot set aliases &lt;alias|none&gt; ...
+#### pp set aliases &lt;alias|none&gt; ...
 
 Set additional aliases for the bot. For example you could upload a custom emoji for :pong: and set an alias for it.
 
@@ -395,7 +371,7 @@ Team China aliases are set to pp and :pong:.
 
 Remove all aliases with `unset aliases`.
 
-#### gamebot set api on|off
+#### pp set api on|off
 
 Enable/disable team data in the public API for your team and displays team API URL.
 
@@ -412,7 +388,7 @@ gamebot unset api
 API for team China is off.
 ```
 
-#### gamebot set unbalanced on|off
+#### pp set unbalanced on|off
 
 Allow unbalanced challenges with different number of opponents.
 
