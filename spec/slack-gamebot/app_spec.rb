@@ -13,7 +13,7 @@ describe SlackGamebot::App do
   context 'teams' do
     let!(:active_team) { Fabricate(:team, created_at: Time.now.utc) }
     let!(:active_team_one_week_ago) { Fabricate(:team, created_at: 1.week.ago) }
-    let!(:active_team_four_weeks_ago) { Fabricate(:team, created_at: 4.weeks.ago - 1.hour) }
+    let!(:active_team_four_weeks_ago) { Fabricate(:team, created_at: 4.weeks.ago - 1.day) }
     let!(:premium_team_a_month_ago) { Fabricate(:team, created_at: 1.month.ago, premium: true) }
     let(:teams) { [active_team, active_team_one_week_ago, active_team_four_weeks_ago, premium_team_a_month_ago] }
     before do

@@ -63,7 +63,7 @@ If your bot is a service, like the one on [playplay.io](https://www.playplay.io)
 ```
 heroku run script/console --app=...
 
-2.2.1> Game.create!(name: 'pong', client_id: 'slack client id', client_secret: 'slack client secret', botname: 'pongbot', aliases: ['pp', 'pong'])
+2.2.1> Game.create!(name: 'pong', client_id: 'slack client id', client_secret: 'slack client secret', bot_name: 'pongbot', aliases: ['pp', 'pong'])
 => #<Game _id: 55c8f7da276eaa0003000000, ...>
 ```
 
