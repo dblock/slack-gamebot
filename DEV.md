@@ -40,6 +40,15 @@ $ script/console
 2.3.1> Game.create!(name: 'pong', client_id: 'slack client id', client_secret: 'slack client secret', bot_name: 'pongbot', aliases: ['pp', 'pong'])
 ```
 
+### Stripe Keys
+
+If you want to test upgrading, premium and payment-related functions you need a [Stripe](https://www.stripe.com) account and test keys. Create a `.env` file.
+
+```
+STRIPE_API_PUBLISHABLE_KEY=pk_test_key
+STRIPE_API_KEY=sk_test_key
+```
+
 ### Start the Bot
 
 ```

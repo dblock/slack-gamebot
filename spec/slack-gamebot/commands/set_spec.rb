@@ -124,13 +124,13 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
     context 'api' do
       it 'is a premium feature' do
         expect(client).to receive(:say).with(channel: 'channel', text: team.premium_text)
-        expect(client).to receive(:say).with(channel: 'channel', text: "API for team #{team.name} is on!", gif: 'programmer')
+        expect(client).to receive(:say).with(channel: 'channel', text: "API for team #{team.name} is on!\n#{team.api_url}", gif: 'programmer')
         message_hook.call(client, Hashie::Mash.new(channel: 'channel', user: 'user', text: "#{SlackRubyBot.config.user} set api on"))
       end
       it 'shows current value of API on' do
         team.update_attributes!(api: true)
         expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
-          "API for team #{team.name} is on!"
+          "API for team #{team.name} is on!\n#{team.api_url}"
         )
       end
       it 'shows current value of API off' do
@@ -144,7 +144,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
         it 'shows current value of API on' do
           team.update_attributes!(api: true)
           expect(message: "#{SlackRubyBot.config.user} set api").to respond_with_slack_message(
-            "API for team #{team.name} is on!"
+            "API for team #{team.name} is on!\n#{team.api_url}"
           )
         end
         it 'shows current value of API off' do
@@ -155,7 +155,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
         end
         it 'enables API' do
           expect(message: "#{SlackRubyBot.config.user} set api on").to respond_with_slack_message(
-            "API for team #{team.name} is on!"
+            "API for team #{team.name} is on!\n#{team.api_url}"
           )
           expect(team.reload.api).to be true
         end
@@ -198,7 +198,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
     context 'aliases' do
       it 'is a premium feature' do
         expect(client).to receive(:say).with(channel: 'channel', text: team.premium_text)
-        expect(client).to receive(:say).with(channel: 'channel', text: "API for team #{team.name} is on!", gif: 'programmer')
+        expect(client).to receive(:say).with(channel: 'channel', text: "API for team #{team.name} is on!\n#{team.api_url}", gif: 'programmer')
         message_hook.call(client, Hashie::Mash.new(channel: 'channel', user: 'user', text: "#{SlackRubyBot.config.user} set api on"))
       end
       context 'with aliases' do

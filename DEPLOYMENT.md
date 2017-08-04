@@ -48,6 +48,10 @@ game.save!
 
 Slack-Gamebot replies with animated GIFs. While it's currently not necessary, you may need to set `GIPHY_API_KEY` in the future, see [github.com/Giphy/GiphyAPI](https://github.com/Giphy/GiphyAPI) for details.
 
+#### URL
+
+This defaults to `http://localhost:5000` in development and `https://www.playplay.io` in production.
+
 #### API_URL
 
 The root of your API location, used when displaying the API URL for teams when invoking `set api`.

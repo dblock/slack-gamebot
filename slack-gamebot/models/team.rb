@@ -27,7 +27,7 @@ class Team
   end
 
   def upgrade_text
-    "Upgrade your team to premium for $29.99 a year at https://www.playplay.io/upgrade?team_id=#{team_id}&game=#{game.name}."
+    "Upgrade your team to premium for $29.99 a year at #{SlackGamebot::Service.url}/upgrade?team_id=#{team_id}&game=#{game.name}."
   end
 
   def captains
@@ -71,8 +71,8 @@ class Team
   end
 
   def api_url
-    return unless api? && ENV.key?('API_URL')
-    "#{ENV['API_URL']}/teams/#{id}"
+    return unless api?
+    "#{SlackGamebot::Service.api_url}/teams/#{id}"
   end
 
   def inform!(message, gif_name = nil)
