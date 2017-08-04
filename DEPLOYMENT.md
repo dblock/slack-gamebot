@@ -8,11 +8,15 @@ Before deploying, consider using and sponsoring [a free game bot service](https:
 
 ## Deploy Your Own Slack-Gamebot
 
+### Heroku
+
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/dblock/slack-gamebot)
 
-### MongoDB
-
 Deploy slack-gamebot to Heroku and add a MongoLab or Compose MongoDB provider. You can use both free and paid tiers.
+
+### DigitalOcean with Dokku
+
+See [this blog post](http://code.dblock.org/2016/02/08/running-slack-bots-on-digital-ocean-with-dokku.html).
 
 ### Environment
 
