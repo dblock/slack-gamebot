@@ -119,5 +119,5 @@ describe 'Subscribe', js: true, type: :feature do
         expect(team.stripe_customer_id).to eq 'customer_id'
       end
     end
-  end unless ENV['CI'] # see https://github.com/dblock/slack-gamebot/issues/139
+  end
 end

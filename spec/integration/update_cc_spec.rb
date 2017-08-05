@@ -40,5 +40,5 @@ describe 'Update cc', js: true, type: :feature do
       let!(:team) { Fabricate(:team, game: game, stripe_customer_id: 'stripe_customer_id') }
       it_behaves_like 'updates cc'
     end
-  end unless ENV['CI'] # see https://github.com/dblock/slack-gamebot/issues/139
+  end
 end
