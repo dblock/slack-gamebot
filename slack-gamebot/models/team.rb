@@ -30,6 +30,10 @@ class Team
     "Upgrade your team to premium for $29.99 a year at #{SlackGamebot::Service.url}/upgrade?team_id=#{team_id}&game=#{game.name}."
   end
 
+  def update_cc_text
+    "Update your credit card info at #{SlackGamebot::Service.url}/update_cc?team_id=#{team_id}&game=#{game.name}."
+  end
+
   def captains
     users.captains
   end

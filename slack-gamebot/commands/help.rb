@@ -39,6 +39,7 @@ set nickname <player> [name], unset nickname <player>: set/unset someone's nickn
 
 Premium
 -------
+premium: show subscription info (captains also see payment data)
 seasons: show all seasons
 reset <team>: reset all stats, start a new season
 unregister <player>: remove a player from the leaderboard
