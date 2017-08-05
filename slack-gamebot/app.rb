@@ -9,6 +9,9 @@ EOS
       super
       update_unbalanced_teams!
       deactivate_dead_teams!
+    end
+
+    def after_start!
       nudge_sleeping_teams!
     end
 

@@ -26,6 +26,7 @@ Thread.abort_on_exception = true
 
 Thread.new do
   SlackGamebot::Service.instance.start_from_database!
+  SlackGamebot::App.instance.after_start!
 end
 
 run Api::Middleware.instance
