@@ -27,7 +27,7 @@ class Team
   end
 
   def upgrade_text
-    "Upgrade your team to premium for $29.99 a year at #{SlackGamebot::Service.url}/upgrade?team_id=#{team_id}&game=#{game.name}."
+    "Upgrade your team to premium and enable paid features for $29.99 a year at #{SlackGamebot::Service.url}/upgrade?team_id=#{team_id}&game=#{game.name}."
   end
 
   def update_cc_text
@@ -59,19 +59,28 @@ class Team
     true
   end
 
-  def nudge?(dt = 2.weeks)
+  def bother?(dt = 1.week)
     time_limit = Time.now - dt
+    return false if created_at > time_limit
     return false if nudge_at && nudge_at > time_limit
-    asleep?(dt)
+    true
+  end
+
+  def nudge?(dt = 2.weeks)
+    bother?(dt) && asleep?(dt)
   end
 
   def dead?(dt = 1.month)
     asleep?(dt)
   end
 
-  def nudge!
-    inform! "Challenge someone to a game of #{game.name} today!", 'nudge'
+  def bother!(message, gif = nil)
+    inform! message, gif
     update_attributes!(nudge_at: Time.now)
+  end
+
+  def nudge!
+    bother! "Challenge someone to a game of #{game.name} today!", 'nudge'
   end
 
   def api_url

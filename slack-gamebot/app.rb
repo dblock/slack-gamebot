@@ -13,6 +13,7 @@ EOS
 
     def after_start!
       nudge_sleeping_teams!
+      bother_free_teams!
     end
 
     private
@@ -37,6 +38,18 @@ EOS
           team.nudge!
         rescue StandardError => e
           logger.warn "Error nudging team #{team}, #{e.message}."
+        end
+      end
+    end
+
+    def bother_free_teams!
+      Team.active.each do |team|
+        next if team.premium?
+        next unless team.bother?
+        begin
+          team.bother! "Enjoying this free bot? Don't be cheap! #{team.upgrade_text}"
+        rescue StandardError => e
+          logger.warn "Error bothering team #{team}, #{e.message}."
         end
       end
     end

@@ -41,5 +41,14 @@ describe SlackGamebot::App do
         subject.send(:nudge_sleeping_teams!)
       end
     end
+    context '#bother_free_teams!' do
+      it 'bothers free teams' do
+        expect(active_team).to_not receive(:bother!)
+        expect(active_team_one_week_ago).to receive(:bother!).with("Enjoying this free bot? Don't be cheap! #{active_team_one_week_ago.upgrade_text}")
+        expect(active_team_four_weeks_ago).to receive(:bother!).with("Enjoying this free bot? Don't be cheap! #{active_team_four_weeks_ago.upgrade_text}")
+        expect(premium_team_a_month_ago).to_not receive(:bother!)
+        subject.send(:bother_free_teams!)
+      end
+    end
   end
 end
