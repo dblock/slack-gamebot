@@ -2,7 +2,7 @@ class Game
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  SORT_ORDERS = ['created_at', '-created_at', 'updated_at', '-updated_at']
+  SORT_ORDERS = ['created_at', '-created_at', 'updated_at', '-updated_at'].freeze
 
   field :name, type: String
   index(name: 1)
@@ -60,6 +60,6 @@ class Game
   private
 
   def check_teams!
-    fail SlackGamebot::Error, 'The game has teams and cannot be destroyed.' if teams.any?
+    raise SlackGamebot::Error, 'The game has teams and cannot be destroyed.' if teams.any?
   end
 end

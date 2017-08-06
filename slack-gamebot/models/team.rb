@@ -95,12 +95,14 @@ class Team
     return unless channels.any?
     channel = channels.first
     logger.info "Sending '#{message}' to #{self} on ##{channel['name']}."
-    gif = begin
-      Giphy.random(gif_name)
-    rescue StandardError => e
-      logger.warn "Giphy.random: #{e.message}"
-      nil
-    end if gif_name && gifs?
+    if gif_name && gifs?
+      gif = begin
+        Giphy.random(gif_name)
+      rescue StandardError => e
+        logger.warn "Giphy.random: #{e.message}"
+        nil
+      end
+    end
     text = [message, gif && gif.image_url.to_s].compact.join("\n")
     client.chat_postMessage(text: text, channel: channel['id'], as_user: true)
   end
@@ -121,7 +123,7 @@ class Team
 
   private
 
-  UPGRADED_TEXT = <<-EOS
+  UPGRADED_TEXT = <<-EOS.freeze
 Your team has been upgraded, enjoy all premium features. Thanks for supporting open-source!
 Follow https://twitter.com/playplayio for news and updates.
 EOS

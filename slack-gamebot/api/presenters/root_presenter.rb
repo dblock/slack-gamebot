@@ -70,7 +70,7 @@ module Api
         "#{base_url(opts)}/api/credit_cards"
       end
 
-      [:challenge, :match, :user, :season, :team, :game].each do |model|
+      %i[challenge match user season team game].each do |model|
         link model do |opts|
           {
             href: "#{base_url(opts)}/api/#{model.to_s.pluralize}/{id}",

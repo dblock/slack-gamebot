@@ -7,18 +7,20 @@ module SlackGamebot
         arguments = match['expression'].split.reject(&:blank?) if match['expression']
         # limit
         max = 10
-        case arguments.last.downcase
-        when 'infinity'
-          max = nil
-        else
-          begin
-            Integer(arguments.last).tap do |value|
-              max = value
-              arguments.pop
+        if arguments && arguments.any?
+          case arguments.last.downcase
+          when 'infinity'
+            max = nil
+          else
+            begin
+              Integer(arguments.last).tap do |value|
+                max = value
+                arguments.pop
+              end
+            rescue ArgumentError
             end
-          rescue ArgumentError
           end
-        end if arguments && arguments.any?
+        end
         # users
         team = client.owner
         users = ::User.find_many_by_slack_mention!(team, arguments) if arguments && arguments.any?
@@ -40,7 +42,7 @@ module SlackGamebot
             "#{s} #{count} times"
           end
         end.join("\n")
-        client.say(channel: data.channel, text: message.length > 0 ? message : 'No matches.')
+        client.say(channel: data.channel, text: !message.empty? ? message : 'No matches.')
         logger.info "MATCHES: #{team} - #{data.user}"
       end
     end

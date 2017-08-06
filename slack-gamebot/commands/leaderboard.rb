@@ -12,12 +12,12 @@ module SlackGamebot
             reverse = true
             number = number[1..-1]
           end
-          case number.downcase
-          when 'infinity'
-            max = nil
-          else
-            max = Integer(number)
-          end
+          max = case number.downcase
+                when 'infinity'
+                  nil
+                else
+                  Integer(number)
+                end
         end
         ranked_players = client.owner.users.ranked
         if ranked_players.any?

@@ -4,7 +4,7 @@ class Challenge
 
   index(state: 1, channel: 1)
 
-  SORT_ORDERS = ['created_at', '-created_at', 'updated_at', '-updated_at', 'state', '-state', 'channel', '-channel']
+  SORT_ORDERS = ['created_at', '-created_at', 'updated_at', '-updated_at', 'state', '-state', 'channel', '-channel'].freeze
 
   field :state, type: String, default: ChallengeState::PROPOSED
   field :channel, type: String
@@ -73,23 +73,23 @@ class Challenge
   end
 
   def accept!(challenger)
-    fail SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
+    raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
     update_attributes!(updated_by: challenger, state: ChallengeState::ACCEPTED)
   end
 
   def decline!(challenger)
-    fail SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
+    raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
     update_attributes!(updated_by: challenger, state: ChallengeState::DECLINED)
   end
 
   def cancel!(challenger)
-    fail SlackGamebot::Error, "Challenge has already been #{state}." unless [ChallengeState::PROPOSED, ChallengeState::ACCEPTED].include?(state)
+    raise SlackGamebot::Error, "Challenge has already been #{state}." unless [ChallengeState::PROPOSED, ChallengeState::ACCEPTED].include?(state)
     update_attributes!(updated_by: challenger, state: ChallengeState::CANCELED)
   end
 
   def lose!(loser, scores = nil)
-    fail SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
-    fail SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+    raise SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
+    raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
     winners = nil
     losers = nil
     if challenged.include?(loser)
@@ -99,15 +99,15 @@ class Challenge
       winners = challenged
       losers = challengers
     else
-      fail SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
+      raise SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
     end
     Match.lose!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     update_attributes!(state: ChallengeState::PLAYED)
   end
 
   def resign!(loser, scores = nil)
-    fail SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
-    fail SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+    raise SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
+    raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
     winners = nil
     losers = nil
     if challenged.include?(loser)
@@ -117,16 +117,16 @@ class Challenge
       winners = challenged
       losers = challengers
     else
-      fail SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
+      raise SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
     end
     Match.resign!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     update_attributes!(state: ChallengeState::PLAYED)
   end
 
   def draw!(player, scores = nil)
-    fail SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
-    fail SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
-    fail SlackGamebot::Error, "Already recorded a draw from #{player.user_name}." if draw.include?(player)
+    raise SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
+    raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+    raise SlackGamebot::Error, "Already recorded a draw from #{player.user_name}." if draw.include?(player)
     draw << player
     update_attributes!(draw_scores: scores) if scores
     return if draw.count != (challenged.count + challengers.count)

@@ -30,7 +30,7 @@ describe User do
     end
     it 'requires known users' do
       expect do
-        User.find_many_by_slack_mention!(team, %w(foo bar))
+        User.find_many_by_slack_mention!(team, %w[foo bar])
       end.to raise_error SlackGamebot::Error, "I don't know who foo is! Ask them to _register_."
     end
   end

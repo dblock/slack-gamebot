@@ -17,7 +17,8 @@ describe Api::Endpoints::CreditCardsEndpoint do
         expect do
           client.credit_cards._post(
             team_id: team._id,
-            stripe_token: 'token')
+            stripe_token: 'token'
+          )
         end.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
           expect(json['error']).to eq 'Not a Premium Customer'

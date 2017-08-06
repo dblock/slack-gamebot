@@ -64,7 +64,7 @@ module Api
             team.activate!(token)
           elsif team
             error!('Invalid Game', 400) unless team.game == game
-            fail "Team #{team.name} is already registered."
+            raise "Team #{team.name} is already registered."
           else
             team = Team.create!(
               game: game,

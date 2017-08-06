@@ -30,7 +30,7 @@ class User
   before_save :update_elo_history!
   after_save :rank!
 
-  SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'ties', '-ties', 'user_name', '-user_name', 'rank', '-rank']
+  SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'ties', '-ties', 'user_name', '-user_name', 'rank', '-rank'].freeze
 
   scope :ranked, -> { where(:rank.ne => nil) }
   scope :captains, -> { where(captain: true) }
@@ -59,7 +59,7 @@ class User
              regexp = Regexp.new("^#{user_name}$", 'i')
              User.where(team: team).or({ user_name: regexp }, nickname: regexp).first
            end
-    fail SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user && user.registered?
+    raise SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user && user.registered?
     user
   end
 
@@ -141,7 +141,7 @@ class User
     players = any_of({ :wins.gt => 0 }, { :losses.gt => 0 }, :ties.gt => 0).where(team: team, registered: true).desc(:elo).desc(:wins).asc(:losses).desc(:ties)
     players.each_with_index do |player, index|
       if player.registered?
-        rank += 1 if index > 0 && [:elo, :wins, :losses, :ties].any? { |property| players[index - 1].send(property) != player.send(property) }
+        rank += 1 if index > 0 && %i[elo wins losses ties].any? { |property| players[index - 1].send(property) != player.send(property) }
         player.set(rank: rank) unless rank == player.rank
       end
     end

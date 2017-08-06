@@ -19,7 +19,7 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
     end
     context 'one season' do
       before do
-        2.times.map { Fabricate(:match, team: team) }
+        Array.new(2) { Fabricate(:match, team: team) }
         challenge = Fabricate(:challenge, challengers: [team.users.asc(:_id).first], challenged: [team.users.asc(:_id).last])
         Fabricate(:match, challenge: challenge)
       end
@@ -30,9 +30,9 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
     end
     context 'two seasons' do
       let!(:seasons) do
-        2.times.map do |n|
+        Array.new(2) do |n|
           team.users.all.destroy
-          (n + 1).times.map { Fabricate(:match, team: team) }
+          Array.new((n + 1)) { Fabricate(:match, team: team) }
           challenge = Fabricate(:challenge, challengers: [team.users.asc(:_id).first], challenged: [team.users.asc(:_id).last])
           Fabricate(:match, challenge: challenge)
           Fabricate(:season)
@@ -44,7 +44,7 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
     end
     context 'current season' do
       before do
-        2.times.map { Fabricate(:match) }
+        Array.new(2) { Fabricate(:match) }
       end
       it 'returns past seasons and current season' do
         current_season = Season.new(team: team)
@@ -53,13 +53,13 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
     end
     context 'current and past season' do
       let!(:season1) do
-        2.times.map { Fabricate(:match) }
+        Array.new(2) { Fabricate(:match) }
         challenge = Fabricate(:challenge, challengers: [team.users.asc(:_id).first], challenged: [team.users.asc(:_id).last])
         Fabricate(:match, challenge: challenge)
         Fabricate(:season)
       end
       let!(:current_season) do
-        2.times.map { Fabricate(:match) }
+        Array.new(2) { Fabricate(:match) }
         Season.new(team: team)
       end
       it 'returns past seasons and current season' do

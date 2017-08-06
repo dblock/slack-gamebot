@@ -1,7 +1,7 @@
 module SlackGamebot
   module Commands
     class Help < SlackRubyBot::Commands::Base
-      HELP = <<-EOS
+      HELP = <<-EOS.freeze
 I am your friendly Gamebot, here to help.
 
 ```
