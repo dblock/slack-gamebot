@@ -51,4 +51,29 @@ describe SlackGamebot::App do
       end
     end
   end
+  context 'subscribed' do
+    include_context :stripe_mock
+    let(:plan) { stripe_helper.create_plan(id: 'slack-playplay-yearly', amount: 2999) }
+    let(:customer) { Stripe::Customer.create(source: stripe_helper.generate_card_token, plan: plan.id, email: 'foo@bar.com') }
+    let!(:team) { Fabricate(:team, premium: true, stripe_customer_id: customer.id) }
+    context '#check_premium_teams!' do
+      it 'ignores active subscriptions' do
+        expect_any_instance_of(Team).to_not receive(:inform!)
+        subject.send(:check_premium_teams!)
+      end
+      it 'notifies past due subscription' do
+        customer.subscriptions.data.first['status'] = 'past_due'
+        expect(Stripe::Customer).to receive(:retrieve).and_return(customer)
+        expect_any_instance_of(Team).to receive(:inform!).with("Your premium subscription to StripeMock Default Plan ID ($29.99) is past due. #{team.update_cc_text}")
+        subject.send(:check_premium_teams!)
+      end
+      it 'notifies past due subscription' do
+        customer.subscriptions.data.first['status'] = 'canceled'
+        expect(Stripe::Customer).to receive(:retrieve).and_return(customer)
+        expect_any_instance_of(Team).to receive(:inform!).with('Your premium subscription to StripeMock Default Plan ID ($29.99) was canceled and your team has been downgraded. Thank you for being a customer!')
+        subject.send(:check_premium_teams!)
+        expect(team.reload.premium?).to be false
+      end
+    end
+  end
 end

@@ -10,6 +10,7 @@ class Team
   field :premium, type: Boolean, default: false
 
   scope :api, -> { where(api: true) }
+  scope :premium, -> { where(premium: true) }
 
   validates_presence_of :game_id
 
