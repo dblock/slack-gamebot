@@ -24,8 +24,8 @@ describe Api::Endpoints::ChallengesEndpoint do
     it 'returns a challenge' do
       challenge = client.challenge(id: existing_challenge.id)
       expect(challenge.id).to eq existing_challenge.id.to_s
-      expect(challenge._links.self._url).to eq "http://example.org/challenges/#{existing_challenge.id}"
-      expect(challenge._links.team._url).to eq "http://example.org/teams/#{existing_challenge.team.id}"
+      expect(challenge._links.self._url).to eq "http://example.org/api/challenges/#{existing_challenge.id}"
+      expect(challenge._links.team._url).to eq "http://example.org/api/teams/#{existing_challenge.team.id}"
     end
     it 'cannot return a challenge for team with api off' do
       team.update_attributes!(api: false)
@@ -45,9 +45,9 @@ describe Api::Endpoints::ChallengesEndpoint do
     it 'returns a challenge with links to challengers, challenged and played match' do
       challenge = client.challenge(id: existing_challenge.id)
       expect(challenge.id).to eq existing_challenge.id.to_s
-      expect(challenge._links.challengers._url).to eq existing_challenge.challengers.map { |user| "http://example.org/users/#{user.id}" }
-      expect(challenge._links.challenged._url).to eq existing_challenge.challenged.map { |user| "http://example.org/users/#{user.id}" }
-      expect(challenge._links.match._url).to eq "http://example.org/matches/#{existing_challenge.match.id}"
+      expect(challenge._links.challengers._url).to eq existing_challenge.challengers.map { |user| "http://example.org/api/users/#{user.id}" }
+      expect(challenge._links.challenged._url).to eq existing_challenge.challenged.map { |user| "http://example.org/api/users/#{user.id}" }
+      expect(challenge._links.match._url).to eq "http://example.org/api/matches/#{existing_challenge.match.id}"
     end
   end
 end

@@ -14,7 +14,7 @@ describe Api::Endpoints::TeamsEndpoint do
     it 'returns a team' do
       team = client.team(id: existing_team.id)
       expect(team.id).to eq existing_team.id.to_s
-      expect(team._links.self._url).to eq "http://example.org/teams/#{existing_team.id}"
+      expect(team._links.self._url).to eq "http://example.org/api/teams/#{existing_team.id}"
     end
   end
 
@@ -74,11 +74,11 @@ describe Api::Endpoints::TeamsEndpoint do
     it 'returns a team with links to challenges, users and matches' do
       team = client.team(id: existing_team.id)
       expect(team.id).to eq existing_team.id.to_s
-      expect(team._links.users._url).to eq "http://example.org/users?team_id=#{existing_team.id}"
-      expect(team._links.challenges._url).to eq "http://example.org/challenges?team_id=#{existing_team.id}"
-      expect(team._links.matches._url).to eq "http://example.org/matches?team_id=#{existing_team.id}"
-      expect(team._links.seasons._url).to eq "http://example.org/seasons?team_id=#{existing_team.id}"
-      expect(team._links.game._url).to eq "http://example.org/games/#{existing_team.game.id}"
+      expect(team._links.users._url).to eq "http://example.org/api/users?team_id=#{existing_team.id}"
+      expect(team._links.challenges._url).to eq "http://example.org/api/challenges?team_id=#{existing_team.id}"
+      expect(team._links.matches._url).to eq "http://example.org/api/matches?team_id=#{existing_team.id}"
+      expect(team._links.seasons._url).to eq "http://example.org/api/seasons?team_id=#{existing_team.id}"
+      expect(team._links.game._url).to eq "http://example.org/api/games/#{existing_team.game.id}"
     end
 
     it 'cannot return a team with api off' do

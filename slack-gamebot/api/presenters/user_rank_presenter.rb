@@ -14,7 +14,7 @@ module Api
 
       link :user do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/users/#{user_id}"
+        "#{request.base_url}/api/users/#{user_id}"
       end
     end
   end
