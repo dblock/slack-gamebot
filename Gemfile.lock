@@ -301,6 +301,7 @@ DEPENDENCIES
   mongoid (~> 5.1.4)
   mongoid-scroll
   mongoid-shell
+  multi_json
   newrelic_rpm
   rack-robotz
   rack-server-pages
