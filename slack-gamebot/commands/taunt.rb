@@ -3,8 +3,7 @@ module SlackGamebot
     class Taunt < SlackRubyBot::Commands::Base
       def self.call(client, data, match)
         taunter = ::User.find_create_or_update_by_slack_id!(client, data.user)
-        arguments = match['expression'].split.reject(&:blank?) if match['expression']
-        arguments ||= []
+        arguments = match['expression'] ? match['expression'].split.reject(&:blank?) : []
         if arguments.length > 1
           client.say(channel: data.channel, text: 'Please only provide one user name to taunt.')
         elsif arguments.length < 1
