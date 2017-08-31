@@ -6,7 +6,7 @@ module SlackGamebot
         arguments = match['expression'] ? match['expression'].split.reject(&:blank?) : []
         if arguments.length > 1
           client.say(channel: data.channel, text: 'Please only provide one user name to taunt.')
-        elsif arguments.length < 1
+        elsif arguments.empty?
           client.say(channel: data.channel, text: 'Please provide a user name to taunt.')
         else
           victim = ::User.find_by_slack_mention!(client.owner, arguments.first)
