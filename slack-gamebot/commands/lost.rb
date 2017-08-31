@@ -35,7 +35,10 @@ module SlackGamebot
 
         challenge = ::Challenge.find_by_user(client.owner, data.channel, challenger, [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
 
-        if opponents.any? && (challenge.nil? || (challenge.challengers != opponents && challenge.challenged != opponents))
+        if scores && scores.any? && Stripe.api_key && !client.owner.reload.premium
+          client.say channel: data.channel, text: "Recording scores is now a premium feature, sorry. #{client.owner.upgrade_text}"
+          logger.info "#{client.owner}, user=#{data.user}, text=#{data.text}, recording scores is now a premium feature"
+        elsif opponents.any? && (challenge.nil? || (challenge.challengers != opponents && challenge.challenged != opponents))
           match = ::Match.lose!(team: client.owner, winners: opponents, losers: teammates, scores: scores)
           client.say(channel: data.channel, text: "Match has been recorded! #{match}.", gif: 'loser')
           logger.info "LOST TO: #{client.owner} - #{match}"
