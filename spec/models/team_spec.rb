@@ -188,14 +188,23 @@ describe Team do
         team.nudge!
       end.to change(team, :nudge_at)
     end
-    it 'sends a challenge message to the first active channel' do
+    it 'sends a challenge message to all active channels' do
       expect(client).to receive(:channels_list).and_return(
         'channels' => [
           { 'name' => 'general', 'is_member' => true, 'id' => 'general_id' },
           { 'name' => 'pong', 'is_member' => true, 'id' => 'pong_id' }
         ]
       )
-      expect(client).to receive(:chat_postMessage).once
+      expect(client).to receive(:chat_postMessage).with(
+        text: "Challenge someone to a game of #{game.name} today!",
+        channel: 'general_id',
+        as_user: true
+      )
+      expect(client).to receive(:chat_postMessage).with(
+        text: "Challenge someone to a game of #{game.name} today!",
+        channel: 'pong_id',
+        as_user: true
+      )
       team.nudge!
     end
     it 'does not nudge when not a member of any channels' do

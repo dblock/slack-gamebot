@@ -1,5 +1,7 @@
 module SlackGamebot
   class App < SlackRubyBotServer::App
+    include Celluloid
+
     DEAD_MESSAGE = <<-EOS.freeze
 This leaderboard has been dead for over a month, deactivating.
 Re-install the bot at https://www.playplay.io. Your data will be purged in 2 weeks.
@@ -11,12 +13,21 @@ EOS
     end
 
     def after_start!
-      check_premium_teams!
-      nudge_sleeping_teams!
-      bother_free_teams!
+      once_and_every 60 * 60 * 24 * 3 do
+        check_premium_teams!
+        nudge_sleeping_teams!
+        bother_free_teams!
+      end
     end
 
     private
+
+    def once_and_every(tt)
+      yield
+      every tt do
+        yield
+      end
+    end
 
     def deactivate_dead_teams!
       Team.active.each do |team|
@@ -25,6 +36,7 @@ EOS
         begin
           team.deactivate!
           team.inform! DEAD_MESSAGE, 'dead'
+          team.inform_admins! DEAD_MESSAGE, 'dead'
         rescue StandardError => e
           logger.warn "Error informing team #{team}, #{e.message}."
         end
@@ -63,10 +75,10 @@ EOS
           case subscription.status
           when 'past_due'
             logger.warn "Subscription for #{team} is #{subscription.status}, notifying."
-            team.inform! "Your premium subscription to #{subscription_name} is past due. #{team.update_cc_text}"
+            team.inform_admins! "Your premium subscription to #{subscription_name} is past due. #{team.update_cc_text}"
           when 'canceled', 'unpaid'
             logger.warn "Subscription for #{team} is #{subscription.status}, downgrading."
-            team.inform! "Your premium subscription to #{subscription.plan.name} (#{ActiveSupport::NumberHelper.number_to_currency(subscription.plan.amount.to_f / 100)}) was canceled and your team has been downgraded. Thank you for being a customer!"
+            team.inform_admins! "Your premium subscription to #{subscription.plan.name} (#{ActiveSupport::NumberHelper.number_to_currency(subscription.plan.amount.to_f / 100)}) was canceled and your team has been downgraded. Thank you for being a customer!"
             team.update_attributes!(premium: false)
           end
         end

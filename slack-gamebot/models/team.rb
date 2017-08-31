@@ -91,20 +91,21 @@ class Team
 
   def inform!(message, gif_name = nil)
     client = Slack::Web::Client.new(token: token)
-    channels = client.channels_list['channels'].select { |channel| channel['is_member'] }
-    return unless channels.any?
-    channel = channels.first
-    logger.info "Sending '#{message}' to #{self} on ##{channel['name']}."
-    if gif_name && gifs?
-      gif = begin
-        Giphy.random(gif_name)
-      rescue StandardError => e
-        logger.warn "Giphy.random: #{e.message}"
-        nil
-      end
+    channels = client.channels_list['channels'].select { |channel| channel['is_member'] } # TODO: paginate
+    channels.each do |channel|
+      logger.info "Sending '#{message}' to #{self} on ##{channel['name']}."
+      client.chat_postMessage(text: make_message(message, gif_name), channel: channel['id'], as_user: true)
     end
-    text = [message, gif && gif.image_url.to_s].compact.join("\n")
-    client.chat_postMessage(text: text, channel: channel['id'], as_user: true)
+  end
+
+  def inform_admins!(message, gif_name = nil)
+    client = Slack::Web::Client.new(token: token)
+    members = client.users_list(presence: false).members.flatten # TODO: paginate
+    members.select(&:is_admin).each do |admin|
+      channel = client.im_open(user: admin.id)
+      logger.info "Sending DM '#{message}' to #{admin.name}."
+      client.chat_postMessage(text: make_message(message, gif_name), channel: channel.channel.id, as_user: true)
+    end
   end
 
   def self.find_or_create_from_env!
@@ -127,6 +128,18 @@ class Team
 Your team has been upgraded, enjoy all premium features. Thanks for supporting open-source!
 Follow https://twitter.com/playplayio for news and updates.
 EOS
+
+  def make_message(message, gif_name = nil)
+    if gif_name && gifs?
+      gif = begin
+        Giphy.random(gif_name)
+      rescue StandardError => e
+        logger.warn "Giphy.random: #{e.message}"
+        nil
+      end
+    end
+    [message, gif && gif.image_url.to_s].compact.join("\n")
+  end
 
   def inform_premium_changed!
     return unless premium? && premium_changed?

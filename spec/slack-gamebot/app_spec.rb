@@ -22,9 +22,13 @@ describe SlackGamebot::App do
     context '#deactivate_dead_teams!' do
       it 'deactivates teams inactive for two weeks' do
         expect(active_team).to_not receive(:inform!)
+        expect(active_team).to_not receive(:inform_admins!)
         expect(active_team_one_week_ago).to_not receive(:inform!)
+        expect(active_team_one_week_ago).to_not receive(:inform_admins!)
         expect(active_team_four_weeks_ago).to receive(:inform!).with(SlackGamebot::App::DEAD_MESSAGE, 'dead').once
+        expect(active_team_four_weeks_ago).to receive(:inform_admins!).with(SlackGamebot::App::DEAD_MESSAGE, 'dead').once
         expect(premium_team_a_month_ago).to_not receive(:inform!)
+        expect(premium_team_a_month_ago).to_not receive(:inform_admins!)
         subject.send(:deactivate_dead_teams!)
         expect(active_team.reload.active).to be true
         expect(active_team_one_week_ago.reload.active).to be true
@@ -59,18 +63,19 @@ describe SlackGamebot::App do
     context '#check_premium_teams!' do
       it 'ignores active subscriptions' do
         expect_any_instance_of(Team).to_not receive(:inform!)
+        expect_any_instance_of(Team).to_not receive(:inform_admins!)
         subject.send(:check_premium_teams!)
       end
       it 'notifies past due subscription' do
         customer.subscriptions.data.first['status'] = 'past_due'
         expect(Stripe::Customer).to receive(:retrieve).and_return(customer)
-        expect_any_instance_of(Team).to receive(:inform!).with("Your premium subscription to StripeMock Default Plan ID ($29.99) is past due. #{team.update_cc_text}")
+        expect_any_instance_of(Team).to receive(:inform_admins!).with("Your premium subscription to StripeMock Default Plan ID ($29.99) is past due. #{team.update_cc_text}")
         subject.send(:check_premium_teams!)
       end
       it 'notifies past due subscription' do
         customer.subscriptions.data.first['status'] = 'canceled'
         expect(Stripe::Customer).to receive(:retrieve).and_return(customer)
-        expect_any_instance_of(Team).to receive(:inform!).with('Your premium subscription to StripeMock Default Plan ID ($29.99) was canceled and your team has been downgraded. Thank you for being a customer!')
+        expect_any_instance_of(Team).to receive(:inform_admins!).with('Your premium subscription to StripeMock Default Plan ID ($29.99) was canceled and your team has been downgraded. Thank you for being a customer!')
         subject.send(:check_premium_teams!)
         expect(team.reload.premium?).to be false
       end
