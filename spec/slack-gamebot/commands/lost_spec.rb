@@ -36,7 +36,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     end
     it 'lost with score requires a premium subscription' do
       expect(message: "#{SlackRubyBot.config.user} lost 15:21", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Recording scores is now a premium feature, sorry. #{team.upgrade_text}"
+        "Recording scores is now a premium feature, sorry. You can still record games without scores. #{team.upgrade_text}"
       )
       challenge.reload
       expect(challenge.match).to be nil

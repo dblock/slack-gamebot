@@ -6,7 +6,7 @@ module SlackGamebot
         challenge = ::Challenge.find_by_user(client.owner, data.channel, challenger, [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
         scores = Score.parse(match['expression']) if match['expression']
         if scores && scores.any? && Stripe.api_key && !client.owner.reload.premium
-          client.say channel: data.channel, text: "Recording scores is now a premium feature, sorry. #{client.owner.upgrade_text}"
+          client.say channel: data.channel, text: "Recording scores is now a premium feature, sorry. You can still record games without scores. #{client.owner.upgrade_text}"
           logger.info "#{client.owner}, user=#{data.user}, text=#{data.text}, recording scores is now a premium feature"
         elsif challenge
           if challenge.draw.include?(challenger)

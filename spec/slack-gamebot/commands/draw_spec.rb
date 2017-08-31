@@ -19,7 +19,7 @@ describe SlackGamebot::Commands::Draw, vcr: { cassette_name: 'user_info' } do
   end
   it 'draw with a score requires premium subscription' do
     expect(message: "#{SlackRubyBot.config.user} draw 2:2", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-      "Recording scores is now a premium feature, sorry. #{team.upgrade_text}"
+      "Recording scores is now a premium feature, sorry. You can still record games without scores. #{team.upgrade_text}"
     )
     challenge.reload
     expect(challenge.draw.any?).to be false

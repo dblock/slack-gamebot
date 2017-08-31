@@ -22,7 +22,7 @@ describe SlackGamebot::Commands::Resigned, vcr: { cassette_name: 'user_info' } d
     end
     it 'resigned with score requires a premium subscription' do
       expect(message: "#{SlackRubyBot.config.user} resigned 15:21", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Recording scores is now a premium feature, sorry. #{team.upgrade_text}"
+        "Recording scores is now a premium feature, sorry. You can still record games without scores. #{team.upgrade_text}"
       )
     end
     context 'premium team' do
