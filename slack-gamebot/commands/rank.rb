@@ -7,7 +7,7 @@ module SlackGamebot
         arguments = match['expression'].split.reject(&:blank?) if match['expression']
         users = arguments || []
         if arguments && arguments.any?
-          users = User.find_many_by_slack_mention!(client.owner, users)
+          users = User.find_many_by_slack_mention!(client, users)
         else
           users << ::User.find_create_or_update_by_slack_id!(client, data.user)
         end

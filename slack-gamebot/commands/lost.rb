@@ -21,10 +21,10 @@ module SlackGamebot
             current = :teammates
           else
             if current == :opponents
-              opponents << ::User.find_by_slack_mention!(client.owner, argument)
+              opponents << ::User.find_by_slack_mention!(client, argument)
               current = :scores unless multi_player
             elsif current == :teammates
-              teammates << ::User.find_by_slack_mention!(client.owner, argument)
+              teammates << ::User.find_by_slack_mention!(client, argument)
               current = :scores if opponents.count == teammates.count
             else
               scores ||= []

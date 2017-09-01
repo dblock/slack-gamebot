@@ -26,6 +26,7 @@ describe SlackGamebot::Commands::Sucks, vcr: { cassette_name: 'user_info' } do
     )
   end
   it 'does not conflict with a player name that contains suck' do
+    allow(client.web_client).to receive(:users_info)
     expect(message: "#{SlackRubyBot.config.user} challenge suckarov", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
       "I don't know who suckarov is! Ask them to _register_."
     )

@@ -44,7 +44,7 @@ class Challenge
   end
 
   # Given a challenger and a list of names splits into two groups, returns users.
-  def self.split_teammates_and_opponents(team, challenger, names, separator = 'with')
+  def self.split_teammates_and_opponents(client, challenger, names, separator = 'with')
     teammates = [challenger]
     opponents = []
     current_side = opponents
@@ -53,17 +53,17 @@ class Challenge
       if name == separator
         current_side = teammates
       else
-        current_side << ::User.find_by_slack_mention!(team, name)
+        current_side << ::User.find_by_slack_mention!(client, name)
       end
     end
 
     [teammates, opponents]
   end
 
-  def self.create_from_teammates_and_opponents!(team, channel, challenger, names, separator = 'with')
-    teammates, opponents = split_teammates_and_opponents(team, challenger, names, separator)
+  def self.create_from_teammates_and_opponents!(client, channel, challenger, names, separator = 'with')
+    teammates, opponents = split_teammates_and_opponents(client, challenger, names, separator)
     Challenge.create!(
-      team: team,
+      team: client.owner,
       channel: channel,
       created_by: challenger,
       challengers: teammates,

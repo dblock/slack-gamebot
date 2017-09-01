@@ -9,7 +9,7 @@ module SlackGamebot
           slack_mention = v.split.first if v
           if v && User.slack_mention?(slack_mention)
             raise SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
-            target_user = ::User.find_by_slack_mention!(client.owner, slack_mention)
+            target_user = ::User.find_by_slack_mention!(client, slack_mention)
             v = v[slack_mention.length + 1..-1]
           end
           unless v.nil?
@@ -31,7 +31,7 @@ module SlackGamebot
           slack_mention = v.split.first if v
           if User.slack_mention?(slack_mention)
             raise SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
-            target_user = ::User.find_by_slack_mention!(client.owner, slack_mention)
+            target_user = ::User.find_by_slack_mention!(client, slack_mention)
           end
           old_nickname = target_user.nickname
           premium client, data do

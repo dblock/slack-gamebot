@@ -9,7 +9,7 @@ describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } 
   it 'creates a singles challenge by user id' do
     expect do
       expect(message: "#{SlackRubyBot.config.user} challenge <@#{opponent.user_id}>", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
-        "#{user.user_name} challenged #{opponent.user_name} to a match!"
+        "#{user.slack_mention} challenged #{opponent.slack_mention} to a match!"
       )
     end.to change(Challenge, :count).by(1)
     challenge = Challenge.last
@@ -20,8 +20,8 @@ describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } 
   end
   it 'creates a singles challenge by user name' do
     expect do
-      expect(message: "#{SlackRubyBot.config.user} challenge #{opponent.user_name}", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
-        "#{user.user_name} challenged #{opponent.user_name} to a match!"
+      expect(message: "#{SlackRubyBot.config.user} challenge #{opponent.slack_mention}", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
+        "#{user.slack_mention} challenged #{opponent.slack_mention} to a match!"
       )
     end.to change(Challenge, :count).by(1)
   end
@@ -29,8 +29,8 @@ describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } 
     opponent2 = Fabricate(:user, team: team)
     teammate = Fabricate(:user, team: team)
     expect do
-      expect(message: "#{SlackRubyBot.config.user} challenge #{opponent.user_name} #{opponent2.user_name} with #{teammate.user_name}", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
-        "#{user.user_name} and #{teammate.user_name} challenged #{opponent.user_name} and #{opponent2.user_name} to a match!"
+      expect(message: "#{SlackRubyBot.config.user} challenge #{opponent.slack_mention} #{opponent2.user_name} with #{teammate.user_name}", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
+        "#{user.slack_mention} and #{teammate.slack_mention} challenged #{opponent.slack_mention} and #{opponent2.slack_mention} to a match!"
       )
     end.to change(Challenge, :count).by(1)
     challenge = Challenge.last
@@ -42,7 +42,7 @@ describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } 
   it 'creates a singles challenge by user name case-insensitive' do
     expect do
       expect(message: "#{SlackRubyBot.config.user} challenge #{opponent.user_name.capitalize}", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
-        "#{user.user_name} challenged #{opponent.user_name} to a match!"
+        "#{user.slack_mention} challenged #{opponent.slack_mention} to a match!"
       )
     end.to change(Challenge, :count).by(1)
   end
@@ -71,7 +71,7 @@ describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } 
       opponent2 = Fabricate(:user)
       expect do
         expect(message: "#{SlackRubyBot.config.user} challenge #{opponent1.slack_mention} #{opponent2.slack_mention}", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
-          "#{user.user_name} challenged #{opponent1.user_name} and #{opponent2.user_name} to a match!"
+          "#{user.slack_mention} challenged #{opponent1.slack_mention} and #{opponent2.slack_mention} to a match!"
         )
       end.to change(Challenge, :count).by(1)
       challenge = Challenge.last
@@ -80,22 +80,24 @@ describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } 
     end
   end
   it 'does not butcher names with special characters' do
+    allow(client.web_client).to receive(:users_info)
     expect(message: "#{SlackRubyBot.config.user} challenge Jung-hwa", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
       "I don't know who Jung-hwa is! Ask them to _register_."
     )
   end
-  it 'requires the opponent to be registred' do
-    opponent.unregister!
-    expect(message: "#{SlackRubyBot.config.user} challenge <@#{opponent.user_name}>", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
-      "I don't know who <@#{opponent.user_name}> is! Ask them to _register_."
-    )
-  end
-  it 'requires the user account to be in a registered state' do
-    user.unregister!
-    expect do
-      expect(message: "#{SlackRubyBot.config.user} challenge foobar", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
-        "You aren't registered to play, please _register_ first."
+  context 'requires the opponent to be registered' do
+    before do
+      opponent.unregister!
+    end
+    it 'by slack id' do
+      expect(message: "#{SlackRubyBot.config.user} challenge #{opponent.slack_mention}", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
+        "I don't know who #{opponent.slack_mention} is! Ask them to _register_."
       )
-    end.to_not change(Challenge, :count)
+    end
+    it 'requires the opponent to be registered by name' do
+      expect(message: "#{SlackRubyBot.config.user} challenge #{opponent.user_name}", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
+        "I don't know who #{opponent.user_name} is! Ask them to _register_."
+      )
+    end
   end
 end

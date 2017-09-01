@@ -52,7 +52,7 @@ You can tell the bot that it sucks. But it will talk back.
 
 #### gamebot register
 
-Registers a user.
+Re-registers a user. This is automatic, but a user can unregister and come back with this command.
 
 ![](screenshots/register.gif)
 

@@ -25,7 +25,7 @@ module SlackGamebot
         end
         # users
         team = client.owner
-        users = ::User.find_many_by_slack_mention!(team, arguments) if arguments && arguments.any?
+        users = ::User.find_many_by_slack_mention!(client, arguments) if arguments && arguments.any?
         user_ids = users.map(&:id) if users && users.any?
         matches = team.matches.current
         matches = matches.any_of({ :winner_ids.in => user_ids }, :loser_ids.in => user_ids) if user_ids && user_ids.any?

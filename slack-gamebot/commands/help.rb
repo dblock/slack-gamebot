@@ -9,8 +9,8 @@ General
 -------
 hi: be nice, say hi to your bot
 team: show your team's info and captains
-register: register yourself as a player
-unregister: unregister yourself
+register: re-register yourself as a player
+unregister: unregister yourself, removes you from leaderboards and challenges
 help: get this helpful message
 sucks: express some frustration
 

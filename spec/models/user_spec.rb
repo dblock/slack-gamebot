@@ -1,41 +1,44 @@
 require 'spec_helper'
 
 describe User do
+  let(:team) { Fabricate(:team) }
   context '#find_by_slack_mention!' do
-    let!(:user) { Fabricate(:user, nickname: 'bob') }
+    let(:web_client) { double(Slack::Web::Client, users_info: nil) }
+    let(:client) { double(Slack::RealTime::Client, owner: team, web_client: web_client) }
+    let!(:user) { Fabricate(:user, team: team, nickname: 'bob') }
     it 'finds by slack id' do
-      expect(User.find_by_slack_mention!(user.team, "<@#{user.user_id}>")).to eq user
+      expect(User.find_by_slack_mention!(client, "<@#{user.user_id}>")).to eq user
     end
     it 'finds by username' do
-      expect(User.find_by_slack_mention!(user.team, user.user_name)).to eq user
+      expect(User.find_by_slack_mention!(client, user.user_name)).to eq user
     end
     it 'finds by username is case-insensitive' do
-      expect(User.find_by_slack_mention!(user.team, user.user_name.capitalize)).to eq user
+      expect(User.find_by_slack_mention!(client, user.user_name.capitalize)).to eq user
     end
     it 'requires a known user' do
       expect do
-        User.find_by_slack_mention!(user.team, '<@nobody>')
+        User.find_by_slack_mention!(client, '<@nobody>')
       end.to raise_error SlackGamebot::Error, "I don't know who <@nobody> is! Ask them to _register_."
     end
     it 'finds by nickname' do
-      expect(User.find_by_slack_mention!(user.team, user.nickname)).to eq user
+      expect(User.find_by_slack_mention!(client, user.nickname)).to eq user
     end
   end
   context '#find_many_by_slack_mention!' do
-    let!(:team) { Fabricate(:team) }
+    let(:web_client) { double(Slack::Web::Client, users_info: nil) }
+    let(:client) { double(Slack::RealTime::Client, owner: team, web_client: web_client) }
     let!(:users) { [Fabricate(:user, team: team), Fabricate(:user, team: team)] }
     it 'finds by slack_id or slack_mention' do
-      results = User.find_many_by_slack_mention!(team, [users.first.user_name, users.last.slack_mention])
+      results = User.find_many_by_slack_mention!(client, [users.first.user_name, users.last.slack_mention])
       expect(results).to contain_exactly(*users)
     end
     it 'requires known users' do
       expect do
-        User.find_many_by_slack_mention!(team, %w[foo bar])
+        User.find_many_by_slack_mention!(client, %w[foo bar])
       end.to raise_error SlackGamebot::Error, "I don't know who foo is! Ask them to _register_."
     end
   end
   context '#find_create_or_update_by_slack_id!', vcr: { cassette_name: 'user_info' } do
-    let!(:team) { Fabricate(:team) }
     let(:client) { SlackRubyBot::Client.new }
     before do
       client.owner = team
