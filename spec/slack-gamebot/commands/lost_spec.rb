@@ -150,10 +150,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
             "You cannot lose to yourself, #{loser.user_name}!"
           )
         end.to_not change(Challenge, :count)
-      end.to change(Match, :count).by(1)
-      match = Match.asc(:_id).last
-      expect(match.winners).to eq [winner]
-      expect(match.losers).to eq [loser]
+      end.to_not change(Match, :count)
     end
     it 'two players' do
       winner2 = Fabricate(:user, team: team)
