@@ -147,7 +147,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
       expect do
         expect do
           expect(message: "#{SlackRubyBot.config.user} lost to #{loser.user_name}", user: loser.user_id, channel: 'channel').to respond_with_slack_message(
-            "You cannot lose to yourself, #{loser.user_name}!"
+            'You cannot lose to yourself!'
           )
         end.to_not change(Challenge, :count)
       end.to_not change(Match, :count)
