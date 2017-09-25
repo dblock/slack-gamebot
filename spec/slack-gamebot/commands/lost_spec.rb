@@ -143,6 +143,18 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
       expect(match.winners).to eq [winner]
       expect(match.losers).to eq [loser]
     end
+    it 'same player' do
+      expect do
+        expect do
+          expect(message: "#{SlackRubyBot.config.user} lost to #{loser.user_name}", user: loser.user_id, channel: 'channel').to respond_with_slack_message(
+            "You cannot lose to yourself, #{loser.user_name}!"
+          )
+        end.to_not change(Challenge, :count)
+      end.to change(Match, :count).by(1)
+      match = Match.asc(:_id).last
+      expect(match.winners).to eq [winner]
+      expect(match.losers).to eq [loser]
+    end
     it 'two players' do
       winner2 = Fabricate(:user, team: team)
       loser2 = Fabricate(:user, team: team)
