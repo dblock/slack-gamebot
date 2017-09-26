@@ -1,5 +1,6 @@
 ### Changelog
 
+* [#155](https://github.com/dblock/slack-gamebot/issues/155): Fix: Players can no longer lose to themselves - [@kanno41](https://github.com/kanno41).
 * [#149](https://github.com/dblock/slack-gamebot/issues/149): Added `premium` info and a way to change team cc - [@dblock](https://github.com/dblock).
 * [#138](https://github.com/dblock/slack-gamebot/issues/138): Fix: reset season with matches lost and no challenges - [@dblock](https://github.com/dblock).
 * [#113](https://github.com/dblock/slack-gamebot/issues/113): Store elo history - [@dblock](https://github.com/dblock).
