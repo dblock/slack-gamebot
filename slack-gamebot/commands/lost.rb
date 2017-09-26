@@ -38,6 +38,9 @@ module SlackGamebot
         if scores && scores.any? && Stripe.api_key && !client.owner.reload.premium
           client.say channel: data.channel, text: "Recording scores is now a premium feature, sorry. You can still record games without scores. #{client.owner.upgrade_text}"
           logger.info "#{client.owner}, user=#{data.user}, text=#{data.text}, recording scores is now a premium feature"
+        elsif !(teammates & opponents).empty?
+          client.say(channel: data.channel, text: 'You cannot lose to yourself!', gif: 'loser')
+          logger.info "Cannot lose to yourself: #{client.owner} - #{match}"
         elsif opponents.any? && (challenge.nil? || (challenge.challengers != opponents && challenge.challenged != opponents))
           match = ::Match.lose!(team: client.owner, winners: opponents, losers: teammates, scores: scores)
           client.say(channel: data.channel, text: "Match has been recorded! #{match}.", gif: 'loser')
