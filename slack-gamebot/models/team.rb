@@ -3,6 +3,7 @@ class Team
   field :api, type: Boolean, default: false
   field :aliases, type: Array, default: []
   field :nudge_at, type: DateTime
+  field :dead_at, type: DateTime
   field :elo, type: Integer, default: 0
   field :unbalanced, type: Boolean, default: false
 
@@ -77,7 +78,13 @@ class Team
 
   def bother!(message, gif = nil)
     inform! message, gif
-    update_attributes!(nudge_at: Time.now)
+    update_attributes!(nudge_at: Time.now.utc)
+  end
+
+  def dead!(message, gif = nil)
+    inform! message, gif
+    inform_admins! message, gif
+    update_attributes!(dead_at: Time.now.utc)
   end
 
   def nudge!

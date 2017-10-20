@@ -13,6 +13,7 @@ EOS
     end
 
     def after_start!
+      inform_dead_teams!
       once_and_every 60 * 60 * 24 * 3 do
         check_premium_teams!
         nudge_sleeping_teams!
@@ -29,16 +30,25 @@ EOS
       end
     end
 
+    def inform_dead_teams!
+      Team.where(active: false).each do |team|
+        next if team.dead_at
+        begin
+          team.dead! DEAD_MESSAGE, 'dead'
+        rescue StandardError => e
+          logger.warn "Error informing dead team #{team}, #{e.message}."
+        end
+      end
+    end
+
     def deactivate_dead_teams!
       Team.active.each do |team|
         next if team.premium?
         next unless team.dead?
         begin
           team.deactivate!
-          team.inform! DEAD_MESSAGE, 'dead'
-          team.inform_admins! DEAD_MESSAGE, 'dead'
         rescue StandardError => e
-          logger.warn "Error informing team #{team}, #{e.message}."
+          logger.warn "Error deactivating team #{team}, #{e.message}."
         end
       end
     end
