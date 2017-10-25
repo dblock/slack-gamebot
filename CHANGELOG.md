@@ -1,4 +1,3 @@
-
 ### Change log
 
 * [#153](https://github.com/dblock/slack-gamebot/pull/153): Added `taunt` command to enable users to taunt other users.
