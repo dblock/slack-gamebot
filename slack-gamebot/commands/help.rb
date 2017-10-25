@@ -13,6 +13,7 @@ register: register yourself as a player
 unregister: unregister yourself
 help: get this helpful message
 sucks: express some frustration
+taunt: insult other users
 
 Games
 -----
