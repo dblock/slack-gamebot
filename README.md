@@ -329,6 +329,8 @@ gamebot unregister @WangHoe
 I've removed @WangHoe from the leaderboard.
 ```
 
+Users that have left a Slack team can be removed by omitting the `@`, eg. `gamebot unregister WangHoe`.
+
 #### gamebot set nickname [name]
 
 Sets a nickname for display purposes.
