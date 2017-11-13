@@ -15,7 +15,7 @@ class Season
   validate :validate_teams
   validates_presence_of :team
 
-  SORT_ORDERS = ['created_at', '-created_at']
+  SORT_ORDERS = ['created_at', '-created_at'].freeze
 
   def initialize(attrs = {})
     super

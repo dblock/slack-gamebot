@@ -20,10 +20,20 @@ describe SlackGamebot::Commands::Resigned, vcr: { cassette_name: 'user_info' } d
       expect(challenge.match.losers).to eq challenge.challenged
       expect(challenge.match.resigned?).to be true
     end
-    it 'resigned with score' do
+    it 'resigned with score requires a premium subscription' do
       expect(message: "#{SlackRubyBot.config.user} resigned 15:21", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        'Cannot score when resigning.'
+        "Recording scores is now a premium feature, sorry. You can still record games without scores. #{team.upgrade_text}"
       )
+    end
+    context 'premium team' do
+      before do
+        team.set(premium: true)
+      end
+      it 'resigned with score' do
+        expect(message: "#{SlackRubyBot.config.user} resigned 15:21", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
+          'Cannot score when resigning.'
+        )
+      end
     end
   end
   context 'resigned to' do

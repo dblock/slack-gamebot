@@ -1,5 +1,5 @@
 module SlackGamebot
-  INFO = <<-EOS
+  INFO = <<-EOS.freeze
 Gamebot #{SlackGamebot::VERSION}
 
 © Daniel Doubrovkine & Contributors, MIT License

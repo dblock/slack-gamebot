@@ -21,12 +21,12 @@ module Api
 
       link :team do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/teams/#{represented.team.id}" if represented.team
+        "#{request.base_url}/api/teams/#{represented.team.id}" if represented.team
       end
 
       link :self do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/users/#{id}"
+        "#{request.base_url}/api/users/#{id}"
       end
     end
   end

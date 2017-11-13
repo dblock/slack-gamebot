@@ -15,12 +15,12 @@ module Api
 
       link :teams do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/teams?game_id=#{represented.id}"
+        "#{request.base_url}/api/teams?game_id=#{represented.id}"
       end
 
       link :self do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/games/#{id}"
+        "#{request.base_url}/api/games/#{id}"
       end
     end
   end

@@ -30,7 +30,7 @@ class User
   before_save :update_elo_history!
   after_save :rank!
 
-  SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'ties', '-ties', 'user_name', '-user_name', 'rank', '-rank']
+  SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'ties', '-ties', 'user_name', '-user_name', 'rank', '-rank'].freeze
 
   scope :ranked, -> { where(:rank.ne => nil) }
   scope :captains, -> { where(captain: true) }
@@ -51,29 +51,48 @@ class User
     Regexp.last_match[1] if user_name =~ /^<@(.*)>$/
   end
 
-  def self.find_by_slack_mention!(team, user_name)
+  def self.find_by_slack_mention!(client, user_name)
+    team = client.owner
     slack_id = slack_mention?(user_name)
     user = if slack_id
-             User.where(user_id: slack_id, team: team).first
+             team.users.where(user_id: slack_id).first
            else
              regexp = Regexp.new("^#{user_name}$", 'i')
              User.where(team: team).or({ user_name: regexp }, nickname: regexp).first
-           end
-    fail SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user && user.registered?
+    end
+    unless user
+      begin
+        users_info = client.web_client.users_info(user: slack_id || "@#{user_name}")
+        info = Hashie::Mash.new(users_info).user if users_info
+        user = User.create!(team: team, user_id: info.id, user_name: info.name, registered: true) if info
+      rescue Slack::Web::Api::Errors::SlackError => e
+        raise e unless e.message == 'user_not_found'
+      end
+    end
+    raise SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user && user.registered?
+    raise SlackGamebot::Error, "I don't know who #{user_name} is!" unless user
     user
   end
 
-  def self.find_many_by_slack_mention!(team, user_names)
-    user_names.map { |user| find_by_slack_mention!(team, user) }
+  def self.find_many_by_slack_mention!(client, user_names)
+    user_names.map { |user| find_by_slack_mention!(client, user) }
   end
 
   # Find an existing record, update the username if necessary, otherwise create a user record.
   def self.find_create_or_update_by_slack_id!(client, slack_id)
     instance = User.where(team: client.owner, user_id: slack_id).first
-    instance_info = Hashie::Mash.new(client.web_client.users_info(user: slack_id)).user
-    instance.update_attributes!(user_name: instance_info.name) if instance && instance.user_name != instance_info.name
-    instance ||= User.create!(team: client.owner, user_id: slack_id, user_name: instance_info.name)
-    instance.promote! unless instance.captain? || client.owner.captains.count > 0
+    users_info = client.web_client.users_info(user: slack_id)
+    instance_info = Hashie::Mash.new(users_info).user if users_info
+    if users_info && instance
+      instance.update_attributes!(user_name: instance_info.name) if instance.user_name != instance_info.name
+    elsif !instance && instance_info
+      instance = User.create!(team: client.owner, user_id: slack_id, user_name: instance_info.name, registered: true)
+    end
+    if instance
+      instance.register! unless instance.registered?
+      instance.promote! unless instance.captain? || client.owner.captains.count > 0
+    end
+    raise SlackGamebot::Error, "I don't know who <@#{slack_id}> is!" unless instance
     instance
   end
 
@@ -141,7 +160,7 @@ class User
     players = any_of({ :wins.gt => 0 }, { :losses.gt => 0 }, :ties.gt => 0).where(team: team, registered: true).desc(:elo).desc(:wins).asc(:losses).desc(:ties)
     players.each_with_index do |player, index|
       if player.registered?
-        rank += 1 if index > 0 && [:elo, :wins, :losses, :ties].any? { |property| players[index - 1].send(property) != player.send(property) }
+        rank += 1 if index > 0 && %i[elo wins losses ties].any? { |property| players[index - 1].send(property) != player.send(property) }
         player.set(rank: rank) unless rank == player.rank
       end
     end

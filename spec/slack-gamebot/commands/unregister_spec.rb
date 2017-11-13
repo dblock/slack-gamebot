@@ -1,19 +1,20 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Unregister, vcr: { cassette_name: 'user_info' } do
-  let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
-  let(:client) { app.send(:client) }
   context 'team' do
+    let(:app) { SlackGamebot::Server.new(team: team) }
+    let(:client) { app.send(:client) }
     let!(:team) { Fabricate(:team) }
     it 'is a premium feature' do
       expect(message: "#{SlackRubyBot.config.user} unregister", user: 'user').to respond_with_slack_message(
-        "This is a premium feature. Upgrade your team to premium for $29.99 a year at https://www.playplay.io/upgrade?team_id=#{team.team_id}&game=#{team.game.name}."
+        "This is a premium feature. Upgrade your team to premium and enable paid features for $29.99 a year at https://www.playplay.io/upgrade?team_id=#{team.team_id}&game=#{team.game.name}."
       )
     end
   end
   context 'premium team' do
     let!(:team) { Fabricate(:team, premium: true) }
+    let(:app) { SlackGamebot::Server.new(team: team) }
+    let(:client) { app.send(:client) }
     it 'requires a captain to unregister someone' do
       Fabricate(:user, captain: true, team: team)
       user = Fabricate(:user)
@@ -26,8 +27,10 @@ describe SlackGamebot::Commands::Unregister, vcr: { cassette_name: 'user_info' }
       expect(User.where(user_id: 'user1').first.registered).to be false
     end
     it 'cannot unregister an unknown user by name' do
+      captain = Fabricate(:user, captain: true, team: team)
+      allow(client.web_client).to receive(:users_info)
       user = Fabricate(:user, team: Fabricate(:team)) # another user in another team
-      expect(message: "#{SlackRubyBot.config.user} unregister #{user.user_name}").to respond_with_slack_message("I don't know who #{user.user_name} is! Ask them to _register_.")
+      expect(message: "#{SlackRubyBot.config.user} unregister #{user.user_name}", user: captain.user_id).to respond_with_slack_message("I don't know who #{user.user_name} is! Ask them to _register_.")
     end
     it 'unregisters self' do
       user = Fabricate(:user, user_id: 'user')

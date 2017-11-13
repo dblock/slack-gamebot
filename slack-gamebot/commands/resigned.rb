@@ -21,10 +21,10 @@ module SlackGamebot
             current = :teammates
           else
             if current == :opponents
-              opponents << ::User.find_by_slack_mention!(client.owner, argument)
+              opponents << ::User.find_by_slack_mention!(client, argument)
               current = :scores unless multi_player
             elsif current == :teammates
-              teammates << ::User.find_by_slack_mention!(client.owner, argument)
+              teammates << ::User.find_by_slack_mention!(client, argument)
               current = :scores if opponents.count == teammates.count
             else
               scores ||= []
@@ -35,7 +35,10 @@ module SlackGamebot
 
         challenge = ::Challenge.find_by_user(client.owner, data.channel, challenger, [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
 
-        if scores && scores.any?
+        if scores && scores.any? && Stripe.api_key && !client.owner.reload.premium
+          client.say channel: data.channel, text: "Recording scores is now a premium feature, sorry. You can still record games without scores. #{client.owner.upgrade_text}"
+          logger.info "#{client.owner}, user=#{data.user}, text=#{data.text}, recording scores is now a premium feature"
+        elsif scores && scores.any?
           client.say(channel: data.channel, text: 'Cannot score when resigning.', gif: 'idiot')
           logger.info "RESIGNED: #{client.owner} - #{data.user}, cannot score."
         elsif opponents.any? && (challenge.nil? || (challenge.challengers != opponents && challenge.challenged != opponents))

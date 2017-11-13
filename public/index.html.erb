@@ -28,10 +28,10 @@
                             <a href="#page-top"></a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="#gotslack">GotSlack</a>
+                            <a class="page-scroll" href="#gotslack">Got Slack?</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="#howtoplay">HowToPlay</a>
+                            <a class="page-scroll" href="#howtouse">How To Use</a>
                         </li>
                         <li>
                             <a class="page-scroll" href="#sponsors">Sponsors</a>
@@ -58,16 +58,14 @@
         <header>
             <div class="container">
                 <div class="intro-text">
-                    <div class="intro-lead-in">Welcome to PlayPlay</div>
-                    <div class="intro-heading">
-                        Invite our game-bots for ping pong, chess, tictactoe and pong to your slack account!
+                    <div class="intro-lead-in">
+                        Keep your leaderboard and scores in Slack.
                         <br><br>
-                        Our game-bots are fun and know how to keep scores!
+                        <a href="#gotslack" class="page-scroll add-to-slack"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
                     </div>
-                    <a id="uptime" href="https://twitter.com/playplayio">
-                        <h6 id="value" class="section-subheading text-center">&nbsp;</h6>
-                    </a>
-                    <a href="#gotslack" class="page-scroll btn btn-xl">Get Started</a>
+                    <div>
+                        <img src='img/slack.png' width="75%">
+                    </div>
                 </div>
             </div>
         </header>
@@ -80,61 +78,54 @@
                         <h4 id="active_teams_count" class="intro-lead-in">&nbsp;</h4>
                     </div>
                     <div class="text-left">
-                        <p class="text_muted">Invite our game bots to your slack account and add friends to build your team! Follow the links below to sign up or login to slack account, register and add the bots for your favourite games. </p>
+                        <p class="text_muted">Invite our game bots to your slack account and add friends to build your team! Follow the links below to sign up or login to slack account, register and add the bots for your favorite games. </p>
                     </div>
                     <div id="games-pong" class="row text-center services-text-color">
                         <div class="intro-heading">
-                            <img class="img-responsive img-centered" src="img/pong.png" alt="" height="120" width="120"><br>
-                            PONG<br>
-                            <a class="add-to-slack" href="https://slack.com/oauth/authorize?scope=bot&amp;client_id=17032864353.17033629782"><img alt="Add Pongbot to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
+                            <p>
+                                <img class="img-responsive img-centered" src="img/pong.png" alt="" height="120" width="120">
+                            </p>
+                            <p class='game'>
+                                PONG
+                            </p>
+                            <p>
+                                <a class="add-to-slack" href="https://slack.com/oauth/authorize?scope=bot&amp;client_id=<%= Game.where(name: 'pong').first.try(:client_id) %>"><img alt="Add Pongbot to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
+                            </p>
                         </div>
                         <div>
-                            <h3><a id="games-toggle" href="#gotslack"><b>click here for Chess, Pool and Tic-Tac-Toe</b></a></h3>
+                            <h4><a id="games-toggle" href="#gotslack"><b>click here for Chess, Pool and Tic-Tac-Toe</b></a></h4>
                         </div>
                     </div>
                     <div id="games-all" style="display: none;" class= "row col-lg-12">
-                        <div class="col-md-3 text-center services-text-color">
-                            <div class="intro-heading">
-                                <img class="img-responsive img-centered" src="img/pong.png" alt="" height="120" width="120"><br>
-                                PONG<br>
-                                <a class="add-to-slack" href="https://slack.com/oauth/authorize?scope=bot&amp;client_id=17032864353.17033629782"><img alt="Add Pongbot to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
+                        <% Game.all.each do |game| %>
+                            <div class="col-md-3 text-center services-text-color">
+                                <div class="intro-heading">
+                                    <p>
+                                        <img class="img-responsive img-centered" src="img/<%= game.name %>.png" alt="" height="120" width="120">
+                                    </p>
+                                    <p class='game'>
+                                        <%= game.name.upcase %>
+                                    </p[>
+                                    <p>
+                                        <a class="add-to-slack" href="https://slack.com/oauth/authorize?scope=bot&amp;client_id=<%= game.client_id %>"><img alt="Add <%= game.name %> to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3 text-center services-text-color">
-                            <div class="intro-heading">
-                                <img class="img-responsive img-centered" src="img/chess.png" alt="" height="120" width="120"><br>
-                                CHESS<br>
-                                <a class="add-to-slack" href="https://slack.com/oauth/authorize?scope=bot&amp;client_id=17032864353.17238753411"><img alt="Add Chessbot to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
-                            </div>
-                        </div>
-                        <div class="col-md-3 text-center services-text-color">
-                            <div class="intro-heading">
-                                <img class="img-responsive img-centered" src="img/pool.png" alt="" height="120" width="120"><br>
-                                POOL<br>
-                                <a class="add-to-slack" href="https://slack.com/oauth/authorize?scope=bot&amp;client_id=17032864353.17415150503"><img alt="Add Poolbot to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
-                            </div>
-                        </div>
-                        <div class="col-md-3 text-center services-text-color">
-                            <div class="intro-heading">
-                                <img class="img-responsive img-centered" src="img/tic-tac-toe.png" alt="" height="120" width="120"><br>
-                                TICTACTOE<br>
-                                <a class="add-to-slack" href="https://slack.com/oauth/authorize?scope=bot&amp;client_id=17032864353.17513476357"><img alt="Add TicTacToe to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
-                            </div>
-                        </div>
+                        <% end %>
                     </div>
                     <div class="row spacer"></div>
                     <h3 class="section-subheading text-muted text-center">
-                    Follow our <a href="#howtoplay" target="_blank">tutorial.</a>
+                    Follow our <a href="#howtouse" target="_blank">tutorial.</a>
                     </h3>
                 </div>
             </div>
         </section>
         <!-- This section describes how to use the bots -->
-        <section id="howtoplay">
+        <section id="howtouse">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 text-center">
-                        <h2 class="section-heading">Start playing!</h2>
+                        <h2 class="section-heading">Record games!</h2>
                         <h3 class="section-subheading text-muted">3 easy steps</h3>
                     </div>
                 </div>
@@ -232,7 +223,7 @@
                         <h3 class="setion-heading">Hypermedia API</h3>
                         <h3 class="section-subheading text-muted">All public game data is available via a Hypermedia HAL API.</h3>
                         <div><img src='img/api.png'></div>
-                        <h3 class="section-subheading text-muted">Try <a href="https://www.playplay.io/api" target="_blank">www.playplay.io/api</a>.</h3>
+                        <h3 class="section-subheading text-muted">Try <a href="<%= SlackGamebot::Service.api_url %>" target="_blank">www.playplay.io/api</a>.</h3>
                     </div>
                 </div>
             </div>
@@ -241,26 +232,31 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 text-center">
-                        <h2 class="section-heading">About Us and Help</h2>
+                        <h2 class="section-subheading">About Us and Help</h2>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-12 text-center">
-                        <h3 class="section-subheading text-muted">
-                        Having trouble? Like what you see?
-                        <br>
-                        <a href='https://github.com/dblock/slack-gamebot'>Fork me on Github</a>,
-                        <a href='https://github.com/dblock/slack-gamebot/issues/new'>open an issue</a>,
-                        <a href='https://twitter.com/playplayio'>tweet at @playplayio</a>,
-                        or <a href='mailto:dblock[at]dblock[dot]org'>e-mail dblock[at]dblock[dot]org</a>.
-                        <br><br>
-                        <a href="https://twitter.com/share" class="twitter-share-button"{count} data-url="https://www.playplay.io" data-text="Check out PlayPlay, a free ping pong, chess and pool bot for @SlackHQ @SlackAPI." data-via="playplayio" data-size="large" data-related="SlackAPI">Tweet</a>
-                        <br><br>
-                        Follow Us or DM <a href='https://twitter.com/playplayio' target="_blank">@playplayio on Twitter</a> and show us some love on <a href='https://www.producthunt.com/tech/playplay-io' target='_blank'>ProductHunt</a>.
-                        Playplay is <a href='https://twitter.com/dblockdotorg' target="_blank">@dblockdotorg</a>'s pet project and is work in progress.
-                        <br /><br />
-                        tl;dr: PlayPlay.io does not want to know who you are and tries to collect just enough data to enable our services. Read our <a href='privacy.html' target="_blank">Privacy Policy</a>.
-                        </h3>
+                    <div class="col-lg-12 white text-center text-muted">
+                        <a id="uptime" href="https://twitter.com/playplayio">
+                            <h6 id="value" class="section-subheading text-center">&nbsp;</h6>
+                        </a>
+                        <div>
+                            Bot offline?
+                            <a href="https://twitter.com/messages/compose?recipient_id=4528918701&text=Help! My bot is offline. My team name is " class="twitter-dm-button" data-screen-name="@playplayio">
+                            I'm having trouble, DM @playplayio</a>
+                            <br><br>
+                        </div>
+                        <div>
+                            <a href='https://github.com/dblock/slack-gamebot'>Fork me on Github</a>,
+                            <a href='https://github.com/dblock/slack-gamebot/issues/new'>open an issue</a>,
+                            <a href='https://twitter.com/playplayio'>tweet at @playplayio</a>,
+                            or <a href='mailto:dblock[at]dblock[dot]org'>e-mail dblock[at]dblock[dot]org</a>.
+                            <br><br>
+                            Follow Us or DM <a href='https://twitter.com/playplayio' target="_blank">@playplayio on Twitter</a> and show us some love on <a href='https://www.producthunt.com/tech/playplay-io' target='_blank'>ProductHunt</a>.
+                            Playplay is <a href='https://twitter.com/dblockdotorg' target="_blank">@dblockdotorg</a>'s pet project and is work in progress.
+                            <br /><br />
+                            tl;dr: PlayPlay.io does not want to know who you are and tries to collect just enough data to enable our services. Read our <a href='privacy.html' target="_blank">Privacy Policy</a>.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -280,12 +276,14 @@
                         <div class="col-lg-8 col-lg-offset-2">
                             <div class="modal-body">
                                 <!-- Project Details Go Here -->
-                                <h2>Step 1: Register</h2>
+                                <h2>Step 1: Invite the gamebot</h2>
                                 <p class="item-intro text-muted">Invite the gamebot</p>
                                 <img class="img-responsive img-centered" src="img/portfolio/welcome.gif" alt="">
-                                <p>It's easy to join. Create a slack channel (#pong, #chess, #pool or #tictactoe) and invite the bot (@pongbot, @chessbot, @poolbot or @tictactoebot) to it. Then, from your slack account, invite friends to join your team.
+                                <p>
+                                    It's easy to join. Create a slack channel (#pong, #chess, #pool or #tictactoe) and invite the bot (@pongbot, @chessbot, @poolbot or @tictactoebot) to it. Then, from your slack account, invite friends to join your team.
+                                    <br><br>
                                     You should address your bot as @pongbot, @chessbot, @poolbot or @tictactoebot. In this tutorial, we will address your bot as @bot for the sake of simplicity.
-                                Every user that wants to play says @bot register (so @pongbot register, @chessbot register or @poolbot register)</p>
+                                </p>
                                 <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i>Close</button>
                             </div>
                         </div>
@@ -352,9 +350,9 @@
                         <div class="alert">
                             Having trouble? <a href='https://twitter.com/playplayio' target="_blank">@playplayio</a> on Twitter
                             <br><br>
-                            <a href="https://twitter.com/share" class="twitter-share-button"{count} data-url="https://www.playplay.io" data-text="I'm team captain on PlayPlay, a free ping pong, chess, pool and tic-tac-toe bot for @SlackHQ @SlackAPI." data-via="playplayio" data-size="large" data-related="SlackAPI">Tweet</a>
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= SlackGamebot::Service.url %>" data-text="I'm team captain on PlayPlay, a free ping pong, chess, pool and tic-tac-toe bot for @SlackHQ @SlackAPI." data-via="playplayio" data-size="large" data-related="SlackAPI">Tweet</a>
                             <br><br>
-                            <a href='https://www.playplay.io'>Go back to playplay.io.</a>
+                            <a href='<%= SlackGamebot::Service.url %>'>Go back to playplay.io.</a>
                         </div>
                     </div>
                 </div>

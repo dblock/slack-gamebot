@@ -24,7 +24,7 @@ describe Api::Endpoints::MatchesEndpoint do
     it 'returns a match' do
       match = client.match(id: existing_match.id)
       expect(match.id).to eq existing_match.id.to_s
-      expect(match._links.self._url).to eq "http://example.org/matches/#{existing_match.id}"
+      expect(match._links.self._url).to eq "http://example.org/api/matches/#{existing_match.id}"
     end
     it 'cannot return a match for a team with api off' do
       team.update_attributes!(api: false)
@@ -40,9 +40,9 @@ describe Api::Endpoints::MatchesEndpoint do
     it 'returns a match with links to challenge' do
       match = client.match(id: existing_match.id)
       expect(match.id).to eq existing_match.id.to_s
-      expect(match._links.challenge._url).to eq "http://example.org/challenges/#{existing_match.challenge.id}"
-      expect(match._links.winners._url).to eq existing_match.winners.map { |user| "http://example.org/users/#{user.id}" }
-      expect(match._links.losers._url).to eq existing_match.losers.map { |user| "http://example.org/users/#{user.id}" }
+      expect(match._links.challenge._url).to eq "http://example.org/api/challenges/#{existing_match.challenge.id}"
+      expect(match._links.winners._url).to eq existing_match.winners.map { |user| "http://example.org/api/users/#{user.id}" }
+      expect(match._links.losers._url).to eq existing_match.losers.map { |user| "http://example.org/api/users/#{user.id}" }
     end
   end
 end

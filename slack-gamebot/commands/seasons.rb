@@ -12,7 +12,7 @@ module SlackGamebot
           message = client.owner.seasons.desc(:_id).map(&:to_s).join("\n")
           client.say(channel: data.channel, text: message)
         else
-          client.say(channel: data.channel, text: "There're no seasons.", gif: %w(winter summer fall spring).sample)
+          client.say(channel: data.channel, text: "There're no seasons.", gif: %w[winter summer fall spring].sample)
         end
         logger.info "SEASONS: #{client.owner} - #{data.user}"
       end

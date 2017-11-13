@@ -19,7 +19,8 @@ describe Api::Endpoints::SubscriptionsEndpoint do
             team_id: team._id,
             stripe_token: 'token',
             stripe_token_type: 'card',
-            stripe_email: 'foo@bar.com')
+            stripe_email: 'foo@bar.com'
+          )
         end.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
           expect(json['error']).to eq 'Already a Premium Subscription'
@@ -34,7 +35,8 @@ describe Api::Endpoints::SubscriptionsEndpoint do
             team_id: team._id,
             stripe_token: 'token',
             stripe_token_type: 'card',
-            stripe_email: 'foo@bar.com')
+            stripe_email: 'foo@bar.com'
+          )
         end.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
           expect(json['error']).to eq 'Customer Already Registered'

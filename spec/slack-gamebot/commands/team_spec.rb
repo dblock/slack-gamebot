@@ -18,7 +18,7 @@ describe SlackGamebot::Commands::Team, vcr: { cassette_name: 'user_info' } do
   end
   context 'with two captains' do
     before do
-      2.times.map { Fabricate(:user, team: team, captain: true) }
+      Array.new(2) { Fabricate(:user, team: team, captain: true) }
     end
     it 'team' do
       expect(message: "#{SlackRubyBot.config.user} team").to respond_with_slack_message "Team _#{team.name}_ (#{team.team_id}), captains #{team.captains.map(&:user_name).and}."

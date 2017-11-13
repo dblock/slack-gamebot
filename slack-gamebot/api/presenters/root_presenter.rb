@@ -66,7 +66,11 @@ module Api
         "#{base_url(opts)}/api/subscriptions"
       end
 
-      [:challenge, :match, :user, :season, :team, :game].each do |model|
+      link :credit_cards do |opts|
+        "#{base_url(opts)}/api/credit_cards"
+      end
+
+      %i[challenge match user season team game].each do |model|
         link model do |opts|
           {
             href: "#{base_url(opts)}/api/#{model.to_s.pluralize}/{id}",

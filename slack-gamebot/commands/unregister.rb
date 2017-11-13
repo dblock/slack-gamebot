@@ -16,7 +16,7 @@ module SlackGamebot
             client.say(channel: data.channel, text: "You're not a captain, sorry.", gif: 'sorry')
             logger.info "UNREGISTER: #{client.owner} - #{names.and}, failed, not captain"
           else
-            users = names.map { |name| ::User.find_by_slack_mention!(client.owner, name) }
+            users = names.map { |name| ::User.find_by_slack_mention!(client, name) }
             users.each(&:unregister!)
             slack_mentions = users.map(&:slack_mention)
             client.say(channel: data.channel, text: "I've removed #{slack_mentions.and} from the leaderboard.", gif: 'find')

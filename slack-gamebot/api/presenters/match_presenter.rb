@@ -13,31 +13,31 @@ module Api
 
       link :team do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/teams/#{represented.team.id}" if represented.team
+        "#{request.base_url}/api/teams/#{represented.team.id}" if represented.team
       end
 
       link :challenge do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/challenges/#{represented.challenge.id}" if represented.challenge
+        "#{request.base_url}/api/challenges/#{represented.challenge.id}" if represented.challenge
       end
 
       link :winners do |opts|
         request = Grape::Request.new(opts[:env])
         represented.winners.map do |user|
-          "#{request.base_url}/users/#{user.id}"
+          "#{request.base_url}/api/users/#{user.id}"
         end
       end
 
       link :losers do |opts|
         request = Grape::Request.new(opts[:env])
         represented.losers.map do |user|
-          "#{request.base_url}/users/#{user.id}"
+          "#{request.base_url}/api/users/#{user.id}"
         end
       end
 
       link :self do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/matches/#{id}"
+        "#{request.base_url}/api/matches/#{id}"
       end
     end
   end

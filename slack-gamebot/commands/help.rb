@@ -1,7 +1,7 @@
 module SlackGamebot
   module Commands
     class Help < SlackRubyBot::Commands::Base
-      HELP = <<-EOS
+      HELP = <<-EOS.freeze
 I am your friendly Gamebot, here to help.
 
 ```
@@ -9,8 +9,8 @@ General
 -------
 hi: be nice, say hi to your bot
 team: show your team's info and captains
-register: register yourself as a player
-unregister: unregister yourself
+register: re-register yourself as a player
+unregister: unregister yourself, removes you from leaderboards and challenges
 help: get this helpful message
 sucks: express some frustration
 taunt: insult other users
@@ -28,8 +28,6 @@ draw: record a tie
 Stats
 -----
 leaderboard [number|infinity]: show the leaderboard, eg. leaderboard 10
-rank [<player> ...]: rank a player or a list of players
-matches [number|infinity]: show this season's matches
 season: show current season
 
 Captains
@@ -40,6 +38,9 @@ set nickname <player> [name], unset nickname <player>: set/unset someone's nickn
 
 Premium
 -------
+rank [<player> ...]: rank a player or a list of players
+matches [number|infinity]: show this season's matches
+premium: show subscription info (captains also see payment data)
 seasons: show all seasons
 reset <team>: reset all stats, start a new season
 unregister <player>: remove a player from the leaderboard

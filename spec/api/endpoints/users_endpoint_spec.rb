@@ -17,7 +17,7 @@ describe Api::Endpoints::UsersEndpoint do
       user = client.user(id: existing_user.id)
       expect(user.id).to eq existing_user.id.to_s
       expect(user.user_name).to eq existing_user.user_name
-      expect(user._links.self._url).to eq "http://example.org/users/#{existing_user.id}"
+      expect(user._links.self._url).to eq "http://example.org/api/users/#{existing_user.id}"
     end
     it 'cannot return a user for a team with api off' do
       team.update_attributes!(api: false)
