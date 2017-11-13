@@ -204,7 +204,7 @@ Taunt another player.
 ```
 gamebot taunt @WangHoe
 
-Victor Barna said Wang Hoe sucks at ping pong!
+Victor Barna says Wang Hoe sucks at ping pong!
 ```
 
 #### gamebot leaderboard [number|infinity]
