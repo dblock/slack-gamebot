@@ -2,7 +2,7 @@ class Match
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  SORT_ORDERS = ['created_at', '-created_at']
+  SORT_ORDERS = ['created_at', '-created_at'].freeze
 
   belongs_to :team, index: true
   field :tied, type: Boolean, default: false

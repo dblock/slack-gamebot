@@ -61,19 +61,21 @@ describe Team do
       expect(Team.find(inactive_team_a_month_ago.id)).to be nil
     end
   end
-  context '#nudge? #dead? and #asleep?' do
+  context '#nudge? #dead? #bother? and #asleep?' do
     context 'default' do
       let(:team) { Fabricate(:team) }
       it 'false' do
         expect(team.asleep?).to be false
         expect(team.nudge?).to be false
         expect(team.dead?).to be false
+        expect(team.bother?).to be false
       end
     end
     context 'team created three weeks ago' do
       let(:team) { Fabricate(:team, created_at: 3.weeks.ago) }
       it 'nudge=true dead=false' do
         expect(team.asleep?).to be true
+        expect(team.bother?).to be true
         expect(team.nudge?).to be true
         expect(team.dead?).to be false
       end
@@ -82,6 +84,7 @@ describe Team do
         it 'false' do
           expect(team.asleep?).to be false
           expect(team.nudge?).to be false
+          expect(team.bother?).to be true
           expect(team.dead?).to be false
         end
         context 'awaken three weeks ago' do
@@ -90,6 +93,15 @@ describe Team do
           end
           it 'nudge' do
             expect(team.nudge?).to be false
+            expect(team.bother?).to be true
+          end
+        end
+        context 'bothered less than a week ago' do
+          before do
+            team.update_attributes!(nudge_at: 3.days.ago)
+          end
+          it 'bother' do
+            expect(team.bother?).to be false
           end
         end
       end
@@ -176,14 +188,23 @@ describe Team do
         team.nudge!
       end.to change(team, :nudge_at)
     end
-    it 'sends a challenge message to the first active channel' do
+    it 'sends a challenge message to all active channels' do
       expect(client).to receive(:channels_list).and_return(
         'channels' => [
           { 'name' => 'general', 'is_member' => true, 'id' => 'general_id' },
           { 'name' => 'pong', 'is_member' => true, 'id' => 'pong_id' }
         ]
       )
-      expect(client).to receive(:chat_postMessage).once
+      expect(client).to receive(:chat_postMessage).with(
+        text: "Challenge someone to a game of #{game.name} today!",
+        channel: 'general_id',
+        as_user: true
+      )
+      expect(client).to receive(:chat_postMessage).with(
+        text: "Challenge someone to a game of #{game.name} today!",
+        channel: 'pong_id',
+        as_user: true
+      )
       team.nudge!
     end
     it 'does not nudge when not a member of any channels' do
@@ -196,6 +217,29 @@ describe Team do
       expect(client).to_not receive(:chat_postMessage)
       expect do
         team.nudge!
+      end.to change(team, :nudge_at)
+    end
+  end
+  context '#bother!' do
+    let(:team) { Fabricate(:team) }
+    let(:client) { double(Slack::Web::Client) }
+    before do
+      allow(Slack::Web::Client).to receive(:new).with(token: team.token).and_return(client)
+    end
+    it 'sends a bother message to the active channel' do
+      expect(client).to receive(:channels_list).and_return(
+        'channels' => [
+          { 'name' => 'general', 'is_member' => false, 'id' => 'general_id' },
+          { 'name' => 'pong', 'is_member' => true, 'id' => 'pong_id' }
+        ]
+      )
+      expect(client).to receive(:chat_postMessage).with(
+        text: 'Please upgrade!',
+        channel: 'pong_id',
+        as_user: true
+      )
+      expect do
+        team.bother! 'Please upgrade!'
       end.to change(team, :nudge_at)
     end
   end

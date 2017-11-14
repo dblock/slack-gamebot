@@ -24,7 +24,8 @@ describe Api do
         '/api/teams',
         '/api/games/{id}',
         '/api/games',
-        '/api/subscriptions'
+        '/api/subscriptions',
+        '/api/credit_cards'
       ]
     end
   end

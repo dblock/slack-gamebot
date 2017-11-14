@@ -61,10 +61,11 @@ module Api
           team ||= Team.where(team_id: rc['team_id'], game: game).first
           if team && !team.active?
             error!('Invalid Game', 400) unless team.game == game
+            team.update_attributes!(created_at: Time.now.utc)
             team.activate!(token)
           elsif team
             error!('Invalid Game', 400) unless team.game == game
-            fail "Team #{team.name} is already registered."
+            raise "Team #{team.name} is already registered."
           else
             team = Team.create!(
               game: game,

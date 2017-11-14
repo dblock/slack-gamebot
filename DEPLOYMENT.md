@@ -8,11 +8,15 @@ Before deploying, consider using and sponsoring [a free game bot service](https:
 
 ## Deploy Your Own Slack-Gamebot
 
+### Heroku
+
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/dblock/slack-gamebot)
 
-### MongoDB
-
 Deploy slack-gamebot to Heroku and add a MongoLab or Compose MongoDB provider. You can use both free and paid tiers.
+
+### DigitalOcean with Dokku
+
+See [this blog post](http://code.dblock.org/2016/02/08/running-slack-bots-on-digital-ocean-with-dokku.html).
 
 ### Environment
 
@@ -44,6 +48,10 @@ game.save!
 
 Slack-Gamebot replies with animated GIFs. While it's currently not necessary, you may need to set `GIPHY_API_KEY` in the future, see [github.com/Giphy/GiphyAPI](https://github.com/Giphy/GiphyAPI) for details.
 
+#### URL
+
+This defaults to `http://localhost:5000` in development and `https://www.playplay.io` in production.
+
 #### API_URL
 
 The root of your API location, used when displaying the API URL for teams when invoking `set api`.
@@ -59,7 +67,7 @@ If your bot is a service, like the one on [playplay.io](https://www.playplay.io)
 ```
 heroku run script/console --app=...
 
-2.2.1> Game.create!(name: 'pong', client_id: 'slack client id', client_secret: 'slack client secret', botname: 'pongbot', aliases: ['pp', 'pong'])
+2.2.1> Game.create!(name: 'pong', client_id: 'slack client id', client_secret: 'slack client secret', bot_name: 'pongbot', aliases: ['pp', 'pong'])
 => #<Game _id: 55c8f7da276eaa0003000000, ...>
 ```
 

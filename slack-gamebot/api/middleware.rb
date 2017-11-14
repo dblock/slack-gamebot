@@ -12,7 +12,7 @@ module Api
         use Rack::Cors do
           allow do
             origins '*'
-            resource '*', headers: :any, methods: [:get, :post]
+            resource '*', headers: :any, methods: %i[get post]
           end
         end
 

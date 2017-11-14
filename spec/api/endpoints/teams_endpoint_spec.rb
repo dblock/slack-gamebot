@@ -14,7 +14,7 @@ describe Api::Endpoints::TeamsEndpoint do
     it 'returns a team' do
       team = client.team(id: existing_team.id)
       expect(team.id).to eq existing_team.id.to_s
-      expect(team._links.self._url).to eq "http://example.org/teams/#{existing_team.id}"
+      expect(team._links.self._url).to eq "http://example.org/api/teams/#{existing_team.id}"
     end
   end
 
@@ -74,11 +74,11 @@ describe Api::Endpoints::TeamsEndpoint do
     it 'returns a team with links to challenges, users and matches' do
       team = client.team(id: existing_team.id)
       expect(team.id).to eq existing_team.id.to_s
-      expect(team._links.users._url).to eq "http://example.org/users?team_id=#{existing_team.id}"
-      expect(team._links.challenges._url).to eq "http://example.org/challenges?team_id=#{existing_team.id}"
-      expect(team._links.matches._url).to eq "http://example.org/matches?team_id=#{existing_team.id}"
-      expect(team._links.seasons._url).to eq "http://example.org/seasons?team_id=#{existing_team.id}"
-      expect(team._links.game._url).to eq "http://example.org/games/#{existing_team.game.id}"
+      expect(team._links.users._url).to eq "http://example.org/api/users?team_id=#{existing_team.id}"
+      expect(team._links.challenges._url).to eq "http://example.org/api/challenges?team_id=#{existing_team.id}"
+      expect(team._links.matches._url).to eq "http://example.org/api/matches?team_id=#{existing_team.id}"
+      expect(team._links.seasons._url).to eq "http://example.org/api/seasons?team_id=#{existing_team.id}"
+      expect(team._links.game._url).to eq "http://example.org/api/games/#{existing_team.game.id}"
     end
 
     it 'cannot return a team with api off' do
@@ -144,7 +144,7 @@ describe Api::Endpoints::TeamsEndpoint do
       end
       it 'reactivates a deactivated team' do
         expect(SlackGamebot::Service.instance).to receive(:start!)
-        existing_team = Fabricate(:team, api: true, game: game, token: 'token', active: false, aliases: %w(foo bar))
+        existing_team = Fabricate(:team, api: true, game: game, token: 'token', active: false, aliases: %w[foo bar])
         expect do
           team = client.teams._post(code: 'code', game: existing_team.game.name)
           expect(team.team_id).to eq existing_team.team_id
@@ -153,7 +153,7 @@ describe Api::Endpoints::TeamsEndpoint do
           team = Team.find(team.id)
           expect(team.token).to eq 'token'
           expect(team.active).to be true
-          expect(team.aliases).to eq %w(foo bar)
+          expect(team.aliases).to eq %w[foo bar]
         end.to_not change(Team, :count)
       end
       it 'updates a reactivated team with a new token' do
@@ -189,7 +189,7 @@ describe Api::Endpoints::TeamsEndpoint do
 
     it 'reactivates a deactivated team with a different code' do
       expect(SlackGamebot::Service.instance).to receive(:start!)
-      existing_team = Fabricate(:team, api: true, game: game, token: 'token', active: false, aliases: %w(foo bar))
+      existing_team = Fabricate(:team, api: true, game: game, token: 'token', active: false, aliases: %w[foo bar])
       oauth_access = { 'bot' => { 'bot_access_token' => 'another_token' }, 'team_id' => existing_team.team_id, 'team_name' => existing_team.name }
       allow_any_instance_of(Slack::Web::Client).to receive(:oauth_access).with(
         hash_including(
@@ -206,7 +206,7 @@ describe Api::Endpoints::TeamsEndpoint do
         team = Team.find(team.id)
         expect(team.token).to eq 'another_token'
         expect(team.active).to be true
-        expect(team.aliases).to eq %w(foo bar)
+        expect(team.aliases).to eq %w[foo bar]
       end.to_not change(Team, :count)
     end
   end

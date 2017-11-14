@@ -4,11 +4,13 @@ This project is work of [many contributors](https://github.com/dblock/slack-game
 
 You're encouraged to submit [pull requests](https://github.com/dblock/slack-gamebot/pulls), [propose features and discuss issues](https://github.com/dblock/slack-gamebot/issues).
 
+See [DEV](DEV.md) for how to setup a development environment.
+
 In the examples below, substitute your Github username for `contributor` in URLs.
 
 ## Fork the Project
 
-Fork the [project on Github](https://github.com/dblock/slack-gamebot) and check out your copy.
+Fork the [project on Githubo](https://github.com/dblock/slack-gamebot) and check out your copy.
 
 ```
 git clone https://github.com/contributor/slack-gamebot.git
@@ -28,7 +30,10 @@ git checkout -b my-feature-branch
 
 ## Bundle Install and Test
 
-Ensure that you can build the project and run tests.
+Ensure that you can build the project and run tests. You will need these dependencies in order to run tests.
+- [mongodb](https://docs.mongodb.com/manual/installation/)
+- [Firefox](https://www.mozilla.org/firefox/new/)
+- ruby 2.3.1 (use rbenv)
 
 ```
 bundle install

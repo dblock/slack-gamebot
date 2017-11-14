@@ -13,41 +13,41 @@ module Api
 
       link :team do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/teams/#{represented.team.id}" if represented.team
+        "#{request.base_url}/api/teams/#{represented.team.id}" if represented.team
       end
 
       link :created_by do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/users/#{represented.created_by.id}" if represented.created_by
+        "#{request.base_url}/api/users/#{represented.created_by.id}" if represented.created_by
       end
 
       link :updated_by do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/users/#{represented.updated_by.id}" if represented.updated_by
+        "#{request.base_url}/api/users/#{represented.updated_by.id}" if represented.updated_by
       end
 
       link :challengers do |opts|
         request = Grape::Request.new(opts[:env])
         represented.challengers.map do |challenger|
-          "#{request.base_url}/users/#{challenger.id}"
+          "#{request.base_url}/api/users/#{challenger.id}"
         end
       end
 
       link :challenged do |opts|
         request = Grape::Request.new(opts[:env])
         represented.challenged.map do |challenged|
-          "#{request.base_url}/users/#{challenged.id}"
+          "#{request.base_url}/api/users/#{challenged.id}"
         end
       end
 
       link :match do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/matches/#{represented.match.id}" if represented.match
+        "#{request.base_url}/api/matches/#{represented.match.id}" if represented.match
       end
 
       link :self do |opts|
         request = Grape::Request.new(opts[:env])
-        "#{request.base_url}/challenges/#{id}"
+        "#{request.base_url}/api/challenges/#{id}"
       end
     end
   end

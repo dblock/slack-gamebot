@@ -20,7 +20,9 @@ $(document).ready(function() {
     var message;
     if (xhr.responseText) {
       var rc = JSON.parse(xhr.responseText);
-      if (rc && rc.message) {
+      if (rc && rc.error) {
+        message = rc.error;
+      } else if (rc && rc.message) {
         message = rc.message;
         if (message == 'invalid_code') {
           message = 'The code returned from the OAuth workflow was invalid.'

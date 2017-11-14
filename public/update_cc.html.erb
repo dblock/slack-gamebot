@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <title>PlayPlay.io - Update Credit Card</title>
+    <%= partial 'public/partials/_head.html' %>
+    <%
+      game = Game.where(name: request['game']).first
+      team = game && game.teams.where(team_id: request['team_id']).first
+      stripe_token = request['stripeToken']
+      stripe_token_type = request['stripeTokenType']
+      stripe_email = request['stripeEmail']
+    %>
+  </head>
+  <body style='text-align: center'>
+    <p style='margin: 50px;'>
+      <a href='/'><img src='img/<%= game ? game.name : 'pong' %>.png' width='120px'></a>
+    </p>
+    <p>
+      <h3>PlayPlay.io: Update Credit Card Info</h3>
+    </p>
+    <p id='messages' />
+    <p id='update_cc'>
+      <form action="" method="POST">
+        <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="<%= ENV['STRIPE_API_PUBLISHABLE_KEY'] %>"
+          data-image='/img/<%= game ? game.name : 'pong' %>.png'
+          data-name="Playplay.io"
+          data-panel-label="Update Credit Card"
+          data-label="Update Credit Card"
+          data-allow-remember-me=false
+          data-locale="auto">
+        </script>
+      </form>
+      <p>
+        <img src='/img/stripe.png' width='119' height='26'></img>
+        <div class='small'>
+          Questions? Contact dblock[at]dblock[dot]org or DM <a href='https://twitter.com/playplayio'>@playplayio</a>.
+        </div>
+      </p>
+      <%= partial 'public/partials/_scripts.html' %>
+      <script>
+        $(document).ready(function() {
+          var data = {
+            stripe_token: "<%= stripe_token %>",
+            stripe_token_type: "<%= stripe_token_type %>",
+            stripe_email: "<%= stripe_email %>",
+            team_id: "<%= team.id %>"
+          };
+
+          if (data.stripe_token) {
+
+            var team = {
+              id: <%= team ? "'#{team._id}'" : 'null' %>,
+              game: <%= game ? "'#{game.name}'" : 'null' %>,
+              name: <%= team ? "'#{team.name}'" : 'null' %>
+            };
+
+            $.ajax({
+              type: 'POST',
+              url: '/api/credit_cards',
+              data: data,
+              success: function(data) {
+                PlayPlay.message('Successfully updated team <b>' + team.name + '</b> credit card for <b>' + team.game + '</b>.<br><br>Thank you for your support!');
+                $('form').remove();
+              },
+              error: PlayPlay.error
+            });
+          }
+        });
+      </script>
+    </p>
+  </body>
+</html>
