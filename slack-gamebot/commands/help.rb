@@ -16,13 +16,14 @@ sucks: express some frustration
 
 Games
 -----
-challenge <opponent>, ... [with <teammate>, ...]: challenge opponent(s) to a game
+challenge <opponent> ... [with <teammate> ...]: challenge opponent(s) to a game
 accept: accept a challenge
 decline: decline a previous challenge
 cancel: cancel a previous challenge
 lost [to <opponent>] [score, ...]: record your loss
 resigned [to <opponent>]: record a resignation
 draw: record a tie
+taunt <opponent> [<opponent> ...]: taunt players
 
 Stats
 -----
