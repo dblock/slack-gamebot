@@ -197,6 +197,16 @@ gamebot cancel
 Victor Barna and Deng Yaping canceled a challenge against Wang Hoe and Zhang Jike.
 ```
 
+####  gamebot taunt &lt;opponent&gt; ... [with &lt;teammate&gt; ...] 
+
+Taunt another player.
+
+```
+gamebot taunt @WangHoe
+
+Victor Barna says Wang Hoe sucks at ping pong!
+```
+
 #### gamebot leaderboard [number|infinity]
 
 Get the leaderboard.
