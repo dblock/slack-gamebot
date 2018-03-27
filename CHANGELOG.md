@@ -1,5 +1,6 @@
 ### Change Log
 
+* [#161](https://github.com/dblock/slack-gamebot/pull/161): Added `MONGODB_URI` env as production mongoid client uri - [@dsantosmerino](https://github.com/dsantosmerino).
 * [#153](https://github.com/dblock/slack-gamebot/pull/153): Added `taunt` that allows users to taunt other users - [@marin-hyatt](https://github.com/marin-hyatt).
 * [#155](https://github.com/dblock/slack-gamebot/issues/155): Fix: Players can no longer lose to themselves - [@kanno41](https://github.com/kanno41).
 * [#149](https://github.com/dblock/slack-gamebot/issues/149): Added `premium` info and a way to change team cc - [@dblock](https://github.com/dblock).
