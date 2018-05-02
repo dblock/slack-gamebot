@@ -40,6 +40,7 @@ group :test do
   gem 'rack-test'
   gem 'rspec'
   gem 'selenium-webdriver'
+  gem 'timecop'
   gem 'vcr'
   gem 'webmock'
 end

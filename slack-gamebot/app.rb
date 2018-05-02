@@ -8,29 +8,21 @@ Re-install the bot at https://www.playplay.io. Your data will be purged in 2 wee
 EOS
 
     def prepare!
-      update_admins!
       super
       deactivate_dead_teams!
     end
 
     def after_start!
       inform_dead_teams!
+      once_and_every 60 * 60 * 24 do
+        check_trials!
+      end
       once_and_every 60 * 60 * 24 * 3 do
         check_subscribed_teams!
       end
     end
 
     private
-
-    def update_admins!
-      Team.each do |team|
-        next if team.activated_user_id
-        user = team.users.asc(:_id).first
-        next unless user
-        logger.info "Setting team #{team} admin to #{user.user_id}, #{user.user_name}."
-        team.update_attributes!(activated_user_id: user.user_id)
-      end
-    end
 
     def once_and_every(tt)
       yield
@@ -58,6 +50,18 @@ EOS
           team.deactivate!
         rescue StandardError => e
           logger.warn "Error deactivating team #{team}, #{e.message}."
+        end
+      end
+    end
+
+    def check_trials!
+      Team.where(subscribed: false).each do |team|
+        begin
+          logger.info "Team #{team} has #{team.remaining_trial_days} trial days left."
+          next unless team.remaining_trial_days <= 3
+          team.inform_trial!
+        rescue StandardError => e
+          logger.warn "Error checking team #{team} trial, #{e.message}."
         end
       end
     end

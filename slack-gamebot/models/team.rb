@@ -3,6 +3,7 @@ class Team
   field :api, type: Boolean, default: false
   field :aliases, type: Array, default: []
   field :dead_at, type: DateTime
+  field :trial_informed_at, type: DateTime
   field :elo, type: Integer, default: 0
   field :unbalanced, type: Boolean, default: false
 
@@ -32,6 +33,31 @@ class Team
     time_limit = Time.now.utc - 2.weeks
     return false if created_at > time_limit
     true
+  end
+
+  def trial_ends_at
+    raise 'Team is subscribed.' if subscribed?
+    created_at + 2.weeks
+  end
+
+  def remaining_trial_days
+    raise 'Team is subscribed.' if subscribed?
+    [0, (trial_ends_at.to_date - Time.now.utc.to_date).to_i].max
+  end
+
+  def trial_message
+    [
+      "Your trial subscription expires in #{remaining_trial_days} day#{remaining_trial_days == 1 ? '' : 's'}.",
+      subscribe_text
+    ].join(' ')
+  end
+
+  def inform_trial!
+    return if subscribed? || subscription_expired?
+    return if trial_informed_at && (Time.now.utc > trial_informed_at + 7.days)
+    inform! trial_message
+    inform_admin! trial_message
+    update_attributes!(trial_informed_at: Time.now.utc)
   end
 
   def subscribe_text

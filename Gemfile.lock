@@ -254,6 +254,7 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     time_ago_in_words (0.1.1)
+    timecop (0.8.1)
     timers (4.1.2)
       hitimes
     tzinfo (1.2.3)
@@ -317,6 +318,7 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock
   time_ago_in_words
+  timecop
   vcr
   wannabe_bool
   webmock
