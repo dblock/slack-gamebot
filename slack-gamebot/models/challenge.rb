@@ -90,37 +90,37 @@ class Challenge
   def lose!(loser, scores = nil)
     raise SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
     raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
-    winners = nil
-    losers = nil
+    winners, losers = winners_and_losers_for(loser)
+    Match.lose!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
+    update_attributes!(state: ChallengeState::PLAYED)
+  end
+
+  def winners_and_losers_for(loser)
     if challenged.include?(loser)
-      winners = challengers
-      losers = challenged
-    elsif
-      winners = challenged
-      losers = challengers
+      [challengers, challenged]
+    elsif challengers.include?(loser)
+      [challenged, challengers]
     else
       raise SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
     end
-    Match.lose!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
-    update_attributes!(state: ChallengeState::PLAYED)
   end
 
   def resign!(loser, scores = nil)
     raise SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
     raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
-    winners = nil
-    losers = nil
-    if challenged.include?(loser)
-      winners = challengers
-      losers = challenged
-    elsif
-      winners = challenged
-      losers = challengers
-    else
-      raise SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can lose this challenge."
-    end
+    winners, losers = winners_and_losers_for_resigned(loser)
     Match.resign!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     update_attributes!(state: ChallengeState::PLAYED)
+  end
+
+  def winners_and_losers_for_resigned(loser)
+    if challenged.include?(loser)
+      [challengers, challenged]
+    elsif challengers.include?(loser)
+      [challenged, challengers]
+    else
+      raise SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can resign this challenge."
+    end
   end
 
   def draw!(player, scores = nil)
@@ -131,17 +131,18 @@ class Challenge
     update_attributes!(draw_scores: scores) if scores
     return if draw.count != (challenged.count + challengers.count)
     # in a draw, winners have a lower original elo
-    winners = nil
-    losers = nil
-    if Elo.team_elo(challenged) < Elo.team_elo(challengers)
-      winners = challenged
-      losers = challengers
-    else
-      losers = challenged
-      winners = challengers
-    end
+    winners, losers = winners_and_losers_for_draw(player)
     Match.draw!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     update_attributes!(state: ChallengeState::PLAYED)
+  end
+
+  def winners_and_losers_for_draw(player)
+    raise SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can draw this challenge." unless challenged.include?(player) || challengers.include?(player)
+    if Elo.team_elo(challenged) < Elo.team_elo(challengers)
+      [challenged, challengers]
+    else
+      [challengers, challenged]
+    end
   end
 
   def to_s
@@ -160,7 +161,7 @@ class Challenge
   end
 
   def draw_scores?
-    draw_scores && draw_scores.any?
+    draw_scores&.any?
   end
 
   private
