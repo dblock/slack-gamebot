@@ -9,6 +9,7 @@ class Team
 
   field :stripe_customer_id, type: String
   field :subscribed, type: Boolean, default: false
+  field :subscribed_at, type: DateTime
 
   field :bot_user_id, type: String
   field :activated_user_id, type: String
@@ -25,6 +26,7 @@ class Team
 
   belongs_to :game
 
+  before_validation :update_subscribed_at
   after_update :inform_subscribed_changed!
 
   def subscription_expired?
@@ -156,6 +158,11 @@ EOS
       end
     end
     [message, gif && gif.image_url.to_s].compact.join("\n")
+  end
+
+  def update_subscribed_at
+    return unless subscribed? && subscribed_changed?
+    self.subscribed_at = subscribed? ? DateTime.now.utc : nil
   end
 
   def inform_subscribed_changed!

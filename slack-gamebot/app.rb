@@ -8,6 +8,7 @@ Re-install the bot at https://www.playplay.io. Your data will be purged in 2 wee
 EOS
 
     def prepare!
+      update_subscribed_at!
       super
       deactivate_dead_teams!
     end
@@ -28,6 +29,19 @@ EOS
       yield
       every tt do
         yield
+      end
+    end
+
+    def update_subscribed_at!
+      Team.subscribed.each do |team|
+        next if team.subscribed_at
+        if team.stripe_customer_id
+          customer = Stripe::Customer.retrieve(client.owner.stripe_customer_id)
+          team.update_attributes!(subscribed_at: customer.created)
+        else
+          team.update_attributes!(subscribed_at: team.updated_at)
+        end
+        logger.info("Team #{team} subscribed since #{team.subscribed_at}.")
       end
     end
 

@@ -4,8 +4,17 @@ describe SlackGamebot::Commands::Subscription, vcr: { cassette_name: 'user_info'
   let(:app) { SlackGamebot::Server.new(team: team) }
   let(:client) { app.send(:client) }
   shared_examples_for 'subscription' do
-    include_context :stripe_mock
+    context 'manually subscribed' do
+      before do
+        team.update_attributes!(subscribed: true)
+      end
+      it 'displays subscription info' do
+        customer_info = "Subscriber since #{team.subscribed_at.strftime('%B %d, %Y')}."
+        expect(message: "#{SlackRubyBot.config.user} subscription").to respond_with_slack_message customer_info
+      end
+    end
     context 'with a plan' do
+      include_context :stripe_mock
       before do
         stripe_helper.create_plan(id: 'slack-playplay-yearly', amount: 2999)
       end
