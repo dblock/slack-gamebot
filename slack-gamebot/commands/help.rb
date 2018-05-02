@@ -56,7 +56,7 @@ subscription: show subscription info (captains also see payment data)
       def self.call(client, data, _match)
         client.say(channel: data.channel, text: [
           HELP,
-          client.owner.reload.subscribed? ? nil : client.owner.subscribe_text
+          client.owner.reload.subscribed? ? nil : client.owner.trial_message
         ].compact.join("\n"))
         client.say(channel: data.channel, gif: 'help')
         logger.info "HELP: #{client.owner} - #{data.user}"
