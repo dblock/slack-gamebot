@@ -23,7 +23,7 @@ class Team
 
   after_update :inform_subscribed_changed!
 
-  def subscripion_expired?
+  def subscription_expired?
     return false if subscribed?
     return false if Time.now.utc < DateTime.parse('2018/5/15') # temporary
     time_limit = Time.now.utc - 2.weeks
