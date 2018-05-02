@@ -57,12 +57,18 @@ module Api
           )
 
           token = rc['bot']['bot_access_token']
+          bot_user_id = rc['bot']['bot_user_id']
+          user_id = rc['user_id']
           team = Team.where(token: token).first
           team ||= Team.where(team_id: rc['team_id'], game: game).first
           if team && !team.active?
             error!('Invalid Game', 400) unless team.game == game
-            team.update_attributes!(created_at: Time.now.utc)
             team.activate!(token)
+            team.update_attributes!(
+              created_at: Time.now.utc,
+              activated_user_id: user_id,
+              bot_user_id: bot_user_id
+            )
           elsif team
             error!('Invalid Game', 400) unless team.game == game
             raise "Team #{team.name} is already registered."
@@ -72,7 +78,9 @@ module Api
               aliases: game.aliases,
               token: token,
               team_id: rc['team_id'],
-              name: rc['team_name']
+              name: rc['team_name'],
+              activated_user_id: user_id,
+              bot_user_id: bot_user_id
             )
           end
 

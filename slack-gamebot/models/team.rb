@@ -9,6 +9,9 @@ class Team
   field :stripe_customer_id, type: String
   field :subscribed, type: Boolean, default: false
 
+  field :bot_user_id, type: String
+  field :activated_user_id, type: String
+
   scope :api, -> { where(api: true) }
   scope :subscribed, -> { where(subscribed: true) }
 
@@ -70,7 +73,7 @@ class Team
 
   def dead!(message, gif = nil)
     inform! message, gif
-    inform_admins! message, gif
+    inform_admin! message, gif
     update_attributes!(dead_at: Time.now.utc)
   end
 
@@ -88,14 +91,12 @@ class Team
     end
   end
 
-  def inform_admins!(message, gif_name = nil)
+  def inform_admin!(message, gif_name = nil)
     client = Slack::Web::Client.new(token: token)
-    members = client.users_list(presence: false).members.flatten # TODO: paginate
-    members.select(&:is_admin).each do |admin|
-      channel = client.im_open(user: admin.id)
-      logger.info "Sending DM '#{message}' to #{admin.name}."
-      client.chat_postMessage(text: make_message(message, gif_name), channel: channel.channel.id, as_user: true)
-    end
+    return unless activated_user_id
+    channel = client.im_open(user: activated_user_id)
+    logger.info "Sending DM '#{message}' to #{activated_user_id}."
+    client.chat_postMessage(text: make_message(message, gif_name), channel: channel.channel.id, as_user: true)
   end
 
   def self.find_or_create_from_env!

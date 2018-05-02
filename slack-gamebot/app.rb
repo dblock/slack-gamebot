@@ -8,8 +8,7 @@ Re-install the bot at https://www.playplay.io. Your data will be purged in 2 wee
 EOS
 
     def prepare!
-      update_premium!
-      unset_nudge!
+      update_admins!
       super
       deactivate_dead_teams!
     end
@@ -23,14 +22,14 @@ EOS
 
     private
 
-    def update_premium!
-      result = Team.where(premium: true).set(subscribed: true)
-      logger.info "update_premium: #{result}"
-      Team.all.unset(:premium)
-    end
-
-    def unset_nudge!
-      Team.all.unset(:nudge_at)
+    def update_admins!
+      Team.each do |team|
+        next if team.activated_user_id
+        user = team.users.asc(:_id).first
+        next unless user
+        logger.info "Setting team #{team} admin to #{user.user_id}, #{user.user_name}."
+        team.update_attributes!(activated_user_id: user.user_id)
+      end
     end
 
     def once_and_every(tt)
@@ -72,10 +71,10 @@ EOS
           case subscription.status
           when 'past_due'
             logger.warn "Subscription for #{team} is #{subscription.status}, notifying."
-            team.inform_admins! "Your subscription to #{subscription_name} is past due. #{team.update_cc_text}"
+            team.inform_admin! "Your subscription to #{subscription_name} is past due. #{team.update_cc_text}"
           when 'canceled', 'unpaid'
             logger.warn "Subscription for #{team} is #{subscription.status}, downgrading."
-            team.inform_admins! "Your subscription to #{subscription.plan.name} (#{ActiveSupport::NumberHelper.number_to_currency(subscription.plan.amount.to_f / 100)}) was canceled and your team has been downgraded. Thank you for being a customer!"
+            team.inform_admin! "Your subscription to #{subscription.plan.name} (#{ActiveSupport::NumberHelper.number_to_currency(subscription.plan.amount.to_f / 100)}) was canceled and your team has been downgraded. Thank you for being a customer!"
             team.update_attributes!(subscribed: false)
           end
         end
