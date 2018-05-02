@@ -69,10 +69,10 @@ EOS
     end
 
     def check_trials!
-      Team.where(subscribed: false).each do |team|
+      Team.active.where(subscribed: false).each do |team|
         begin
           logger.info "Team #{team} has #{team.remaining_trial_days} trial days left."
-          next unless team.remaining_trial_days <= 3
+          next unless team.remaining_trial_days > 0 && team.remaining_trial_days <= 3
           team.inform_trial!
         rescue StandardError => e
           logger.warn "Error checking team #{team} trial, #{e.message}."
