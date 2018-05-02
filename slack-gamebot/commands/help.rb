@@ -12,6 +12,7 @@ team: show your team's info and captains
 register: re-register yourself as a player
 unregister: unregister yourself, removes you from leaderboards and challenges
 help: get this helpful message
+info: bot credits
 sucks: express some frustration
 
 Games
@@ -55,7 +56,6 @@ subscription: show subscription info (captains also see payment data)
       def self.call(client, data, _match)
         client.say(channel: data.channel, text: [
           HELP,
-          SlackGamebot::INFO,
           client.owner.reload.subscribed? ? nil : client.owner.subscribe_text
         ].compact.join("\n"))
         client.say(channel: data.channel, gif: 'help')
