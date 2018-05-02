@@ -2,16 +2,15 @@ class Team
   field :gifs, type: Boolean, default: true
   field :api, type: Boolean, default: false
   field :aliases, type: Array, default: []
-  field :nudge_at, type: DateTime
   field :dead_at, type: DateTime
   field :elo, type: Integer, default: 0
   field :unbalanced, type: Boolean, default: false
 
   field :stripe_customer_id, type: String
-  field :premium, type: Boolean, default: false
+  field :subscribed, type: Boolean, default: false
 
   scope :api, -> { where(api: true) }
-  scope :premium, -> { where(premium: true) }
+  scope :subscribed, -> { where(subscribed: true) }
 
   validates_presence_of :game_id
 
@@ -22,14 +21,18 @@ class Team
 
   belongs_to :game
 
-  after_update :inform_premium_changed!
+  after_update :inform_subscribed_changed!
 
-  def premium_text
-    "This is a premium feature. #{upgrade_text}"
+  def subscripion_expired?
+    return false if subscribed?
+    return false if Time.now.utc < DateTime.parse('2018/5/15') # temporary
+    time_limit = Time.now.utc - 2.weeks
+    return false if created_at > time_limit
+    true
   end
 
-  def upgrade_text
-    "Upgrade your team to premium and enable paid features for $29.99 a year at #{SlackGamebot::Service.url}/upgrade?team_id=#{team_id}&game=#{game.name}."
+  def subscribe_text
+    "Subscribe your team for $29.99 a year at #{SlackGamebot::Service.url}/subscribe?team_id=#{team_id}&game=#{game.name}."
   end
 
   def update_cc_text
@@ -61,34 +64,14 @@ class Team
     true
   end
 
-  def bother?(dt = 1.week)
-    time_limit = Time.now - dt
-    return false if created_at > time_limit
-    return false if nudge_at && nudge_at > time_limit
-    true
-  end
-
-  def nudge?(dt = 2.weeks)
-    bother?(dt) && asleep?(dt)
-  end
-
   def dead?(dt = 1.month)
     asleep?(dt)
-  end
-
-  def bother!(message, gif = nil)
-    inform! message, gif
-    update_attributes!(nudge_at: Time.now.utc)
   end
 
   def dead!(message, gif = nil)
     inform! message, gif
     inform_admins! message, gif
     update_attributes!(dead_at: Time.now.utc)
-  end
-
-  def nudge!
-    bother! "Challenge someone to a game of #{game.name} today!", 'nudge'
   end
 
   def api_url
@@ -131,8 +114,8 @@ class Team
 
   private
 
-  UPGRADED_TEXT = <<-EOS.freeze
-Your team has been upgraded, enjoy all premium features. Thanks for supporting open-source!
+  SUBSCRIBED_TEXT = <<-EOS.freeze
+Your team has been subscribed. Thank you!
 Follow https://twitter.com/playplayio for news and updates.
 EOS
 
@@ -148,8 +131,8 @@ EOS
     [message, gif && gif.image_url.to_s].compact.join("\n")
   end
 
-  def inform_premium_changed!
-    return unless premium? && premium_changed?
-    inform! UPGRADED_TEXT, 'thanks'
+  def inform_subscribed_changed!
+    return unless subscribed? && subscribed_changed?
+    inform! SUBSCRIBED_TEXT, 'thanks'
   end
 end

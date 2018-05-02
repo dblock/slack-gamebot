@@ -1,9 +1,9 @@
 module SlackGamebot
   module Commands
     class Rank < SlackRubyBot::Commands::Base
-      include SlackGamebot::Commands::Mixins::Premium
+      include SlackGamebot::Commands::Mixins::Subscription
 
-      premium_command 'rank' do |client, data, match|
+      subscribed_command 'rank' do |client, data, match|
         arguments = match['expression'].split.reject(&:blank?) if match['expression']
         users = arguments || []
         if arguments && arguments.any?

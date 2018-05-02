@@ -1,7 +1,9 @@
 module SlackGamebot
   module Commands
     class Team < SlackRubyBot::Commands::Base
-      def self.call(client, data, _match)
+      include SlackGamebot::Commands::Mixins::Subscription
+
+      subscribed_command 'team' do |client, data, _match|
         ::User.find_create_or_update_by_slack_id!(client, data.user)
         captains = if client.owner.captains.count == 1
                      ", captain #{client.owner.captains.first.user_name}"

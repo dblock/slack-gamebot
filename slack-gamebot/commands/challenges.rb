@@ -1,7 +1,9 @@
 module SlackGamebot
   module Commands
     class Challenges < SlackRubyBot::Commands::Base
-      def self.call(client, data, _match)
+      include SlackGamebot::Commands::Mixins::Subscription
+
+      subscribed_command 'challenges' do |client, data, _match|
         challenges = ::Challenge.where(
           channel: data.channel,
           :state.in => [ChallengeState::PROPOSED, ChallengeState::ACCEPTED]

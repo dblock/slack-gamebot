@@ -1,9 +1,9 @@
 module SlackGamebot
   module Commands
     class Unregister < SlackRubyBot::Commands::Base
-      include SlackGamebot::Commands::Mixins::Premium
+      include SlackGamebot::Commands::Mixins::Subscription
 
-      premium_command 'unregister' do |client, data, match|
+      subscribed_command 'unregister' do |client, data, match|
         if !match['expression'] || match['expression'] == 'me'
           user = ::User.find_create_or_update_by_slack_id!(client, data.user)
           user.unregister!

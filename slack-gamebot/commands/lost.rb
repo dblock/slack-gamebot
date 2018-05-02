@@ -1,7 +1,9 @@
 module SlackGamebot
   module Commands
     class Lost < SlackRubyBot::Commands::Base
-      def self.call(client, data, match)
+      include SlackGamebot::Commands::Mixins::Subscription
+
+      subscribed_command 'lost' do |client, data, match|
         challenger = ::User.find_create_or_update_by_slack_id!(client, data.user)
         expression = match['expression'] if match['expression']
         arguments = expression.split.reject(&:blank?) if expression
@@ -35,10 +37,7 @@ module SlackGamebot
 
         challenge = ::Challenge.find_by_user(client.owner, data.channel, challenger, [ChallengeState::PROPOSED, ChallengeState::ACCEPTED])
 
-        if scores && scores.any? && Stripe.api_key && !client.owner.reload.premium
-          client.say channel: data.channel, text: "Recording scores is now a premium feature, sorry. You can still record games without scores. #{client.owner.upgrade_text}"
-          logger.info "#{client.owner}, user=#{data.user}, text=#{data.text}, recording scores is now a premium feature"
-        elsif !(teammates & opponents).empty?
+        if !(teammates & opponents).empty?
           client.say(channel: data.channel, text: 'You cannot lose to yourself!', gif: 'loser')
           logger.info "Cannot lose to yourself: #{client.owner} - #{match}"
         elsif opponents.any? && (challenge.nil? || (challenge.challengers != opponents && challenge.challenged != opponents))

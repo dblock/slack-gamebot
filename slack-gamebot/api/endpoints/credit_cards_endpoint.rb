@@ -13,7 +13,7 @@ module Api
         end
         post do
           team = Team.find(params[:team_id]) || error!('Not Found', 404)
-          error!('Not a Premium Customer', 400) unless team.stripe_customer_id
+          error!('Not a Subscriber', 400) unless team.stripe_customer_id
           customer = Stripe::Customer.retrieve(team.stripe_customer_id)
           customer.source = params['stripe_token']
           customer.save

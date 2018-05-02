@@ -49,7 +49,7 @@ describe 'Update cc', js: true, type: :feature do
             find('button[type="submit"]').click
           end
           sleep 5
-          expect(find('#messages')).to have_text('Not a Premium Customer')
+          expect(find('#messages')).to have_text('Not a Subscriber')
         end
       end
     end

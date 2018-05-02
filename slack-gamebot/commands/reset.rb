@@ -1,9 +1,9 @@
 module SlackGamebot
   module Commands
     class Reset < SlackRubyBot::Commands::Base
-      include SlackGamebot::Commands::Mixins::Premium
+      include SlackGamebot::Commands::Mixins::Subscription
 
-      premium_command 'reset' do |client, data, match|
+      subscribed_command 'reset' do |client, data, match|
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
         if !user.captain?
           client.say(channel: data.channel, text: "You're not a captain, sorry.", gif: 'sorry')

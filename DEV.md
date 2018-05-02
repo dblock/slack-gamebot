@@ -42,7 +42,7 @@ $ script/console
 
 ### Stripe Keys
 
-If you want to test upgrading, premium and payment-related functions you need a [Stripe](https://www.stripe.com) account and test keys. Create a `.env` file.
+If you want to test subscriptions and payment-related functions you need a [Stripe](https://www.stripe.com) account and test keys. Create a `.env` file.
 
 ```
 STRIPE_API_PUBLISHABLE_KEY=pk_test_key

@@ -4,7 +4,7 @@ describe 'Subscribe', js: true, type: :feature do
   let!(:game) { Fabricate(:game, name: 'pong') }
   context 'without team_id' do
     before do
-      visit '/upgrade'
+      visit '/subscribe'
     end
     it 'requires a team' do
       expect(find('#messages')).to have_text('Missing or invalid team ID and/or game.')
@@ -14,27 +14,27 @@ describe 'Subscribe', js: true, type: :feature do
   context 'without game' do
     let!(:team) { Fabricate(:team) }
     before do
-      visit "/upgrade?team_id=#{team.team_id}"
+      visit "/subscribe?team_id=#{team.team_id}"
     end
     it 'requires a game' do
       expect(find('#messages')).to have_text('Missing or invalid team ID and/or game.')
       find('#subscribe', visible: false)
     end
   end
-  context 'for a premium team' do
-    let!(:team) { Fabricate(:team, game: game, premium: true) }
+  context 'for a subscribed team' do
+    let!(:team) { Fabricate(:team, game: game, subscribed: true) }
     before do
-      visit "/upgrade?team_id=#{team.team_id}&game=#{team.game.name}"
+      visit "/subscribe?team_id=#{team.team_id}&game=#{team.game.name}"
     end
     it 'displays an error' do
-      expect(find('#messages')).to have_text("Team #{team.name} already has a premium #{team.game.name} subscription, thank you for your support.")
+      expect(find('#messages')).to have_text("Team #{team.name} is already subscribed to #{team.game.name}, thank you.")
       find('#subscribe', visible: false)
     end
   end
-  shared_examples 'upgrades to premium' do
-    it 'upgrades to premium' do
-      visit "/upgrade?team_id=#{team.team_id}&game=#{team.game.name}"
-      expect(find('#messages')).to have_text("Upgrade team #{team.name} to premium #{team.game.name} for $29.99 a year!")
+  shared_examples 'subscribes' do
+    it 'subscribes' do
+      visit "/subscribe?team_id=#{team.team_id}&game=#{team.game.name}"
+      expect(find('#messages')).to have_text("Subscribe team #{team.name} to #{team.game.name} for $29.99 a year!")
       find('#subscribe', visible: true)
 
       expect(Stripe::Customer).to receive(:create).and_return('id' => 'customer_id')
@@ -42,7 +42,7 @@ describe 'Subscribe', js: true, type: :feature do
       find('#subscribeButton').click
       sleep 1
 
-      expect_any_instance_of(Team).to receive(:inform!).with(Team::UPGRADED_TEXT, 'thanks')
+      expect_any_instance_of(Team).to receive(:inform!).with(Team::SUBSCRIBED_TEXT, 'thanks')
 
       stripe_iframe = all('iframe[name=stripe_checkout_app]').last
       Capybara.within_frame stripe_iframe do
@@ -55,11 +55,11 @@ describe 'Subscribe', js: true, type: :feature do
 
       sleep 5
 
-      expect(find('#messages')).to have_text("Team #{team.name} successfully upgraded to premium #{team.game.name}. Thank you for your support!")
+      expect(find('#messages')).to have_text("Team #{team.name} successfully subscribed to subscribed #{team.game.name}. Thank you for your support!")
       find('#subscribe', visible: false)
 
       team.reload
-      expect(team.premium).to be true
+      expect(team.subscribed).to be true
       expect(team.stripe_customer_id).to eq 'customer_id'
     end
   end
@@ -72,30 +72,30 @@ describe 'Subscribe', js: true, type: :feature do
     end
     context 'a team' do
       let!(:team) { Fabricate(:team, game: game) }
-      it_behaves_like 'upgrades to premium'
+      it_behaves_like 'subscribes'
     end
     context 'a team with two games' do
       let!(:team) { Fabricate(:team, game: game) }
       let!(:team2) { Fabricate(:team, team_id: team.team_id, game: Fabricate(:game)) }
-      it_behaves_like 'upgrades to premium'
+      it_behaves_like 'subscribes'
     end
     context 'a second team with two games' do
       let!(:team2) { Fabricate(:team, game: Fabricate(:game)) }
       let!(:team) { Fabricate(:team, game: game, team_id: team2.team_id) }
-      it_behaves_like 'upgrades to premium'
+      it_behaves_like 'subscribes'
     end
     context 'with a coupon' do
       let!(:team) { Fabricate(:team, game: game) }
       it 'applies the coupon' do
         coupon = double(Stripe::Coupon, id: 'coupon-id', amount_off: 1200)
         expect(Stripe::Coupon).to receive(:retrieve).with('coupon-id').and_return(coupon)
-        visit "/upgrade?team_id=#{team.team_id}&game=#{team.game.name}&coupon=coupon-id"
-        expect(find('#messages')).to have_text("Upgrade team #{team.name} to premium #{team.game.name} for $17.99 for the first year and $29.99 thereafter with coupon coupon-id!")
+        visit "/subscribe?team_id=#{team.team_id}&game=#{team.game.name}&coupon=coupon-id"
+        expect(find('#messages')).to have_text("Subscribe team #{team.name} to #{team.game.name} for $17.99 for the first year and $29.99 thereafter with coupon coupon-id!")
         find('#subscribe', visible: true)
 
         expect(Stripe::Customer).to receive(:create).with(hash_including(coupon: 'coupon-id')).and_return('id' => 'customer_id')
 
-        expect_any_instance_of(Team).to receive(:inform!).with(Team::UPGRADED_TEXT, 'thanks')
+        expect_any_instance_of(Team).to receive(:inform!).with(Team::SUBSCRIBED_TEXT, 'thanks')
 
         find('#subscribeButton').click
         sleep 1
@@ -111,11 +111,11 @@ describe 'Subscribe', js: true, type: :feature do
 
         sleep 5
 
-        expect(find('#messages')).to have_text("Team #{team.name} successfully upgraded to premium #{team.game.name}. Thank you for your support!")
+        expect(find('#messages')).to have_text("Team #{team.name} successfully subscribed to subscribed #{team.game.name}. Thank you for your support!")
         find('#subscribe', visible: false)
 
         team.reload
-        expect(team.premium).to be true
+        expect(team.subscribed).to be true
         expect(team.stripe_customer_id).to eq 'customer_id'
       end
     end

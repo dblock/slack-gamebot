@@ -1,7 +1,9 @@
 module SlackGamebot
   module Commands
     class Leaderboard < SlackRubyBot::Commands::Base
-      def self.call(client, data, match)
+      include SlackGamebot::Commands::Mixins::Subscription
+
+      subscribed_command 'leaderboard' do |client, data, match|
         max = 3
         reverse = false
         arguments = match['expression'].split.reject(&:blank?) if match['expression']

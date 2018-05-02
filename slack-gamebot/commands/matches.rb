@@ -1,9 +1,9 @@
 module SlackGamebot
   module Commands
     class Matches < SlackRubyBot::Commands::Base
-      include SlackGamebot::Commands::Mixins::Premium
+      include SlackGamebot::Commands::Mixins::Subscription
 
-      premium_command 'matches' do |client, data, match|
+      subscribed_command 'matches' do |client, data, match|
         totals = {}
         totals.default = 0
         arguments = match['expression'].split.reject(&:blank?) if match['expression']

@@ -24,39 +24,39 @@ lost [to <opponent>] [score, ...]: record your loss
 resigned [to <opponent>]: record a resignation
 draw: record a tie
 taunt <opponent> [<opponent> ...]: taunt players
+rank [<player> ...]: rank a player or a list of players
+matches [number|infinity]: show this season's matches
 
 Stats
 -----
 leaderboard [number|infinity]: show the leaderboard, eg. leaderboard 10
 season: show current season
 
-Captains
+Settings
 --------
-promote <player>: promote a user to captain
-demote me: demote you from captain
-set nickname <player> [name], unset nickname <player>: set/unset someone's nickname
-
-Premium
--------
-rank [<player> ...]: rank a player or a list of players
-matches [number|infinity]: show this season's matches
-premium: show subscription info (captains also see payment data)
-seasons: show all seasons
-reset <team>: reset all stats, start a new season
-unregister <player>: remove a player from the leaderboard
 set nickname [name], unset nickname: set/unset your nickname displayed in leaderboards
 set gifs [on|off]: enable/disable animated GIFs, default is on
 set aliases [<alias> ...], unset aliases: set/unset additional bot aliases
 set elo [number]: set base elo for the team
 set api [on|off]: enable/disable team data in the public API, default is off
 set unbalanced [on|off]: allow matches between different numbers of players, default is off
+
+Captains
+--------
+promote <player>: promote a user to captain
+demote me: demote you from captain
+set nickname <player> [name], unset nickname <player>: set/unset someone's nickname
+seasons: show all seasons
+reset <team>: reset all stats, start a new season
+unregister <player>: remove a player from the leaderboard
+subscription: show subscription info (captains also see payment data)
 ```
         EOS
       def self.call(client, data, _match)
         client.say(channel: data.channel, text: [
           HELP,
           SlackGamebot::INFO,
-          client.owner.reload.premium? ? nil : client.owner.upgrade_text
+          client.owner.reload.subscribed? ? nil : client.owner.subscribe_text
         ].compact.join("\n"))
         client.say(channel: data.channel, gif: 'help')
         logger.info "HELP: #{client.owner} - #{data.user}"

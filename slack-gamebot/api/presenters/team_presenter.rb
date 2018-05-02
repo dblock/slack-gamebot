@@ -10,7 +10,7 @@ module Api
       property :name, type: String, desc: 'Team name.'
       property :domain, type: String, desc: 'Team domain.'
       property :active, type: Boolean, desc: 'Team is active.'
-      property :premium, type: Boolean, desc: 'Team is a premium subscriber.'
+      property :subscribed, type: Boolean, desc: 'Team is a subscriber.'
       property :gifs, type: Boolean, desc: 'Team loves animated GIFs.'
       property :aliases, type: Array, desc: 'Game aliases.'
       property :elo, type: Integer, desc: 'Base elo.'

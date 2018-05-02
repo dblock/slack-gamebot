@@ -11,8 +11,8 @@ describe Api::Endpoints::CreditCardsEndpoint do
         expect(json['type']).to eq 'param_error'
       end
     end
-    context 'premium team without a stripe customer id' do
-      let!(:team) { Fabricate(:team, premium: true, stripe_customer_id: nil) }
+    context 'subscribed team without a stripe customer id' do
+      let!(:team) { Fabricate(:team, subscribed: true, stripe_customer_id: nil) }
       it 'fails to update credit_card' do
         expect do
           client.credit_cards._post(
@@ -21,11 +21,11 @@ describe Api::Endpoints::CreditCardsEndpoint do
           )
         end.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
-          expect(json['error']).to eq 'Not a Premium Customer'
+          expect(json['error']).to eq 'Not a Subscriber'
         end
       end
     end
-    context 'existing premium team' do
+    context 'existing subscribed team' do
       include_context :stripe_mock
       let!(:team) { Fabricate(:team) }
       before do
@@ -36,7 +36,7 @@ describe Api::Endpoints::CreditCardsEndpoint do
           email: 'foo@bar.com'
         )
         expect_any_instance_of(Team).to receive(:inform!).once
-        team.update_attributes!(premium: true, stripe_customer_id: customer['id'])
+        team.update_attributes!(subscribed: true, stripe_customer_id: customer['id'])
       end
       it 'updates a credit card' do
         new_source = stripe_helper.generate_card_token

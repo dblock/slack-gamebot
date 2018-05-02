@@ -4,7 +4,7 @@ module Api
       format :json
 
       namespace :subscriptions do
-        desc 'Subscribe to slack-playplay premium features.'
+        desc 'Subscribe to slack-playplay.'
         params do
           requires :stripe_token, type: String
           requires :stripe_token_type, type: String
@@ -15,7 +15,7 @@ module Api
         post do
           team = Team.find(params[:team_id]) || error!('Not Found', 404)
           Api::Middleware.logger.info "Creating a subscription for team #{team}, email=#{params[:stripe_email]}, coupon=#{params[:stripe_coupon]}."
-          error!('Already a Premium Subscription', 400) if team.premium
+          error!('Already a Subscriber', 400) if team.subscribed?
           error!('Customer Already Registered', 400) if team.stripe_customer_id
           customer = Stripe::Customer.create(
             source: params[:stripe_token],
@@ -31,7 +31,7 @@ module Api
             }
           )
           Api::Middleware.logger.info "Subscription for team #{team} created, stripe_customer_id=#{customer['id']}."
-          team.update_attributes!(premium: true, stripe_customer_id: customer['id'])
+          team.update_attributes!(subscribed: true, stripe_customer_id: customer['id'])
           present team, with: Api::Presenters::TeamPresenter
         end
       end

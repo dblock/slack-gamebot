@@ -1,7 +1,9 @@
 module SlackGamebot
   module Commands
     class Season < SlackRubyBot::Commands::Base
-      def self.call(client, data, _match)
+      include SlackGamebot::Commands::Mixins::Subscription
+
+      subscribed_command 'season' do |client, data, _match|
         if client.owner.seasons.count > 0 && client.owner.challenges.current.none?
           client.say(channel: data.channel, text: 'No matches have been recorded.', gif: 'history')
         elsif client.owner.challenges.current.any?

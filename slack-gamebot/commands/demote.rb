@@ -1,7 +1,9 @@
 module SlackGamebot
   module Commands
     class Demote < SlackRubyBot::Commands::Base
-      def self.call(client, data, match)
+      include SlackGamebot::Commands::Mixins::Subscription
+
+      subscribed_command 'demote' do |client, data, match|
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
         if !match['expression'] || match['expression'] != 'me'
           client.say(channel: data.channel, text: 'You can only demote yourself, try _demote me_.', gif: 'help')

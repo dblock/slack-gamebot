@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>PlayPlay.io - Upgrade</title>
+    <title>PlayPlay.io - Subscribe</title>
     <%= partial 'public/partials/_head.html' %>
     <script src='https://checkout.stripe.com/checkout.js'></script>
     <link rel='stylesheet' href='https://checkout.stripe.com/v3/checkout/button.css'></link>
@@ -20,14 +20,7 @@
       <a href='/'><img src='img/<%= game ? game.name : 'pong' %>.png' width='120px'></a>
     </p>
     <p>
-      <h3>PlayPlay.io: Upgrade</h3>
-      <div>
-        turn GIFs on and off<br>
-        archive scores into seasons<br>
-        set base elo for your team<br>
-        access your data via a RESTful API<br>
-        support open-source
-      </div>
+      <h3>PlayPlay.io: Subscribe</h3>
     </p>
     <p id='messages' />
     <p id='subscribe'>
@@ -48,7 +41,7 @@
             id: <%= team ? "'#{team._id}'" : 'null' %>,
             game: <%= game ? "'#{game.name}'" : 'null' %>,
             name: <%= team ? "'#{team.name}'" : 'null' %>,
-            premium: <%= !!(team && team.premium) %>
+            subscribed: <%= !!(team && team.subscribed) %>
           };
 
           var coupon = {
@@ -65,13 +58,13 @@
             cents: <%= amount_cents %>
           };
 
-          if (team.premium) {
-            PlayPlay.message('Team <b>' + team.name + '</b> already has a premium <b>' + team.game + '</b> subscription, thank you for your support.');
+          if (team.subscribed) {
+            PlayPlay.message('Team <b>' + team.name + '</b> is already subscribed to <b>' + team.game + '</b>, thank you.');
             $('#subscribeButton').remove();
           } else if (team.id && team.name && team.game && coupon.code) {
-            PlayPlay.message('Upgrade team <b>' + team.name + '</b> to premium <b>' + team.game + '</b> for $' + pay.dollars + ' for the first year and $' + subscription.dollars + ' thereafter with coupon <b>' + coupon.code + '!');
+            PlayPlay.message('Subscribe team <b>' + team.name + '</b> to <b>' + team.game + '</b> for $' + pay.dollars + ' for the first year and $' + subscription.dollars + ' thereafter with coupon <b>' + coupon.code + '!');
           } else if (team.id && team.name && team.game) {
-            PlayPlay.message('Upgrade team <b>' + team.name + '</b> to premium <b>' + team.game + '</b> for $29.99 a year!');
+            PlayPlay.message('Subscribe team <b>' + team.name + '</b> to <b>' + team.game + '</b> for $29.99 a year!');
           } else {
             $('#subscribeButton').remove();
             PlayPlay.message('Missing or invalid team ID and/or game.');
@@ -98,7 +91,7 @@
                 url: '/api/subscriptions',
                 data: data,
                 success: function(data) {
-                  PlayPlay.message('Team <b>' + team.name + '</b> successfully upgraded to premium <b>' + team.game + '</b>.<br><br>Thank you for your support!');
+                  PlayPlay.message('Team <b>' + team.name + '</b> successfully subscribed to <b>' + team.game + '</b>.<br><br>Thank you!');
                   $('#subscribeButton').remove();
                 },
                 error: PlayPlay.error
@@ -108,7 +101,7 @@
 
           $('#subscribeButton').on('click', function(e) {
             handler.open({
-              name: 'PlayPlay.io Premium',
+              name: 'PlayPlay.io',
               description: '1 Year Subscription',
               amount: pay.cents
             });

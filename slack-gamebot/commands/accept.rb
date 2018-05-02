@@ -1,7 +1,9 @@
 module SlackGamebot
   module Commands
     class Accept < SlackRubyBot::Commands::Base
-      def self.call(client, data, _match)
+      include SlackGamebot::Commands::Mixins::Subscription
+
+      subscribed_command 'accept' do |client, data, _match|
         challenger = ::User.find_create_or_update_by_slack_id!(client, data.user)
         challenge = ::Challenge.find_by_user(client.owner, data.channel, challenger)
         if challenge

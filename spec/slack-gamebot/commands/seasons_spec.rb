@@ -3,14 +3,6 @@ require 'spec_helper'
 describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
   let(:app) { SlackGamebot::Server.new(team: team) }
   let(:client) { app.send(:client) }
-  context 'team' do
-    let!(:team) { Fabricate(:team) }
-    it 'is a premium feature' do
-      expect(message: "#{SlackRubyBot.config.user} seasons", user: 'user').to respond_with_slack_message(
-        "This is a premium feature. Upgrade your team to premium and enable paid features for $29.99 a year at https://www.playplay.io/upgrade?team_id=#{team.team_id}&game=#{team.game.name}."
-      )
-    end
-  end
   shared_examples_for 'seasons' do
     context 'no seasons' do
       it 'seasons' do
@@ -67,8 +59,8 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
       end
     end
   end
-  context 'premium team' do
-    let!(:team) { Fabricate(:team, premium: true) }
+  context 'subscribed team' do
+    let!(:team) { Fabricate(:team, subscribed: true) }
     it_behaves_like 'seasons'
     context 'with another team' do
       let!(:team2) { Fabricate(:team) }

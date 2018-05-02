@@ -1,1 +1,1 @@
-require 'slack-gamebot/commands/mixins/premium'
+require 'slack-gamebot/commands/mixins/subscription'

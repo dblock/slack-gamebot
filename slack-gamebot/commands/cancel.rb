@@ -1,7 +1,9 @@
 module SlackGamebot
   module Commands
     class Cancel < SlackRubyBot::Commands::Base
-      def self.call(client, data, _match)
+      include SlackGamebot::Commands::Mixins::Subscription
+
+      subscribed_command 'cancel' do |client, data, _match|
         player = ::User.find_create_or_update_by_slack_id!(client, data.user)
         challenge = ::Challenge.find_by_user(client.owner, data.channel, player)
         if challenge

@@ -1,7 +1,9 @@
 module SlackGamebot
   module Commands
     class Challenge < SlackRubyBot::Commands::Base
-      def self.call(client, data, match)
+      include SlackGamebot::Commands::Mixins::Subscription
+
+      subscribed_command 'challenge' do |client, data, match|
         challenger = ::User.find_create_or_update_by_slack_id!(client, data.user)
         arguments = match['expression'].split.reject(&:blank?) if match['expression']
         arguments ||= []
