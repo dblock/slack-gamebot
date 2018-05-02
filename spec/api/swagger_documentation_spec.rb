@@ -9,7 +9,7 @@ describe Api do
       JSON.parse(last_response.body)
     end
     it 'documents root level apis' do
-      expect(subject['paths'].keys).to eq [
+      expect(subject['paths'].keys.sort).to eq [
         '/api/status',
         '/api/users/{id}',
         '/api/users',
@@ -26,7 +26,7 @@ describe Api do
         '/api/games',
         '/api/subscriptions',
         '/api/credit_cards'
-      ]
+      ].sort
     end
   end
 
@@ -36,10 +36,10 @@ describe Api do
       JSON.parse(last_response.body)
     end
     it 'documents users apis' do
-      expect(subject['paths'].keys).to eq [
+      expect(subject['paths'].keys.sort).to eq [
         '/api/users/{id}',
         '/api/users'
-      ]
+      ].sort
     end
   end
 end
