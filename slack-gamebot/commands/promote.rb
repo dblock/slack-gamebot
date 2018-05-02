@@ -6,7 +6,7 @@ module SlackGamebot
       subscribed_command 'promote' do |client, data, match|
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
         arguments = match['expression'].split.reject(&:blank?) if match['expression']
-        users = User.find_many_by_slack_mention!(client, arguments) if arguments && arguments.any?
+        users = User.find_many_by_slack_mention!(client, arguments) if arguments&.any?
         captains = users.select(&:captain) if users
         if !users
           client.say(channel: data.channel, text: 'Try _promote @someone_.', gif: 'help')

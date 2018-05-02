@@ -11,10 +11,10 @@ module SlackGamebot
         scores = nil
         opponents = []
         teammates = [challenger]
-        multi_player = expression && expression.include?(' with ')
+        multi_player = expression&.include?(' with ')
 
         current = :scores
-        while arguments && arguments.any?
+        while arguments&.any?
           argument = arguments.shift
           case argument
           when 'to' then

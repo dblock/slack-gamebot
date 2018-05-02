@@ -6,7 +6,7 @@ module SlackGamebot
       subscribed_command 'rank' do |client, data, match|
         arguments = match['expression'].split.reject(&:blank?) if match['expression']
         users = arguments || []
-        if arguments && arguments.any?
+        if arguments&.any?
           users = User.find_many_by_slack_mention!(client, users)
         else
           users << ::User.find_create_or_update_by_slack_id!(client, data.user)

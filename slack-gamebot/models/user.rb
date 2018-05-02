@@ -69,7 +69,7 @@ class User
         raise e unless e.message == 'user_not_found'
       end
     end
-    raise SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user && user.registered?
+    raise SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user&.registered?
     raise SlackGamebot::Error, "I don't know who #{user_name} is!" unless user
     user
   end

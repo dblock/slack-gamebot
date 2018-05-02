@@ -30,7 +30,7 @@ module SlackGamebot
           logger.info "DRAW: #{client.owner} - #{challenge}"
         else
           match = ::Match.any_of({ winner_ids: challenger.id }, loser_ids: challenger.id).desc(:id).first
-          if match && match.tied?
+          if match&.tied?
             match.update_attributes!(scores: scores)
             client.say(channel: data.channel, text: "Match scores have been updated! #{match}.", gif: 'score')
             logger.info "SCORED: #{client.owner} - #{match}"

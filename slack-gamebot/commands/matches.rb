@@ -9,7 +9,7 @@ module SlackGamebot
         arguments = match['expression'].split.reject(&:blank?) if match['expression']
         # limit
         max = 10
-        if arguments && arguments.any?
+        if arguments&.any?
           case arguments.last.downcase
           when 'infinity'
             max = nil
@@ -20,15 +20,16 @@ module SlackGamebot
                 arguments.pop
               end
             rescue ArgumentError
+              # ignore
             end
           end
         end
         # users
         team = client.owner
-        users = ::User.find_many_by_slack_mention!(client, arguments) if arguments && arguments.any?
-        user_ids = users.map(&:id) if users && users.any?
+        users = ::User.find_many_by_slack_mention!(client, arguments) if arguments&.any?
+        user_ids = users.map(&:id) if users&.any?
         matches = team.matches.current
-        matches = matches.any_of({ :winner_ids.in => user_ids }, :loser_ids.in => user_ids) if user_ids && user_ids.any?
+        matches = matches.any_of({ :winner_ids.in => user_ids }, :loser_ids.in => user_ids) if user_ids&.any?
         matches.each do |m|
           totals[m.to_s] += 1
         end

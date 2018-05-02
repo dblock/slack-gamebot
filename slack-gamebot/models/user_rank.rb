@@ -27,7 +27,7 @@ class UserRank
   end
 
   def team_elo
-    user && user.team ? elo + user.team.elo : elo
+    user&.team ? elo + user.team.elo : elo
   end
 
   def to_s

@@ -73,7 +73,7 @@ class Season
       :state.in => [ChallengeState::PROPOSED, ChallengeState::ACCEPTED]
     ).set(
       state: ChallengeState::CANCELED,
-      updated_by_id: created_by && created_by.id
+      updated_by_id: created_by&.id
     )
     team.challenges.current.set(season_id: id)
     team.matches.current.set(season_id: id)

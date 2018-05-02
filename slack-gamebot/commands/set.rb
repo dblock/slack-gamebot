@@ -90,7 +90,7 @@ module SlackGamebot
           unless v.nil?
             elo = begin
                     Integer(v)
-                  rescue
+                  rescue StandardError
                     nil
                   end
             client.owner.update_attributes!(elo: elo) unless elo.nil?
