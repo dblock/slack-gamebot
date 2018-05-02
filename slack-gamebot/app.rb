@@ -36,7 +36,7 @@ EOS
       Team.subscribed.each do |team|
         next if team.subscribed_at
         if team.stripe_customer_id
-          customer = Stripe::Customer.retrieve(client.owner.stripe_customer_id)
+          customer = Stripe::Customer.retrieve(team.stripe_customer_id)
           team.update_attributes!(subscribed_at: customer.created)
         else
           team.update_attributes!(subscribed_at: team.updated_at)
