@@ -44,6 +44,10 @@ Politely says 'hi' back.
 
 Get help.
 
+#### gamebot info
+
+Bot credits.
+
 #### gamebot sucks
 
 You can tell the bot that it sucks. But it will talk back.
