@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 ruby '2.3.1'
 
-gem 'giphy'
+gem 'GiphyClient'
 gem 'hashie', '3.4.6'
 gem 'kaminari-grape'
 gem 'mongoid', '~> 5.1.4'

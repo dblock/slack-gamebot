@@ -22,7 +22,7 @@ module SlackGamebot
                           end
                           customer_info
                         else
-                          "Subscriber since #{Time.at(client.owner.subscribed_at).strftime('%B %d, %Y')}."
+                          "Subscriber since #{client.owner.subscribed_at.strftime('%B %d, %Y')}."
         end
         client.say(channel: data.channel, text: customer_info)
         logger.info "SUBSCRIPTION: #{client.owner} - #{data.user}"
