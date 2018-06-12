@@ -182,6 +182,11 @@ describe Team do
         expect(team_created_3_weeks_ago).to_not receive(:inform_admin!)
         team_created_3_weeks_ago.inform_trial!
       end
+      it 'informs once' do
+        expect(team_created_1_week_ago).to receive(:inform!).once
+        expect(team_created_1_week_ago).to receive(:inform_admin!).once
+        2.times { team_created_1_week_ago.inform_trial! }
+      end
     end
     after do
       Timecop.return

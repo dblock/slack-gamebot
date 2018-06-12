@@ -55,7 +55,7 @@ class Team
 
   def inform_trial!
     return if subscribed? || subscription_expired?
-    return if trial_informed_at && (Time.now.utc > trial_informed_at + 7.days)
+    return if trial_informed_at && (Time.now.utc < trial_informed_at + 7.days)
     inform! trial_message
     inform_admin! trial_message
     update_attributes!(trial_informed_at: Time.now.utc)
