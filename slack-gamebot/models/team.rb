@@ -31,7 +31,6 @@ class Team
 
   def subscription_expired?
     return false if subscribed?
-    return false if Time.now.utc < DateTime.parse('2018/5/15') # temporary
     time_limit = Time.now.utc - 2.weeks
     return false if created_at > time_limit
     true
@@ -49,7 +48,7 @@ class Team
 
   def trial_message
     [
-      "Your trial subscription expires in #{remaining_trial_days} day#{remaining_trial_days == 1 ? '' : 's'}.",
+      remaining_trial_days.zero? ? 'Your trial subscription has expired.' : "Your trial subscription expires in #{remaining_trial_days} day#{remaining_trial_days == 1 ? '' : 's'}.",
       subscribe_text
     ].join(' ')
   end
