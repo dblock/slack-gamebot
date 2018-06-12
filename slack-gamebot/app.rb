@@ -7,19 +7,15 @@ This leaderboard has been dead for over a month, deactivating.
 Re-install the bot at https://www.playplay.io. Your data will be purged in 2 weeks.
 EOS
 
-    def prepare!
-      update_subscribed_at!
-      super
-      deactivate_dead_teams!
-    end
-
     def after_start!
-      inform_dead_teams!
       once_and_every 60 * 60 * 24 do
         check_trials!
-      end
-      once_and_every 60 * 60 * 24 * 3 do
+        deactivate_dead_teams!
+        inform_dead_teams!
         check_subscribed_teams!
+      end
+      once_and_every 60 * 60 do
+        ping_teams!
       end
     end
 
@@ -32,16 +28,15 @@ EOS
       end
     end
 
-    def update_subscribed_at!
-      Team.subscribed.each do |team|
-        next if team.subscribed_at
-        if team.stripe_customer_id
-          customer = Stripe::Customer.retrieve(team.stripe_customer_id)
-          team.update_attributes!(subscribed_at: customer.created)
-        else
-          team.update_attributes!(subscribed_at: team.updated_at)
+    def ping_teams!
+      Team.active.each do |team|
+        begin
+          ping = team.ping!
+          next if ping[:presence].online
+          logger.warn "DOWN: #{team}"
+        rescue StandardError => e
+          logger.warn "Error pinging team #{team}, #{e.message}."
         end
-        logger.info("Team #{team} subscribed since #{team.subscribed_at}.")
       end
     end
 
