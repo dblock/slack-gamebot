@@ -34,6 +34,13 @@ EOS
           ping = team.ping!
           next if ping[:presence].online
           logger.warn "DOWN: #{team}"
+          after 60 do
+            ping = team.ping!
+            unless ping[:presence].online
+              logger.info "RESTART: #{team}"
+              SlackGamebot::Service.instance.start!(team)
+            end
+          end
         rescue StandardError => e
           logger.warn "Error pinging team #{team}, #{e.message}."
         end
