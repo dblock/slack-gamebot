@@ -4,7 +4,7 @@ module SlackGamebot
       include SlackGamebot::Commands::Mixins::Subscription
 
       subscribed_command 'leaderboard' do |client, data, match|
-        max = 3
+        max = 15
         reverse = false
         arguments = match['expression'].split.reject(&:blank?) if match['expression']
         arguments ||= []
