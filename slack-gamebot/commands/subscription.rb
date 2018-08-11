@@ -21,9 +21,11 @@ module SlackGamebot
                             customer_info += "\n#{client.owner.update_cc_text}"
                           end
                           customer_info
-                        else
+                        elsif client.owner.subscribed_at
                           "Subscriber since #{client.owner.subscribed_at.strftime('%B %d, %Y')}."
-        end
+                        else
+                          client.owner.trial_message
+                        end
         client.say(channel: data.channel, text: customer_info)
         logger.info "SUBSCRIPTION: #{client.owner} - #{data.user}"
       end
