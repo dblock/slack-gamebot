@@ -13,6 +13,7 @@ EOS
         deactivate_dead_teams!
         inform_dead_teams!
         check_subscribed_teams!
+        check_active_subscriptions_without_teams!
       end
       once_and_every 60 * 3 do
         ping_teams!
@@ -102,6 +103,14 @@ EOS
         rescue StandardError => e
           logger.warn "Error checking team #{team} subscription, #{e.message}."
         end
+      end
+    end
+
+    def check_active_subscriptions_without_teams!
+      Stripe::Subscription.all(plan: 'slack-playplay-yearly').each do |subscription|
+        next if Team.where(subscribed: true, stripe_customer_id: subscription.customer).exists?
+        customer = Stripe::Customer.retrieve(subscription.customer)
+        logger.warn "Customer #{customer.email}, team #{customer.metadata['name']} is #{subscription.status}, but customer no longer exists."
       end
     end
   end
