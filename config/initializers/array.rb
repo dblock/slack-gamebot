@@ -7,6 +7,10 @@ class Array
     join_with 'or'
   end
 
+  def same?
+    uniq.length == 1
+  end
+
   private
 
   def join_with(separator)

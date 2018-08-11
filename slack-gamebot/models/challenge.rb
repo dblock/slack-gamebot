@@ -60,9 +60,9 @@ class Challenge
     [teammates, opponents]
   end
 
-  def self.create_from_teammates_and_opponents!(client, channel, challenger, names, separator = 'with')
+  def self.new_from_teammates_and_opponents(client, channel, challenger, names, separator = 'with')
     teammates, opponents = split_teammates_and_opponents(client, challenger, names, separator)
-    Challenge.create!(
+    Challenge.new(
       team: client.owner,
       channel: channel,
       created_by: challenger,
@@ -70,6 +70,10 @@ class Challenge
       challenged: opponents,
       state: ChallengeState::PROPOSED
     )
+  end
+
+  def self.create_from_teammates_and_opponents!(client, channel, challenger, names, separator = 'with')
+    new_from_teammates_and_opponents(client, channel, challenger, names, separator).tap(&:save!)
   end
 
   def accept!(challenger)

@@ -18,6 +18,7 @@ sucks: express some frustration
 Games
 -----
 challenge <opponent> ... [with <teammate> ...]: challenge opponent(s) to a game
+challenge? <opponent> ... [with <teammate> ...]: show elo at stake
 accept: accept a challenge
 decline: decline a previous challenge
 cancel: cancel a previous challenge

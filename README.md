@@ -89,6 +89,16 @@ gamebot challenge @WangHoe @ZhangJike with @DengYaping
 Victor Barna and Deng Yaping challenged Wang Hoe and Zhang Jike to a match!
 ```
 
+#### gamebot challenge?
+
+Show elo at stake for each opponent.
+
+```
+gamebot challenge? @WangHoe
+
+Victor Barna challenging Wang Hoe to a match is worth 48 and 24 elo.
+```
+
 #### gamebot accept
 
 Accept a challenge.

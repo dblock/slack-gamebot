@@ -65,6 +65,17 @@ class Match
     User.rank!(team)
   end
 
+  def elo_s
+    winners_delta, losers_delta = calculated_elo
+    if (winners_delta | losers_delta).same?
+      winners_delta.first.to_i.to_s
+    elsif winners_delta.same? && losers_delta.same?
+      [winners_delta.first, losers_delta.first].map(&:to_i).and
+    else
+      (winners_delta | losers_delta).map(&:to_i).and
+    end
+  end
+
   private
 
   def validate_teams
@@ -111,33 +122,47 @@ class Match
     end
   end
 
+  def calculated_elo
+    @calcualted_elo ||= begin
+      winners_delta = []
+      losers_delta = []
+      winners_elo = Elo.team_elo(winners)
+      losers_elo = Elo.team_elo(losers)
+
+      losers_ratio = losers.any? ? [winners.size.to_f / losers.size, 1].min : 1
+      winners_ratio = winners.any? ? [losers.size.to_f / winners.size, 1].min : 1
+
+      ratio = if winners_elo == losers_elo && tied?
+                0 # no elo updates when tied and elo is equal
+              elsif tied?
+                0.5 # half the elo in a tie
+              else
+                1 # whole elo
+              end
+
+      winners.each do |winner|
+        e = 100 - 1.0 / (1.0 + (10.0**((losers_elo - winner.elo) / 400.0))) * 100
+        winner.tau += 0.5
+        delta = e * ratio * (Elo::DELTA_TAU**winner.tau) * winners_ratio
+        winners_delta << delta
+        winner.elo += delta
+      end
+
+      losers.each do |loser|
+        e = 100 - 1.0 / (1.0 + (10.0**((loser.elo - winners_elo) / 400.0))) * 100
+        loser.tau += 0.5
+        delta = e * ratio * (Elo::DELTA_TAU**loser.tau) * losers_ratio
+        losers_delta << delta
+        loser.elo -= delta
+      end
+
+      [losers_delta, winners_delta]
+    end
+  end
+
   def calculate_elo!
-    winners_elo = Elo.team_elo(winners)
-    losers_elo = Elo.team_elo(losers)
-
-    losers_ratio = losers.any? ? [winners.size.to_f / losers.size, 1].min : 1
-    winners_ratio = winners.any? ? [losers.size.to_f / winners.size, 1].min : 1
-
-    ratio = if winners_elo == losers_elo && tied?
-              0 # no elo updates when tied and elo is equal
-            elsif tied?
-              0.5 # half the elo in a tie
-            else
-              1 # whole elo
-            end
-
-    winners.each do |winner|
-      e = 100 - 1.0 / (1.0 + (10.0**((losers_elo - winner.elo) / 400.0))) * 100
-      winner.tau += 0.5
-      winner.elo += e * ratio * (Elo::DELTA_TAU**winner.tau) * winners_ratio
-      winner.save!
-    end
-
-    losers.each do |loser|
-      e = 100 - 1.0 / (1.0 + (10.0**((loser.elo - winners_elo) / 400.0))) * 100
-      loser.tau += 0.5
-      loser.elo -= e * ratio * (Elo::DELTA_TAU**loser.tau) * losers_ratio
-      loser.save!
-    end
+    calculated_elo
+    winners.each(&:save!)
+    losers.each(&:save!)
   end
 end
