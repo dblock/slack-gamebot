@@ -107,6 +107,7 @@ EOS
 
     def check_active_subscriptions_without_teams!
       Stripe::Subscription.all(plan: 'slack-playplay-yearly').each do |subscription|
+        next if subscription.cancel_at_period_end
         next if Team.where(stripe_customer_id: subscription.customer).exists?
         customer = Stripe::Customer.retrieve(subscription.customer)
         logger.warn "Customer #{customer.email}, team #{customer.metadata['name']} is #{subscription.status}, but customer no longer exists."
