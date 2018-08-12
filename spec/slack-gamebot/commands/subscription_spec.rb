@@ -35,11 +35,14 @@ describe SlackGamebot::Commands::Subscription, vcr: { cassette_name: 'user_info'
           team.update_attributes!(subscribed: true, stripe_customer_id: customer['id'])
         end
         it 'displays subscription info' do
-          customer_info = "Customer since #{Time.at(customer.created).strftime('%B %d, %Y')}."
-          customer_info += "\nSubscribed to StripeMock Default Plan ID ($29.99)"
           card = customer.sources.first
-          customer_info += "\nOn file Visa card, #{card.name} ending with #{card.last4}, expires #{card.exp_month}/#{card.exp_year}."
-          customer_info += "\n#{team.update_cc_text}"
+          current_period_end = Time.at(customer.subscriptions.first.current_period_end).strftime('%B %d, %Y')
+          customer_info = [
+            "Customer since #{Time.at(customer.created).strftime('%B %d, %Y')}.",
+            "Subscribed to StripeMock Default Plan ID ($29.99), will auto-renew on #{current_period_end}.",
+            "On file Visa card, #{card.name} ending with #{card.last4}, expires #{card.exp_month}/#{card.exp_year}.",
+            team.update_cc_text
+          ].join("\n")
           expect(message: "#{SlackRubyBot.config.user} subscription").to respond_with_slack_message customer_info
         end
       end

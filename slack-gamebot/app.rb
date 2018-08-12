@@ -86,8 +86,7 @@ EOS
     def check_subscribed_teams!
       Team.where(subscribed: true, :stripe_customer_id.ne => nil).each do |team|
         begin
-          customer = Stripe::Customer.retrieve(team.stripe_customer_id)
-          customer.subscriptions.each do |subscription|
+          team.stripe_customer.subscriptions.each do |subscription|
             subscription_name = "#{subscription.plan.name} (#{ActiveSupport::NumberHelper.number_to_currency(subscription.plan.amount.to_f / 100)})"
             logger.info "Checking #{team} subscription to #{subscription_name}, #{subscription.status}."
             case subscription.status
@@ -108,7 +107,7 @@ EOS
 
     def check_active_subscriptions_without_teams!
       Stripe::Subscription.all(plan: 'slack-playplay-yearly').each do |subscription|
-        next if Team.where(subscribed: true, stripe_customer_id: subscription.customer).exists?
+        next if Team.where(stripe_customer_id: subscription.customer).exists?
         customer = Stripe::Customer.retrieve(subscription.customer)
         logger.warn "Customer #{customer.email}, team #{customer.metadata['name']} is #{subscription.status}, but customer no longer exists."
       end

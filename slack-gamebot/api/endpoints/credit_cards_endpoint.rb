@@ -14,7 +14,7 @@ module Api
         post do
           team = Team.find(params[:team_id]) || error!('Not Found', 404)
           error!('Not a Subscriber', 400) unless team.stripe_customer_id
-          customer = Stripe::Customer.retrieve(team.stripe_customer_id)
+          customer = team.stripe_customer
           customer.source = params['stripe_token']
           customer.save
           Api::Middleware.logger.info "Updated credit card for team #{team}, email=#{params[:stripe_email]}."

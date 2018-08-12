@@ -52,6 +52,7 @@ seasons: show all seasons
 reset <team>: reset all stats, start a new season
 unregister <player>: remove a player from the leaderboard
 subscription: show subscription info (captains also see payment data)
+unsubscribe: cancel subscription
 ```
         EOS
       def self.call(client, data, _match)

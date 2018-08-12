@@ -140,6 +140,55 @@ class Team
     team
   end
 
+  def stripe_customer
+    return unless stripe_customer_id
+    @stripe_customer ||= Stripe::Customer.retrieve(stripe_customer_id)
+  end
+
+  def stripe_customer_text
+    "Customer since #{Time.at(stripe_customer.created).strftime('%B %d, %Y')}."
+  end
+
+  def subscriber_text
+    return unless subscribed_at
+    "Subscriber since #{subscribed_at.strftime('%B %d, %Y')}."
+  end
+
+  def stripe_customer_subscriptions_info(with_unsubscribe = false)
+    stripe_customer.subscriptions.map do |subscription|
+      amount = ActiveSupport::NumberHelper.number_to_currency(subscription.plan.amount.to_f / 100)
+      current_period_end = Time.at(subscription.current_period_end).strftime('%B %d, %Y')
+      [
+        "Subscribed to #{subscription.plan.name} (#{amount}), will#{subscription.cancel_at_period_end ? ' not' : ''} auto-renew on #{current_period_end}.",
+        !subscription.cancel_at_period_end && with_unsubscribe ? "Send `unsubscribe #{subscription.id}` to unsubscribe." : nil
+      ].compact.join("\n")
+    end
+  end
+
+  def stripe_customer_invoices_info
+    stripe_customer.invoices.map do |invoice|
+      amount = ActiveSupport::NumberHelper.number_to_currency(invoice.amount_due.to_f / 100)
+      "Invoice for #{amount} on #{Time.at(invoice.date).strftime('%B %d, %Y')}, #{invoice.paid ? 'paid' : 'unpaid'}."
+    end
+  end
+
+  def stripe_customer_sources_info
+    stripe_customer.sources.map do |source|
+      "On file #{source.brand} #{source.object}, #{source.name} ending with #{source.last4}, expires #{source.exp_month}/#{source.exp_year}."
+    end
+  end
+
+  def active_stripe_subscription?
+    !active_stripe_subscription.nil?
+  end
+
+  def active_stripe_subscription
+    return unless stripe_customer
+    stripe_customer.subscriptions.detect do |subscription|
+      subscription.status == 'active' && !subscription.cancel_at_period_end
+    end
+  end
+
   private
 
   SUBSCRIBED_TEXT = <<-EOS.freeze

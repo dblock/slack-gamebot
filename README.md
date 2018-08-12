@@ -448,6 +448,45 @@ gamebot set unbalanced on
 Unbalanced challenges for team China are on!
 ```
 
+#### gamebot subscription
+
+DM to show paid subscription information.
+
+```
+subscription
+
+Your trial subscription expires in 13 days. Subscribe your team for $29.99 a year at ... .
+```
+
+Captains are able to see credit card info.
+
+```
+subscription
+
+Customer since August 11, 2018.
+Subscribed to Slack PlayPlay (Yearly) ($29.99), will auto-renew on August 11, 2019.
+Invoice for $29.99 on August 11, 2018, paid.
+On file Visa card, user@example.com ending with 4242, expires 2/2022.
+Update your credit card info at ... .
+```
+
+#### gamebot unsubscribe [id]
+
+DM to cancel a paid subscription.
+
+```
+unsubscribe
+
+Subscribed to Slack PlayPlay (Yearly) ($29.99), will auto-renew on August 11, 2019.
+Send `unsubscribe sub_DOvlBd1lETNimB` to unsubscribe.
+```
+
+```
+unsubscribe sub_DOvlBd1lETNimB
+
+Successfully canceled Slack PlayPlay (Yearly) ($29.99).
+```
+
 ## API
 
 Slack-gamebot implements a Hypermedia API. Navigate to the application root to browse through available objects and methods. PlayPlay.io's Gamebot is [here](http://www.playplay.io/api), you can see [dblock's current ping-pong elo here](http://www.playplay.io/api/users/5543f64d6237640003000000).
