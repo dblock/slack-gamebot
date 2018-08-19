@@ -1,5 +1,6 @@
 ### Change Log
 
+* [#169](https://github.com/dblock/slack-gamebot/issues/169): Added `draw to`, similar to `lost to` - [@dblock](https://github.com/dblock).
 * [#154](https://github.com/dblock/slack-gamebot/issues/154): Added `unsubscribe` to cancel a paid subscription - [@dblock](https://github.com/dblock).
 * [#168](https://github.com/dblock/slack-gamebot/issues/168): Added `challenge?` to display elo stake - [@dblock](https://github.com/dblock).
 * [#161](https://github.com/dblock/slack-gamebot/pull/161): Added `MONGODB_URI` env as production mongoid client uri - [@dsantosmerino](https://github.com/dsantosmerino).

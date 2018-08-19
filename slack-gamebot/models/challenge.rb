@@ -129,9 +129,10 @@ class Challenge
 
   def draw!(player, scores = nil)
     raise SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
-    raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+    raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED || state == ChallengeState::DRAWN
     raise SlackGamebot::Error, "Already recorded a draw from #{player.user_name}." if draw.include?(player)
     draw << player
+    update_attributes!(state: ChallengeState::DRAWN)
     update_attributes!(draw_scores: scores) if scores
     return if draw.count != (challenged.count + challengers.count)
     # in a draw, winners have a lower original elo

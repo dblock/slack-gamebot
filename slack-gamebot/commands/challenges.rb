@@ -6,7 +6,11 @@ module SlackGamebot
       subscribed_command 'challenges' do |client, data, _match|
         challenges = ::Challenge.where(
           channel: data.channel,
-          :state.in => [ChallengeState::PROPOSED, ChallengeState::ACCEPTED]
+          :state.in => [
+            ChallengeState::PROPOSED,
+            ChallengeState::ACCEPTED,
+            ChallengeState::DRAWN
+          ]
         ).asc(:created_at)
 
         if challenges.any?

@@ -24,7 +24,7 @@ decline: decline a previous challenge
 cancel: cancel a previous challenge
 lost [to <opponent>] [score, ...]: record your loss
 resigned [to <opponent>]: record a resignation
-draw: record a tie
+draw [to <opponent>] [score, ...]: record a tie
 taunt <opponent> [<opponent> ...]: taunt players
 rank [<player> ...]: rank a player or a list of players
 matches [number|infinity]: show this season's matches

@@ -70,7 +70,11 @@ class Season
 
   def archive_challenges!
     team.challenges.where(
-      :state.in => [ChallengeState::PROPOSED, ChallengeState::ACCEPTED]
+      :state.in => [
+        ChallengeState::PROPOSED,
+        ChallengeState::ACCEPTED,
+        ChallengeState::DRAWN
+      ]
     ).set(
       state: ChallengeState::CANCELED,
       updated_by_id: created_by&.id

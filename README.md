@@ -149,7 +149,7 @@ You can record a loss without a challenge.
 
 ![](screenshots/lost_to.gif)
 
-You can also record scores and record lost matches with multiple players.
+You can also record scores and record lost matches without a challenge including with multiple players.
 
 ```
 gamebot lost to @WangHoe @ZhangJike with @DengYaping 5:21
@@ -170,6 +170,20 @@ gamebot draw 2:2
 
 Match has been recorded. Victor Barna tied with Zhang Jike with a score of 2:2.
 ```
+
+You can also record scores and ties without a challenge.
+
+```
+gamebot draw to @VictorBarna
+
+Match is a draw, waiting to hear from Victor Barna.
+
+gamebot draw 2:2
+
+Match is a draw! Wang Hoe tied with Victor Barna with the score of 2:2.
+```
+
+You can also record scores and have multiple players.
 
 #### gamebot resigned [to &lt;opponent&gt; [with &lt;teammate&gt;]]
 
