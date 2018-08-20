@@ -32,23 +32,23 @@ EOS
     def ping_teams!
       Team.active.each do |team|
         begin
-          socket_id = SlackGamebot::Server.server_map[team.team_id]
-          logger.info [socket_id, "PING: #{team}."]
+          driver = SlackGamebot::Server.server_map[team.team_id]
+          logger.info [driver.object_id, "PING: #{team}."]
           ping = team.ping!
           if ping[:presence].online
-            logger.info [socket_id, "UP: #{team}."]
+            logger.info [driver.object_id, "UP: #{team}."]
             next
           else
-            logger.warn [socket_id, "DOWN: #{team}."]
+            logger.warn [driver.object_id, "DOWN: #{team}."]
           end
           after 60 do
-            logger.info [socket_id, "REPING: #{team}."]
+            logger.info [driver.object_id, "REPING: #{team}."]
             ping = team.ping!
             if ping[:presence].online
-              logger.warn [socket_id, "UP: #{team}."]
+              logger.warn [driver.object_id, "UP: #{team}."]
             else
-              logger.warn [socket_id, "RESTART: #{team}."]
-              SlackGamebot::Service.instance.start!(team)
+              logger.warn [driver.object_id, "KILL: #{team}."]
+              driver.emit(:close, WebSocket::Driver::CloseEvent.new(1001, 'server mia'))
             end
           end
         rescue StandardError => e

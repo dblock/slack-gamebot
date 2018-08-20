@@ -17,7 +17,7 @@ module SlackGamebot
       socket = client.instance_variable_get(:@socket)
       driver = socket.instance_variable_get(:@driver) if socket
       logger.info [driver.object_id, "Now associated with #{client.team.id}."]
-      @server_map[client.team.id] = driver.object_id
+      @server_map[client.team.id] = driver
     end
 
     on :user_change do |client, data|
