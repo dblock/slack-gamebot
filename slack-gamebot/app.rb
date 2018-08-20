@@ -32,13 +32,22 @@ EOS
     def ping_teams!
       Team.active.each do |team|
         begin
+          socket_id = SlackGamebot::Server.server_map[team.team_id]
+          logger.info [socket_id, "PING: #{team}."]
           ping = team.ping!
-          next if ping[:presence].online
-          logger.warn "DOWN: #{team}"
+          if ping[:presence].online
+            logger.info [socket_id, "UP: #{team}."]
+            next
+          else
+            logger.warn [socket_id, "DOWN: #{team}."]
+          end
           after 60 do
+            logger.info [socket_id, "REPING: #{team}."]
             ping = team.ping!
-            unless ping[:presence].online
-              logger.info "RESTART: #{team}"
+            if ping[:presence].online
+              logger.warn [socket_id, "UP: #{team}."]
+            else
+              logger.warn [socket_id, "RESTART: #{team}."]
               SlackGamebot::Service.instance.start!(team)
             end
           end

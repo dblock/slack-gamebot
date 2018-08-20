@@ -18,6 +18,7 @@ gem 'slack-ruby-client'
 gem 'stripe'
 gem 'time_ago_in_words'
 gem 'wannabe_bool'
+gem 'hex_string'
 
 group :development, :test do
   gem 'foreman'

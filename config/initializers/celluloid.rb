@@ -28,9 +28,12 @@ module Slack
 
           def read
             buffer = socket.readpartial(BLOCK_SIZE)
-            log_info(["got a nil buffer"]) unless buffer
-            log_info(["got an empty buffer"]) if buffer && buffer.size == 0
-            async.handle_read(buffer)
+            log_info([driver.object_id, "got a nil buffer"]) unless buffer
+            log_info([driver.object_id, "got an empty buffer"]) if buffer && buffer.size == 0
+            if buffer
+              log_info [driver.object_id, buffer.to_hex_string]
+              async.handle_read(buffer)
+            end
           end
 
           def build_driver
