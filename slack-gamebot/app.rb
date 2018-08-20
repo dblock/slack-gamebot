@@ -33,14 +33,8 @@ EOS
       Team.active.each do |team|
         begin
           driver = SlackGamebot::Server.server_map[team.team_id]
-          logger.info [driver.object_id, "PING: #{team}."]
           ping = team.ping!
-          if ping[:presence].online
-            logger.info [driver.object_id, "UP: #{team}."]
-            next
-          else
-            logger.warn [driver.object_id, "DOWN: #{team}."]
-          end
+          next if ping[:presence].online
           after 60 do
             logger.info [driver.object_id, "REPING: #{team}."]
             ping = team.ping!
