@@ -1,6 +1,10 @@
 require 'slack/real_time/concurrency/celluloid'
 require 'celluloid/internals/logger'
 
+Slack::RealTime::Client.configure do |config|
+  config.websocket_ping = 5
+end
+
 module Slack
   module RealTime
     module Concurrency
@@ -31,7 +35,7 @@ module Slack
             log_info([driver.object_id, "got a nil buffer"]) unless buffer
             log_info([driver.object_id, "got an empty buffer"]) if buffer && buffer.size == 0
             if buffer
-              log_info [driver.object_id, buffer.to_hex_string]
+              # log_info [driver.object_id, buffer.to_hex_string]
               async.handle_read(buffer)
             end
           end
@@ -45,7 +49,7 @@ module Slack
               end
 
               ws.on :message do |message|
-                log_info [ws.object_id, :server_message, message.data]
+                log_info [ws.object_id, :server_message]
               end
 
               ws.on :close do |close|
@@ -57,11 +61,11 @@ module Slack
               end
 
               ws.on :ping do |ping|
-                log_info [ws.object_id, :server_ping, ping.data]
+                log_info [ws.object_id, :server_ping]
               end
 
               ws.on :pong do |pong|
-                log_info [ws.object_id, :server_pong, pong.data]
+                log_info [ws.object_id, :server_pong]
               end
             end
           end
