@@ -101,6 +101,7 @@ class Team
   def dead!(message, gif = nil)
     inform! message, gif
     inform_admin! message, gif
+  ensure
     update_attributes!(dead_at: Time.now.utc)
   end
 
