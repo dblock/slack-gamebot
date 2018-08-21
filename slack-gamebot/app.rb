@@ -15,9 +15,6 @@ EOS
         check_subscribed_teams!
         check_active_subscriptions_without_teams!
       end
-      once_and_every 60 * 3 do
-        ping_teams!
-      end
     end
 
     private
@@ -26,33 +23,6 @@ EOS
       yield
       every tt do
         yield
-      end
-    end
-
-    def ping_teams!
-      Team.active.each do |team|
-        begin
-          driver = SlackGamebot::Server.server_map[team.team_id]
-          driver_id = driver.object_id if driver
-          ping = team.ping!
-          next if ping[:presence].online
-          after 60 do
-            logger.info [driver_id, "REPING: #{team}."]
-            ping = team.ping!
-            if ping[:presence].online
-              logger.warn [driver_id, "UP: #{team}."]
-            else
-              logger.warn [driver_id, "KILL: #{team}."]
-              if driver
-                driver.emit(:close, WebSocket::Driver::CloseEvent.new(1001, 'server mia'))
-              else
-                SlackGamebot::Service.instance.start!(team)
-              end
-            end
-          end
-        rescue StandardError => e
-          logger.warn "Error pinging team #{team}, #{e.message}."
-        end
       end
     end
 

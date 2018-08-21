@@ -1,11 +1,5 @@
 module SlackGamebot
   class Server < SlackRubyBotServer::Server
-    @server_map = {}
-
-    def self.server_map
-      @server_map
-    end
-
     def initialize(attrs = {})
       attrs = attrs.dup
       attrs[:aliases] = ([attrs[:team].game.name] + [attrs[:team].aliases]).flatten.compact
@@ -13,11 +7,8 @@ module SlackGamebot
       super attrs
     end
 
-    on :hello do |client, data|
-      socket = client.instance_variable_get(:@socket)
-      driver = socket.instance_variable_get(:@driver) if socket
-      logger.info [driver.object_id, "Now associated with #{client.team.id}."]
-      @server_map[client.team.id] = driver
+    on :hello do |client|
+      client.ping!
     end
 
     on :user_change do |client, data|
@@ -38,3 +29,4 @@ Type `@#{client.self.name} help` fore more commands and don't forget to have fun
     end
   end
 end
+

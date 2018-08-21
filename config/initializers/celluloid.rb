@@ -1,10 +1,6 @@
 require 'slack/real_time/concurrency/celluloid'
 require 'celluloid/internals/logger'
 
-Slack::RealTime::Client.configure do |config|
-  config.websocket_ping = 5
-end
-
 module Slack
   module RealTime
     module Concurrency
@@ -26,6 +22,7 @@ module Slack
           def build_driver
             @logger = Logger.new(STDOUT)
             @logger.level = Logger::INFO
+
             ::WebSocket::Driver.client(self).tap do |ws|
               ws.on :open do
                 logger.info [ws.object_id, :server_open]
