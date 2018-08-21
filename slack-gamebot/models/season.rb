@@ -3,7 +3,7 @@ class Season
   include Mongoid::Timestamps::Created
 
   belongs_to :team, index: true
-  belongs_to :created_by, class_name: 'User', inverse_of: nil, index: true
+  belongs_to :created_by, class_name: 'User', inverse_of: nil, index: true, optional: true
   has_many :challenges
   has_many :matches
   embeds_many :user_ranks

@@ -8,8 +8,8 @@ class Match
   field :tied, type: Boolean, default: false
   field :resigned, type: Boolean, default: false
   field :scores, type: Array
-  belongs_to :challenge, index: true
-  belongs_to :season, inverse_of: :matches, index: true
+  belongs_to :challenge, index: true, optional: true
+  belongs_to :season, inverse_of: :matches, index: true, optional: true
   before_create :calculate_elo!
   after_create :update_users!
   validate :validate_scores, unless: :tied?

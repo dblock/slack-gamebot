@@ -10,9 +10,9 @@ class Challenge
   field :channel, type: String
 
   belongs_to :team, index: true
-  belongs_to :season, inverse_of: :challenges, index: true
-  belongs_to :created_by, class_name: 'User', inverse_of: nil, index: true
-  belongs_to :updated_by, class_name: 'User', inverse_of: nil, index: true
+  belongs_to :season, inverse_of: :challenges, index: true, optional: true
+  belongs_to :created_by, class_name: 'User', inverse_of: nil, index: true, optional: true
+  belongs_to :updated_by, class_name: 'User', inverse_of: nil, index: true, optional: true
 
   has_and_belongs_to_many :challengers, class_name: 'User', inverse_of: nil
   has_and_belongs_to_many :challenged, class_name: 'User', inverse_of: nil
