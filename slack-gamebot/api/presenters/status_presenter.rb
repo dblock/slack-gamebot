@@ -12,8 +12,6 @@ module Api
       property :games_count
       property :games
 
-      private
-
       def games_count
         Game.count
       end
@@ -32,6 +30,8 @@ module Api
           h[game.name][:ping] = team.ping! if team
         end
       end
+
+      private
 
       def base_url(opts)
         request = Grape::Request.new(opts[:env])
