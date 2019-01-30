@@ -210,6 +210,7 @@ describe Team do
       )
       list = double(Mailchimp::List, members: double(Mailchimp::List::Members))
       expect(team.send(:mailchimp_client)).to receive(:lists).with('list-id').and_return(list)
+      expect(list.members).to receive(:where).with(email_address: 'user@example.com').and_return([])
       expect(list.members).to receive(:create_or_update).with(
         email_address: 'user@example.com',
         merge_fields: {
@@ -217,6 +218,7 @@ describe Team do
           'LNAME' => 'Last',
           'BOT' => team.game.name.capitalize
         },
+        status: 'pending',
         name: nil,
         tags: %w[gamebot trial],
         unique_email_id: "#{team.team_id}-activated_user_id"
