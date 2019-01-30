@@ -198,9 +198,13 @@ class Team
     profile ||= Hashie::Mash.new(slack_client.users_info(user: activated_user_id)).user.profile
     return unless profile
     return unless mailchimp_list
-    member = mailchimp_list.members.where(email_address: profile.email).first
     tags = ['gamebot', subscribed? ? 'subscribed' : 'trial', stripe_customer_id? ? 'paid' : nil].compact
-    tags = member.tags.map { |tag| tag['name'] }.concat(tags).uniq if member
+    member = mailchimp_list.members.where(email_address: profile.email).first
+    if member
+      member_tags = member.tags.map { |tag| tag['name'] }.sort
+      tags = (member_tags + tags).uniq
+      return if tags == member_tags
+    end
     mailchimp_list.members.create_or_update(
       name: profile.name,
       email_address: profile.email,
