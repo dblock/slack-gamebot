@@ -192,4 +192,40 @@ describe Team do
       Timecop.return
     end
   end
+  context '#signup_to_mailing_list!' do
+    before do
+      ENV['MAILCHIMP_LIST_ID'] = 'list-id'
+      ENV['MAILCHIMP_API_KEY'] = 'api-key'
+    end
+    let(:team) { Fabricate(:team, activated_user_id: 'activated_user_id') }
+    it 'subscribes the activating user' do
+      expect(team.slack_client).to receive(:users_info).with(user: 'activated_user_id').and_return(
+        user: {
+          profile: {
+            email: 'user@example.com',
+            first_name: 'First',
+            last_name: 'Last'
+          }
+        }
+      )
+      list = double(Mailchimp::List, members: double(Mailchimp::List::Members))
+      expect(team.send(:mailchimp_client)).to receive(:lists).with('list-id').and_return(list)
+      expect(list.members).to receive(:create_or_update).with(
+        email_address: 'user@example.com',
+        merge_fields: {
+          'FNAME' => 'First',
+          'LNAME' => 'Last',
+          'BOT' => team.game.name.capitalize
+        },
+        name: nil,
+        tags: %w[gamebot trial],
+        unique_email_id: "#{team.team_id}-activated_user_id"
+      )
+      team.send(:signup_to_mailing_list!)
+    end
+    after do
+      ENV.delete 'MAILCHIMP_API_KEY'
+      ENV.delete 'MAILCHIMP_LIST_ID'
+    end
+  end
 end

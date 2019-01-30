@@ -27,7 +27,8 @@ class Team
   belongs_to :game
 
   before_validation :update_subscribed_at
-  after_update :inform_subscribed_changed!
+  after_update :subscribed!
+  after_save :activated!
 
   def subscription_expired?
     return false if subscribed?
@@ -110,21 +111,23 @@ class Team
     "#{SlackGamebot::Service.api_url}/teams/#{id}"
   end
 
+  def slack_client
+    @slack_client ||= Slack::Web::Client.new(token: token)
+  end
+
   def inform!(message, gif_name = nil)
-    client = Slack::Web::Client.new(token: token)
-    channels = client.channels_list['channels'].select { |channel| channel['is_member'] } # TODO: paginate
+    channels = slack_client.channels_list['channels'].select { |channel| channel['is_member'] } # TODO: paginate
     channels.each do |channel|
       logger.info "Sending '#{message}' to #{self} on ##{channel['name']}."
-      client.chat_postMessage(text: make_message(message, gif_name), channel: channel['id'], as_user: true)
+      slack_client.chat_postMessage(text: make_message(message, gif_name), channel: channel['id'], as_user: true)
     end
   end
 
   def inform_admin!(message, gif_name = nil)
-    client = Slack::Web::Client.new(token: token)
     return unless activated_user_id
-    channel = client.im_open(user: activated_user_id)
+    channel = slack_client.im_open(user: activated_user_id)
     logger.info "Sending DM '#{message}' to #{activated_user_id}."
-    client.chat_postMessage(text: make_message(message, gif_name), channel: channel.channel.id, as_user: true)
+    slack_client.chat_postMessage(text: make_message(message, gif_name), channel: channel.channel.id, as_user: true)
   end
 
   def self.find_or_create_from_env!
@@ -190,6 +193,31 @@ class Team
     end
   end
 
+  def signup_to_mailing_list!
+    return unless activated_user_id
+    profile ||= Hashie::Mash.new(slack_client.users_info(user: activated_user_id)).user.profile
+    return unless profile
+    return unless mailchimp_list
+    mailchimp_list.members.create_or_update(
+      name: profile.name,
+      email_address: profile.email,
+      unique_email_id: "#{team_id}-#{activated_user_id}",
+      tags: [
+        'gamebot',
+        subscribed? ? 'subscribed' : 'trial',
+        stripe_customer_id? ? 'paid' : nil
+      ].compact,
+      merge_fields: {
+        'FNAME' => profile.first_name.to_s,
+        'LNAME' => profile.last_name.to_s,
+        'BOT' => game.name.capitalize
+      }
+    )
+    logger.info "Subscribed #{profile.email} to #{ENV['MAILCHIMP_LIST_ID']}, #{self}."
+  rescue StandardError => e
+    logger.error "Error subscribing #{self} to #{ENV['MAILCHIMP_LIST_ID']}: #{e.message}, #{e.errors}"
+  end
+
   private
 
   SUBSCRIBED_TEXT = <<-EOS.freeze
@@ -214,8 +242,28 @@ EOS
     self.subscribed_at = subscribed? ? DateTime.now.utc : nil
   end
 
-  def inform_subscribed_changed!
+  def subscribed!
     return unless subscribed? && subscribed_changed?
     inform! SUBSCRIBED_TEXT, 'thanks'
+    signup_to_mailing_list!
+  end
+
+  def activated!
+    return unless active? && activated_user_id && bot_user_id
+    return unless active_changed? || activated_user_id_changed?
+    signup_to_mailing_list!
+  end
+
+  # mailing list management
+
+  def mailchimp_client
+    return unless ENV.key?('MAILCHIMP_API_KEY')
+    @mailchimp_client ||= Mailchimp.connect(ENV['MAILCHIMP_API_KEY'])
+  end
+
+  def mailchimp_list
+    return unless mailchimp_client
+    rerurn unless ENV.key?('MAILCHIMP_LIST_ID')
+    @mailchimp_list ||= mailchimp_client.lists(ENV['MAILCHIMP_LIST_ID'])
   end
 end

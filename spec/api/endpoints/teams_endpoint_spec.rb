@@ -118,6 +118,7 @@ describe Api::Endpoints::TeamsEndpoint do
           'team_id' => 'team_id',
           'team_name' => 'team_name'
         }
+        allow_any_instance_of(Team).to receive(:signup_to_mailing_list!)
         allow_any_instance_of(Slack::Web::Client).to receive(:oauth_access).with(
           hash_including(
             code: 'code',
@@ -204,6 +205,7 @@ describe Api::Endpoints::TeamsEndpoint do
     end
 
     it 'reactivates a deactivated team with a different code' do
+      expect_any_instance_of(Team).to receive(:signup_to_mailing_list!)
       expect(SlackGamebot::Service.instance).to receive(:start!)
       existing_team = Fabricate(:team, api: true, game: game, token: 'token', active: false, aliases: %w[foo bar])
       oauth_access = {
