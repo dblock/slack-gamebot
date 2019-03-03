@@ -1,7 +1,5 @@
 module SlackGamebot
   class App < SlackRubyBotServer::App
-    include Celluloid
-
     DEAD_MESSAGE = <<-EOS.freeze
 This leaderboard has been dead for over a month, deactivating.
 Re-install the bot at https://www.playplay.io. Your data will be purged in 2 weeks.
@@ -20,9 +18,11 @@ EOS
     private
 
     def once_and_every(tt)
-      yield
-      every tt do
-        yield
+      ::Async::Reactor.run do |task|
+        loop do
+          yield
+          task.sleep tt
+        end
       end
     end
 
