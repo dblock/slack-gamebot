@@ -21,7 +21,7 @@ describe SlackGamebot::Commands::Subscription, vcr: { cassette_name: 'user_info'
     context 'with a plan' do
       include_context :stripe_mock
       before do
-        stripe_helper.create_plan(id: 'slack-playplay-yearly', amount: 2999)
+        stripe_helper.create_plan(id: 'slack-playplay-yearly', amount: 2999, name: 'Plan')
       end
       context 'a customer' do
         let!(:customer) do
@@ -39,7 +39,7 @@ describe SlackGamebot::Commands::Subscription, vcr: { cassette_name: 'user_info'
           current_period_end = Time.at(customer.subscriptions.first.current_period_end).strftime('%B %d, %Y')
           customer_info = [
             "Customer since #{Time.at(customer.created).strftime('%B %d, %Y')}.",
-            "Subscribed to StripeMock Default Plan ID ($29.99), will auto-renew on #{current_period_end}.",
+            "Subscribed to Plan ($29.99), will auto-renew on #{current_period_end}.",
             "On file Visa card, #{card.name} ending with #{card.last4}, expires #{card.exp_month}/#{card.exp_year}.",
             team.update_cc_text
           ].join("\n")

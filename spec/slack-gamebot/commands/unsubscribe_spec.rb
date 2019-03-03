@@ -23,7 +23,7 @@ describe SlackGamebot::Commands::Unsubscribe, vcr: { cassette_name: 'user_info' 
     context 'with a plan' do
       include_context :stripe_mock
       before do
-        stripe_helper.create_plan(id: 'slack-playplay-yearly', amount: 2999)
+        stripe_helper.create_plan(id: 'slack-playplay-yearly', amount: 2999, name: 'Plan')
       end
       context 'a customer' do
         let!(:customer) do
@@ -40,7 +40,7 @@ describe SlackGamebot::Commands::Unsubscribe, vcr: { cassette_name: 'user_info' 
         let(:current_period_end) { Time.at(active_subscription.current_period_end).strftime('%B %d, %Y') }
         it 'displays subscription info' do
           customer_info = [
-            "Subscribed to StripeMock Default Plan ID ($29.99), will auto-renew on #{current_period_end}.",
+            "Subscribed to Plan ($29.99), will auto-renew on #{current_period_end}.",
             "Send `unsubscribe #{active_subscription.id}` to unsubscribe."
           ].join("\n")
           expect(message: "#{SlackRubyBot.config.user} unsubscribe").to respond_with_slack_message customer_info
@@ -49,7 +49,7 @@ describe SlackGamebot::Commands::Unsubscribe, vcr: { cassette_name: 'user_info' 
           expect(message: "#{SlackRubyBot.config.user} unsubscribe xyz").to respond_with_slack_message 'Sorry, I cannot find a subscription with "xyz".'
         end
         it 'unsubscribes' do
-          expect(message: "#{SlackRubyBot.config.user} unsubscribe #{active_subscription.id}").to respond_with_slack_message 'Successfully canceled StripeMock Default Plan ID ($29.99).'
+          expect(message: "#{SlackRubyBot.config.user} unsubscribe #{active_subscription.id}").to respond_with_slack_message 'Successfully canceled Plan ($29.99).'
           team.reload
           expect(team.subscribed).to be false
           expect(team.subscribed_at).to be nil
