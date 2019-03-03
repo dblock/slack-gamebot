@@ -48,6 +48,7 @@ class Game
     client_id = ENV['SLACK_CLIENT_ID']
     client_secret = ENV['SLACK_CLIENT_SECRET']
     return unless client_id && client_secret
+
     game = Game.where(client_id: client_id).first
     game ||= Game.new(client_id: client_id)
     game.client_id = client_id

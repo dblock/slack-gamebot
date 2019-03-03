@@ -54,7 +54,7 @@ unregister <player>: remove a player from the leaderboard
 subscription: show subscription info (captains also see payment data)
 unsubscribe: cancel subscription
 ```
-        EOS
+      EOS
       def self.call(client, data, _match)
         client.say(channel: data.channel, text: [
           HELP,

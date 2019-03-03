@@ -58,11 +58,13 @@ class Season
 
   def validate_challenges
     return if team.matches.current.any? || team.challenges.current.any?
+
     errors.add(:challenges, 'No matches have been recorded.')
   end
 
   def create_user_ranks
     return if user_ranks.any?
+
     team.users.ranked.asc(:rank).asc(:_id).each do |user|
       user_ranks << UserRank.from_user(user)
     end

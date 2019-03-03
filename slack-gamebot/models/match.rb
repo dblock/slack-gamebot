@@ -87,16 +87,19 @@ class Match
 
   def validate_scores
     return unless scores&.any?
+
     errors.add(:scores, 'Loser scores must come first.') unless Score.valid?(scores)
   end
 
   def validate_tied_scores
     return unless scores&.any?
+
     errors.add(:scores, 'In a tie both sides must have the same number of points.') unless Score.tie?(scores)
   end
 
   def validate_resigned_scores
     return unless scores&.any?
+
     errors.add(:scores, 'Cannot score when resigning.')
   end
 

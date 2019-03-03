@@ -3,7 +3,7 @@ module SlackGamebot
     DEAD_MESSAGE = <<-EOS.freeze
 This leaderboard has been dead for over a month, deactivating.
 Re-install the bot at https://www.playplay.io. Your data will be purged in 2 weeks.
-EOS
+    EOS
 
     def after_start!
       once_and_every 60 * 60 * 24 do
@@ -29,6 +29,7 @@ EOS
     def inform_dead_teams!
       Team.where(active: false).each do |team|
         next if team.dead_at
+
         begin
           team.dead! DEAD_MESSAGE, 'dead'
         rescue StandardError => e
@@ -41,6 +42,7 @@ EOS
       Team.active.each do |team|
         next if team.subscribed?
         next unless team.dead?
+
         begin
           team.deactivate!
         rescue StandardError => e
@@ -53,6 +55,7 @@ EOS
       Team.active.where(subscribed: false).each do |team|
         logger.info "Team #{team} has #{team.remaining_trial_days} trial days left."
         next unless team.remaining_trial_days > 0 && team.remaining_trial_days <= 3
+
         team.inform_trial!
       rescue StandardError => e
         logger.warn "Error checking team #{team} trial, #{e.message}."
@@ -83,6 +86,7 @@ EOS
       Stripe::Subscription.all(plan: 'slack-playplay-yearly').each do |subscription|
         next if subscription.cancel_at_period_end
         next if Team.where(stripe_customer_id: subscription.customer).exists?
+
         customer = Stripe::Customer.retrieve(subscription.customer)
         logger.warn "Customer #{customer.email}, team #{customer.metadata['name']} is #{subscription.status}, but customer no longer exists."
       end

@@ -71,6 +71,7 @@ class User
     end
     raise SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user&.registered?
     raise SlackGamebot::Error, "I don't know who #{user_name} is!" unless user
+
     user
   end
 
@@ -93,6 +94,7 @@ class User
       instance.promote! unless instance.captain? || client.owner.captains.count > 0
     end
     raise SlackGamebot::Error, "I don't know who <@#{slack_id}> is!" unless instance
+
     instance
   end
 
@@ -134,24 +136,28 @@ class User
 
   def register!
     return if registered?
+
     update_attributes!(registered: true)
     User.rank!(team)
   end
 
   def unregister!
     return unless registered?
+
     update_attributes!(registered: false, rank: nil)
     User.rank!(team)
   end
 
   def rank!
     return unless elo_changed?
+
     User.rank!(team)
     reload.rank
   end
 
   def update_elo_history!
     return unless elo_changed?
+
     elo_history << elo
   end
 
@@ -186,12 +192,14 @@ class User
       longest_winning_streak = current_winning_streak if current_winning_streak > longest_winning_streak
     end
     return if losing_streak == longest_losing_streak && winning_streak == longest_winning_streak
+
     update_attributes!(losing_streak: longest_losing_streak, winning_streak: longest_winning_streak)
   end
 
   def self.rank_section(team, users)
     ranks = users.map(&:rank)
     return users unless ranks.min && ranks.max
+
     where(team: team, :rank.gte => ranks.min, :rank.lte => ranks.max).asc(:rank).asc(:wins).asc(:ties)
   end
 end

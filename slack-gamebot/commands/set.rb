@@ -9,6 +9,7 @@ module SlackGamebot
           slack_mention = v.split.first if v
           if v && User.slack_mention?(slack_mention)
             raise SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
+
             target_user = ::User.find_by_slack_mention!(client, slack_mention)
             v = v[slack_mention.length + 1..-1]
           end
@@ -27,6 +28,7 @@ module SlackGamebot
           slack_mention = v.split.first if v
           if User.slack_mention?(slack_mention)
             raise SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
+
             target_user = ::User.find_by_slack_mention!(client, slack_mention)
           end
           old_nickname = target_user.nickname
@@ -37,6 +39,7 @@ module SlackGamebot
 
         def set_gifs(client, data, user, v)
           raise SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
+
           unless v.nil?
             client.owner.update_attributes!(gifs: v.to_b)
             client.send_gifs = client.owner.gifs
@@ -47,6 +50,7 @@ module SlackGamebot
 
         def unset_gifs(client, data, user)
           raise SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
+
           client.owner.update_attributes!(gifs: false)
           client.send_gifs = client.owner.gifs
           client.say(channel: data.channel, text: "GIFs for team #{client.owner.name} are off.", gif: 'fun')
@@ -55,6 +59,7 @@ module SlackGamebot
 
         def set_unbalanced(client, data, user, v)
           raise SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
+
           client.owner.update_attributes!(unbalanced: v.to_b) unless v.nil?
           client.say(channel: data.channel, text: "Unbalanced challenges for team #{client.owner.name} are #{client.owner.unbalanced? ? 'on!' : 'off.'}", gif: 'balance')
           logger.info "SET: #{client.owner} - #{user.user_name} unbalanced challenges are #{client.owner.unbalanced? ? 'on' : 'off'}"
@@ -62,6 +67,7 @@ module SlackGamebot
 
         def unset_unbalanced(client, data, user)
           raise SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
+
           client.owner.update_attributes!(unbalanced: false)
           client.say(channel: data.channel, text: "Unbalanced challenges for team #{client.owner.name} are off.", gif: 'balance')
           logger.info "UNSET: #{client.owner} - #{user.user_name} unbalanced challenges are off"
@@ -69,6 +75,7 @@ module SlackGamebot
 
         def set_api(client, data, user, v)
           raise SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
+
           client.owner.update_attributes!(api: v.to_b) unless v.nil?
           message = [
             "API for team #{client.owner.name} is #{client.owner.api? ? 'on!' : 'off.'}",
@@ -80,6 +87,7 @@ module SlackGamebot
 
         def unset_api(client, data, user)
           raise SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
+
           client.owner.update_attributes!(api: false)
           client.say(channel: data.channel, text: "API for team #{client.owner.name} is off.", gif: 'programmer')
           logger.info "UNSET: #{client.owner} - #{user.user_name} API is off"
@@ -87,6 +95,7 @@ module SlackGamebot
 
         def set_elo(client, data, user, v)
           raise SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
+
           unless v.nil?
             elo = begin
                     Integer(v)
@@ -102,6 +111,7 @@ module SlackGamebot
 
         def unset_elo(client, data, user)
           raise SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
+
           client.owner.update_attributes!(elo: 0)
           client.say(channel: data.channel, text: "Base elo for team #{client.owner.name} has been unset.", gif: 'score')
           logger.info "UNSET: #{client.owner} - #{user.user_name} ELO has been unset"
@@ -109,6 +119,7 @@ module SlackGamebot
 
         def set_aliases(client, data, user, v)
           raise SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
+
           unless v.nil?
             client.owner.update_attributes!(aliases: v.split(/[\s,;]+/))
             client.aliases = client.owner.aliases
@@ -124,6 +135,7 @@ module SlackGamebot
 
         def unset_aliases(client, data, user)
           raise SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
+
           client.owner.update_attributes!(aliases: [])
           client.aliases = []
           client.say(channel: data.channel, text: "Team #{client.owner.name} no longer has bot aliases.", gif: 'name')

@@ -78,22 +78,26 @@ class Challenge
 
   def accept!(challenger)
     raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
+
     update_attributes!(updated_by: challenger, state: ChallengeState::ACCEPTED)
   end
 
   def decline!(challenger)
     raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
+
     update_attributes!(updated_by: challenger, state: ChallengeState::DECLINED)
   end
 
   def cancel!(challenger)
     raise SlackGamebot::Error, "Challenge has already been #{state}." unless [ChallengeState::PROPOSED, ChallengeState::ACCEPTED].include?(state)
+
     update_attributes!(updated_by: challenger, state: ChallengeState::CANCELED)
   end
 
   def lose!(loser, scores = nil)
     raise SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
     raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+
     winners, losers = winners_and_losers_for(loser)
     Match.lose!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     update_attributes!(state: ChallengeState::PLAYED)
@@ -112,6 +116,7 @@ class Challenge
   def resign!(loser, scores = nil)
     raise SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
     raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
+
     winners, losers = winners_and_losers_for_resigned(loser)
     Match.resign!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
     update_attributes!(state: ChallengeState::PLAYED)
@@ -131,10 +136,12 @@ class Challenge
     raise SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
     raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED || state == ChallengeState::DRAWN
     raise SlackGamebot::Error, "Already recorded a draw from #{player.user_name}." if draw.include?(player)
+
     draw << player
     update_attributes!(state: ChallengeState::DRAWN)
     update_attributes!(draw_scores: scores) if scores
     return if draw.count != (challenged.count + challengers.count)
+
     # in a draw, winners have a lower original elo
     winners, losers = winners_and_losers_for_draw(player)
     Match.draw!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
@@ -143,6 +150,7 @@ class Challenge
 
   def winners_and_losers_for_draw(player)
     raise SlackGamebot::Error, "Only #{(challenged + challengers).map(&:user_name).or} can draw this challenge." unless challenged.include?(player) || challengers.include?(player)
+
     if Elo.team_elo(challenged) < Elo.team_elo(challengers)
       [challenged, challengers]
     else
@@ -178,6 +186,7 @@ class Challenge
 
   def validate_opponents_counts
     return if challengers.any? && challenged.any? && (challengers.count == challenged.count || team.unbalanced)
+
     errors.add(:challenged, "Number of teammates (#{challengers.count}) and opponents (#{challenged.count}) must match.")
   end
 
@@ -193,10 +202,12 @@ class Challenge
 
   def validate_unique_challenge
     return unless state == ChallengeState::PROPOSED || state == ChallengeState::ACCEPTED
+
     (challengers + challenged).each do |player|
       existing_challenge = ::Challenge.find_by_user(team, channel, player)
       next unless existing_challenge.present?
       next if existing_challenge == self
+
       errors.add(:challenge, "#{player.user_name} can't play. There's already #{existing_challenge}.")
     end
   end
@@ -205,12 +216,15 @@ class Challenge
     case state
     when ChallengeState::ACCEPTED
       return if updated_by && challenged.include?(updated_by)
+
       errors.add(:accepted_by, "Only #{challenged.map(&:user_name).and} can accept this challenge.")
     when ChallengeState::DECLINED
       return if updated_by && challenged.include?(updated_by)
+
       errors.add(:declined_by, "Only #{challenged.map(&:user_name).and} can decline this challenge.")
     when ChallengeState::CANCELED
       return if updated_by && (challengers.include?(updated_by) || challenged.include?(updated_by))
+
       errors.add(:declined_by, "Only #{challengers.map(&:user_name).and} or #{challenged.map(&:user_name).and} can cancel this challenge.")
     end
   end
@@ -218,6 +232,7 @@ class Challenge
   def validate_draw_scores
     return unless draw_scores
     return if Score.tie?(draw_scores)
+
     errors.add(:scores, 'In a tie both sides must score the same number of points.')
   end
 end
