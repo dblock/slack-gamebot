@@ -6,4 +6,4 @@ services:
   - mongodb
 
 rvm:
-  - 2.3.1
+  - 2.5.3
