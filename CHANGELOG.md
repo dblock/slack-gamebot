@@ -1,5 +1,6 @@
 ### Change Log
 
+* [#159](https://github.com/dblock/slack-gamebot/issues/159): The `unsubscribe` command will only turn off auto-renew instead of canceling immediately - [@dblock](https://github.com/dblock).
 * [#164](https://github.com/dblock/slack-gamebot/issues/163): Set leaderboard max with `set leaderboard max` and `unset leaderboard max`, default is unset - [@dblock](https://github.com/dblock).
 * [#169](https://github.com/dblock/slack-gamebot/issues/169): Added `draw to`, similar to `lost to` - [@dblock](https://github.com/dblock).
 * [#154](https://github.com/dblock/slack-gamebot/issues/154): Added `unsubscribe` to cancel a paid subscription - [@dblock](https://github.com/dblock).

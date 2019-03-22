@@ -49,11 +49,10 @@ describe SlackGamebot::Commands::Unsubscribe, vcr: { cassette_name: 'user_info' 
           expect(message: "#{SlackRubyBot.config.user} unsubscribe xyz").to respond_with_slack_message 'Sorry, I cannot find a subscription with "xyz".'
         end
         it 'unsubscribes' do
-          expect(message: "#{SlackRubyBot.config.user} unsubscribe #{active_subscription.id}").to respond_with_slack_message 'Successfully canceled Plan ($29.99).'
+          expect(message: "#{SlackRubyBot.config.user} unsubscribe #{active_subscription.id}").to respond_with_slack_message 'Successfully canceled auto-renew for Plan ($29.99).'
           team.reload
-          expect(team.subscribed).to be false
-          expect(team.subscribed_at).to be nil
-          expect(team.stripe_customer_id).to be nil
+          expect(team.subscribed).to be true
+          expect(team.stripe_customer_id).to_not be nil
         end
       end
     end

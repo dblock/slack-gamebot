@@ -503,7 +503,7 @@ Update your credit card info at ... .
 
 #### gamebot unsubscribe [id]
 
-DM to cancel a paid subscription.
+DM to cancel auto-renew for a paid subscription.
 
 ```
 unsubscribe
@@ -515,7 +515,7 @@ Send `unsubscribe sub_DOvlBd1lETNimB` to unsubscribe.
 ```
 unsubscribe sub_DOvlBd1lETNimB
 
-Successfully canceled Slack PlayPlay (Yearly) ($29.99).
+Successfully canceled auto-renew for Slack PlayPlay (Yearly) ($29.99).
 ```
 
 ## API
