@@ -4,7 +4,7 @@ module SlackGamebot
       include SlackGamebot::Commands::Mixins::Subscription
 
       subscribed_command 'leaderboard' do |client, data, match|
-        max = 3
+        max = client.owner.leaderboard_max
         reverse = false
         arguments = match['expression'].split.reject(&:blank?) if match['expression']
         arguments ||= []
@@ -23,7 +23,9 @@ module SlackGamebot
         end
         ranked_players = client.owner.users.ranked
         if ranked_players.any?
-          message = ranked_players.send(reverse ? :desc : :asc, :rank).limit(max).each_with_index.map do |user, index|
+          ranked_players = ranked_players.send(reverse ? :desc : :asc, :rank)
+          ranked_players = ranked_players.limit(max) if max && max >= 1
+          message = ranked_players.each_with_index.map do |user, index|
             "#{reverse ? index + 1 : user.rank}. #{user}"
           end.join("\n")
           client.say(channel: data.channel, text: message)

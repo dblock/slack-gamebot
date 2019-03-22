@@ -246,7 +246,9 @@ gamebot leaderboard
 3. Wang Hoe: 0 wins, 1 loss (elo: -12)
 ```
 
-The leaderboard contains 3 topmost players ranked by [Elo](http://en.wikipedia.org/wiki/Elo_rating_system), use _leaderboard 10_ or _leaderboard infinity_ to see 10 players or more, respectively. It also shows the longest winning (lws) and losing (lls) streaks of at least 3.
+The leaderboard contains players ranked by [Elo](http://en.wikipedia.org/wiki/Elo_rating_system), use _leaderboard 10_ or _leaderboard infinity_ to see 10 players or all players, respectively. Use `set leaderboard max 3` to limit the default leaderboard size to 3.
+
+The leaderboard also shows the longest winning (lws) and losing (lls) streaks of at least 3.
 
 In case you want to see leaderboard in reverse order (which would be totally wrong but motivational for people at the bottom of leaderboard), specify a negative number or `-infinity`:
 
@@ -407,6 +409,22 @@ GIFs for team China are off.
 ![](screenshots/gifs.gif)
 
 Using `unset gifs` is equivalent to `set gifs off`.
+
+#### gamebot set leaderboard max [number|infinity]
+
+Set and resets the leaderboard max. Default is inifinity, ie. to show the entire leaderboard.
+
+```
+gamebot set leaderboard max 5
+```
+
+The following are equivalent.
+
+```
+gamebot set leaderboard max 0
+gamebot set leaderboard max infinity
+gamebot unset leaderboard max
+```
 
 #### gamebot set elo [number]
 

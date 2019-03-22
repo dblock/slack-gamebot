@@ -244,25 +244,15 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
             "Base elo for team #{team.name} is 1000."
           )
         end
-      end
-      context 'with a non-default base elo' do
-        before do
-          team.update_attributes!(elo: 1000)
-        end
-        it 'shows current value of elo' do
-          expect(message: "#{SlackRubyBot.config.user} set elo").to respond_with_slack_message(
-            "Base elo for team #{team.name} is 1000."
-          )
-        end
         it 'sets elo' do
           expect(message: "#{SlackRubyBot.config.user} set elo 200").to respond_with_slack_message(
             "Base elo for team #{team.name} is 200."
           )
           expect(team.reload.elo).to eq 200
         end
-        it 'ignores errors' do
+        it 'handles errors' do
           expect(message: "#{SlackRubyBot.config.user} set elo invalid").to respond_with_slack_message(
-            "Base elo for team #{team.name} is 1000."
+            'Sorry, invalid is not a valid number.'
           )
           expect(team.reload.elo).to eq 1000
         end
@@ -280,15 +270,63 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
         end
       end
     end
+    context 'leaderboard max' do
+      context 'with a non-default leaderboard max' do
+        before do
+          team.update_attributes!(leaderboard_max: 5)
+        end
+        it 'shows current value of leaderboard max' do
+          expect(message: "#{SlackRubyBot.config.user} set leaderboard max").to respond_with_slack_message(
+            "Leaderboard max for team #{team.name} is 5."
+          )
+        end
+        it 'sets leaderboard max' do
+          expect(message: "#{SlackRubyBot.config.user} set leaderboard max 12").to respond_with_slack_message(
+            "Leaderboard max for team #{team.name} is 12."
+          )
+          expect(team.leaderboard_max).to eq 12
+        end
+        it 'sets leaderboard max to a negative number' do
+          expect(message: "#{SlackRubyBot.config.user} set leaderboard max -12").to respond_with_slack_message(
+            "Leaderboard max for team #{team.name} is -12."
+          )
+          expect(team.leaderboard_max).to eq(-12)
+        end
+        it 'handles errors' do
+          expect(message: "#{SlackRubyBot.config.user} set leaderboard max invalid").to respond_with_slack_message(
+            'Sorry, invalid is not a valid number.'
+          )
+          expect(team.leaderboard_max).to eq 5
+        end
+        it 'resets leaderboard max with set 0' do
+          expect(message: "#{SlackRubyBot.config.user} set leaderboard max 0").to respond_with_slack_message(
+            "Leaderboard max for team #{team.name} is not set."
+          )
+          expect(team.leaderboard_max).to be nil
+        end
+        it 'resets leaderboard max with set infinity' do
+          expect(message: "#{SlackRubyBot.config.user} set leaderboard max infinity").to respond_with_slack_message(
+            "Leaderboard max for team #{team.name} is not set."
+          )
+          expect(team.leaderboard_max).to be nil
+        end
+        it 'resets leaderboard max with unset' do
+          expect(message: "#{SlackRubyBot.config.user} unset leaderboard max").to respond_with_slack_message(
+            "Leaderboard max for team #{team.name} has been unset."
+          )
+          expect(team.leaderboard_max).to be nil
+        end
+      end
+    end
     context 'invalid' do
       it 'errors set' do
         expect(message: "#{SlackRubyBot.config.user} set invalid on").to respond_with_slack_message(
-          'Invalid setting invalid, you can _set gifs on|off_, _set unbalanced on|off_, _api on|off_, _elo_, _nickname_ and _aliases_.'
+          'Invalid setting invalid, you can _set gifs on|off_, _set unbalanced on|off_, _api on|off_, _leaderboard max_, _elo_, _nickname_ and _aliases_.'
         )
       end
       it 'errors unset' do
         expect(message: "#{SlackRubyBot.config.user} unset invalid").to respond_with_slack_message(
-          'Invalid setting invalid, you can _unset gifs_, _api_, _elo_, _nickname_ and _aliases_.'
+          'Invalid setting invalid, you can _unset gifs_, _api_, _leaderboard max_, _elo_, _nickname_ and _aliases_.'
         )
       end
     end
@@ -319,6 +357,30 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
       it 'can see aliases' do
         expect(message: "#{SlackRubyBot.config.user} set aliases").to respond_with_slack_message(
           "Team #{team.name} does not have any bot aliases."
+        )
+      end
+    end
+    context 'elo' do
+      it 'cannot set elo' do
+        expect(message: "#{SlackRubyBot.config.user} set elo 1000").to respond_with_slack_message(
+          "You're not a captain, sorry."
+        )
+      end
+      it 'can see elo' do
+        expect(message: "#{SlackRubyBot.config.user} set elo").to respond_with_slack_message(
+          "Base elo for team #{team.name} is 0."
+        )
+      end
+    end
+    context 'leaderboard max' do
+      it 'cannot set leaderboard max' do
+        expect(message: "#{SlackRubyBot.config.user} set leaderboard max 3").to respond_with_slack_message(
+          "You're not a captain, sorry."
+        )
+      end
+      it 'can see leaderboard max' do
+        expect(message: "#{SlackRubyBot.config.user} set leaderboard max").to respond_with_slack_message(
+          "Leaderboard max for team #{team.name} is not set."
         )
       end
     end

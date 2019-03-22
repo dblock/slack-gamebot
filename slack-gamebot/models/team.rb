@@ -6,6 +6,7 @@ class Team
   field :trial_informed_at, type: DateTime
   field :elo, type: Integer, default: 0
   field :unbalanced, type: Boolean, default: false
+  field :leaderboard_max, type: Integer
 
   field :stripe_customer_id, type: String
   field :subscribed, type: Boolean, default: false

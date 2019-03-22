@@ -18,6 +18,10 @@ describe SlackGamebot::Commands::Leaderboard do
       it 'limits to max' do
         expect(message: "#{SlackRubyBot.config.user} leaderboard 1").to respond_with_slack_message "1. #{user_elo_48}"
       end
+      it 'limits to team leaderboard max' do
+        team.update_attributes!(leaderboard_max: 1)
+        expect(message: "#{SlackRubyBot.config.user} leaderboard").to respond_with_slack_message "1. #{user_elo_48}"
+      end
       it 'supports infinity' do
         user_elo_43 = Fabricate(:user, elo: 43, wins: 2, losses: 3)
         user_elo_44 = Fabricate(:user, elo: 44, wins: 2, losses: 3)

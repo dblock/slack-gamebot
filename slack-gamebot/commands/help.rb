@@ -37,6 +37,7 @@ season: show current season
 Settings
 --------
 set nickname [name], unset nickname: set/unset your nickname displayed in leaderboards
+set leaderboard max [number|infinity], unset leaderboard max: set/unset leaderboard max
 set gifs [on|off]: enable/disable animated GIFs, default is on
 set aliases [<alias> ...], unset aliases: set/unset additional bot aliases
 set elo [number]: set base elo for the team

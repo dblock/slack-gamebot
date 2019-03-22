@@ -96,14 +96,7 @@ module SlackGamebot
         def set_elo(client, data, user, v)
           raise SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
 
-          unless v.nil?
-            elo = begin
-                    Integer(v)
-                  rescue StandardError
-                    nil
-                  end
-            client.owner.update_attributes!(elo: elo) unless elo.nil?
-          end
+          client.owner.update_attributes!(elo: parse_int(v)) unless v.nil?
           message = "Base elo for team #{client.owner.name} is #{client.owner.elo}."
           client.say(channel: data.channel, text: message, gif: 'score')
           logger.info "SET: #{client.owner} - #{user.user_name} ELO is #{client.owner.elo}"
@@ -115,6 +108,26 @@ module SlackGamebot
           client.owner.update_attributes!(elo: 0)
           client.say(channel: data.channel, text: "Base elo for team #{client.owner.name} has been unset.", gif: 'score')
           logger.info "UNSET: #{client.owner} - #{user.user_name} ELO has been unset"
+        end
+
+        def set_leaderboard_max(client, data, user, v)
+          raise SlackGamebot::Error, "You're not a captain, sorry." unless v.nil? || user.captain?
+
+          unless v.nil?
+            v = parse_int_with_inifinity(v)
+            client.owner.update_attributes!(leaderboard_max: v && v != 0 ? v : nil)
+          end
+          message = "Leaderboard max for team #{client.owner.name} is #{client.owner.leaderboard_max || 'not set'}."
+          client.say(channel: data.channel, text: message, gif: 'count')
+          logger.info "SET: #{client.owner} - #{user.user_name} LEADERBOARD MAX is #{client.owner.leaderboard_max}"
+        end
+
+        def unset_leaderboard_max(client, data, user)
+          raise SlackGamebot::Error, "You're not a captain, sorry." unless user.captain?
+
+          client.owner.update_attributes!(leaderboard_max: nil)
+          client.say(channel: data.channel, text: "Leaderboard max for team #{client.owner.name} has been unset.", gif: 'score')
+          logger.info "UNSET: #{client.owner} - #{user.user_name} LEADERBOARD MAX has been unset"
         end
 
         def set_aliases(client, data, user, v)
@@ -142,12 +155,30 @@ module SlackGamebot
           logger.info "UNSET: #{client.owner} - #{user.user_name} no longer has bot aliases"
         end
 
+        def parse_int_with_inifinity(v)
+          v == 'infinity' ? nil : parse_int(v)
+        end
+
+        def parse_int(v)
+          Integer(v)
+        rescue StandardError
+          raise SlackGamebot::Error, "Sorry, #{v} is not a valid number."
+        end
+
         def set(client, data, user, k, v)
           case k
           when 'nickname' then
             set_nickname client, data, user, v
           when 'gifs' then
             set_gifs client, data, user, v
+          when 'leaderboard' then
+            k, v = v.split(/[\s]+/, 2) if v
+            case k
+            when 'max' then
+              set_leaderboard_max client, data, user, v
+            else
+              raise SlackGamebot::Error, "Invalid leaderboard setting #{k}, you can _set leaderboard max_."
+            end
           when 'unbalanced' then
             set_unbalanced client, data, user, v
           when 'api' then
@@ -157,7 +188,7 @@ module SlackGamebot
           when 'aliases' then
             set_aliases client, data, user, v
           else
-            raise SlackGamebot::Error, "Invalid setting #{k}, you can _set gifs on|off_, _set unbalanced on|off_, _api on|off_, _elo_, _nickname_ and _aliases_."
+            raise SlackGamebot::Error, "Invalid setting #{k}, you can _set gifs on|off_, _set unbalanced on|off_, _api on|off_, _leaderboard max_, _elo_, _nickname_ and _aliases_."
           end
         end
 
@@ -167,6 +198,13 @@ module SlackGamebot
             unset_nickname client, data, user, v
           when 'gifs' then
             unset_gifs client, data, user
+          when 'leaderboard' then
+            case v
+            when 'max' then
+              unset_leaderboard_max client, data, user
+            else
+              raise SlackGamebot::Error, "Invalid leaderboard setting #{v}, you can _unset leaderboard max_."
+            end
           when 'unbalanced' then
             unset_unbalanced client, data, user
           when 'api' then
@@ -176,7 +214,7 @@ module SlackGamebot
           when 'aliases' then
             unset_aliases client, data, user
           else
-            raise SlackGamebot::Error, "Invalid setting #{k}, you can _unset gifs_, _api_, _elo_, _nickname_ and _aliases_."
+            raise SlackGamebot::Error, "Invalid setting #{k}, you can _unset gifs_, _api_, _leaderboard max_, _elo_, _nickname_ and _aliases_."
           end
         end
       end
