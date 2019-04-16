@@ -48,7 +48,6 @@ describe Api::Endpoints::SubscriptionsEndpoint do
       let!(:team) { Fabricate(:team) }
       context 'with a plan' do
         before do
-          expect_any_instance_of(Team).to receive(:signup_to_mailing_list!)
           expect_any_instance_of(Team).to receive(:inform!).once
           stripe_helper.create_plan(id: 'slack-playplay-yearly', amount: 2999)
           client.subscriptions._post(
@@ -78,7 +77,6 @@ describe Api::Endpoints::SubscriptionsEndpoint do
       end
       context 'with a coupon' do
         before do
-          expect_any_instance_of(Team).to receive(:signup_to_mailing_list!)
           expect_any_instance_of(Team).to receive(:inform!).once
           stripe_helper.create_plan(id: 'slack-playplay-yearly', amount: 2999)
           stripe_helper.create_coupon(id: 'slack-playplay-yearly-twenty-nine-ninety-nine', amount_off: 2999)

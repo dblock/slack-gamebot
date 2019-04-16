@@ -59,19 +59,20 @@ module Api
           token = rc['bot']['bot_access_token']
           bot_user_id = rc['bot']['bot_user_id']
           user_id = rc['user_id']
+          access_token = rc['access_token']
           team = Team.where(token: token).first
           team ||= Team.where(team_id: rc['team_id'], game: game).first
-          if team && !team.active?
+
+          if team
             error!('Invalid Game', 400) unless team.game == game
-            team.activate!(token)
             team.update_attributes!(
-              created_at: Time.now.utc,
               activated_user_id: user_id,
+              activated_user_access_token: access_token,
               bot_user_id: bot_user_id
             )
-          elsif team
-            error!('Invalid Game', 400) unless team.game == game
-            raise "Team #{team.name} is already registered."
+            raise "Team #{team.name} is already registered." if team.active?
+
+            team.activate!(token)
           else
             team = Team.create!(
               game: game,
@@ -80,11 +81,12 @@ module Api
               team_id: rc['team_id'],
               name: rc['team_name'],
               activated_user_id: user_id,
+              activated_user_access_token: access_token,
               bot_user_id: bot_user_id
             )
           end
 
-          SlackGamebot::Service.instance.start!(team)
+          SlackRubyBotServer::Service.instance.create!(team)
           present team, with: Api::Presenters::TeamPresenter
         end
       end

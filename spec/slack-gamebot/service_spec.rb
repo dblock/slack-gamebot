@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SlackGamebot::Service do
+describe SlackRubyBotServer::Service do
   context '#url' do
     before do
       @rack_env = ENV['RACK_ENV']
@@ -9,14 +9,14 @@ describe SlackGamebot::Service do
       ENV['RACK_ENV'] = @rack_env
     end
     it 'defaults to playplay.io in production' do
-      expect(SlackGamebot::Service.url).to eq 'https://www.playplay.io'
+      expect(SlackRubyBotServer::Service.url).to eq 'https://www.playplay.io'
     end
     context 'in development' do
       before do
         ENV['RACK_ENV'] = 'development'
       end
       it 'defaults to localhost' do
-        expect(SlackGamebot::Service.url).to eq 'http://localhost:5000'
+        expect(SlackRubyBotServer::Service.url).to eq 'http://localhost:5000'
       end
     end
     context 'when set' do
@@ -27,13 +27,13 @@ describe SlackGamebot::Service do
         ENV.delete('URL')
       end
       it 'defaults to ENV' do
-        expect(SlackGamebot::Service.url).to eq 'updated'
+        expect(SlackRubyBotServer::Service.url).to eq 'updated'
       end
     end
   end
   context '#api_url' do
     it 'defaults to playplay.io in production' do
-      expect(SlackGamebot::Service.api_url).to eq 'https://www.playplay.io/api'
+      expect(SlackRubyBotServer::Service.api_url).to eq 'https://www.playplay.io/api'
     end
     context 'when set' do
       before do
@@ -43,7 +43,7 @@ describe SlackGamebot::Service do
         ENV.delete 'API_URL'
       end
       it 'defaults to ENV' do
-        expect(SlackGamebot::Service.api_url).to eq 'updated'
+        expect(SlackRubyBotServer::Service.api_url).to eq 'updated'
       end
     end
   end

@@ -35,7 +35,6 @@ describe Api::Endpoints::CreditCardsEndpoint do
           plan: 'slack-playplay-yearly',
           email: 'foo@bar.com'
         )
-        expect_any_instance_of(Team).to receive(:signup_to_mailing_list!)
         expect_any_instance_of(Team).to receive(:inform!).once
         team.update_attributes!(subscribed: true, stripe_customer_id: customer['id'])
       end
