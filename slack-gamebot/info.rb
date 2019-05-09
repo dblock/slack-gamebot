@@ -2,8 +2,8 @@ module SlackGamebot
   INFO = <<-EOS.freeze
 Gamebot #{SlackGamebot::VERSION}
 
-© Daniel Doubrovkine & Contributors, MIT License
-https://twitter.com/dblockdotorg
+© Daniel Doubrovkine, Vestris LLC & Contributors, MIT License
+https://www.vestris.com
 
 Hosted at https://www.playplay.io
 Follow Us at https://twitter.com/playplayio
