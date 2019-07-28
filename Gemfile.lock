@@ -223,7 +223,7 @@ GEM
     slack-ruby-bot-server-mailchimp (0.2.0)
       mailchimp_api_v3
       slack-ruby-bot-server (>= 0.10.0)
-    slack-ruby-client (0.14.3)
+    slack-ruby-client (0.14.4)
       activesupport
       faraday (>= 0.9)
       faraday_middleware
