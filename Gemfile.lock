@@ -201,7 +201,7 @@ GEM
     ruby-enum (0.7.2)
       i18n
     ruby-progressbar (1.10.0)
-    rubyzip (1.2.2)
+    rubyzip (1.3.0)
     safe_yaml (1.0.5)
     selenium-webdriver (3.141.0)
       childprocess (~> 0.5)
