@@ -8,7 +8,7 @@ module SlackGamebot
         challenge = ::Challenge.find_by_user(client.owner, data.channel, challenger)
         if challenge
           challenge.decline!(challenger)
-          client.say(channel: data.channel, text: "#{challenge.challenged.map(&:user_name).and} declined #{challenge.challengers.map(&:user_name).and} challenge.", gif: 'no')
+          client.say(channel: data.channel, text: "#{challenge.challenged.map(&:display_name).and} declined #{challenge.challengers.map(&:display_name).and} challenge.", gif: 'no')
           logger.info "DECLINE: #{client.owner} - #{challenge}"
         else
           client.say(channel: data.channel, text: 'No challenge to decline!')

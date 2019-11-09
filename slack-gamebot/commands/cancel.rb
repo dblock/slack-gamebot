@@ -9,11 +9,11 @@ module SlackGamebot
         if challenge
           challenge.cancel!(player)
           if challenge.challengers.include?(player)
-            client.say(channel: data.channel, text: "#{challenge.challengers.map(&:user_name).and} canceled a challenge against #{challenge.challenged.map(&:user_name).and}.", gif: 'chicken')
+            client.say(channel: data.channel, text: "#{challenge.challengers.map(&:display_name).and} canceled a challenge against #{challenge.challenged.map(&:display_name).and}.", gif: 'chicken')
           elsif challenge.challenged.include?(player)
-            client.say(channel: data.channel, text: "#{challenge.challenged.map(&:user_name).and} canceled a challenge against #{challenge.challengers.map(&:user_name).and}.", gif: 'chicken')
+            client.say(channel: data.channel, text: "#{challenge.challenged.map(&:display_name).and} canceled a challenge against #{challenge.challengers.map(&:display_name).and}.", gif: 'chicken')
           else
-            client.say(channel: data.channel, text: "#{player.user_name} canceled #{challenge}.", gif: 'chicken')
+            client.say(channel: data.channel, text: "#{player.display_name} canceled #{challenge}.", gif: 'chicken')
           end
           logger.info "CANCEL: #{client.owner} - #{challenge}"
         else

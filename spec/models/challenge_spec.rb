@@ -206,7 +206,7 @@ describe Challenge do
       player = Fabricate(:user)
       expect do
         challenge.cancel!(player)
-      end.to raise_error Mongoid::Errors::Validations, /Only #{challenge.challengers.map(&:user_name).and} or #{challenge.challenged.map(&:user_name).and} can cancel this challenge./
+      end.to raise_error Mongoid::Errors::Validations, /Only #{challenge.challengers.map(&:display_name).and} or #{challenge.challenged.map(&:display_name).and} can cancel this challenge./
     end
     it 'cannot be canceled_by twice' do
       canceled_by = challenge.challengers.first

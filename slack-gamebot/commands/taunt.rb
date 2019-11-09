@@ -10,7 +10,7 @@ module SlackGamebot
           client.say(channel: data.channel, text: 'Please provide a user name to taunt.')
         else
           victim = ::User.find_many_by_slack_mention!(client, arguments)
-          taunt = "#{victim.map(&:user_name).and} #{victim.count == 1 ? 'sucks' : 'suck'} at #{client.name}!"
+          taunt = "#{victim.map(&:display_name).and} #{victim.count == 1 ? 'sucks' : 'suck'} at #{client.name}!"
           client.say(channel: data.channel, text: "#{taunter.user_name} says that #{taunt}")
           logger.info "TAUNT: #{client.owner} - #{taunter.user_name}"
         end

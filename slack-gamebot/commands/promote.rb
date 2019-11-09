@@ -13,17 +13,17 @@ module SlackGamebot
           logger.info "PROMOTE: #{client.owner} - #{user.user_name}, failed, no users"
         elsif !user.captain?
           client.say(channel: data.channel, text: "You're not a captain, sorry.", gif: 'sorry')
-          logger.info "PROMOTE: #{client.owner} - #{user.user_name} promoting #{users.map(&:user_name).and}, failed, not captain"
+          logger.info "PROMOTE: #{client.owner} - #{user.user_name} promoting #{users.map(&:display_name).and}, failed, not captain"
         elsif captains && captains.count > 1
-          client.say(channel: data.channel, text: "#{captains.map(&:user_name).and} are already captains.")
-          logger.info "PROMOTE: #{client.owner} - #{user.user_name} promoting #{users.map(&:user_name).and}, failed, #{captains.map(&:user_name).and} already captains"
+          client.say(channel: data.channel, text: "#{captains.map(&:display_name).and} are already captains.")
+          logger.info "PROMOTE: #{client.owner} - #{user.user_name} promoting #{users.map(&:display_name).and}, failed, #{captains.map(&:display_name).and} already captains"
         elsif captains && captains.count == 1
           client.say(channel: data.channel, text: "#{captains.first.user_name} is already a captain.")
-          logger.info "PROMOTE: #{client.owner} - #{user.user_name} promoting #{users.map(&:user_name).and}, failed, #{captains.first.user_name} already captain"
+          logger.info "PROMOTE: #{client.owner} - #{user.user_name} promoting #{users.map(&:display_name).and}, failed, #{captains.first.user_name} already captain"
         else
           users.each(&:promote!)
-          client.say(channel: data.channel, text: "#{users.map(&:user_name).and} #{users.count == 1 ? 'has' : 'have'} been promoted to captain.", gif: 'power')
-          logger.info "PROMOTE: #{client.owner} - #{user.user_name} promoted #{users.map(&:user_name).and}"
+          client.say(channel: data.channel, text: "#{users.map(&:display_name).and} #{users.count == 1 ? 'has' : 'have'} been promoted to captain.", gif: 'power')
+          logger.info "PROMOTE: #{client.owner} - #{user.user_name} promoted #{users.map(&:display_name).and}"
         end
       end
     end

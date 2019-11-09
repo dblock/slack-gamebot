@@ -110,4 +110,18 @@ describe SlackGamebot::Commands::Challenge, vcr: { cassette_name: 'user_info' } 
       )
     end
   end
+  User::EVERYONE.each do |username|
+    it "challenges #{username}" do
+      expect do
+        expect(message: "#{SlackRubyBot.config.user} challenge <!#{username}>", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
+          "#{user.slack_mention} challenged anyone to a match!"
+        )
+      end.to change(Challenge, :count).by(1)
+      challenge = Challenge.last
+      expect(challenge.channel).to eq 'pongbot'
+      expect(challenge.created_by).to eq user
+      expect(challenge.challengers).to eq [user]
+      expect(challenge.challenged).to eq team.users.everyone
+    end
+  end
 end

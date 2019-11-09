@@ -12,7 +12,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     end
     it 'lost' do
       expect(message: "#{SlackRubyBot.config.user} lost", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} defeated #{challenge.challenged.map(&:user_name).and}."
+        "Match has been recorded! #{challenge.challengers.map(&:display_name).and} defeated #{challenge.challenged.map(&:display_name).and}."
       )
       challenge.reload
       expect(challenge.state).to eq ChallengeState::PLAYED
@@ -27,7 +27,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     end
     it 'updates existing challenge when lost to' do
       expect(message: "#{SlackRubyBot.config.user} lost to #{challenge.challengers.first.user_name}", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} defeated #{challenge.challenged.map(&:user_name).and}."
+        "Match has been recorded! #{challenge.challengers.map(&:display_name).and} defeated #{challenge.challenged.map(&:display_name).and}."
       )
       challenge.reload
       expect(challenge.state).to eq ChallengeState::PLAYED
@@ -36,7 +36,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     end
     it 'lost with score' do
       expect(message: "#{SlackRubyBot.config.user} lost 15:21", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} defeated #{challenge.challenged.map(&:user_name).and} with the score of 21:15."
+        "Match has been recorded! #{challenge.challengers.map(&:display_name).and} defeated #{challenge.challenged.map(&:display_name).and} with the score of 21:15."
       )
       challenge.reload
       expect(challenge.match.scores).to eq [[15, 21]]
@@ -49,25 +49,25 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     end
     it 'lost with scores' do
       expect(message: "#{SlackRubyBot.config.user} lost 21:15 14:21 5:11", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} defeated #{challenge.challenged.map(&:user_name).and} with the scores of 15:21 21:14 11:5."
+        "Match has been recorded! #{challenge.challengers.map(&:display_name).and} defeated #{challenge.challenged.map(&:display_name).and} with the scores of 15:21 21:14 11:5."
       )
       challenge.reload
       expect(challenge.match.scores).to eq [[21, 15], [14, 21], [5, 11]]
     end
     it 'lost with a crushing score' do
       expect(message: "#{SlackRubyBot.config.user} lost 5:21", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} crushed #{challenge.challenged.map(&:user_name).and} with the score of 21:5."
+        "Match has been recorded! #{challenge.challengers.map(&:display_name).and} crushed #{challenge.challenged.map(&:display_name).and} with the score of 21:5."
       )
     end
     it 'lost in a close game' do
       expect(message: "#{SlackRubyBot.config.user} lost 19:21", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} narrowly defeated #{challenge.challenged.map(&:user_name).and} with the score of 21:19."
+        "Match has been recorded! #{challenge.challengers.map(&:display_name).and} narrowly defeated #{challenge.challenged.map(&:display_name).and} with the score of 21:19."
       )
     end
     it 'lost amending scores' do
       challenge.lose!(challenged)
       expect(message: "#{SlackRubyBot.config.user} lost 21:15 14:21 5:11", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Match scores have been updated! #{challenge.challengers.map(&:user_name).and} defeated #{challenge.challenged.map(&:user_name).and} with the scores of 15:21 21:14 11:5."
+        "Match scores have been updated! #{challenge.challengers.map(&:display_name).and} defeated #{challenge.challenged.map(&:display_name).and} with the scores of 15:21 21:14 11:5."
       )
       challenge.reload
       expect(challenge.match.scores).to eq [[21, 15], [14, 21], [5, 11]]
@@ -77,7 +77,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
       challenge2 = Fabricate(:challenge, challenged: [challenged])
       challenge2.accept!(challenged)
       expect(message: "#{SlackRubyBot.config.user} lost", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Match has been recorded! #{challenge2.challengers.map(&:user_name).and} defeated #{challenge2.challenged.map(&:user_name).and}."
+        "Match has been recorded! #{challenge2.challengers.map(&:display_name).and} defeated #{challenge2.challenged.map(&:display_name).and}."
       )
       challenge.reload
       expect(challenge.match.scores).to eq [[11, 21]]
@@ -102,7 +102,7 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     end
     it 'lost' do
       expect(message: "#{SlackRubyBot.config.user} lost", user: challenged1.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Match has been recorded! #{challenge.challengers.map(&:user_name).and} defeated #{challenge.challenged.map(&:user_name).and}."
+        "Match has been recorded! #{challenge.challengers.map(&:display_name).and} defeated #{challenge.challenged.map(&:display_name).and}."
       )
       challenge.reload
       expect(challenge.state).to eq ChallengeState::PLAYED

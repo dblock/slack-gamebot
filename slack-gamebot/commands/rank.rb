@@ -15,7 +15,7 @@ module SlackGamebot
           user.rank ? "#{user.rank}. #{user}" : "#{user.user_name}: not ranked"
         end.join("\n")
         client.say(channel: data.channel, text: message)
-        logger.info "RANK: #{client.owner} - #{users.map(&:user_name).and}"
+        logger.info "RANK: #{client.owner} - #{users.map(&:display_name).and}"
       end
     end
   end

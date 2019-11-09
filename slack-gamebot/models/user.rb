@@ -31,24 +31,33 @@ class User
   after_save :rank!
 
   SORT_ORDERS = ['elo', '-elo', 'created_at', '-created_at', 'wins', '-wins', 'losses', '-losses', 'ties', '-ties', 'user_name', '-user_name', 'rank', '-rank'].freeze
+  ANYONE = '*'.freeze
+  EVERYONE = %w[here channel].freeze
 
   scope :ranked, -> { where(:rank.ne => nil) }
   scope :captains, -> { where(captain: true) }
+  scope :everyone, -> { where(user_id: ANYONE) }
 
   def current_matches
     Match.current.where(team: team).or({ winner_ids: _id }, loser_ids: _id)
   end
 
   def slack_mention
-    "<@#{user_id}>"
+    anyone? ? 'anyone' : "<@#{user_id}>"
   end
 
   def display_name
     registered ? nickname || user_name : '<unregistered>'
   end
 
+  def anyone?
+    user_id == ANYONE
+  end
+
   def self.slack_mention?(user_name)
-    ::Regexp.last_match[1] if user_name =~ /^<@(.*)>$/
+    slack_id = ::Regexp.last_match[1] if user_name =~ /^<[@!](.*)>$/
+    slack_id = ANYONE if slack_id && EVERYONE.include?(slack_id)
+    slack_id
   end
 
   def self.find_by_slack_mention!(client, user_name)
@@ -61,12 +70,17 @@ class User
              User.where(team: team).or({ user_name: regexp }, nickname: regexp).first
     end
     unless user
-      begin
-        users_info = client.web_client.users_info(user: slack_id || "@#{user_name}")
-        info = Hashie::Mash.new(users_info).user if users_info
-        user = User.create!(team: team, user_id: info.id, user_name: info.name, registered: true) if info
-      rescue Slack::Web::Api::Errors::SlackError => e
-        raise e unless e.message == 'user_not_found'
+      case slack_id
+      when ANYONE then
+        user = User.create!(team: team, user_id: ANYONE, user_name: ANYONE, nickname: 'anyone', registered: true)
+      else
+        begin
+          users_info = client.web_client.users_info(user: slack_id || "@#{user_name}")
+          info = Hashie::Mash.new(users_info).user if users_info
+          user = User.create!(team: team, user_id: info.id, user_name: info.name, registered: true) if info
+        rescue Slack::Web::Api::Errors::SlackError => e
+          raise e unless e.message == 'user_not_found'
+        end
       end
     end
     raise SlackGamebot::Error, "I don't know who #{user_name} is! Ask them to _register_." unless user&.registered?

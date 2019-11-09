@@ -23,6 +23,16 @@ describe User do
     it 'finds by nickname' do
       expect(User.find_by_slack_mention!(client, user.nickname)).to eq user
     end
+    %w[here channel].each do |name|
+      it "always finds #{name}" do
+        mention = "<!#{name}>"
+        expect do
+          3.times do
+            expect(User.find_by_slack_mention!(client, mention)).to be_a User
+          end
+        end.to change(User, :count).by(1)
+      end
+    end
   end
   context '#find_many_by_slack_mention!' do
     let(:web_client) { double(Slack::Web::Client, users_info: nil) }

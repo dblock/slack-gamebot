@@ -79,7 +79,9 @@ class Challenge
   def accept!(challenger)
     raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::PROPOSED
 
-    update_attributes!(updated_by: challenger, state: ChallengeState::ACCEPTED)
+    updates = { updated_by: challenger, state: ChallengeState::ACCEPTED }
+    updates[:challenged_ids] = [challenger._id] if open_challenge?
+    update_attributes!(updates)
   end
 
   def decline!(challenger)
@@ -173,6 +175,19 @@ class Challenge
     ).first
   end
 
+  def self.find_open_challenge(team, channel, states = [ChallengeState::PROPOSED])
+    Challenge.where(
+      team: team,
+      challenged_ids: team.users.everyone.map(&:_id),
+      channel: channel,
+      :state.in => states
+    ).first
+  end
+
+  def open_challenge?
+    challenged.any?(&:anyone?)
+  end
+
   def draw_scores?
     draw_scores&.any?
   end
@@ -217,15 +232,15 @@ class Challenge
     when ChallengeState::ACCEPTED
       return if updated_by && challenged.include?(updated_by)
 
-      errors.add(:accepted_by, "Only #{challenged.map(&:user_name).and} can accept this challenge.")
+      errors.add(:accepted_by, "Only #{challenged.map(&:display_name).and} can accept this challenge.")
     when ChallengeState::DECLINED
       return if updated_by && challenged.include?(updated_by)
 
-      errors.add(:declined_by, "Only #{challenged.map(&:user_name).and} can decline this challenge.")
+      errors.add(:declined_by, "Only #{challenged.map(&:display_name).and} can decline this challenge.")
     when ChallengeState::CANCELED
       return if updated_by && (challengers.include?(updated_by) || challenged.include?(updated_by))
 
-      errors.add(:declined_by, "Only #{challengers.map(&:user_name).and} or #{challenged.map(&:user_name).and} can cancel this challenge.")
+      errors.add(:declined_by, "Only #{challengers.map(&:display_name).and} or #{challenged.map(&:display_name).and} can cancel this challenge.")
     end
   end
 

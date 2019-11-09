@@ -8,7 +8,7 @@ module SlackGamebot
         captains = if client.owner.captains.count == 1
                      ", captain #{client.owner.captains.first.user_name}"
                    elsif client.owner.captains.count > 1
-                     ", captains #{client.owner.captains.map(&:user_name).and}"
+                     ", captains #{client.owner.captains.map(&:display_name).and}"
         end
         client.say(channel: data.channel, text: "Team _#{client.owner.name}_ (#{client.owner.team_id})#{captains}.", gif: 'team')
         logger.info "TEAM: #{client.owner} - #{data.user}"

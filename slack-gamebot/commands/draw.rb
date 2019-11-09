@@ -53,7 +53,7 @@ module SlackGamebot
             state: ChallengeState::DRAWN
           )
           messages = [
-            "Match is a draw, waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:user_name).and}.",
+            "Match is a draw, waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:display_name).and}.",
             challenge.draw_scores? ? "Recorded #{Score.scores_to_string(challenge.draw_scores)}." : nil
           ].compact
           client.say(channel: data.channel, text: messages.join(' '), gif: 'tie')
@@ -62,7 +62,7 @@ module SlackGamebot
           if challenge.draw.include?(challenger)
             challenge.update_attributes!(draw_scores: scores) if scores
             messages = [
-              "Match is a draw, still waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:user_name).and}.",
+              "Match is a draw, still waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:display_name).and}.",
               challenge.draw_scores? ? "Recorded #{Score.scores_to_string(challenge.draw_scores)}." : nil
             ].compact
             client.say(channel: data.channel, text: messages.join(' '), gif: 'tie')
@@ -72,7 +72,7 @@ module SlackGamebot
               client.say(channel: data.channel, text: "Match has been recorded! #{challenge.match}.", gif: 'tie')
             else
               messages = [
-                "Match is a draw, waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:user_name).and}.",
+                "Match is a draw, waiting to hear from #{(challenge.challengers + challenge.challenged - challenge.draw).map(&:display_name).and}.",
                 challenge.draw_scores? ? "Recorded #{Score.scores_to_string(challenge.draw_scores)}." : nil
               ].compact
               client.say(channel: data.channel, text: messages.join(' '), gif: 'tie')

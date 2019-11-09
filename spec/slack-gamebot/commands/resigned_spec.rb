@@ -12,7 +12,7 @@ describe SlackGamebot::Commands::Resigned, vcr: { cassette_name: 'user_info' } d
     end
     it 'resigned' do
       expect(message: "#{SlackRubyBot.config.user} resigned", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
-        "Match has been recorded! #{challenge.challenged.map(&:user_name).and} resigned against #{challenge.challengers.map(&:user_name).and}."
+        "Match has been recorded! #{challenge.challenged.map(&:display_name).and} resigned against #{challenge.challengers.map(&:display_name).and}."
       )
       challenge.reload
       expect(challenge.state).to eq ChallengeState::PLAYED
@@ -32,8 +32,8 @@ describe SlackGamebot::Commands::Resigned, vcr: { cassette_name: 'user_info' } d
     it 'a player' do
       expect do
         expect do
-          expect(message: "#{SlackRubyBot.config.user} resigned to #{winner.user_name}", user: loser.user_id, channel: 'channel').to respond_with_slack_message(
-            "Match has been recorded! #{loser.user_name} resigned against #{winner.user_name}."
+          expect(message: "#{SlackRubyBot.config.user} resigned to #{winner.display_name}", user: loser.user_id, channel: 'channel').to respond_with_slack_message(
+            "Match has been recorded! #{loser.user_name} resigned against #{winner.display_name}."
           )
         end.to_not change(Challenge, :count)
       end.to change(Match, :count).by(1)
@@ -48,7 +48,7 @@ describe SlackGamebot::Commands::Resigned, vcr: { cassette_name: 'user_info' } d
       expect do
         expect do
           expect(message: "#{SlackRubyBot.config.user} resigned to #{winner.user_name} #{winner2.user_name} with #{loser2.user_name}", user: loser.user_id, channel: 'pongbot').to respond_with_slack_message(
-            "Match has been recorded! #{loser.user_name} and #{loser2.user_name} resigned against #{winner.user_name} and #{winner2.user_name}."
+            "Match has been recorded! #{loser.display_name} and #{loser2.display_name} resigned against #{winner.display_name} and #{winner2.display_name}."
           )
         end.to_not change(Challenge, :count)
       end.to change(Match, :count).by(1)

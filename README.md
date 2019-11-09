@@ -80,6 +80,14 @@ gamebot challenge @WangHoe
 Victor Barna challenged Wang Hoe to a match!
 ```
 
+You can challenge anyone to play.
+
+```
+gamebot challenge @here
+
+Victor Barna challenged anyone to a match!
+```
+
 You can create group challenges, too. Both sides must have the same number of players.
 
 ```
