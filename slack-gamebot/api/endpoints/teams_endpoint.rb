@@ -66,6 +66,8 @@ module Api
           if team
             error!('Invalid Game', 400) unless team.game == game
 
+            team.ping_if_active!
+
             team.update_attributes!(
               token: token,
               activated_user_id: user_id,

@@ -214,6 +214,18 @@ class Team
     ].compact
   end
 
+  def ping_if_active!
+    return unless active?
+
+    ping!
+  rescue Slack::Web::Api::Errors::SlackError => e
+    logger.warn "Active team #{self} ping, #{e.message}."
+    case e.message
+    when 'account_inactive', 'invalid_auth' then
+      deactivate!
+    end
+  end
+
   private
 
   SUBSCRIBED_TEXT = <<-EOS.freeze

@@ -171,6 +171,23 @@ describe Api::Endpoints::TeamsEndpoint do
           expect(team.activated_user_id).to eq 'activated_user_id'
         end.to_not change(Team, :count)
       end
+      it 'reactivates a team deactivated on slack' do
+        expect(SlackRubyBotServer::Service.instance).to receive(:start!)
+        existing_team = Fabricate(:team, api: true, game: game, token: 'token', aliases: %w[foo bar])
+        expect do
+          expect_any_instance_of(Team).to receive(:ping!) { raise Slack::Web::Api::Errors::SlackError, 'invalid_auth' }
+          team = client.teams._post(code: 'code', game: existing_team.game.name)
+          expect(team.team_id).to eq existing_team.team_id
+          expect(team.name).to eq existing_team.name
+          expect(team.active).to be true
+          team = Team.find(team.id)
+          expect(team.token).to eq 'token'
+          expect(team.active).to be true
+          expect(team.aliases).to eq %w[foo bar]
+          expect(team.bot_user_id).to eq 'bot_user_id'
+          expect(team.activated_user_id).to eq 'activated_user_id'
+        end.to_not change(Team, :count)
+      end
       it 'updates a reactivated team with a new token' do
         expect(SlackRubyBotServer::Service.instance).to receive(:start!)
         existing_team = Fabricate(:team, api: true, game: game, token: 'old', team_id: 'team_id', active: false)
@@ -196,6 +213,7 @@ describe Api::Endpoints::TeamsEndpoint do
       end
       it 'returns a useful error when team already exists' do
         expect(SlackRubyBotServer::Service.instance).to_not receive(:start!)
+        expect_any_instance_of(Team).to receive(:ping_if_active!)
         existing_team = Fabricate(:team, api: true, game: game, token: 'token')
         expect { client.teams._post(code: 'code', game: game.name) }.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
