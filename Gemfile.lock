@@ -62,7 +62,7 @@ GEM
     fabrication (2.20.1)
     faker (1.9.3)
       i18n (>= 0.7)
-    faraday (0.15.4)
+    faraday (0.17.1)
       multipart-post (>= 1.2, < 3)
     faraday-digestauth (0.3.0)
       faraday (~> 0.7)
@@ -74,7 +74,7 @@ GEM
     ffi (1.10.0)
     foreman (0.85.0)
       thor (~> 0.19.1)
-    gli (2.18.1)
+    gli (2.19.0)
     grape (1.2.3)
       activesupport
       builder
@@ -99,7 +99,7 @@ GEM
       faraday_middleware
       net-http-digest_auth
       uri_template
-    i18n (1.6.0)
+    i18n (1.7.0)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     irb (1.0.0)
@@ -117,7 +117,7 @@ GEM
     mime-types-data (3.2019.0331)
     mini_mime (1.0.1)
     mini_portile2 (2.4.0)
-    minitest (5.11.3)
+    minitest (5.13.0)
     mongo (2.8.0)
       bson (>= 4.4.2, < 5.0.0)
     mongoid (7.0.2)
@@ -224,7 +224,7 @@ GEM
     slack-ruby-bot-server-mailchimp (0.2.0)
       mailchimp_api_v3
       slack-ruby-bot-server (>= 0.10.0)
-    slack-ruby-client (0.14.4)
+    slack-ruby-client (0.14.5)
       activesupport
       faraday (>= 0.9)
       faraday_middleware
