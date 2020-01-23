@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# after the team is exported, tar vfcz it, then run
+#  tar vfxz TEAM.tar.gz
+#
+#  dokku enter game-bot
+#  wget [archive url]
+#  tar vfxz TEAM.tar.gz
+#  cd TEAM
+
+#  dokku mongo:expose game-bot
+#  mongo --username=game-bot --password=pwd --db=game-bot --port=13450
+#  mongoimport --username=game-bot --password=pwd --port=13450 --db game-bot -c teams teams.dump
+#  dokku mongo:unexpose game-bot
+
+TEAM_ID=REPLACE_ME
+DB=game-bot
+OUT=exports/$TEAM_ID
+
+mkdir -p $OUT
+TEAM_QUERY='{"team_id":"'"$TEAM_ID"'"}'
+
+ID=`mongo $DB --quiet --eval "db.teams.findOne($TEAM_QUERY)._id.valueOf()"`
+
+echo Exporting $TEAM_QUERY, $ID ...
+ID_QUERY='{"team_id":{"$oid":"'"$ID"'"}}'
+
+mongoexport --db $DB -c teams --out $OUT/teams.dump --query=$TEAM_QUERY
+
+echo $ID_QUERY
+
+for coll in challenges games matches seasons user_ranks users
+do
+  mongoexport --db $DB -c $coll --out $OUT/$coll.dump --query=$ID_QUERY
+done
