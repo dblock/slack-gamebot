@@ -25,7 +25,7 @@ gem 'wannabe_bool'
 
 group :development, :test do
   gem 'foreman'
-  gem 'rake', '~> 10.4'
+  gem 'rake', '~> 12.3'
   gem 'rubocop'
   gem 'stripe-ruby-mock', require: 'stripe_mock'
 end
