@@ -79,6 +79,16 @@ describe Match do
         expect(match.losers.map(&:losing_streak)).to eq [3]
       end
     end
+    context 'after (MAX_TAU * 2) games' do
+      let!(:match) { Fabricate(:match) }
+      before do
+        (Elo::MAX_TAU * 2).times { Fabricate(:match, winners: match.winners, losers: match.losers) }
+      end
+      it 'caps tau at MAX_TAU' do
+        expect(match.winners.map(&:tau)).to eq [Elo::MAX_TAU]
+        expect(match.losers.map(&:tau)).to eq [Elo::MAX_TAU]
+      end
+    end
     context 'doubles' do
       let(:match) { Fabricate(:match, challenge: Fabricate(:doubles_challenge)) }
       it 'updates elo and tau' do
