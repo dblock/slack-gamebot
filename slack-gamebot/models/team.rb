@@ -125,7 +125,7 @@ class Team
   end
 
   def inform!(message, gif_name = nil)
-    channels = slack_client.channels_list['channels'].select { |channel| channel['is_member'] } # TODO: paginate
+    channels = slack_client.conversations_list['channels'].select { |channel| channel['is_member'] } # TODO: paginate
     channels.each do |channel|
       logger.info "Sending '#{message}' to #{self} on ##{channel['name']}."
       slack_client.chat_postMessage(text: make_message(message, gif_name), channel: channel['id'], as_user: true)
