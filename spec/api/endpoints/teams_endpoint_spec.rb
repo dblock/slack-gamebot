@@ -10,7 +10,7 @@ describe Api::Endpoints::TeamsEndpoint do
   let!(:game) { Fabricate(:game) }
 
   context 'team' do
-    let(:existing_team) { Fabricate(:team, api: true, game: game) }
+    let(:existing_team) { Fabricate(:team, game: game) }
     it 'returns a team' do
       team = client.team(id: existing_team.id)
       expect(team.id).to eq existing_team.id.to_s
@@ -20,8 +20,8 @@ describe Api::Endpoints::TeamsEndpoint do
 
   context 'teams' do
     context 'active/inactive' do
-      let!(:active_team) { Fabricate(:team, api: true, game: game, active: true) }
-      let!(:inactive_team) { Fabricate(:team, api: true, game: game, active: false) }
+      let!(:active_team) { Fabricate(:team, game: game, active: true) }
+      let!(:inactive_team) { Fabricate(:team, game: game, active: false) }
       it 'returns all teams' do
         teams = client.teams
         expect(teams.count).to eq 2
@@ -33,8 +33,8 @@ describe Api::Endpoints::TeamsEndpoint do
       end
     end
     context 'game_id' do
-      let!(:team1) { Fabricate(:team, api: true, game: game) }
-      let!(:team2) { Fabricate(:team, api: true, game: Fabricate(:game)) }
+      let!(:team1) { Fabricate(:team, game: game) }
+      let!(:team2) { Fabricate(:team, game: Fabricate(:game)) }
       it 'returns all teams' do
         teams = client.teams
         expect(teams.count).to eq 2
@@ -46,7 +46,7 @@ describe Api::Endpoints::TeamsEndpoint do
       end
     end
     context 'api on/off' do
-      let!(:team_api_on) { Fabricate(:team, api: true, game: game) }
+      let!(:team_api_on) { Fabricate(:team, game: game) }
       let!(:team_api_off) { Fabricate(:team, api: false, game: game) }
       it 'only returns teams with api on' do
         teams = client.teams
@@ -55,8 +55,8 @@ describe Api::Endpoints::TeamsEndpoint do
       end
     end
     context 'game_id' do
-      let!(:team1) { Fabricate(:team, api: true, game: game) }
-      let!(:team2) { Fabricate(:team, api: true, game: Fabricate(:game)) }
+      let!(:team1) { Fabricate(:team, game: game) }
+      let!(:team2) { Fabricate(:team, game: Fabricate(:game)) }
       it 'returns all teams' do
         teams = client.teams
         expect(teams.count).to eq 2
@@ -70,7 +70,7 @@ describe Api::Endpoints::TeamsEndpoint do
   end
 
   context 'team' do
-    let(:existing_team) { Fabricate(:team, api: true, game: game) }
+    let(:existing_team) { Fabricate(:team, game: game) }
     it 'returns a team with links to challenges, users and matches' do
       team = client.team(id: existing_team.id)
       expect(team.id).to eq existing_team.id.to_s
@@ -157,7 +157,7 @@ describe Api::Endpoints::TeamsEndpoint do
       end
       it 'reactivates a deactivated team' do
         expect(SlackRubyBotServer::Service.instance).to receive(:start!)
-        existing_team = Fabricate(:team, api: true, game: game, token: 'token', active: false, aliases: %w[foo bar])
+        existing_team = Fabricate(:team, game: game, token: 'token', active: false, aliases: %w[foo bar])
         expect do
           team = client.teams._post(code: 'code', game: existing_team.game.name)
           expect(team.team_id).to eq existing_team.team_id
@@ -173,7 +173,7 @@ describe Api::Endpoints::TeamsEndpoint do
       end
       it 'reactivates a team deactivated on slack' do
         expect(SlackRubyBotServer::Service.instance).to receive(:start!)
-        existing_team = Fabricate(:team, api: true, game: game, token: 'token', aliases: %w[foo bar])
+        existing_team = Fabricate(:team, game: game, token: 'token', aliases: %w[foo bar])
         expect do
           expect_any_instance_of(Team).to receive(:ping!) { raise Slack::Web::Api::Errors::SlackError, 'invalid_auth' }
           team = client.teams._post(code: 'code', game: existing_team.game.name)
@@ -190,7 +190,7 @@ describe Api::Endpoints::TeamsEndpoint do
       end
       it 'updates a reactivated team with a new token' do
         expect(SlackRubyBotServer::Service.instance).to receive(:start!)
-        existing_team = Fabricate(:team, api: true, game: game, token: 'old', team_id: 'team_id', active: false)
+        existing_team = Fabricate(:team, game: game, token: 'old', team_id: 'team_id', active: false)
         expect do
           team = client.teams._post(code: 'code', game: existing_team.game.name)
           expect(team.team_id).to eq existing_team.team_id
@@ -203,9 +203,26 @@ describe Api::Endpoints::TeamsEndpoint do
           expect(team.activated_user_id).to eq 'activated_user_id'
         end.to_not change(Team, :count)
       end
+      it 'revives a dead team' do
+        expect(SlackRubyBotServer::Service.instance).to receive(:start!)
+        existing_team = Fabricate(:team, game: game, token: 'old', aliases: %w[foo bar], team_id: 'team_id', active: false, dead_at: Time.now)
+        expect do
+          team = client.teams._post(code: 'code', game: existing_team.game.name)
+          expect(team.team_id).to eq existing_team.team_id
+          expect(team.name).to eq existing_team.name
+          expect(team.active).to be true
+          team = Team.find(team.id)
+          expect(team.token).to eq 'token'
+          expect(team.active).to be true
+          expect(team.aliases).to eq %w[foo bar]
+          expect(team.bot_user_id).to eq 'bot_user_id'
+          expect(team.activated_user_id).to eq 'activated_user_id'
+          expect(team.dead_at).to be nil
+        end.to_not change(Team, :count)
+      end
       it 'cannot switch games' do
         expect(SlackRubyBotServer::Service.instance).to_not receive(:start!)
-        Fabricate(:team, api: true, game: Fabricate(:game), token: 'token', active: false)
+        Fabricate(:team, game: Fabricate(:game), token: 'token', active: false)
         expect { client.teams._post(code: 'code', game_id: game.id.to_s) }.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
           expect(json['error']).to eq 'Invalid Game'
@@ -214,7 +231,7 @@ describe Api::Endpoints::TeamsEndpoint do
       it 'returns a useful error when team already exists' do
         expect(SlackRubyBotServer::Service.instance).to_not receive(:start!)
         expect_any_instance_of(Team).to receive(:ping_if_active!)
-        existing_team = Fabricate(:team, api: true, game: game, token: 'token')
+        existing_team = Fabricate(:team, game: game, token: 'token')
         expect { client.teams._post(code: 'code', game: game.name) }.to raise_error Faraday::ClientError do |e|
           json = JSON.parse(e.response[:body])
           expect(json['message']).to eq "Team #{existing_team.name} is already registered."
@@ -276,7 +293,7 @@ describe Api::Endpoints::TeamsEndpoint do
 
     it 'reactivates a deactivated team with a different code' do
       expect(SlackRubyBotServer::Service.instance).to receive(:start!)
-      existing_team = Fabricate(:team, api: true, game: game, token: 'token', active: false, aliases: %w[foo bar])
+      existing_team = Fabricate(:team, game: game, token: 'token', active: false, aliases: %w[foo bar])
       oauth_access = {
         'bot' => {
           'bot_access_token' => 'another_token',

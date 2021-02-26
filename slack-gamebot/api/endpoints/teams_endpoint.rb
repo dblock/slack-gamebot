@@ -72,7 +72,8 @@ module Api
               token: token,
               activated_user_id: user_id,
               activated_user_access_token: access_token,
-              bot_user_id: bot_user_id
+              bot_user_id: bot_user_id,
+              dead_at: nil
             )
 
             raise "Team #{team.name} is already registered." if team.active?

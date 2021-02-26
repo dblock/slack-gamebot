@@ -135,7 +135,7 @@ class Team
   def inform_admin!(message, gif_name = nil)
     return unless activated_user_id
 
-    channel = slack_client.im_open(user: activated_user_id)
+    channel = slack_client.conversations_open(users: activated_user_id.to_s)
     logger.info "Sending DM '#{message}' to #{activated_user_id}."
     slack_client.chat_postMessage(text: make_message(message, gif_name), channel: channel.channel.id, as_user: true)
   end
