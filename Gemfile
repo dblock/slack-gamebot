@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '2.6.2'
+ruby '2.6.5'
 
 gem 'GiphyClient'
 gem 'hashie', '3.4.6'

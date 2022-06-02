@@ -1,9 +1,0 @@
-language: ruby
-
-cache: bundler
-
-services:
-  - mongodb
-
-rvm:
-  - 2.6.2
