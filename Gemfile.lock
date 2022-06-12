@@ -1,9 +1,6 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    GiphyClient (1.0.0)
-      json (~> 1.8, >= 1.8.3)
-      typhoeus (~> 1.0, >= 1.0.1)
     activemodel (6.1.6)
       activesupport (= 6.1.6)
     activesupport (6.1.6)
@@ -68,8 +65,6 @@ GEM
       dry-core (~> 0.5, >= 0.5)
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-logic (~> 1.0, >= 1.0.2)
-    ethon (0.15.0)
-      ffi (>= 1.15.0)
     excon (0.92.3)
     fabrication (2.28.0)
     faker (2.21.0)
@@ -101,7 +96,6 @@ GEM
       faraday_middleware (>= 0.9)
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
-    ffi (1.15.5)
     fiber-local (1.0.0)
     foreman (0.87.2)
     gli (2.21.0)
@@ -133,7 +127,7 @@ GEM
     io-console (0.5.11)
     irb (1.4.1)
       reline (>= 0.3.0)
-    json (1.8.6)
+    json (2.6.2)
     kaminari-core (1.2.2)
     kaminari-grape (1.0.1)
       grape
@@ -290,8 +284,6 @@ GEM
     timecop (0.9.5)
     timers (4.3.3)
     trailblazer-option (0.1.2)
-    typhoeus (1.4.0)
-      ethon (>= 0.9.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
@@ -319,7 +311,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  GiphyClient
   capybara
   database_cleaner-mongoid
   excon
@@ -329,6 +320,7 @@ DEPENDENCIES
   hashie (= 3.4.6)
   hyperclient
   irb
+  json
   kaminari-grape
   mailchimp_api_v3
   mongoid

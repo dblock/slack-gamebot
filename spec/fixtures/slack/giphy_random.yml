@@ -1,0 +1,72 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api.giphy.com/v1/gifs/random?api_key=key&q=bot&rating=G
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      X-Robots-Tag:
+      - noindex
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Accept, x-requested-with, cache-control, X-GIPHY-SDK-NAME,
+        X-GIPHY-SDK-VERSION, X-GIPHY-SDK-PLATFORM, X-CSRFToken
+      X-Cachiness-Shield-Rule:
+      - giphy_api_vcl_fetch_stale_if_error_val_set
+      X-Cachiness-Shield-Actual-Ttl:
+      - '120.000'
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Rule-Debug:
+      - '1'
+      X-Cachiness-Edge-Rule:
+      - giphy_api_vcl_fetch_stale_if_error_val_set
+      X-Cachiness-Edge-Actual-Ttl:
+      - '120.000'
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Sun, 12 Jun 2022 20:21:54 GMT
+      Connection:
+      - keep-alive
+      X-Served-By:
+      - cache-iad-kjyo7100100-IAD, cache-bos4677-BOS
+      X-Cache-Hits:
+      - 0, 0
+      X-Timer:
+      - S1655065315.660252,VS0,VE63
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=15465600
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"type":"gif","id":"QAPGorQJSoarrsjVhH","url":"https:\/\/giphy.com\/gifs\/nolan-north-troy-baker-uncharted-2-QAPGorQJSoarrsjVhH","slug":"nolan-north-troy-baker-uncharted-2-QAPGorQJSoarrsjVhH","bitly_gif_url":"https:\/\/gph.is\/g\/ZkN0rAP","bitly_url":"https:\/\/gph.is\/g\/ZkN0rAP","embed_url":"https:\/\/giphy.com\/embed\/QAPGorQJSoarrsjVhH","username":"RETROREPLAY","source":"https:\/\/www.youtube.com\/watch?v=yqSfPfvMylk","title":"","rating":"g","content_url":"","source_tld":"www.youtube.com","source_post_url":"https:\/\/www.youtube.com\/watch?v=yqSfPfvMylk","is_sticker":0,"import_datetime":"2019-10-24
+        09:14:59","trending_datetime":"0000-00-00 00:00:00","images":{"fixed_width_still":{"height":"112","size":"14127","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200w_s.gif","width":"200"},"preview_gif":{"height":"51","size":"47216","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy-preview.gif","width":"91"},"fixed_height_downsampled":{"height":"200","size":"154357","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200_d.gif","webp":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200_d.webp","webp_size":"104676","width":"358"},"preview":{"height":"174","mp4":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy-preview.mp4","mp4_size":"31736","width":"311"},"fixed_height_small":{"height":"100","mp4":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/100.mp4","mp4_size":"68654","size":"547166","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/100.gif","webp":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/100.webp","webp_size":"197960","width":"179"},"downsized":{"height":"214","size":"1396844","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy-downsized.gif","width":"384"},"fixed_width_downsampled":{"height":"112","size":"57824","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200w_d.gif","webp":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200w_d.webp","webp_size":"39604","width":"200"},"fixed_width":{"height":"112","mp4":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200w.mp4","mp4_size":"75900","size":"639247","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200w.gif","webp":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200w.webp","webp_size":"219568","width":"200"},"downsized_still":{"height":"214","size":"32591","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy-downsized_s.gif","width":"384"},"downsized_medium":{"height":"268","size":"2923153","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy-downsized-medium.gif","width":"480"},"original_mp4":{"height":"268","mp4":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy.mp4","mp4_size":"399717","width":"480"},"downsized_large":{"height":"268","size":"2923153","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy-downsized-large.gif","width":"480"},"preview_webp":{"height":"96","size":"38476","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy-preview.webp","width":"172"},"original":{"frames":"77","hash":"5505386e9a57f8212bd4b1a556f35bd7","height":"268","mp4":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy.mp4","mp4_size":"399717","size":"4442449","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy.gif","webp":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy.webp","webp_size":"900620","width":"480"},"original_still":{"height":"268","size":"112955","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy_s.gif","width":"480"},"fixed_height_small_still":{"height":"100","size":"10857","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/100_s.gif","width":"179"},"fixed_width_small":{"height":"56","mp4":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/100w.mp4","mp4_size":"27299","size":"202139","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/100w.gif","webp":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/100w.webp","webp_size":"79040","width":"100"},"looping":{"mp4":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy-loop.mp4","mp4_size":"2202654"},"downsized_small":{"height":"176","mp4":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/giphy-downsized-small.mp4","mp4_size":"78547","width":"315"},"fixed_width_small_still":{"height":"56","size":"3862","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/100w_s.gif","width":"100"},"fixed_height_still":{"height":"200","size":"31444","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200_s.gif","width":"358"},"fixed_height":{"height":"200","mp4":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200.mp4","mp4_size":"213774","size":"1834179","url":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200.gif","webp":"https:\/\/media4.giphy.com\/media\/QAPGorQJSoarrsjVhH\/200.webp","webp_size":"565664","width":"358"},"480w_still":{"url":"https:\/\/media3.giphy.com\/media\/QAPGorQJSoarrsjVhH\/480w_s.jpg","width":"480","height":"268"}},"user":{"avatar_url":"https:\/\/media4.giphy.com\/avatars\/RETROREPLAY\/pCAhPQATyoYJ.jpeg","banner_image":"https:\/\/media4.giphy.com\/headers\/RETROREPLAY\/qpHFK1mxTKFD.png","banner_url":"https:\/\/media4.giphy.com\/headers\/RETROREPLAY\/qpHFK1mxTKFD.png","profile_url":"https:\/\/giphy.com\/RETROREPLAY\/","username":"RETROREPLAY","display_name":"RETRO
+        REPLAY","description":"RETRO REPLAY is a comedy gaming and talk show featuring
+        modern-day industry icon Nolan North.\r\n\r\nJoin us every Tuesday and Thursday
+        for a new episode of Retro Replay, Advice From Uncle Noly, and more as Nolan
+        and guests go through a range of emotions, voices, and stories while playing
+        video games and telling stories.","is_verified":false,"website_url":"https:\/\/retroreplayshow.com\/","instagram_url":"https:\/\/instagram.com\/retroreplayshow"}},"meta":{"msg":"OK","status":200,"response_id":"e7dac5f16d15a9e59e946fb7079675d7dca98a2a"}}'
+  recorded_at: Sun, 12 Jun 2022 20:21:54 GMT
+recorded_with: VCR 6.1.0

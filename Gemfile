@@ -4,6 +4,7 @@ ruby '2.6.5'
 
 gem 'hashie', '3.4.6'
 gem 'irb'
+gem 'json'
 gem 'kaminari-grape'
 gem 'mailchimp_api_v3'
 gem 'mongoid'
