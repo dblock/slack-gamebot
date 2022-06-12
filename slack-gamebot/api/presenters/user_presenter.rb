@@ -15,9 +15,9 @@ module Api
       property :rank, type: Integer, desc: 'Rank.'
       property :winning_streak, type: Integer, desc: 'Longest winning streak this season.'
       property :losing_streak, type: Integer, desc: 'Longest losing streak this season.'
-      property :registered, type: Boolean, desc: 'User registered or unregistered.'
+      property :registered, type: ::Grape::API::Boolean, desc: 'User registered or unregistered.'
       property :created_at, as: :registered_at, type: DateTime, desc: 'Date/time when the user has registered.'
-      property :captain, type: Boolean, desc: 'Team captain.'
+      property :captain, type: ::Grape::API::Boolean, desc: 'Team captain.'
 
       link :team do |opts|
         request = Grape::Request.new(opts[:env])

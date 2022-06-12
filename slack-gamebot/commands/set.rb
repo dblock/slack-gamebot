@@ -221,23 +221,23 @@ module SlackGamebot
 
       subscribed_command 'set' do |client, data, match|
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
-        if !match['expression']
-          client.say(channel: data.channel, text: 'Missing setting, eg. _set gifs off_.', gif: 'help')
-          logger.info "SET: #{client.owner} - #{user.user_name}, failed, missing setting"
-        else
+        if match['expression']
           k, v = match['expression'].split(/[\s]+/, 2)
           set client, data, user, k, v
+        else
+          client.say(channel: data.channel, text: 'Missing setting, eg. _set gifs off_.', gif: 'help')
+          logger.info "SET: #{client.owner} - #{user.user_name}, failed, missing setting"
         end
       end
 
       subscribed_command 'unset' do |client, data, match|
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
-        if !match['expression']
-          client.say(channel: data.channel, text: 'Missing setting, eg. _unset gifs_.', gif: 'help')
-          logger.info "UNSET: #{client.owner} - #{user.user_name}, failed, missing setting"
-        else
+        if match['expression']
           k, v = match['expression'].split(/[\s]+/, 2)
           unset client, data, user, k, v
+        else
+          client.say(channel: data.channel, text: 'Missing setting, eg. _unset gifs_.', gif: 'help')
+          logger.info "UNSET: #{client.owner} - #{user.user_name}, failed, missing setting"
         end
       end
     end

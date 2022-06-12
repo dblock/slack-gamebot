@@ -6,8 +6,8 @@ module Api
       include Grape::Roar::Representer
 
       property :id, type: String, desc: 'Match ID.'
-      property :tied, type: Boolean, desc: 'Match is a tie.'
-      property :resigned, type: Boolean, desc: 'The loser resigned.'
+      property :tied, type: ::Grape::API::Boolean, desc: 'Match is a tie.'
+      property :resigned, type: ::Grape::API::Boolean, desc: 'The loser resigned.'
       property :scores, type: Array, desc: 'Match scores.'
       property :created_at, type: DateTime, desc: 'Date/time when the match was created.'
 

@@ -63,7 +63,7 @@ describe Api::Endpoints::SubscriptionsEndpoint do
           expect(team.stripe_customer_id).to_not be_blank
           customer = Stripe::Customer.retrieve(team.stripe_customer_id)
           expect(customer).to_not be nil
-          expect(Hash[customer.metadata]).to eq(
+          expect(customer.metadata.to_h).to eq(
             id: team._id.to_s,
             name: team.name,
             team_id: team.team_id,

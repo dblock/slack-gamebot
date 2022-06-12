@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SlackRubyBotServer::Service do
   context '#url' do
     before do
-      @rack_env = ENV['RACK_ENV']
+      @rack_env = ENV.fetch('RACK_ENV', nil)
     end
     after do
       ENV['RACK_ENV'] = @rack_env

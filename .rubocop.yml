@@ -1,4 +1,5 @@
 AllCops:
+  NewCops: enable
   Exclude:
     - vendor/**/*
     - bin/**/*
@@ -6,7 +7,7 @@ AllCops:
 Metrics:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 500
   Enabled: false
 

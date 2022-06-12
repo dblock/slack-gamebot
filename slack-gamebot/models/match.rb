@@ -144,7 +144,7 @@ class Match
               end
 
       winners.each do |winner|
-        e = 100 - 1.0 / (1.0 + (10.0**((losers_elo - winner.elo) / 400.0))) * 100
+        e = 100 - (1.0 / (1.0 + (10.0**((losers_elo - winner.elo) / 400.0))) * 100)
         winner.tau = [winner.tau + 0.5, Elo::MAX_TAU].min
         delta = e * ratio * (Elo::DELTA_TAU**winner.tau) * winners_ratio
         winners_delta << delta
@@ -152,7 +152,7 @@ class Match
       end
 
       losers.each do |loser|
-        e = 100 - 1.0 / (1.0 + (10.0**((loser.elo - winners_elo) / 400.0))) * 100
+        e = 100 - (1.0 / (1.0 + (10.0**((loser.elo - winners_elo) / 400.0))) * 100)
         loser.tau = [loser.tau + 0.5, Elo::MAX_TAU].min
         delta = e * ratio * (Elo::DELTA_TAU**loser.tau) * losers_ratio
         losers_delta << delta

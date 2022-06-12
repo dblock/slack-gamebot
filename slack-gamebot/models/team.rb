@@ -141,7 +141,7 @@ class Team
   end
 
   def self.find_or_create_from_env!
-    token = ENV['SLACK_API_TOKEN']
+    token = ENV.fetch('SLACK_API_TOKEN', nil)
     return unless token
 
     team = Team.where(token: token).first
@@ -234,15 +234,8 @@ Follow https://twitter.com/playplayio for news and updates.
   EOS
 
   def make_message(message, gif_name = nil)
-    if gif_name && gifs?
-      gif = begin
-        Giphy.random(gif_name)
-            rescue StandardError => e
-              logger.warn "Giphy.random: #{e.message}"
-              nil
-      end
-    end
-    [message, gif && gif.image_url.to_s].compact.join("\n")
+    gif = Giphy.random(gif_name) if gif_name && gifs?
+    [message, gif].compact.join("\n")
   end
 
   def update_subscribed_at

@@ -13,7 +13,7 @@ namespace :db do
       end
 
       # connect to MongoDB
-      env = (ENV['RACK_ENV'] || 'development').to_s
+      env = ENV.fetch('RACK_ENV', 'development').to_s
       logger.info "Connecting to the #{env} environment."
       Mongoid.load! 'config/mongoid.yml', env
 

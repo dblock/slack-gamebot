@@ -1,9 +1,8 @@
 module SlackGamebot
-  class Server < SlackRubyBotServer::Server
+  class Server < SlackRubyBotServer::RealTime::Server
     def initialize(attrs = {})
       attrs = attrs.dup
       attrs[:aliases] = ([attrs[:team].game.name] + [attrs[:team].aliases]).flatten.compact
-      attrs[:send_gifs] = attrs[:team].gifs
       super attrs
     end
 
@@ -23,6 +22,14 @@ Challenge someone to a game of #{client.owner.game.name} with `@#{client.self.na
 Type `@#{client.self.name} help` fore more commands and don't forget to have fun at work!
       EOS
       client.say(channel: data.channel['id'], text: message)
+    end
+
+    def client
+      @client ||= begin
+        client = super
+        client.send_gifs = team.gifs
+        client
+      end
     end
   end
 end

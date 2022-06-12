@@ -39,7 +39,7 @@ class User
   scope :everyone, -> { where(user_id: ANYONE) }
 
   def current_matches
-    Match.current.where(team: team).or({ winner_ids: _id }, loser_ids: _id)
+    Match.current.where(team: team).any_of({ winner_ids: _id }, loser_ids: _id)
   end
 
   def slack_mention
@@ -67,7 +67,8 @@ class User
              team.users.where(user_id: slack_id).first
            else
              regexp = ::Regexp.new("^#{user_name}$", 'i')
-             User.where(team: team).or({ user_name: regexp }, nickname: regexp).first
+             query = User.where(team: team).any_of({ user_name: regexp }, nickname: regexp)
+             query.first
     end
     unless user
       case slack_id
@@ -127,9 +128,9 @@ class User
   end
 
   def to_s
-    wins_s = "#{wins} win#{wins != 1 ? 's' : ''}"
-    losses_s = "#{losses} loss#{losses != 1 ? 'es' : ''}"
-    ties_s = "#{ties} tie#{ties != 1 ? 's' : ''}" if ties && ties > 0
+    wins_s = "#{wins} win#{wins == 1 ? '' : 's'}"
+    losses_s = "#{losses} loss#{losses == 1 ? '' : 'es'}"
+    ties_s = "#{ties} tie#{ties == 1 ? '' : 's'}" if ties && ties > 0
     elo_s = "elo: #{team_elo}"
     lws_s = "lws: #{winning_streak}" if winning_streak >= losing_streak && winning_streak >= 3
     lls_s = "lls: #{losing_streak}" if losing_streak > winning_streak && losing_streak >= 3

@@ -45,8 +45,8 @@ class Game
   end
 
   def self.find_or_create_from_env!
-    client_id = ENV['SLACK_CLIENT_ID']
-    client_secret = ENV['SLACK_CLIENT_SECRET']
+    client_id = ENV.fetch('SLACK_CLIENT_ID', nil)
+    client_secret = ENV.fetch('SLACK_CLIENT_SECRET', nil)
     return unless client_id && client_secret
 
     game = Game.where(client_id: client_id).first
