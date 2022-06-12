@@ -10,7 +10,7 @@ require 'slack-gamebot'
 
 NewRelic::Agent.manual_start
 
-SlackRubyBotServer.configure do |config|
+SlackRubyBotServer::RealTime.configure do |config|
   config.server_class = SlackGamebot::Server
 end
 
