@@ -121,9 +121,22 @@ class Team
     @slack_client ||= Slack::Web::Client.new(token: token)
   end
 
+  def slack_channels
+    raise 'missing bot_user_id' unless bot_user_id
+
+    channels = []
+    slack_client.users_conversations(
+      user: bot_user_id,
+      exclude_archived: true,
+      types: 'public_channel,private_channel'
+    ) do |response|
+      channels.concat(response.channels)
+    end
+    channels
+  end
+
   def inform!(message, gif_name = nil)
-    channels = slack_client.conversations_list['channels'].select { |channel| channel['is_member'] } # TODO: paginate
-    channels.each do |channel|
+    slack_channels.each do |channel|
       logger.info "Sending '#{message}' to #{self} on ##{channel['name']}."
       slack_client.chat_postMessage(text: make_message(message, gif_name), channel: channel['id'], as_user: true)
     end
