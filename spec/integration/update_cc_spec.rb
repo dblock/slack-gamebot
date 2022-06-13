@@ -24,13 +24,13 @@ describe 'Update cc', js: true, type: :feature do
           stripe_iframe = all('iframe[name=stripe_checkout_app]').last
           Capybara.within_frame stripe_iframe do
             page.find_field('Email').set 'foo@bar.com'
-            page.find_field('Card number').set '4012 8888 8888 1881'
-            page.find_field('MM / YY').set '12/42'
+            page.find_field('Card number').client_set '4012 8888 8888 1881'
+            page.find_field('MM / YY').client_set '12/42'
             page.find_field('CVC').set '345'
             find('button[type="submit"]').click
           end
           sleep 5
-          expect(find('#messages')).to have_text("Successfully updated team #{team.name} credit card for #{team.game.name}. Thank you for your support!")
+          expect(find('#messages')).to have_text("Successfully updated team #{team.name} credit card for #{team.game.name}.\nThank you!")
         end
       end
       context 'a team without a stripe customer ID' do
@@ -43,8 +43,8 @@ describe 'Update cc', js: true, type: :feature do
           stripe_iframe = all('iframe[name=stripe_checkout_app]').last
           Capybara.within_frame stripe_iframe do
             page.find_field('Email').set 'foo@bar.com'
-            page.find_field('Card number').set '4012 8888 8888 1881'
-            page.find_field('MM / YY').set '12/42'
+            page.find_field('Card number').client_set '4012 8888 8888 1881'
+            page.find_field('MM / YY').client_set '12/42'
             page.find_field('CVC').set '345'
             find('button[type="submit"]').click
           end

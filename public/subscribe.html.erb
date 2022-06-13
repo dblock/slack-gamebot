@@ -91,7 +91,7 @@
                 url: '/api/subscriptions',
                 data: data,
                 success: function(data) {
-                  PlayPlay.message('Team <b>' + team.name + '</b> successfully subscribed to <b>' + team.game + '</b>.<br><br>Thank you!');
+                  PlayPlay.message('Team <b>' + team.name + '</b> successfully subscribed to <b>' + team.game + '</b>.<br>Thank you!');
                   $('#subscribeButton').remove();
                 },
                 error: PlayPlay.error
