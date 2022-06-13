@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '2.6.5'
+ruby '2.7.6'
 
 gem 'hashie', '3.4.6'
 gem 'irb'

@@ -12,9 +12,6 @@ class Team
   field :subscribed, type: Boolean, default: false
   field :subscribed_at, type: DateTime
 
-  field :bot_user_id, type: String
-  field :activated_user_id, type: String
-
   scope :api, -> { where(api: true) }
   scope :subscribed, -> { where(subscribed: true) }
 
