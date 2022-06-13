@@ -26,6 +26,7 @@ class Team
 
   before_validation :update_subscribed_at
   after_update :subscribed!
+  after_save :activated!
 
   def subscription_expired?
     return false if subscribed?
@@ -258,5 +259,31 @@ Follow https://twitter.com/playplayio for news and updates.
     return unless subscribed? && subscribed_changed?
 
     inform! SUBSCRIBED_TEXT, 'thanks'
+  end
+
+  def bot_mention
+    "<@#{bot_user_id || 'bot'}>"
+  end
+
+  def activated_text
+    <<~EOS
+      Welcome! Invite #{bot_mention} to a channel to get started.
+    EOS
+  end
+
+  def activated!
+    return unless active? && activated_user_id && bot_user_id
+    return unless active_changed? || activated_user_id_changed?
+
+    inform_activated!
+  end
+
+  def inform_activated!
+    im = slack_client.conversations_open(users: activated_user_id.to_s)
+    slack_client.chat_postMessage(
+      text: activated_text,
+      channel: im['channel']['id'],
+      as_user: true
+    )
   end
 end

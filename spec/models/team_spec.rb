@@ -202,4 +202,7 @@ describe Team do
       team.inform!(message: 'message')
     end
   end
+  context '#activated' do
+    pending 'DMs installing user when activated'
+  end
 end

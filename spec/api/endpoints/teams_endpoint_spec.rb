@@ -128,6 +128,7 @@ describe Api::Endpoints::TeamsEndpoint do
         ).and_return(oauth_access)
       end
       it 'creates a team with game name' do
+        expect_any_instance_of(Team).to receive(:activated!)
         expect(SlackRubyBotServer::Service.instance).to receive(:start!)
         expect do
           team = client.teams._post(code: 'code', game: game.name)
@@ -142,6 +143,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end.to change(Team, :count).by(1)
       end
       it 'creates a team with game id' do
+        expect_any_instance_of(Team).to receive(:activated!)
         expect(SlackRubyBotServer::Service.instance).to receive(:start!)
         expect do
           team = client.teams._post(code: 'code', game_id: game.id.to_s)
@@ -156,6 +158,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end.to change(Team, :count).by(1)
       end
       it 'reactivates a deactivated team' do
+        allow_any_instance_of(Team).to receive(:activated!)
         expect(SlackRubyBotServer::Service.instance).to receive(:start!)
         existing_team = Fabricate(:team, game: game, token: 'token', active: false, aliases: %w[foo bar])
         expect do
@@ -172,6 +175,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end.to_not change(Team, :count)
       end
       it 'reactivates a team deactivated on slack' do
+        allow_any_instance_of(Team).to receive(:activated!)
         expect(SlackRubyBotServer::Service.instance).to receive(:start!)
         existing_team = Fabricate(:team, game: game, token: 'token', aliases: %w[foo bar])
         expect do
@@ -189,6 +193,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end.to_not change(Team, :count)
       end
       it 'updates a reactivated team with a new token' do
+        allow_any_instance_of(Team).to receive(:activated!)
         expect(SlackRubyBotServer::Service.instance).to receive(:start!)
         existing_team = Fabricate(:team, game: game, token: 'old', team_id: 'team_id', active: false)
         expect do
@@ -204,6 +209,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end.to_not change(Team, :count)
       end
       it 'revives a dead team' do
+        allow_any_instance_of(Team).to receive(:activated!)
         expect(SlackRubyBotServer::Service.instance).to receive(:start!)
         existing_team = Fabricate(:team, game: game, token: 'old', aliases: %w[foo bar], team_id: 'team_id', active: false, dead_at: Time.now)
         expect do
@@ -229,6 +235,7 @@ describe Api::Endpoints::TeamsEndpoint do
         end
       end
       it 'returns a useful error when team already exists' do
+        allow_any_instance_of(Team).to receive(:activated!)
         expect(SlackRubyBotServer::Service.instance).to_not receive(:start!)
         expect_any_instance_of(Team).to receive(:ping_if_active!)
         existing_team = Fabricate(:team, game: game, token: 'token')
@@ -251,6 +258,7 @@ describe Api::Endpoints::TeamsEndpoint do
         let(:list) { double(Mailchimp::List, members: double(Mailchimp::List::Members)) }
 
         it 'subscribes to the mailing list' do
+          allow_any_instance_of(Team).to receive(:activated!)
           expect(SlackRubyBotServer::Service.instance).to receive(:start!)
 
           allow_any_instance_of(Slack::Web::Client).to receive(:users_info).with(
@@ -292,6 +300,7 @@ describe Api::Endpoints::TeamsEndpoint do
     end
 
     it 'reactivates a deactivated team with a different code' do
+      allow_any_instance_of(Team).to receive(:activated!).twice
       expect(SlackRubyBotServer::Service.instance).to receive(:start!)
       existing_team = Fabricate(:team, game: game, token: 'token', active: false, aliases: %w[foo bar])
       oauth_access = {
