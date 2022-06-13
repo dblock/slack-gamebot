@@ -10,7 +10,7 @@ module Capybara
   module Node
     class Element
       def client_set(value)
-        driver.browser.execute_script("$(arguments[0]).val('#{value}');", self.native)
+        driver.browser.execute_script("$(arguments[0]).val('#{value}');", native)
       end
     end
   end

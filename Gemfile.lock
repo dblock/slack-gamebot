@@ -142,7 +142,7 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
     minitest (5.15.0)
-    mongo (2.17.1)
+    mongo (2.15.1)
       bson (>= 4.8.2, < 5.0.0)
     mongoid (7.4.0)
       activemodel (>= 5.1, < 7.1, != 7.0.0)
@@ -323,6 +323,7 @@ DEPENDENCIES
   json
   kaminari-grape
   mailchimp_api_v3
+  mongo (~> 2.15.1)
   mongoid
   mongoid-scroll
   mongoid-shell
