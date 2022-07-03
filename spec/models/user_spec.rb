@@ -34,6 +34,14 @@ describe User do
       end
     end
   end
+  context 'with a mismatching user id in slack_mention' do
+    let!(:user) { Fabricate(:user, team: team, nickname: 'bob') }
+    let(:web_client) { double(Slack::Web::Client, users_info: { user: { id: user.user_id, name: user.user_name } }) }
+    let(:client) { double(Slack::RealTime::Client, owner: team, web_client: web_client) }
+    it 'finds by different slack id returned from slack info' do
+      expect(User.find_by_slack_mention!(client, '<@unknown>')).to eq user
+    end
+  end
   context '#find_many_by_slack_mention!' do
     let(:web_client) { double(Slack::Web::Client, users_info: nil) }
     let(:client) { double(Slack::RealTime::Client, owner: team, web_client: web_client) }

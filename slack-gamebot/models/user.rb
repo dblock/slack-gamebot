@@ -77,8 +77,13 @@ class User
       else
         begin
           users_info = client.web_client.users_info(user: slack_id || "@#{user_name}")
-          info = Hashie::Mash.new(users_info).user if users_info
-          user = User.create!(team: team, user_id: info.id, user_name: info.name, registered: true) if info
+          if users_info
+            info = Hashie::Mash.new(users_info).user
+            if info
+              user = team.users.where(user_id: info.id).first
+              user ||= User.create!(team: team, user_id: info.id, user_name: info.name, registered: true)
+            end
+          end
         rescue Slack::Web::Api::Errors::SlackError => e
           raise e unless e.message == 'user_not_found'
         end
