@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '2.7.7'
+ruby '3.1.2'
 
 gem 'hashie', '3.4.6'
 gem 'irb'
@@ -51,4 +51,5 @@ group :test do
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
+  gem 'webrick'
 end

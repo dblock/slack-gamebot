@@ -14,7 +14,7 @@ module Api
         get 'current' do
           team = Team.find(params[:team_id]) || error!('Not Found', 404)
           error!('Not Found', 404) unless team.api?
-          present Season.new(team: team), with: Api::Presenters::SeasonPresenter
+          present Season.new(team:), with: Api::Presenters::SeasonPresenter
         end
 
         desc 'Get a season.'

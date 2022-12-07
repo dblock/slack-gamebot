@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::ChallengeQuestion, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
   let(:user) { Fabricate(:user, user_name: 'username') }
   let(:opponent) { Fabricate(:user) }
@@ -14,8 +14,8 @@ describe SlackGamebot::Commands::ChallengeQuestion, vcr: { cassette_name: 'user_
     end.to_not change(Challenge, :count)
   end
   it 'displays elo at stake for a doubles challenge' do
-    opponent2 = Fabricate(:user, team: team)
-    teammate = Fabricate(:user, team: team)
+    opponent2 = Fabricate(:user, team:)
+    teammate = Fabricate(:user, team:)
     expect do
       expect(message: "#{SlackRubyBot.config.user} challenge? #{opponent.slack_mention} #{opponent2.user_name} with #{teammate.user_name}", user: user.user_id, channel: 'pongbot').to respond_with_slack_message(
         "#{user.slack_mention} and #{teammate.slack_mention} challenging #{opponent.slack_mention} and #{opponent2.slack_mention} to a match is worth 48 elo."

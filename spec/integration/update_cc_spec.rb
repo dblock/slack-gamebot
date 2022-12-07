@@ -11,7 +11,7 @@ describe 'Update cc', js: true, type: :feature do
     context 'a game' do
       let!(:game) { Fabricate(:game, name: 'pong') }
       context 'a team with a stripe customer ID' do
-        let!(:team) { Fabricate(:team, game: game, stripe_customer_id: 'stripe_customer_id') }
+        let!(:team) { Fabricate(:team, game:, stripe_customer_id: 'stripe_customer_id') }
         it 'updates cc' do
           visit "/update_cc?team_id=#{team.team_id}&game=#{team.game.name}"
           expect(find('h3')).to have_text('PLAYPLAY.IO: UPDATE CREDIT CARD INFO')
@@ -34,7 +34,7 @@ describe 'Update cc', js: true, type: :feature do
         end
       end
       context 'a team without a stripe customer ID' do
-        let!(:team) { Fabricate(:team, game: game, stripe_customer_id: nil) }
+        let!(:team) { Fabricate(:team, game:, stripe_customer_id: nil) }
         it 'displays error' do
           visit "/update_cc?team_id=#{team.team_id}&game=#{team.game.name}"
           expect(find('h3')).to have_text('PLAYPLAY.IO: UPDATE CREDIT CARD INFO')

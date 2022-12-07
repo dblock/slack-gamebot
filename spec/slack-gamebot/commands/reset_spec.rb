@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
   let!(:team) { Fabricate(:team) }
   it 'requires a captain' do
-    Fabricate(:user, captain: true, team: team)
+    Fabricate(:user, captain: true, team:)
     Fabricate(:user, user_name: 'username')
     expect(::User).to_not receive(:reset_all!).with(team)
     expect(message: "#{SlackRubyBot.config.user} reset").to respond_with_slack_message("You're not a captain, sorry.")
@@ -79,7 +79,7 @@ describe SlackGamebot::Commands::Reset, vcr: { cassette_name: 'user_info' } do
     expect(message: "#{SlackRubyBot.config.user} reset #{team.name}").to respond_with_slack_message('No matches have been recorded.')
   end
   it 'can be reset with a match lost' do
-    ::Match.lose!(team: team, winners: [Fabricate(:user, team: team)], losers: [Fabricate(:user, team: team)])
+    ::Match.lose!(team:, winners: [Fabricate(:user, team:)], losers: [Fabricate(:user, team:)])
     expect(message: "#{SlackRubyBot.config.user} reset #{team.name}").to respond_with_slack_message('Welcome to the new season!')
   end
 end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SlackGamebot::Server do
   let(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
   context 'send_gifs' do
     context 'default' do
@@ -26,13 +26,13 @@ describe SlackGamebot::Server do
   end
   context 'aliases' do
     let(:game) { Fabricate(:game, name: 'game', aliases: []) }
-    let(:team) { Fabricate(:team, game: game, aliases: %w[t1 t2]) }
+    let(:team) { Fabricate(:team, game:, aliases: %w[t1 t2]) }
     it 'combines game name and team aliases' do
       expect(app.send(:client).aliases).to eq %w[game t1 t2]
     end
   end
   context 'hooks' do
-    let(:user) { Fabricate(:user, team: team) }
+    let(:user) { Fabricate(:user, team:) }
     it 'renames user' do
       app.send(:hook_blocks)[:user_change].each do |hook|
         hook.call(client, Hashie::Mash.new(type: 'user_change', user: { id: user.user_id, name: 'updated' }))

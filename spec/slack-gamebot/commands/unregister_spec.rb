@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::Unregister, vcr: { cassette_name: 'user_info' } do
   context 'team' do
-    let(:app) { SlackGamebot::Server.new(team: team) }
+    let(:app) { SlackGamebot::Server.new(team:) }
     let(:client) { app.send(:client) }
     let!(:team) { Fabricate(:team) }
     it 'requires a captain to unregister someone' do
-      Fabricate(:user, captain: true, team: team)
+      Fabricate(:user, captain: true, team:)
       user = Fabricate(:user)
       expect(message: "#{SlackRubyBot.config.user} unregister #{user.user_name}").to respond_with_slack_message("You're not a captain, sorry.")
     end
@@ -17,7 +17,7 @@ describe SlackGamebot::Commands::Unregister, vcr: { cassette_name: 'user_info' }
       expect(User.where(user_id: 'user1').first.registered).to be false
     end
     it 'cannot unregister an unknown user by name' do
-      captain = Fabricate(:user, captain: true, team: team)
+      captain = Fabricate(:user, captain: true, team:)
       allow(client.web_client).to receive(:users_info)
       user = Fabricate(:user, team: Fabricate(:team)) # another user in another team
       expect(message: "#{SlackRubyBot.config.user} unregister #{user.user_name}", user: captain.user_id).to respond_with_slack_message("I don't know who #{user.user_name} is! Ask them to _register_.")

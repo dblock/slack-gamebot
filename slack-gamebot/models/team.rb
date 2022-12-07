@@ -80,8 +80,8 @@ class Team
   def to_s
     {
       game: game.name,
-      name: name,
-      domain: domain,
+      name:,
+      domain:,
       id: team_id
     }.map do |k, v|
       "#{k}=#{v}" if v
@@ -119,7 +119,7 @@ class Team
   end
 
   def slack_client
-    @slack_client ||= Slack::Web::Client.new(token: token)
+    @slack_client ||= Slack::Web::Client.new(token:)
   end
 
   def slack_channels
@@ -155,9 +155,9 @@ class Team
     token = ENV.fetch('SLACK_API_TOKEN', nil)
     return unless token
 
-    team = Team.where(token: token).first
-    team ||= Team.new(token: token)
-    info = Slack::Web::Client.new(token: token).team_info
+    team = Team.where(token:).first
+    team ||= Team.new(token:)
+    info = Slack::Web::Client.new(token:).team_info
     team.team_id = info['team']['id']
     team.name = info['team']['name']
     team.domain = info['team']['domain']

@@ -31,7 +31,7 @@ describe Game do
       end.to change(Game, :count).by(-1)
     end
     context 'with teams' do
-      let!(:team) { Fabricate(:team, game: game) }
+      let!(:team) { Fabricate(:team, game:) }
       it 'cannot destroy a game that has teams' do
         expect do
           expect do

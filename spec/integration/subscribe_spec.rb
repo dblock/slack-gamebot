@@ -22,7 +22,7 @@ describe 'Subscribe', js: true, type: :feature do
     end
   end
   context 'for a subscribed team' do
-    let!(:team) { Fabricate(:team, game: game, subscribed: true) }
+    let!(:team) { Fabricate(:team, game:, subscribed: true) }
     before do
       visit "/subscribe?team_id=#{team.team_id}&game=#{team.game.name}"
     end
@@ -71,21 +71,21 @@ describe 'Subscribe', js: true, type: :feature do
       ENV.delete 'STRIPE_API_PUBLISHABLE_KEY'
     end
     context 'a team' do
-      let!(:team) { Fabricate(:team, game: game) }
+      let!(:team) { Fabricate(:team, game:) }
       it_behaves_like 'subscribes'
     end
     context 'a team with two games' do
-      let!(:team) { Fabricate(:team, game: game) }
+      let!(:team) { Fabricate(:team, game:) }
       let!(:team2) { Fabricate(:team, team_id: team.team_id, game: Fabricate(:game)) }
       it_behaves_like 'subscribes'
     end
     context 'a second team with two games' do
       let!(:team2) { Fabricate(:team, game: Fabricate(:game)) }
-      let!(:team) { Fabricate(:team, game: game, team_id: team2.team_id) }
+      let!(:team) { Fabricate(:team, game:, team_id: team2.team_id) }
       it_behaves_like 'subscribes'
     end
     context 'with a coupon' do
-      let!(:team) { Fabricate(:team, game: game) }
+      let!(:team) { Fabricate(:team, game:) }
       it 'applies the coupon' do
         coupon = double(Stripe::Coupon, id: 'coupon-id', amount_off: 1200)
         expect(Stripe::Coupon).to receive(:retrieve).with('coupon-id').and_return(coupon)

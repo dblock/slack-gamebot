@@ -60,8 +60,8 @@ module Api
           bot_user_id = rc['bot']['bot_user_id']
           user_id = rc['user_id']
           access_token = rc['access_token']
-          team = Team.where(token: token).first
-          team ||= Team.where(team_id: rc['team_id'], game: game).first
+          team = Team.where(token:).first
+          team ||= Team.where(team_id: rc['team_id'], game:).first
 
           if team
             error!('Invalid Game', 400) unless team.game == game
@@ -69,10 +69,10 @@ module Api
             team.ping_if_active!
 
             team.update_attributes!(
-              token: token,
+              token:,
               activated_user_id: user_id,
               activated_user_access_token: access_token,
-              bot_user_id: bot_user_id,
+              bot_user_id:,
               dead_at: nil
             )
 
@@ -81,14 +81,14 @@ module Api
             team.activate!(token)
           else
             team = Team.create!(
-              game: game,
+              game:,
               aliases: game.aliases,
-              token: token,
+              token:,
               team_id: rc['team_id'],
               name: rc['team_name'],
               activated_user_id: user_id,
               activated_user_access_token: access_token,
-              bot_user_id: bot_user_id
+              bot_user_id:
             )
           end
 

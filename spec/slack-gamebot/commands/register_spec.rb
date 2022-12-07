@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::Register, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
   it 'registers a new user and promotes them to captain' do
     Fabricate(:user, team: Fabricate(:team)) # another user in another team
@@ -11,7 +11,7 @@ describe SlackGamebot::Commands::Register, vcr: { cassette_name: 'user_info' } d
     end.to change(User, :count).by(1)
   end
   it 'registers a new user' do
-    Fabricate(:user, team: team, captain: true)
+    Fabricate(:user, team:, captain: true)
     expect do
       expect(message: "#{SlackRubyBot.config.user} register", user: 'user').to respond_with_slack_message("Welcome <@user>! You're ready to play.")
     end.to change(User, :count).by(1)

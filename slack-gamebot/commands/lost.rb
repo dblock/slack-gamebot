@@ -41,7 +41,7 @@ module SlackGamebot
           client.say(channel: data.channel, text: 'You cannot lose to yourself!', gif: 'loser')
           logger.info "Cannot lose to yourself: #{client.owner} - #{match}"
         elsif opponents.any? && (challenge.nil? || (challenge.challengers != opponents && challenge.challenged != opponents))
-          match = ::Match.lose!(team: client.owner, winners: opponents, losers: teammates, scores: scores)
+          match = ::Match.lose!(team: client.owner, winners: opponents, losers: teammates, scores:)
           client.say(channel: data.channel, text: "Match has been recorded! #{match}.", gif: 'loser')
           logger.info "LOST TO: #{client.owner} - #{match}"
         elsif challenge
@@ -51,7 +51,7 @@ module SlackGamebot
         else
           match = ::Match.where(loser_ids: challenger.id).desc(:_id).first
           if match
-            match.update_attributes!(scores: scores)
+            match.update_attributes!(scores:)
             client.say(channel: data.channel, text: "Match scores have been updated! #{match}.", gif: 'score')
             logger.info "SCORED: #{client.owner} - #{match}"
           else

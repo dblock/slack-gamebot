@@ -4,8 +4,8 @@ describe User do
   let(:team) { Fabricate(:team) }
   context '#find_by_slack_mention!' do
     let(:web_client) { double(Slack::Web::Client, users_info: nil) }
-    let(:client) { double(Slack::RealTime::Client, owner: team, web_client: web_client) }
-    let!(:user) { Fabricate(:user, team: team, nickname: 'bob') }
+    let(:client) { double(Slack::RealTime::Client, owner: team, web_client:) }
+    let!(:user) { Fabricate(:user, team:, nickname: 'bob') }
     it 'finds by slack id' do
       expect(User.find_by_slack_mention!(client, "<@#{user.user_id}>")).to eq user
     end
@@ -35,17 +35,17 @@ describe User do
     end
   end
   context 'with a mismatching user id in slack_mention' do
-    let!(:user) { Fabricate(:user, team: team, nickname: 'bob') }
+    let!(:user) { Fabricate(:user, team:, nickname: 'bob') }
     let(:web_client) { double(Slack::Web::Client, users_info: { user: { id: user.user_id, name: user.user_name } }) }
-    let(:client) { double(Slack::RealTime::Client, owner: team, web_client: web_client) }
+    let(:client) { double(Slack::RealTime::Client, owner: team, web_client:) }
     it 'finds by different slack id returned from slack info' do
       expect(User.find_by_slack_mention!(client, '<@unknown>')).to eq user
     end
   end
   context '#find_many_by_slack_mention!' do
     let(:web_client) { double(Slack::Web::Client, users_info: nil) }
-    let(:client) { double(Slack::RealTime::Client, owner: team, web_client: web_client) }
-    let!(:users) { [Fabricate(:user, team: team), Fabricate(:user, team: team)] }
+    let(:client) { double(Slack::RealTime::Client, owner: team, web_client:) }
+    let!(:users) { [Fabricate(:user, team:), Fabricate(:user, team:)] }
     it 'finds by slack_id or slack_mention' do
       results = User.find_many_by_slack_mention!(client, [users.first.user_name, users.last.slack_mention])
       expect(results).to contain_exactly(*users)
@@ -72,7 +72,7 @@ describe User do
       end
     end
     context 'with a user' do
-      let!(:user) { Fabricate(:user, team: team) }
+      let!(:user) { Fabricate(:user, team:) }
       it 'creates another user' do
         expect do
           User.find_create_or_update_by_slack_id!(client, 'U42')
@@ -231,10 +231,10 @@ describe User do
   context '.rank_section' do
     let(:team) { Fabricate(:team) }
     it 'returns a section' do
-      user1 = Fabricate(:user, team: team, elo: 100, wins: 4, losses: 0)
-      user2 = Fabricate(:user, team: team, elo: 40, wins: 1, losses: 1)
-      user3 = Fabricate(:user, team: team, elo: 60, wins: 2, losses: 0)
-      user4 = Fabricate(:user, team: team, elo: 80, wins: 3, losses: 0)
+      user1 = Fabricate(:user, team:, elo: 100, wins: 4, losses: 0)
+      user2 = Fabricate(:user, team:, elo: 40, wins: 1, losses: 1)
+      user3 = Fabricate(:user, team:, elo: 60, wins: 2, losses: 0)
+      user4 = Fabricate(:user, team:, elo: 80, wins: 3, losses: 0)
       [user1, user2, user3, user4].each(&:reload)
       expect(User.rank_section(team, [user1])).to eq [user1]
       expect(User.rank_section(team, [user1, user3])).to eq [user1, user4, user3]
@@ -245,8 +245,8 @@ describe User do
       expect(User.rank_section(Fabricate(:team), [user])).to eq []
     end
     it 'only returns one unranked user' do
-      user1 = Fabricate(:user, team: team)
-      user2 = Fabricate(:user, team: team)
+      user1 = Fabricate(:user, team:)
+      user2 = Fabricate(:user, team:)
       expect(User.rank_section(team, [user1])).to eq [user1]
       expect(User.rank_section(team, [user1, user2])).to eq [user1, user2]
     end

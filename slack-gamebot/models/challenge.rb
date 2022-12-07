@@ -40,7 +40,7 @@ class Challenge
 
   # challenges scoped by state
   ChallengeState.values.each do |state|
-    scope state.to_sym, -> { where(state: state) }
+    scope state.to_sym, -> { where(state:) }
   end
 
   # Given a challenger and a list of names splits into two groups, returns users.
@@ -64,7 +64,7 @@ class Challenge
     teammates, opponents = split_teammates_and_opponents(client, challenger, names, separator)
     Challenge.new(
       team: client.owner,
-      channel: channel,
+      channel:,
       created_by: challenger,
       challengers: teammates,
       challenged: opponents,
@@ -101,7 +101,7 @@ class Challenge
     raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
 
     winners, losers = winners_and_losers_for(loser)
-    Match.lose!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
+    Match.lose!(team:, challenge: self, winners:, losers:, scores:)
     update_attributes!(state: ChallengeState::PLAYED)
   end
 
@@ -120,7 +120,7 @@ class Challenge
     raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED
 
     winners, losers = winners_and_losers_for_resigned(loser)
-    Match.resign!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
+    Match.resign!(team:, challenge: self, winners:, losers:, scores:)
     update_attributes!(state: ChallengeState::PLAYED)
   end
 
@@ -146,7 +146,7 @@ class Challenge
 
     # in a draw, winners have a lower original elo
     winners, losers = winners_and_losers_for_draw(player)
-    Match.draw!(team: team, challenge: self, winners: winners, losers: losers, scores: scores)
+    Match.draw!(team:, challenge: self, winners:, losers:, scores:)
     update_attributes!(state: ChallengeState::PLAYED)
   end
 
@@ -169,17 +169,17 @@ class Challenge
       { challenger_ids: player._id },
       challenged_ids: player._id
     ).where(
-      team: team,
-      channel: channel,
+      team:,
+      channel:,
       :state.in => states
     ).first
   end
 
   def self.find_open_challenge(team, channel, states = [ChallengeState::PROPOSED])
     Challenge.where(
-      team: team,
+      team:,
       challenged_ids: team.users.everyone.map(&:_id),
-      channel: channel,
+      channel:,
       :state.in => states
     ).first
   end
