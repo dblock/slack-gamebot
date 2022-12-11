@@ -15,7 +15,7 @@ module Api
             error!("Invalid sort order: #{sort_order}, must be#{supported_sort_orders.count == 1 ? '' : ' one of'} '#{supported_sort_orders.join('\', \'')}'", 400)
           end
         end
-        sort_order = sort_order.split(',').map do |sort_entry|
+        sort_order.split(',').map do |sort_entry|
           sort_order = {}
           if sort_entry[0] == '-'
             sort_order[:direction] = :desc
@@ -27,7 +27,6 @@ module Api
           error!("Invalid sort: #{sort_entry}", 400) if sort_order[:column].blank?
           sort_order
         end
-        sort_order
       end
 
       def route_sort

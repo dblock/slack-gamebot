@@ -17,9 +17,9 @@ module SlackGamebot
         while arguments&.any?
           argument = arguments.shift
           case argument
-          when 'to' then
+          when 'to'
             current = :opponents
-          when 'with' then
+          when 'with'
             current = :teammates
           else
             if current == :opponents

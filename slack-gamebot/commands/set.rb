@@ -167,25 +167,25 @@ module SlackGamebot
 
         def set(client, data, user, k, v)
           case k
-          when 'nickname' then
+          when 'nickname'
             set_nickname client, data, user, v
-          when 'gifs' then
+          when 'gifs'
             set_gifs client, data, user, v
-          when 'leaderboard' then
-            k, v = v.split(/[\s]+/, 2) if v
+          when 'leaderboard'
+            k, v = v.split(/\s+/, 2) if v
             case k
-            when 'max' then
+            when 'max'
               set_leaderboard_max client, data, user, v
             else
               raise SlackGamebot::Error, "Invalid leaderboard setting #{k}, you can _set leaderboard max_."
             end
-          when 'unbalanced' then
+          when 'unbalanced'
             set_unbalanced client, data, user, v
-          when 'api' then
+          when 'api'
             set_api client, data, user, v
-          when 'elo' then
+          when 'elo'
             set_elo client, data, user, v
-          when 'aliases' then
+          when 'aliases'
             set_aliases client, data, user, v
           else
             raise SlackGamebot::Error, "Invalid setting #{k}, you can _set gifs on|off_, _set unbalanced on|off_, _api on|off_, _leaderboard max_, _elo_, _nickname_ and _aliases_."
@@ -194,24 +194,24 @@ module SlackGamebot
 
         def unset(client, data, user, k, v)
           case k
-          when 'nickname' then
+          when 'nickname'
             unset_nickname client, data, user, v
-          when 'gifs' then
+          when 'gifs'
             unset_gifs client, data, user
-          when 'leaderboard' then
+          when 'leaderboard'
             case v
-            when 'max' then
+            when 'max'
               unset_leaderboard_max client, data, user
             else
               raise SlackGamebot::Error, "Invalid leaderboard setting #{v}, you can _unset leaderboard max_."
             end
-          when 'unbalanced' then
+          when 'unbalanced'
             unset_unbalanced client, data, user
-          when 'api' then
+          when 'api'
             unset_api client, data, user
-          when 'elo' then
+          when 'elo'
             unset_elo client, data, user
-          when 'aliases' then
+          when 'aliases'
             unset_aliases client, data, user
           else
             raise SlackGamebot::Error, "Invalid setting #{k}, you can _unset gifs_, _api_, _leaderboard max_, _elo_, _nickname_ and _aliases_."
@@ -222,7 +222,7 @@ module SlackGamebot
       subscribed_command 'set' do |client, data, match|
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
         if match['expression']
-          k, v = match['expression'].split(/[\s]+/, 2)
+          k, v = match['expression'].split(/\s+/, 2)
           set client, data, user, k, v
         else
           client.say(channel: data.channel, text: 'Missing setting, eg. _set gifs off_.', gif: 'help')
@@ -233,7 +233,7 @@ module SlackGamebot
       subscribed_command 'unset' do |client, data, match|
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
         if match['expression']
-          k, v = match['expression'].split(/[\s]+/, 2)
+          k, v = match['expression'].split(/\s+/, 2)
           unset client, data, user, k, v
         else
           client.say(channel: data.channel, text: 'Missing setting, eg. _unset gifs_.', gif: 'help')

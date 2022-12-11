@@ -69,10 +69,10 @@ class User
              regexp = ::Regexp.new("^#{user_name}$", 'i')
              query = User.where(team: team).any_of({ user_name: regexp }, nickname: regexp)
              query.first
-    end
+           end
     unless user
       case slack_id
-      when ANYONE then
+      when ANYONE
         user = User.create!(team: team, user_id: ANYONE, user_name: ANYONE, nickname: 'anyone', registered: true)
       else
         begin

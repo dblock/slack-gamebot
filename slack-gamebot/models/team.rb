@@ -51,7 +51,11 @@ class Team
 
   def trial_message
     [
-      remaining_trial_days.zero? ? 'Your trial subscription has expired.' : "Your trial subscription expires in #{remaining_trial_days} day#{remaining_trial_days == 1 ? '' : 's'}.",
+      if remaining_trial_days.zero?
+        'Your trial subscription has expired.'
+      else
+        "Your trial subscription expires in #{remaining_trial_days} day#{remaining_trial_days == 1 ? '' : 's'}."
+      end,
       subscribe_text
     ].join(' ')
   end
@@ -232,16 +236,16 @@ class Team
   rescue Slack::Web::Api::Errors::SlackError => e
     logger.warn "Active team #{self} ping, #{e.message}."
     case e.message
-    when 'account_inactive', 'invalid_auth' then
+    when 'account_inactive', 'invalid_auth'
       deactivate!
     end
   end
 
   private
 
-  SUBSCRIBED_TEXT = <<-EOS.freeze
-Your team has been subscribed. Thank you!
-Follow https://twitter.com/playplayio for news and updates.
+  SUBSCRIBED_TEXT = <<~EOS.freeze
+    Your team has been subscribed. Thank you!
+    Follow https://twitter.com/playplayio for news and updates.
   EOS
 
   def make_message(message, gif_name = nil)
