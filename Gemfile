@@ -45,7 +45,7 @@ group :test do
   gem 'fabrication'
   gem 'faker'
   gem 'hyperclient'
-  gem 'rack-test'
+  gem 'rack-test', '~> 1.1.0'
   gem 'rspec'
   gem 'selenium-webdriver'
   gem 'timecop'
