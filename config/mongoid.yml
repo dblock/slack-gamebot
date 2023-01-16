@@ -25,3 +25,4 @@ production:
   options:
     raise_not_found_error: false
     use_utc: true
+    ssl_verify: false
