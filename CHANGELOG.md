@@ -1,4 +1,5 @@
 ### Change Log
+
 * [#189](https://github.com/dblock/slack-gamebot/pull/189): Capped user tau at 11 for elo scoring - [@eddycurry](https://github.com/eddycurry).
 * [#166](https://github.com/dblock/slack-gamebot/issues/166): Challenge anyone to a game with `challenge @here` or `challenge @channel` - [@dblock](https://github.com/dblock).
 * [#159](https://github.com/dblock/slack-gamebot/issues/159): The `unsubscribe` command will only turn off auto-renew instead of canceling immediately - [@dblock](https://github.com/dblock).
