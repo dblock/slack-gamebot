@@ -7,7 +7,7 @@ module SlackGamebot
         user = ::User.find_create_or_update_by_slack_id!(client, data.user)
         team = ::Team.find(client.owner.id)
         subscription_info = []
-        if team.active_stripe_subscription?
+        if team.stripe_subcriptions&.any?
           subscription_info << team.stripe_customer_text
           subscription_info.concat(team.stripe_customer_subscriptions_info)
           if user.captain?

@@ -45,6 +45,20 @@ describe SlackGamebot::Commands::Subscription, vcr: { cassette_name: 'user_info'
           ].join("\n")
           expect(message: "#{SlackRubyBot.config.user} subscription").to respond_with_slack_message customer_info
         end
+        context 'past due subscription' do
+          before do
+            customer.subscriptions.data.first['status'] = 'past_due'
+            allow(Stripe::Customer).to receive(:retrieve).and_return(customer)
+          end
+          it 'displays subscription info' do
+            customer_info = "Customer since #{Time.at(customer.created).strftime('%B %d, %Y')}."
+            customer_info += "\nPast Due subscription created November 03, 2016 to Plan ($29.99)."
+            card = customer.sources.first
+            customer_info += "\nOn file Visa card, #{card.name} ending with #{card.last4}, expires #{card.exp_month}/#{card.exp_year}."
+            customer_info += "\n#{team.update_cc_text}"
+            expect(message: "#{SlackRubyBot.config.user} subscription").to respond_with_slack_message customer_info
+          end
+        end
       end
     end
   end
