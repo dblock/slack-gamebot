@@ -1,9 +1,9 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activemodel (7.0.4.3)
-      activesupport (= 7.0.4.3)
-    activesupport (7.0.4.3)
+    activemodel (7.0.7.2)
+      activesupport (= 7.0.7.2)
+    activesupport (7.0.7.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -121,7 +121,7 @@ GEM
       faraday (>= 0.9.0)
       faraday_hal_middleware
       faraday_middleware
-    i18n (1.12.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     io-console (0.5.11)
     irb (1.4.1)
@@ -140,7 +140,7 @@ GEM
     mime-types-data (3.2022.0105)
     mini_mime (1.1.2)
     mini_portile2 (2.8.1)
-    minitest (5.18.0)
+    minitest (5.19.0)
     mongo (2.15.1)
       bson (>= 4.8.2, < 5.0.0)
     mongoid (7.5.2)
