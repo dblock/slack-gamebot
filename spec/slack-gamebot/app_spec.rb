@@ -63,6 +63,13 @@ describe SlackGamebot::App do
         subject.send(:check_subscribed_teams!)
         expect(team.reload.subscribed?).to be false
       end
+      it 'notifies no active subscriptions' do
+        customer.subscriptions.data = []
+        expect(Stripe::Customer).to receive(:retrieve).and_return(customer)
+        expect_any_instance_of(Team).to receive(:inform!).with('Your subscription was canceled and your team has been downgraded. Thank you for being a customer!')
+        subject.send(:check_subscribed_teams!)
+        expect(team.reload.subscribed?).to be false
+      end
     end
   end
 end
