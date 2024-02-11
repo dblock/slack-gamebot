@@ -64,7 +64,7 @@ module SlackGamebot
 
     def check_subscribed_teams!
       Team.where(subscribed: true, :stripe_customer_id.ne => nil).each do |team|
-        if team.stripe_customer.subscriptions.none?
+        if team.subscribed? && team.stripe_customer.subscriptions.none?
           logger.info "No active subscriptions for #{team} (#{team.stripe_customer_id}), downgrading."
           team.inform_admin! 'Your subscription was canceled and your team has been downgraded. Thank you for being a customer!'
           team.update_attributes!(subscribed: false)

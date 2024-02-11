@@ -16,8 +16,8 @@ module Api
           team = Team.find(params[:team_id]) || error!('Not Found', 404)
           Api::Middleware.logger.info "Creating a subscription for team #{team}, email=#{params[:stripe_email]}, coupon=#{params[:stripe_coupon]}."
           error!('Already a Subscriber', 400) if team.subscribed?
-          error!('Customer Already Registered', 400) if team.stripe_customer_id
-          customer = Stripe::Customer.create(
+          error!('Existing Subscription Already Active', 400) if team.stripe_customer_id && team.stripe_customer.subscriptions.any?
+          data = {
             source: params[:stripe_token],
             plan: 'slack-playplay-yearly',
             email: params[:stripe_email],
@@ -29,7 +29,8 @@ module Api
               domain: team.domain,
               game: team.game.name
             }
-          )
+          }
+          customer = team.stripe_customer_id ? Stripe::Customer.update(team.stripe_customer_id, data) : Stripe::Customer.create(data)
           Api::Middleware.logger.info "Subscription for team #{team} created, stripe_customer_id=#{customer['id']}."
           team.update_attributes!(subscribed: true, stripe_customer_id: customer['id'])
           present team, with: Api::Presenters::TeamPresenter
