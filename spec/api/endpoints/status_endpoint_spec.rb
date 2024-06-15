@@ -15,6 +15,7 @@ describe Api::Endpoints::StatusEndpoint do
 
     context 'with a team that is inactive' do
       let!(:team) { Fabricate(:team, api: true, active: false) }
+
       it 'returns a status' do
         status = client.status
         expect(status.games_count).to eq 1
@@ -27,9 +28,11 @@ describe Api::Endpoints::StatusEndpoint do
 
     context 'with a team that has an inactive account' do
       let!(:team) { Fabricate(:team, api: true, active: true) }
+
       before do
         expect_any_instance_of(Team).to receive(:ping!) { raise Slack::Web::Api::Errors::SlackError, 'account_inactive' }
       end
+
       it 'returns a status and deactivates team' do
         status = client.status
         expect(status.games_count).to eq 1
@@ -43,6 +46,7 @@ describe Api::Endpoints::StatusEndpoint do
 
     context 'with a team with api off' do
       let!(:team) { Fabricate(:team, api: false) }
+
       it 'returns total counts anyway' do
         status = client.status
         expect(status.games_count).to eq 1

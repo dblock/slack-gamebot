@@ -5,7 +5,7 @@ module SlackRubyBot
     attr_accessor :send_gifs, :aliases
 
     def initialize(attrs = {})
-      super(attrs)
+      super
       @send_gifs = attrs[:send_gifs]
       @aliases = attrs[:aliases]
     end

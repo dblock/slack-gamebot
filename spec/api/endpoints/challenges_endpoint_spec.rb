@@ -21,12 +21,14 @@ describe Api::Endpoints::ChallengesEndpoint do
 
   context 'challenge' do
     let(:existing_challenge) { Fabricate(:challenge) }
+
     it 'returns a challenge' do
       challenge = client.challenge(id: existing_challenge.id)
       expect(challenge.id).to eq existing_challenge.id.to_s
       expect(challenge._links.self._url).to eq "http://example.org/api/challenges/#{existing_challenge.id}"
       expect(challenge._links.team._url).to eq "http://example.org/api/teams/#{existing_challenge.team.id}"
     end
+
     it 'cannot return a challenge for team with api off' do
       team.update_attributes!(api: false)
       expect { client.challenge(id: existing_challenge.id).resource }.to raise_error Faraday::ClientError do |e|
@@ -38,10 +40,12 @@ describe Api::Endpoints::ChallengesEndpoint do
 
   context 'doubles challenge' do
     let(:existing_challenge) { Fabricate(:doubles_challenge) }
+
     before do
       existing_challenge.accept!(existing_challenge.challenged.first)
       existing_challenge.lose!(existing_challenge.challengers.first)
     end
+
     it 'returns a challenge with links to challengers, challenged and played match' do
       challenge = client.challenge(id: existing_challenge.id)
       expect(challenge.id).to eq existing_challenge.id.to_s

@@ -21,11 +21,13 @@ describe Api::Endpoints::SeasonsEndpoint do
 
   context 'season' do
     let(:existing_season) { Fabricate(:season) }
+
     it 'returns a season' do
       season = client.season(id: existing_season.id)
       expect(season.id).to eq existing_season.id.to_s
       expect(season._links.self._url).to eq "http://example.org/api/seasons/#{existing_season.id}"
     end
+
     it 'cannot return a season for a team with api off' do
       team.update_attributes!(api: false)
       expect { client.season(id: existing_season.id).resource }.to raise_error Faraday::ClientError do |e|
@@ -39,11 +41,13 @@ describe Api::Endpoints::SeasonsEndpoint do
     before do
       Fabricate(:match)
     end
+
     it 'returns the current season' do
       season = client.current_season(team_id: team.id.to_s)
       expect(season.id).to eq 'current'
       expect(season._links.self._url).to eq 'http://example.org/api/seasons/current'
     end
+
     it 'cannot return the current season for team with api off' do
       team.update_attributes!(api: false)
       expect { client.current_season(team_id: team.id.to_s).resource }.to raise_error Faraday::ClientError do |e|

@@ -3,7 +3,7 @@ module SlackGamebot
     def initialize(attrs = {})
       attrs = attrs.dup
       attrs[:aliases] = ([attrs[:team].game.name] + [attrs[:team].aliases]).flatten.compact
-      super attrs
+      super
     end
 
     on :user_change do |client, data|

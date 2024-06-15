@@ -6,6 +6,7 @@ describe SlackGamebot::Commands::Decline, vcr: { cassette_name: 'user_info' } do
   let(:client) { app.send(:client) }
   let(:challenged) { Fabricate(:user, user_name: 'username') }
   let!(:challenge) { Fabricate(:challenge, challenged: [challenged]) }
+
   it 'declines a challenge' do
     expect(message: "#{SlackRubyBot.config.user} decline", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
       "#{challenge.challenged.map(&:display_name).and} declined #{challenge.challengers.map(&:display_name).and} challenge."

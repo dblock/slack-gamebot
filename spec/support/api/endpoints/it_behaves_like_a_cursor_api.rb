@@ -48,8 +48,9 @@ shared_examples_for 'a cursor api' do |model|
     context 'total count' do
       it "doesn't return total_count" do
         response = client.send(model_ps, cursor_params)
-        expect(response).to_not respond_to(:total_count)
+        expect(response).not_to respond_to(:total_count)
       end
+
       it 'returns total_count when total_count query string is specified' do
         response = client.send(model_ps, cursor_params.merge(total_count: true))
         expect(response.total_count).to eq model.all.count

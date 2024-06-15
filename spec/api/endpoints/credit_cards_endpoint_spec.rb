@@ -11,8 +11,10 @@ describe Api::Endpoints::CreditCardsEndpoint do
         expect(json['type']).to eq 'param_error'
       end
     end
+
     context 'subscribed team without a stripe customer id' do
       let!(:team) { Fabricate(:team, subscribed: true, stripe_customer_id: nil) }
+
       it 'fails to update credit_card' do
         expect do
           client.credit_cards._post(
@@ -25,9 +27,11 @@ describe Api::Endpoints::CreditCardsEndpoint do
         end
       end
     end
+
     context 'existing subscribed team' do
-      include_context :stripe_mock
+      include_context 'stripe mock'
       let!(:team) { Fabricate(:team) }
+
       before do
         stripe_helper.create_plan(id: 'slack-playplay-yearly', amount: 2999)
         customer = Stripe::Customer.create(
@@ -38,6 +42,7 @@ describe Api::Endpoints::CreditCardsEndpoint do
         expect_any_instance_of(Team).to receive(:inform!).once
         team.update_attributes!(subscribed: true, stripe_customer_id: customer['id'])
       end
+
       it 'updates a credit card' do
         new_source = stripe_helper.generate_card_token
         client.credit_cards._post(

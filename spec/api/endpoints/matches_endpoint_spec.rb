@@ -21,11 +21,13 @@ describe Api::Endpoints::MatchesEndpoint do
 
   context 'match' do
     let(:existing_match) { Fabricate(:match, team: team) }
+
     it 'returns a match' do
       match = client.match(id: existing_match.id)
       expect(match.id).to eq existing_match.id.to_s
       expect(match._links.self._url).to eq "http://example.org/api/matches/#{existing_match.id}"
     end
+
     it 'cannot return a match for a team with api off' do
       team.update_attributes!(api: false)
       expect { client.match(id: existing_match.id).resource }.to raise_error Faraday::ClientError do |e|
@@ -37,6 +39,7 @@ describe Api::Endpoints::MatchesEndpoint do
 
   context 'match' do
     let(:existing_match) { Fabricate(:match) }
+
     it 'returns a match with links to challenge' do
       match = client.match(id: existing_match.id)
       expect(match.id).to eq existing_match.id.to_s

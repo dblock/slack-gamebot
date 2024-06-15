@@ -7,6 +7,7 @@ describe Api::Endpoints::GamesEndpoint do
 
   context 'game' do
     let(:existing_game) { Fabricate(:game) }
+
     it 'returns a game' do
       game = client.game(id: existing_game.id)
       expect(game.id).to eq existing_game.id.to_s
@@ -16,6 +17,7 @@ describe Api::Endpoints::GamesEndpoint do
 
   context 'game' do
     let(:existing_game) { Fabricate(:game) }
+
     it 'returns a game with links to teams' do
       game = client.game(id: existing_game.id)
       expect(game.id).to eq existing_game.id.to_s

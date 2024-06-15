@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe UserRank do
-  context '#from_user' do
+  describe '#from_user' do
     it 'creates a record' do
       user = Fabricate(:user)
       user_rank = UserRank.from_user(user)

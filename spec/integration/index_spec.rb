@@ -1,10 +1,12 @@
 require 'spec_helper'
 
-describe 'index.html', js: true, type: :feature do
+describe 'index.html', :js, type: :feature do
   let!(:game) { Fabricate(:game, name: 'pong') }
+
   before do
     visit '/'
   end
+
   it 'includes a link to add to slack with the client id' do
     expect(title).to eq('PlayPlay.io - Ping Pong Bot, Chess Bot, Pool Bot and Tic Tac Toe Bot for Slack')
     click_link 'Add to Slack'

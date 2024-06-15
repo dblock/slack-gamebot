@@ -9,6 +9,7 @@ describe Api::Endpoints::RootEndpoint do
     links = JSON.parse(last_response.body)['_links']
     expect(links.keys.sort).to eq(%w[self status team teams user users challenge challenges credit_cards match matches current_season season seasons subscriptions game games].sort)
   end
+
   it 'follows all links' do
     get '/api/'
     expect(last_response.status).to eq 200
@@ -21,9 +22,10 @@ describe Api::Endpoints::RootEndpoint do
 
       get href.gsub('http://example.org', '')
       expect(last_response.status).to eq 200
-      expect(JSON.parse(last_response.body)).to_not eq({})
+      expect(JSON.parse(last_response.body)).not_to eq({})
     end
   end
+
   it 'rewrites encoded HAL links to make them clickable' do
     get '/api/teams/%7B?cursor,size%7D'
     expect(last_response.status).to eq 302
