@@ -7,7 +7,7 @@ module Api
       # returns a hash:
       #   results: (paginated collection subset)
       #   next: (cursor to the next page)
-      def paginate_by_cursor(coll, &_block)
+      def paginate_by_cursor(coll, &)
         raise 'Both cursor and offset parameters are present, these are mutually exclusive.' if params.key?(:offset) && params.key?(:cursor)
 
         results = { results: [], next: nil }
@@ -18,18 +18,18 @@ module Api
         end
         # some items may be skipped with a block
         query = block_given? ? coll : coll.limit(size)
-        query.scroll(params[:cursor]) do |record, next_cursor|
+        query.scroll(params[:cursor]) do |record, iterator|
           record = yield(record) if block_given?
           results[:results] << record if record
-          results[:next] = next_cursor.to_s
+          results[:next] = iterator.next_cursor.to_s
           break if results[:results].count >= size
         end
         results[:total_count] = coll.count if params[:total_count] && coll.respond_to?(:count)
         results
       end
 
-      def paginate_and_sort_by_cursor(coll, options = {}, &block)
-        Hashie::Mash.new(paginate_by_cursor(sort(coll, options), &block))
+      def paginate_and_sort_by_cursor(coll, options = {}, &)
+        Hashie::Mash.new(paginate_by_cursor(sort(coll, options), &))
       end
     end
   end

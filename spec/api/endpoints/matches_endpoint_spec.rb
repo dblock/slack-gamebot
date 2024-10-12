@@ -20,7 +20,7 @@ describe Api::Endpoints::MatchesEndpoint do
   end
 
   context 'match' do
-    let(:existing_match) { Fabricate(:match, team: team) }
+    let(:existing_match) { Fabricate(:match, team:) }
 
     it 'returns a match' do
       match = client.match(id: existing_match.id)

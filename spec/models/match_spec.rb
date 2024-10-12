@@ -132,7 +132,7 @@ describe Match do
       let(:challenge1) { Fabricate(:doubles_challenge) }
       let(:challengers) { challenge1.challengers }
       let(:challenged) { [Fabricate(:user), Fabricate(:user)] }
-      let(:match) { Fabricate(:match, challenge: Fabricate(:challenge, challengers: challengers, challenged: challenged)) }
+      let(:match) { Fabricate(:match, challenge: Fabricate(:challenge, challengers:, challenged:)) }
 
       before do
         challenge1.accept!(challenge1.challenged.first)
@@ -158,7 +158,7 @@ describe Match do
       let(:challenge1) { Fabricate(:doubles_challenge) }
       let(:challengers) { challenge1.challengers }
       let(:challenged) { [Fabricate(:user), Fabricate(:user)] }
-      let(:match) { Fabricate(:match, challenge: Fabricate(:challenge, challengers: challengers, challenged: challenged), tied: true) }
+      let(:match) { Fabricate(:match, challenge: Fabricate(:challenge, challengers:, challenged:), tied: true) }
 
       before do
         challenge1.accept!(challenge1.challenged.first)
@@ -184,7 +184,7 @@ describe Match do
       let(:challenge1) { Fabricate(:doubles_challenge) }
       let(:challengers) { challenge1.challengers }
       let(:challenged) { [Fabricate(:user), Fabricate(:user)] }
-      let(:match) { Fabricate(:match, challenge: Fabricate(:challenge, challengers: challengers, challenged: challenged), tied: true) }
+      let(:match) { Fabricate(:match, challenge: Fabricate(:challenge, challengers:, challenged:), tied: true) }
 
       before do
         challenge1.accept!(challenge1.challenged.first)
@@ -210,7 +210,7 @@ describe Match do
       let(:challenge1) { Fabricate(:doubles_challenge) }
       let(:challengers) { challenge1.challenged }
       let(:challenged) { [Fabricate(:user), Fabricate(:user)] }
-      let(:match) { Fabricate(:match, challenge: Fabricate(:challenge, challengers: challengers, challenged: challenged)) }
+      let(:match) { Fabricate(:match, challenge: Fabricate(:challenge, challengers:, challenged:)) }
 
       before do
         challenge1.accept!(challenge1.challenged.first)
@@ -229,23 +229,23 @@ describe Match do
       let!(:team) { Fabricate(:team) }
 
       it 'loser first' do
-        expect(Match.new(team: team, scores: [[15, 21]])).to be_valid
+        expect(Match.new(team:, scores: [[15, 21]])).to be_valid
       end
 
       it 'loser first with 3 scores' do
-        expect(Match.new(team: team, scores: [[15, 21], [21, 5], [3, 11]])).to be_valid
+        expect(Match.new(team:, scores: [[15, 21], [21, 5], [3, 11]])).to be_valid
       end
 
       it 'winner first' do
-        expect(Match.new(team: team, scores: [[21, 15]])).not_to be_valid
+        expect(Match.new(team:, scores: [[21, 15]])).not_to be_valid
       end
 
       it 'winner first with 3 scores' do
-        expect(Match.new(team: team, scores: [[21, 15], [5, 21], [11, 3]])).not_to be_valid
+        expect(Match.new(team:, scores: [[21, 15], [5, 21], [11, 3]])).not_to be_valid
       end
 
       it 'draw' do
-        expect(Match.new(team: team, tied: true, scores: [[15, 15]])).to be_valid
+        expect(Match.new(team:, tied: true, scores: [[15, 15]])).to be_valid
       end
     end
   end

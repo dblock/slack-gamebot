@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::Matches, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
 
   shared_examples_for 'matches' do
@@ -18,28 +18,28 @@ describe SlackGamebot::Commands::Matches, vcr: { cassette_name: 'user_info' } do
 
       it 'displays top 10 matches' do
         expect_any_instance_of(Array).to receive(:take).with(10).and_call_original
-        expect(message: "#{SlackRubyBot.config.user} matches", user: user.user_id, channel: match1.challenge.channel).to respond_with_slack_message([
+        expect(message: "#{SlackRubyBot.config.user} matches", user: user.user_id, channel: doubles_challenge.channel).to respond_with_slack_message([
           "#{match1} 3 times",
           "#{match0} once"
         ].join("\n"))
       end
 
       it 'limits number of matches' do
-        expect(message: "#{SlackRubyBot.config.user} matches 1", user: user.user_id, channel: match1.challenge.channel).to respond_with_slack_message([
+        expect(message: "#{SlackRubyBot.config.user} matches 1", user: user.user_id, channel: doubles_challenge.channel).to respond_with_slack_message([
           "#{match1} 3 times"
         ].join("\n"))
       end
 
       it 'displays only matches for requested users' do
-        expect(message: "#{SlackRubyBot.config.user} matches #{match1.challenge.challenged.first.user_name}", user: user.user_id, channel: match1.challenge.channel).to respond_with_slack_message(
+        expect(message: "#{SlackRubyBot.config.user} matches #{doubles_challenge.challenged.first.user_name}", user: user.user_id, channel: doubles_challenge.channel).to respond_with_slack_message(
           "#{match1} 3 times"
         )
       end
 
       it 'displays only matches for requested users with a limit' do
-        another_challenge = Fabricate(:challenge, challengers: [match1.challenge.challenged.first])
+        another_challenge = Fabricate(:challenge, challengers: [doubles_challenge.challenged.first])
         Fabricate(:match, challenge: another_challenge)
-        expect(message: "#{SlackRubyBot.config.user} matches #{match1.challenge.challenged.first.user_name} 1", user: user.user_id, channel: match1.challenge.channel).to respond_with_slack_message(
+        expect(message: "#{SlackRubyBot.config.user} matches #{doubles_challenge.challenged.first.user_name} 1", user: user.user_id, channel: doubles_challenge.channel).to respond_with_slack_message(
           "#{match1} 3 times"
         )
       end

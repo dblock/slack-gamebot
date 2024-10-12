@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
 
   shared_examples_for 'seasons' do
@@ -13,12 +13,12 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
 
     context 'one season' do
       before do
-        Array.new(2) { Fabricate(:match, team: team) }
+        Array.new(2) { Fabricate(:match, team:) }
         challenge = Fabricate(:challenge, challengers: [team.users.asc(:_id).first], challenged: [team.users.asc(:_id).last])
-        Fabricate(:match, challenge: challenge)
+        Fabricate(:match, challenge:)
       end
 
-      let!(:season) { Fabricate(:season, team: team) }
+      let!(:season) { Fabricate(:season, team:) }
 
       it 'seasons' do
         expect(message: "#{SlackRubyBot.config.user} seasons").to respond_with_slack_message season.to_s
@@ -29,9 +29,9 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
       let!(:seasons) do
         Array.new(2) do |n|
           team.users.all.destroy
-          Array.new((n + 1)) { Fabricate(:match, team: team) }
+          Array.new((n + 1)) { Fabricate(:match, team:) }
           challenge = Fabricate(:challenge, challengers: [team.users.asc(:_id).first], challenged: [team.users.asc(:_id).last])
-          Fabricate(:match, challenge: challenge)
+          Fabricate(:match, challenge:)
           Fabricate(:season)
         end
       end
@@ -47,7 +47,7 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
       end
 
       it 'returns past seasons and current season' do
-        current_season = Season.new(team: team)
+        current_season = Season.new(team:)
         expect(message: "#{SlackRubyBot.config.user} seasons").to respond_with_slack_message current_season.to_s
       end
     end
@@ -56,12 +56,12 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
       let!(:season1) do
         Array.new(2) { Fabricate(:match) }
         challenge = Fabricate(:challenge, challengers: [team.users.asc(:_id).first], challenged: [team.users.asc(:_id).last])
-        Fabricate(:match, challenge: challenge)
+        Fabricate(:match, challenge:)
         Fabricate(:season)
       end
       let!(:current_season) do
         Array.new(2) { Fabricate(:match) }
-        Season.new(team: team)
+        Season.new(team:)
       end
 
       it 'returns past seasons and current season' do

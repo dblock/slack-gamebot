@@ -31,9 +31,9 @@ describe Api::Endpoints::UsersEndpoint do
   end
 
   context 'users' do
-    let!(:user_elo1) { Fabricate(:user, elo: 1, wins: 1, team: team, captain: true) }
-    let!(:user_elo3) { Fabricate(:user, elo: 3, wins: 3, team: team) }
-    let!(:user_elo2) { Fabricate(:user, elo: 2, wins: 2, team: team) }
+    let!(:user_elo1) { Fabricate(:user, elo: 1, wins: 1, team:, captain: true) }
+    let!(:user_elo3) { Fabricate(:user, elo: 3, wins: 3, team:) }
+    let!(:user_elo2) { Fabricate(:user, elo: 2, wins: 2, team:) }
 
     it 'cannot return users for a team with api off' do
       team.update_attributes!(api: false)

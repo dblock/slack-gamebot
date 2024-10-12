@@ -39,7 +39,7 @@ class User
   scope :everyone, -> { where(user_id: ANYONE) }
 
   def current_matches
-    Match.current.where(team: team).any_of({ winner_ids: _id }, loser_ids: _id)
+    Match.current.where(team:).any_of({ winner_ids: _id }, loser_ids: _id)
   end
 
   def slack_mention
@@ -67,13 +67,13 @@ class User
              team.users.where(user_id: slack_id).first
            else
              regexp = ::Regexp.new("^#{user_name}$", 'i')
-             query = User.where(team: team).any_of({ user_name: regexp }, nickname: regexp)
+             query = User.where(team:).any_of({ user_name: regexp }, nickname: regexp)
              query.first
            end
     unless user
       case slack_id
       when ANYONE
-        user = User.create!(team: team, user_id: ANYONE, user_name: ANYONE, nickname: 'anyone', registered: true)
+        user = User.create!(team:, user_id: ANYONE, user_name: ANYONE, nickname: 'anyone', registered: true)
       else
         begin
           users_info = client.web_client.users_info(user: slack_id || "@#{user_name}")
@@ -81,7 +81,7 @@ class User
             info = Hashie::Mash.new(users_info).user
             if info
               user = team.users.where(user_id: info.id).first
-              user ||= User.create!(team: team, user_id: info.id, user_name: info.name, registered: true)
+              user ||= User.create!(team:, user_id: info.id, user_name: info.name, registered: true)
             end
           end
         rescue Slack::Web::Api::Errors::SlackError => e
@@ -119,7 +119,7 @@ class User
   end
 
   def self.reset_all!(team)
-    User.where(team: team).set(
+    User.where(team:).set(
       wins: 0,
       losses: 0,
       ties: 0,
@@ -169,25 +169,25 @@ class User
   end
 
   def rank!
-    return unless elo_changed?
+    return unless elo_changed? || saved_change_to_elo?
 
     User.rank!(team)
     reload.rank
   end
 
   def update_elo_history!
-    return unless elo_changed?
+    return unless elo_changed? || saved_change_to_elo?
 
     elo_history << elo
   end
 
   def self.rank!(team)
     rank = 1
-    players = any_of({ :wins.gt => 0 }, { :losses.gt => 0 }, :ties.gt => 0).where(team: team, registered: true).desc(:elo).desc(:wins).asc(:losses).desc(:ties)
+    players = any_of({ :wins.gt => 0 }, { :losses.gt => 0 }, :ties.gt => 0).where(team:, registered: true).desc(:elo).desc(:wins).asc(:losses).desc(:ties)
     players.each_with_index do |player, index|
       if player.registered?
         rank += 1 if index > 0 && %i[elo wins losses ties].any? { |property| players[index - 1].send(property) != player.send(property) }
-        player.set(rank: rank) unless rank == player.rank
+        player.set(rank:) unless rank == player.rank
       end
     end
   end
@@ -220,6 +220,6 @@ class User
     ranks = users.map(&:rank)
     return users unless ranks.min && ranks.max
 
-    where(team: team, :rank.gte => ranks.min, :rank.lte => ranks.max).asc(:rank).asc(:wins).asc(:ties)
+    where(team:, :rank.gte => ranks.min, :rank.lte => ranks.max).asc(:rank).asc(:wins).asc(:ties)
   end
 end

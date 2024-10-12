@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::Sucks, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:user) { Fabricate(:user) }
   let(:client) { app.send(:client) }
 

@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
-  let(:captain) { Fabricate(:user, team: team, user_name: 'username', captain: true) }
+  let(:captain) { Fabricate(:user, team:, user_name: 'username', captain: true) }
   let(:message_hook) { SlackRubyBot::Hooks::Message.new }
 
   context 'captain' do
@@ -386,7 +386,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
 
   context 'not captain' do
     before do
-      Fabricate(:user, team: team, captain: true)
+      Fabricate(:user, team:, captain: true)
       captain.demote!
     end
 
@@ -448,7 +448,7 @@ describe SlackGamebot::Commands::Set, vcr: { cassette_name: 'user_info' } do
   end
 
   context 'nickname' do
-    let(:user) { Fabricate(:user, team: team, user_name: 'username') }
+    let(:user) { Fabricate(:user, team:, user_name: 'username') }
 
     context 'with no nickname' do
       it 'shows that the user has no nickname' do

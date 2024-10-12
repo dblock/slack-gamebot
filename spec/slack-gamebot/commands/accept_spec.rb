@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::Accept, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
 
   context 'regular challenge' do
-    let(:challenged) { Fabricate(:user, team: team, user_name: 'username') }
-    let!(:challenge) { Fabricate(:challenge, team: team, challenged: [challenged]) }
+    let(:challenged) { Fabricate(:user, team:, user_name: 'username') }
+    let!(:challenge) { Fabricate(:challenge, team:, challenged: [challenged]) }
 
     it 'accepts a challenge' do
       expect(message: "#{SlackRubyBot.config.user} accept", user: challenged.user_id, channel: challenge.channel).to respond_with_slack_message(
@@ -18,10 +18,10 @@ describe SlackGamebot::Commands::Accept, vcr: { cassette_name: 'user_info' } do
   end
 
   context 'open challenge' do
-    let(:user) { Fabricate(:user, team: team) }
-    let(:acceptor) { Fabricate(:user, team: team) }
-    let(:anyone_challenged) { Fabricate(:user, team: team, user_id: User::ANYONE) }
-    let!(:challenge) { Fabricate(:challenge, team: team, challengers: [user], challenged: [anyone_challenged]) }
+    let(:user) { Fabricate(:user, team:) }
+    let(:acceptor) { Fabricate(:user, team:) }
+    let(:anyone_challenged) { Fabricate(:user, team:, user_id: User::ANYONE) }
+    let!(:challenge) { Fabricate(:challenge, team:, challengers: [user], challenged: [anyone_challenged]) }
 
     it 'accepts an open challenge' do
       allow_any_instance_of(Slack::Web::Client).to receive(:users_info).and_return(nil)

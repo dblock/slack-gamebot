@@ -84,8 +84,8 @@ class Team
   def to_s
     {
       game: game.name,
-      name: name,
-      domain: domain,
+      name:,
+      domain:,
       id: team_id
     }.map do |k, v|
       "#{k}=#{v}" if v
@@ -123,7 +123,7 @@ class Team
   end
 
   def slack_client
-    @slack_client ||= Slack::Web::Client.new(token: token)
+    @slack_client ||= Slack::Web::Client.new(token:)
   end
 
   def slack_channels
@@ -159,9 +159,9 @@ class Team
     token = ENV.fetch('SLACK_API_TOKEN', nil)
     return unless token
 
-    team = Team.where(token: token).first
-    team ||= Team.new(token: token)
-    info = Slack::Web::Client.new(token: token).team_info
+    team = Team.where(token:).first
+    team ||= Team.new(token:)
+    info = Slack::Web::Client.new(token:).team_info
     team.team_id = info['team']['id']
     team.name = info['team']['name']
     team.domain = info['team']['domain']
@@ -264,13 +264,13 @@ class Team
   end
 
   def update_subscribed_at
-    return unless subscribed? && subscribed_changed?
+    return unless subscribed? && (subscribed_changed? || saved_change_to_subscribed?)
 
     self.subscribed_at = subscribed? ? DateTime.now.utc : nil
   end
 
   def subscribed!
-    return unless subscribed? && subscribed_changed?
+    return unless subscribed? && (subscribed_changed? || saved_change_to_subscribed?)
 
     inform! SUBSCRIBED_TEXT, 'thanks'
   end
@@ -287,7 +287,7 @@ class Team
 
   def activated!
     return unless active? && activated_user_id && bot_user_id
-    return unless active_changed? || activated_user_id_changed?
+    return unless (active_changed? || saved_change_to_active?) || (activated_user_id_changed? || saved_change_to_activated_user_id?)
 
     inform_activated!
   end

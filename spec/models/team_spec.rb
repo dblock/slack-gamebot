@@ -27,8 +27,8 @@ describe Team do
 
   describe '#destroy' do
     let!(:team) { Fabricate(:team) }
-    let!(:match) { Fabricate(:match, team: team) }
-    let!(:season) { Fabricate(:season, team: team) }
+    let!(:match) { Fabricate(:match, team:) }
+    let!(:season) { Fabricate(:season, team:) }
 
     it 'destroys dependent records' do
       expect(Team.count).to eq 1
@@ -88,7 +88,7 @@ describe Team do
       end
 
       context 'with a recent challenge' do
-        let!(:challenge) { Fabricate(:challenge, team: team) }
+        let!(:challenge) { Fabricate(:challenge, team:) }
 
         it 'false' do
           expect(team.asleep?).to be false
@@ -97,7 +97,7 @@ describe Team do
       end
 
       context 'with a recent match' do
-        let!(:match) { Fabricate(:match, team: team) }
+        let!(:match) { Fabricate(:match, team:) }
 
         it 'false' do
           expect(team.asleep?).to be false
@@ -106,7 +106,7 @@ describe Team do
       end
 
       context 'with a recent match lost to' do
-        let!(:match) { Fabricate(:match_lost_to, team: team) }
+        let!(:match) { Fabricate(:match_lost_to, team:) }
 
         it 'false' do
           expect(team.asleep?).to be false
@@ -115,7 +115,7 @@ describe Team do
       end
 
       context 'with an old challenge' do
-        let!(:challenge) { Fabricate(:challenge, updated_at: 3.weeks.ago, team: team) }
+        let!(:challenge) { Fabricate(:challenge, updated_at: 3.weeks.ago, team:) }
 
         it 'true' do
           expect(team.asleep?).to be true
@@ -132,7 +132,7 @@ describe Team do
       end
 
       context 'with a recent challenge' do
-        let!(:challenge) { Fabricate(:challenge, updated_at: 2.weeks.ago, team: team) }
+        let!(:challenge) { Fabricate(:challenge, updated_at: 2.weeks.ago, team:) }
 
         it 'true' do
           expect(team.dead?).to be false
@@ -140,7 +140,7 @@ describe Team do
       end
 
       context 'with an old challenge' do
-        let!(:challenge) { Fabricate(:challenge, updated_at: 5.weeks.ago, team: team) }
+        let!(:challenge) { Fabricate(:challenge, updated_at: 5.weeks.ago, team:) }
 
         it 'true' do
           expect(team.dead?).to be true

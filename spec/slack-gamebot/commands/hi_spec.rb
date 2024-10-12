@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SlackRubyBot::Commands::Hi do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
 
   it 'says hi' do

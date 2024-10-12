@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
 
   context 'with an existing challenge' do
@@ -160,8 +160,8 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     end
 
     it 'two players' do
-      winner2 = Fabricate(:user, team: team)
-      loser2 = Fabricate(:user, team: team)
+      winner2 = Fabricate(:user, team:)
+      loser2 = Fabricate(:user, team:)
       expect do
         expect do
           expect(message: "#{SlackRubyBot.config.user} lost to #{winner.user_name} #{winner2.user_name} with #{loser2.user_name}", user: loser.user_id, channel: 'pongbot').to respond_with_slack_message(
@@ -175,8 +175,8 @@ describe SlackGamebot::Commands::Lost, vcr: { cassette_name: 'user_info' } do
     end
 
     it 'two players with scores' do
-      winner2 = Fabricate(:user, team: team)
-      loser2 = Fabricate(:user, team: team)
+      winner2 = Fabricate(:user, team:)
+      loser2 = Fabricate(:user, team:)
       expect do
         expect do
           expect(message: "#{SlackRubyBot.config.user} lost to #{winner.user_name} #{winner2.user_name} with #{loser2.user_name} 15:21", user: loser.user_id, channel: 'pongbot').to respond_with_slack_message(

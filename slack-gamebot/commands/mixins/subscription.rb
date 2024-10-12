@@ -5,7 +5,7 @@ module SlackGamebot
         extend ActiveSupport::Concern
 
         module ClassMethods
-          def subscribed_command(*values, &_block)
+          def subscribed_command(*values, &)
             command(*values) do |client, data, match|
               if Stripe.api_key && client.owner.reload.subscription_expired?
                 client.say channel: data.channel, text: client.owner.trial_message

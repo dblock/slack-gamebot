@@ -22,7 +22,7 @@ module SlackRubyBot
       text = options.delete(:text)
       gif = Giphy.random(keywords) if keywords && send_gifs?
       text = [text, gif].compact.join("\n")
-      message({ text: text }.merge(options))
+      message({ text: }.merge(options))
     end
   end
 end

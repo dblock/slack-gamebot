@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::Promote, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
-  let(:user) { Fabricate(:user, team: team, user_name: 'username', captain: true) }
+  let(:user) { Fabricate(:user, team:, user_name: 'username', captain: true) }
 
   it 'gives help' do
     expect(message: "#{SlackRubyBot.config.user} promote", user: user.user_id).to respond_with_slack_message(
@@ -13,7 +13,7 @@ describe SlackGamebot::Commands::Promote, vcr: { cassette_name: 'user_info' } do
   end
 
   it 'promotes another user' do
-    another_user = Fabricate(:user, team: team)
+    another_user = Fabricate(:user, team:)
     expect(message: "#{SlackRubyBot.config.user} promote #{another_user.user_name}", user: user.user_id).to respond_with_slack_message(
       "#{another_user.user_name} has been promoted to captain."
     )
@@ -28,9 +28,9 @@ describe SlackGamebot::Commands::Promote, vcr: { cassette_name: 'user_info' } do
   end
 
   it 'promotes multiple users' do
-    another_user1 = Fabricate(:user, team: team)
-    another_user2 = Fabricate(:user, team: team)
-    another_user3 = Fabricate(:user, team: team)
+    another_user1 = Fabricate(:user, team:)
+    another_user2 = Fabricate(:user, team:)
+    another_user3 = Fabricate(:user, team:)
     expect(message: "#{SlackRubyBot.config.user} promote #{another_user1.user_name} #{another_user2.user_name} #{another_user3.user_name}", user: user.user_id).to respond_with_slack_message(
       "#{another_user1.user_name}, #{another_user2.user_name} and #{another_user3.user_name} have been promoted to captain."
     )
@@ -40,7 +40,7 @@ describe SlackGamebot::Commands::Promote, vcr: { cassette_name: 'user_info' } do
   end
 
   it 'cannot promote another captain' do
-    another_user = Fabricate(:user, team: team, captain: true)
+    another_user = Fabricate(:user, team:, captain: true)
     expect(message: "#{SlackRubyBot.config.user} promote #{another_user.user_name}", user: user.user_id).to respond_with_slack_message(
       "#{another_user.user_name} is already a captain."
     )
@@ -49,7 +49,7 @@ describe SlackGamebot::Commands::Promote, vcr: { cassette_name: 'user_info' } do
 
   it 'cannot promote when not a captain' do
     user.demote!
-    another_user = Fabricate(:user, team: team, captain: true)
+    another_user = Fabricate(:user, team:, captain: true)
     expect(message: "#{SlackRubyBot.config.user} promote #{another_user.user_name}", user: user.user_id).to respond_with_slack_message(
       "You're not a captain, sorry."
     )

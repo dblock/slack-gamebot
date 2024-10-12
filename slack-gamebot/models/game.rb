@@ -36,9 +36,9 @@ class Game
 
   def to_s
     {
-      name: name,
-      client_id: client_id,
-      aliases: aliases
+      name:,
+      client_id:,
+      aliases:
     }.map do |k, v|
       "#{k}=#{v}" if v
     end.compact.join(', ')
@@ -49,8 +49,8 @@ class Game
     client_secret = ENV.fetch('SLACK_CLIENT_SECRET', nil)
     return unless client_id && client_secret
 
-    game = Game.where(client_id: client_id).first
-    game ||= Game.new(client_id: client_id)
+    game = Game.where(client_id:).first
+    game ||= Game.new(client_id:)
     game.client_id = client_id
     game.client_secret = client_secret
     game.aliases = ENV['SLACK_RUBY_BOT_ALIASES'].split if ENV.key?('SLACK_RUBY_BOT_ALIASES')

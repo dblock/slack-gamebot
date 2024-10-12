@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::Leaderboard do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
 
   shared_examples_for 'leaderboard' do

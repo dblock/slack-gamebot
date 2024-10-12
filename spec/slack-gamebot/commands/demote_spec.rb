@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::Demote, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
 
   context 'captain' do
-    let(:user) { Fabricate(:user, team: team, user_name: 'username', captain: true) }
+    let(:user) { Fabricate(:user, team:, user_name: 'username', captain: true) }
 
     it 'demotes self' do
-      another_user = Fabricate(:user, team: team, captain: true)
+      another_user = Fabricate(:user, team:, captain: true)
       expect(message: "#{SlackRubyBot.config.user} demote me", user: user.user_id).to respond_with_slack_message(
         "#{user.user_name} is no longer captain."
       )
@@ -23,7 +23,7 @@ describe SlackGamebot::Commands::Demote, vcr: { cassette_name: 'user_info' } do
     end
 
     it 'cannot demote another captain' do
-      another_user = Fabricate(:user, team: team, captain: true)
+      another_user = Fabricate(:user, team:, captain: true)
       expect(message: "#{SlackRubyBot.config.user} demote #{another_user.user_name}", user: user.user_id).to respond_with_slack_message(
         'You can only demote yourself, try _demote me_.'
       )
@@ -32,8 +32,8 @@ describe SlackGamebot::Commands::Demote, vcr: { cassette_name: 'user_info' } do
   end
 
   context 'not captain' do
-    let!(:captain) { Fabricate(:user, team: team, captain: true) }
-    let(:user) { Fabricate(:user, team: team, user_name: 'username') }
+    let!(:captain) { Fabricate(:user, team:, captain: true) }
+    let(:user) { Fabricate(:user, team:, user_name: 'username') }
 
     it 'cannot demote' do
       expect(message: "#{SlackRubyBot.config.user} demote me", user: user.user_id).to respond_with_slack_message(

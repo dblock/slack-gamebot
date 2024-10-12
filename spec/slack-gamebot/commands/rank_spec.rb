@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SlackGamebot::Commands::Rank, vcr: { cassette_name: 'user_info' } do
   let!(:team) { Fabricate(:team) }
-  let(:app) { SlackGamebot::Server.new(team: team) }
+  let(:app) { SlackGamebot::Server.new(team:) }
   let(:client) { app.send(:client) }
 
   shared_examples_for 'rank' do
@@ -16,19 +16,19 @@ describe SlackGamebot::Commands::Rank, vcr: { cassette_name: 'user_info' } do
     end
 
     it 'ranks someone who is not ranked' do
-      user = Fabricate(:user, team: team)
+      user = Fabricate(:user, team:)
       expect(message: "#{SlackRubyBot.config.user} rank", user: user.user_id).to respond_with_slack_message 'username: not ranked'
     end
 
     it 'ranks someone who is not ranked by default' do
-      user1 = Fabricate(:user, team: team)
-      Fabricate(:user, team: team)
+      user1 = Fabricate(:user, team:)
+      Fabricate(:user, team:)
       expect(message: "#{SlackRubyBot.config.user} rank", user: user1.user_id).to respond_with_slack_message 'username: not ranked'
     end
 
     it 'ranks someone who is not ranked by name' do
-      user1 = Fabricate(:user, team: team)
-      Fabricate(:user, team: team)
+      user1 = Fabricate(:user, team:)
+      Fabricate(:user, team:)
       expect(message: "#{SlackRubyBot.config.user} rank #{user1.user_name}", user: user1.user_id).to respond_with_slack_message "#{user1.user_name}: not ranked"
     end
 
