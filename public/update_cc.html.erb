@@ -47,14 +47,15 @@
             team_id: "<%= team.id %>"
           };
 
-          if (data.stripe_token) {
+          var team = {
+            id: "<%= team && team.team_id %>",
+            game: <%= JSON::generate(ERB::Util.html_escape(game && game.name)) %>,
+            name: <%= JSON::generate(ERB::Util.html_escape(team && team.name)) %>,
+          };
 
-            var team = {
-              id: <%= team ? "'#{team._id}'" : 'null' %>,
-              game: <%= game ? "'#{game.name}'" : 'null' %>,
-              name: <%= team ? "'#{team.name}'" : 'null' %>
-            };
+          PlayPlay.message('Update credit card for team <b>' + team.name + '</b>.');
 
+          if (data.stripe_token && data.stripe_token.length > 0) {
             $.ajax({
               type: 'POST',
               url: '/api/credit_cards',
@@ -65,6 +66,10 @@
               },
               error: PlayPlay.error
             });
+          } else if (!data.team_id || data.team_id.length == 0) {
+            PlayPlay.errorMessage("Team not found.")
+            $('form').remove();
+            $('#update_cc').hide();
           }
         });
       </script>

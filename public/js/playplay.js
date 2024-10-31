@@ -9,6 +9,11 @@ $(document).ready(function() {
     });
   };
 
+  PlayPlay.errorMessage = function(message) {
+    PlayPlay.message(message)
+    $('#messages').addClass('has-error');
+  };
+
   PlayPlay.register = function(text) {
     $('.navbar').fadeOut('slow');
     $('header').fadeOut('slow');

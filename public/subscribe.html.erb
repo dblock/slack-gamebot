@@ -38,9 +38,9 @@
         $(document).ready(function() {
 
           var team = {
-            id: <%= team ? "'#{team._id}'" : 'null' %>,
-            game: <%= game ? "'#{game.name}'" : 'null' %>,
-            name: <%= team ? "'#{team.name}'" : 'null' %>,
+            id: "<%= team && team.id %>",
+            game: <%= JSON::generate(ERB::Util.html_escape(game && game.name)) %>,
+            name: <%= JSON::generate(ERB::Util.html_escape(team && team.name)) %>,
             subscribed: <%= !!(team && team.subscribed) %>
           };
 
@@ -64,10 +64,10 @@
           } else if (team.id && team.name && team.game && coupon.code) {
             PlayPlay.message('Subscribe team <b>' + team.name + '</b> to <b>' + team.game + '</b> for $' + pay.dollars + ' for the first year and $' + subscription.dollars + ' thereafter with coupon <b>' + coupon.code + '!');
           } else if (team.id && team.name && team.game) {
-            PlayPlay.message('Subscribe team <b>' + team.name + '</b> to <b>' + team.game + '</b> for $29.99 a year!');
+            PlayPlay.message('Subscribe team <b>' + team.name + '</b> to <b>' + team.game + '</b> for $29.99/yr.');
           } else {
             $('#subscribeButton').remove();
-            PlayPlay.message('Missing or invalid team ID and/or game.');
+            PlayPlay.errorMessage('Missing or invalid team ID and/or game.');
           }
 
           var handler = StripeCheckout.configure({

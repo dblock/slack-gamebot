@@ -40,10 +40,30 @@ describe 'Subscribe', :js, type: :feature do
     end
   end
 
+  [
+    Faker::Lorem.word,
+    "#{Faker::Lorem.word}'s",
+    '💥 team',
+    'команда',
+    "\"#{Faker::Lorem.word}'s\"",
+    "#{Faker::Lorem.word}\n#{Faker::Lorem.word}",
+    "<script>alert('xss');</script>",
+    '<script>alert("xss");</script>'
+  ].each do |team_name|
+    context "team #{team_name}" do
+      let!(:team) { Fabricate(:team, name: team_name) }
+
+      it 'displays subscribe page' do
+        visit "/subscribe?team_id=#{team.team_id}&game=#{team.game.name}"
+        expect(find_by_id('messages')).to have_text("Subscribe team #{team.name.gsub("\n", ' ')} to #{team.game.name} for $29.99/yr.")
+      end
+    end
+  end
+
   shared_examples 'subscribes' do
     it 'subscribes' do
       visit "/subscribe?team_id=#{team.team_id}&game=#{team.game.name}"
-      expect(find_by_id('messages')).to have_text("Subscribe team #{team.name} to #{team.game.name} for $29.99 a year!")
+      expect(find_by_id('messages')).to have_text("Subscribe team #{team.name} to #{team.game.name} for $29.99/yr.")
       find_by_id('subscribe', visible: true)
 
       expect(Stripe::Customer).to receive(:create).and_return('id' => 'customer_id')
