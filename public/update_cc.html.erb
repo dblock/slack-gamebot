@@ -41,9 +41,9 @@
       <script>
         $(document).ready(function() {
           var data = {
-            stripe_token: "<%= stripe_token %>",
-            stripe_token_type: "<%= stripe_token_type %>",
-            stripe_email: "<%= stripe_email %>",
+            stripe_token: "<%=h stripe_token %>",
+            stripe_token_type: "<%=h stripe_token_type %>",
+            stripe_email: "<%=h stripe_email %>",
             team_id: "<%= team.id %>"
           };
 
