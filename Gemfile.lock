@@ -172,7 +172,7 @@ GEM
       uri
     netrc (0.11.0)
     newrelic_rpm (9.14.0)
-    nokogiri (1.18.4)
+    nokogiri (1.18.8)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     parallel (1.26.3)
