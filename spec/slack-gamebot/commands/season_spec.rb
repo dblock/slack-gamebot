@@ -13,22 +13,36 @@ describe SlackGamebot::Commands::Season, vcr: { cassette_name: 'user_info' } do
     end
 
     context 'current season' do
-      before do
-        Fabricate(:match)
-      end
+      context 'with a recorded loss' do
+        let!(:winner) { Fabricate(:user, team:) }
+        let!(:loser) { Fabricate(:user, team:) }
 
-      it 'returns current season' do
-        current_season = Season.new(team:)
-        expect(message: "#{SlackRubyBot.config.user} season").to respond_with_slack_message current_season.to_s
-      end
-
-      context 'after reset' do
         before do
-          Season.create!(team:, created_by: User.first)
+          Match.lose!(team:, winners: [winner], losers: [loser])
         end
 
         it 'returns current season' do
-          expect(message: "#{SlackRubyBot.config.user} season").to respond_with_slack_message 'No matches have been recorded.'
+          current_season = Season.new(team:)
+          expect(message: "#{SlackRubyBot.config.user} season").to respond_with_slack_message current_season.to_s
+        end
+      end
+
+      context 'with a match' do
+        let!(:match) { Fabricate(:match) }
+
+        it 'returns current season' do
+          current_season = Season.new(team:)
+          expect(message: "#{SlackRubyBot.config.user} season").to respond_with_slack_message current_season.to_s
+        end
+
+        context 'after reset' do
+          before do
+            Season.create!(team:, created_by: User.first)
+          end
+
+          it 'returns current season' do
+            expect(message: "#{SlackRubyBot.config.user} season").to respond_with_slack_message 'No matches have been recorded.'
+          end
         end
       end
     end

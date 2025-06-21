@@ -1,5 +1,6 @@
 ### Change Log
 
+* Fix: correct display current `season` with only `lost to` matches  - [@dblock](https://github.com/dblock).
 * Fix: subscribe and change cc for teams with special characters in name - [@dblock](https://github.com/dblock).
 * Upgraded to Ruby 3.3.5 - [@dblock](https://github.com/dblock).
 * [#189](https://github.com/dblock/slack-gamebot/pull/189): Capped user tau at 11 for elo scoring - [@eddycurry](https://github.com/eddycurry).
