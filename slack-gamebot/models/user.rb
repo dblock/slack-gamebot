@@ -133,9 +133,9 @@ class User
   end
 
   def to_s
-    wins_s = "#{wins} win#{wins == 1 ? '' : 's'}"
-    losses_s = "#{losses} loss#{losses == 1 ? '' : 'es'}"
-    ties_s = "#{ties} tie#{ties == 1 ? '' : 's'}" if ties && ties > 0
+    wins_s = "#{wins} win#{'s' unless wins == 1}"
+    losses_s = "#{losses} loss#{'es' unless losses == 1}"
+    ties_s = "#{ties} tie#{'s' unless ties == 1}" if ties && ties > 0
     elo_s = "elo: #{team_elo}"
     lws_s = "lws: #{winning_streak}" if winning_streak >= losing_streak && winning_streak >= 3
     lls_s = "lls: #{losing_streak}" if losing_streak > winning_streak && losing_streak >= 3

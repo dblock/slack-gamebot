@@ -11,7 +11,7 @@ module SlackRubyBot
     end
 
     def send_gifs?
-      send_gifs.nil? ? true : send_gifs
+      send_gifs.nil? || send_gifs
     end
 
     def say(options = {})

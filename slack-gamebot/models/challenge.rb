@@ -136,7 +136,7 @@ class Challenge
 
   def draw!(player, scores = nil)
     raise SlackGamebot::Error, 'Challenge must first be accepted.' if state == ChallengeState::PROPOSED
-    raise SlackGamebot::Error, "Challenge has already been #{state}." unless state == ChallengeState::ACCEPTED || state == ChallengeState::DRAWN
+    raise SlackGamebot::Error, "Challenge has already been #{state}." unless [ChallengeState::ACCEPTED, ChallengeState::DRAWN].include?(state)
     raise SlackGamebot::Error, "Already recorded a draw from #{player.user_name}." if draw.include?(player)
 
     draw << player
@@ -216,7 +216,7 @@ class Challenge
   end
 
   def validate_unique_challenge
-    return unless state == ChallengeState::PROPOSED || state == ChallengeState::ACCEPTED
+    return unless [ChallengeState::PROPOSED, ChallengeState::ACCEPTED].include?(state)
 
     (challengers + challenged).each do |player|
       existing_challenge = ::Challenge.find_by_user(team, channel, player)

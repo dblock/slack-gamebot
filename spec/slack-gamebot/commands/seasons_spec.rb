@@ -29,7 +29,7 @@ describe SlackGamebot::Commands::Seasons, vcr: { cassette_name: 'user_info' } do
       let!(:seasons) do
         Array.new(2) do |n|
           team.users.all.destroy
-          Array.new((n + 1)) { Fabricate(:match, team:) }
+          Array.new(n + 1) { Fabricate(:match, team:) }
           challenge = Fabricate(:challenge, challengers: [team.users.asc(:_id).first], challenged: [team.users.asc(:_id).last])
           Fabricate(:match, challenge:)
           Fabricate(:season)

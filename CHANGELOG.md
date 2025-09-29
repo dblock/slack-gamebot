@@ -1,5 +1,6 @@
 ### Change Log
 
+* Upgrade to Ruby 3.4.6 - [@dblock](https://github.com/dblock).
 * Fix: correct display current `season` with only `lost to` matches  - [@dblock](https://github.com/dblock).
 * Fix: subscribe and change cc for teams with special characters in name - [@dblock](https://github.com/dblock).
 * Upgraded to Ruby 3.3.5 - [@dblock](https://github.com/dblock).
