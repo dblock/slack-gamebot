@@ -1,7 +1,7 @@
-name: Tests
+name: test
 on: [push, pull_request]
 jobs:
-  test:
+  RSpec:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -10,13 +10,13 @@ jobs:
           ruby-version: '3.4.6'
       - uses: supercharge/mongodb-github-action@1.7.0
         with:
-          mongodb-version: '5.0'
+          mongodb-version: '8.0'
       - uses: browser-actions/setup-geckodriver@latest
         with:
-          geckodriver-version: '0.34.0'
+          geckodriver-version: '0.36.0'
       - uses: browser-actions/setup-firefox@v1
         with:
-          firefox-version: '129.0.2'
+          firefox-version: '143.0.3'
       - run: |
           bundle install
       - uses: GabrielBB/xvfb-action@v1
