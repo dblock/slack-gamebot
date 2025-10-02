@@ -1,25 +1,26 @@
 name: test
+
 on: [push, pull_request]
+
 jobs:
   RSpec:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.4.6'
-      - uses: supercharge/mongodb-github-action@1.7.0
-        with:
-          mongodb-version: '8.0'
-      - uses: browser-actions/setup-geckodriver@latest
-        with:
-          geckodriver-version: '0.36.0'
-      - uses: browser-actions/setup-firefox@v1
+      - uses: actions/checkout@v3
+      - uses: browser-actions/setup-firefox@latest
         with:
           firefox-version: '143.0.3'
-      - run: |
-          bundle install
+      - uses: browser-actions/setup-geckodriver@latest
+        with:
+          geckodriver-version: "0.36.0"
+      - uses: supercharge/mongodb-github-action@1.7.0
+        with:
+          mongodb-version: "8.0"
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4.6"
+          bundler-cache: true
       - uses: GabrielBB/xvfb-action@v1
-        with:          
+        with:
           run: |
             bundle exec rake spec

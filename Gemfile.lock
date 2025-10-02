@@ -89,7 +89,7 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-follow_redirects (0.3.0)
+    faraday-follow_redirects (0.4.0)
       faraday (>= 1, < 3)
     faraday-mashify (1.0.0)
       faraday (~> 2.0)
@@ -146,7 +146,6 @@ GEM
     kaminari-grape (1.0.1)
       grape
       kaminari-core (~> 1.0)
-    kgio (2.11.4)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
@@ -188,6 +187,7 @@ GEM
       uri
     netrc (0.11.0)
     newrelic_rpm (9.21.0)
+    nio4r (2.7.4)
     nokogiri (1.18.10)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -204,6 +204,8 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
+    puma (7.0.4)
+      nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.18)
     rack-cors (2.0.2)
@@ -216,7 +218,6 @@ GEM
     rack-test (2.2.0)
       rack (>= 1.3)
     rainbow (3.1.1)
-    raindrops (0.20.1)
     rake (13.3.0)
     rdoc (6.14.2)
       erb
@@ -337,9 +338,6 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
-    unicorn (6.1.0)
-      kgio (~> 2.6)
-      raindrops (~> 0.7)
     uri (1.0.3)
     vcr (6.3.1)
       base64
@@ -348,7 +346,6 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webrick (1.9.1)
     websocket (1.2.11)
     websocket-driver (0.7.7)
       base64
@@ -381,6 +378,7 @@ DEPENDENCIES
   mongoid-shell
   multi_json
   newrelic_rpm
+  puma
   rack (~> 2)
   rack-robotz
   rack-server-pages
@@ -402,11 +400,9 @@ DEPENDENCIES
   stripe-ruby-mock (~> 2.4.1)
   time_ago_in_words
   timecop
-  unicorn
   vcr
   wannabe_bool
   webmock
-  webrick
 
 RUBY VERSION
    ruby 3.4.6p54

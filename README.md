@@ -6,7 +6,6 @@ Slack-Gamebot
 Or roll your own ...
 
 [![Tests](https://github.com/dblock/slack-gamebot/actions/workflows/test.yml/badge.svg)](https://github.com/dblock/slack-gamebot/actions/workflows/test.yml)
-[![Code Climate](https://codeclimate.com/github/dblock/slack-gamebot/badges/gpa.svg)](https://codeclimate.com/github/dblock/slack-gamebot)
 
 A generic game bot for slack. Works for ping-pong (2, 4 or more players), chess, etc. Inspired by [slack-pongbot](https://github.com/andrewvy/slack-pongbot), but more robust, generic and easier to improve and contribute to.
 
