@@ -3,11 +3,11 @@
     <title>PlayPlay.io - Update Credit Card</title>
     <%= partial 'public/partials/_head.html' %>
     <%
-      game = Game.where(name: request['game']).first
-      team = game && game.teams.where(team_id: request['team_id']).first
-      stripe_token = request['stripeToken']
-      stripe_token_type = request['stripeTokenType']
-      stripe_email = request['stripeEmail']
+      game = Game.where(name: request.params['game']).first
+      team = game && game.teams.where(team_id: request.params['team_id']).first
+      stripe_token = request.params['stripeToken']
+      stripe_token_type = request.params['stripeTokenType']
+      stripe_email = request.params['stripeEmail']
     %>
   </head>
   <body style='text-align: center'>
