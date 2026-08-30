@@ -1,5 +1,6 @@
 ### Change Log
 
+* 2026/08/30: Add missing `game_id` index on `Team` to speed up per-game status queries used by `/api/status` - [@dblock](https://github.com/dblock), [@Copilot](https://github.com/apps/copilot-swe-agent).
 * Upgrade to Ruby 3.4.6 - [@dblock](https://github.com/dblock).
 * Fix: correct display current `season` with only `lost to` matches  - [@dblock](https://github.com/dblock).
 * Fix: subscribe and change cc for teams with special characters in name - [@dblock](https://github.com/dblock).

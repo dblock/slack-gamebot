@@ -22,7 +22,7 @@ class Team
   has_many :matches, dependent: :destroy
   has_many :challenges, dependent: :destroy
 
-  belongs_to :game
+  belongs_to :game, index: true
 
   before_validation :update_subscribed_at
   after_update :subscribed!
