@@ -15,13 +15,10 @@ describe 'index.html', :js, type: :feature do
     end
   end
 
-  context 'v2' do
-    before do
-      visit '/'
-    end
-
+  context 'v2', driver: :selenium_no_wait do
     it 'redirects' do
-      expect(current_url).to eq('https://gamebot2.playplay.io/')
+      visit '/'
+      expect(page).to have_current_path('https://gamebot2.playplay.io/', url: true)
     end
   end
 end

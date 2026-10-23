@@ -1,5 +1,6 @@
 ### Change Log
 
+* 2026/10/23: Upgrade Ruby to 4.0.9 and refresh dependencies, leaving Stripe dependencies unchanged - [@dblock](https://github.com/dblock), [@Copilot](https://github.com/apps/copilot-swe-agent).
 * 2026/08/30: Add missing `game_id` index on `Team` to speed up per-game status queries used by `/api/status` - [@dblock](https://github.com/dblock), [@Copilot](https://github.com/apps/copilot-swe-agent).
 * Upgrade to Ruby 3.4.6 - [@dblock](https://github.com/dblock).
 * Fix: correct display current `season` with only `lost to` matches  - [@dblock](https://github.com/dblock).

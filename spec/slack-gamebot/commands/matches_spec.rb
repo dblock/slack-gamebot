@@ -10,6 +10,7 @@ describe SlackGamebot::Commands::Matches, vcr: { cassette_name: 'user_info' } do
     let(:user) { Fabricate(:user, user_name: 'username') }
     let(:singles_challenge) { Fabricate(:challenge, challengers: [user]) }
     let(:doubles_challenge) { Fabricate(:doubles_challenge, challengers: [user, Fabricate(:user)]) }
+
     context 'with many matches' do
       let!(:match0) { Fabricate(:match) }
       let!(:match1) { Fabricate(:match, challenge: doubles_challenge) }
