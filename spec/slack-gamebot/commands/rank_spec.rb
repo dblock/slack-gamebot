@@ -11,6 +11,7 @@ describe SlackGamebot::Commands::Rank, vcr: { cassette_name: 'user_info' } do
     let!(:user_elo_42) { Fabricate(:user, elo: 42, wins: 3, losses: 2) }
     let!(:user_elo_67) { Fabricate(:user, elo: 67, wins: 5, losses: 2) }
     let!(:user_elo_98) { Fabricate(:user, elo: 98, wins: 7, losses: 0) }
+
     it 'ranks the requester if no argument is passed' do
       expect(message: "#{SlackRubyBot.config.user} rank", user: user_elo_42.user_id).to respond_with_slack_message '3. username: 3 wins, 2 losses (elo: 42)'
     end
