@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>PlayPlay.io - Subscribe</title>
-    <%= partial 'public/partials/_head.html' %>
+    <%= partial 'public/partials/_head.html.erb' %>
     <script src='https://checkout.stripe.com/checkout.js'></script>
     <link rel='stylesheet' href='https://checkout.stripe.com/v3/checkout/button.css'></link>
     <%
@@ -17,7 +17,7 @@
   </head>
   <body style='text-align: center'>
     <p style='margin: 50px;'>
-      <a href='/'><img src='img/<%= game ? game.name : 'pong' %>.png' width='120px'></a>
+      <a href='/'><img src='<%= h asset_path("/img/#{game ? game.name : 'pong'}.png") %>' width='120px'></a>
     </p>
     <p>
       <h3>PlayPlay.io: Subscribe</h3>
@@ -28,12 +28,12 @@
           <span style='display: block; min-height: 30px;'>Pay $<%= amount_dollars %> with Card</span>
       </button>
       <p>
-        <img src='/img/stripe.png' width='119' height='26'></img>
+        <img src='<%= h asset_path('/img/stripe.png') %>' width='119' height='26'></img>
         <div class='small'>
           Questions? Contact dblock[at]dblock[dot]org or DM <a href='https://twitter.com/playplayio'>@playplayio</a>.
         </div>
       </p>
-      <%= partial 'public/partials/_scripts.html' %>
+      <%= partial 'public/partials/_scripts.html.erb' %>
       <script>
         $(document).ready(function() {
 
@@ -72,7 +72,7 @@
 
           var handler = StripeCheckout.configure({
             key: '<%= ENV['STRIPE_API_PUBLISHABLE_KEY'] %>',
-            image: '/img/<%= game ? game.name : 'pong' %>.png',
+            image: <%= asset_path("/img/#{game ? game.name : 'pong'}.png").to_json %>,
             locale: 'auto',
             token: function(token) {
               data = {

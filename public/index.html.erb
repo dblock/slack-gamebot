@@ -5,7 +5,7 @@
     <meta name="og:description" content="Game bots for Slack teams. Ping pong bot, chess bot, pool bot and tic-tac-toe bot for Slack. Challenges and rankings.">
     <meta name="keywords" content="slack,ping,pong,ping-pong,chess,pool,billiards,tic-tac-toe,slack,bot,leaderboard">
     <title>PlayPlay.io - Ping Pong Bot, Chess Bot, Pool Bot and Tic Tac Toe Bot for Slack</title>
-    <%= partial 'public/partials/_head.html' %>
+    <%= partial 'public/partials/_head.html.erb' %>
   </head>
   <body id="page-top" class="index">
     <!-- Navigation -->
@@ -64,7 +64,7 @@
             <a href="#gotslack" class="page-scroll add-to-slack"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
           </div>
           <div>
-            <img src='img/slack.png' width="75%">
+            <img src='<%= h asset_path('/img/slack.png') %>' width="75%">
           </div>
         </div>
       </div>
@@ -83,7 +83,7 @@
           <div id="games-pong" class="row text-center services-text-color">
             <div class="intro-heading">
               <p>
-                <img class="img-responsive img-centered" src="img/pong.png" alt="" height="120" width="120">
+                <img class="img-responsive img-centered" src="<%= h asset_path('/img/pong.png') %>" alt="" height="120" width="120">
               </p>
               <p class='game'>
                 PONG
@@ -101,7 +101,7 @@
               <div class="col-md-3 text-center services-text-color">
                 <div class="intro-heading">
                   <p>
-                    <img class="img-responsive img-centered" src="img/<%= game.name %>.png" alt="" height="120" width="120">
+                    <img class="img-responsive img-centered" src="<%= h asset_path("/img/#{game.name}.png") %>" alt="" height="120" width="120">
                   </p>
                   <p class='game'>
                     <%= game.name.upcase %>
@@ -135,7 +135,7 @@
               <div class="portfolio-hover">
                 <div class="portfolio-hover-content">
                   <i class="fa fa-plus fa-3x"></i>
-                  <img src="img/portfolio/welcomesnapshot.png" class="img-responsive" alt="">
+                  <img src="<%= h asset_path('/img/portfolio/welcomesnapshot.png') %>" class="img-responsive" alt="">
                 </div>
               </div>
             </a>
@@ -151,7 +151,7 @@
                   <i class="fa fa-plus fa-3x"></i>
                 </div>
               </div>
-              <img src="img/portfolio/challengesnapshot.png" class="img-responsive" alt="">
+              <img src="<%= h asset_path('/img/portfolio/challengesnapshot.png') %>" class="img-responsive" alt="">
             </a>
             <div class="portfolio-caption">
               <h4>Step 2</h4>
@@ -165,7 +165,7 @@
                   <i class="fa fa-plus fa-3x"></i>
                 </div>
               </div>
-              <img src="img/portfolio/resultsnapshot.png" class="img-responsive" alt="">
+              <img src="<%= h asset_path('/img/portfolio/resultsnapshot.png') %>" class="img-responsive" alt="">
             </a>
             <div class="portfolio-caption">
               <h4>Step 3</h4>
@@ -186,14 +186,14 @@
             <h2 class="section-heading">Sponsors</h2>
             <h3 class="section-subheading text-muted">
               Playplay.io was made possible by sponsors and open-source contributors.<br><br>
-              <a class="sponsor" href="https://www.kickstarter.com/backing-and-hacking" target="_blank"><img src='img/sponsors/kickstarter.png' alt='Kickstarter'></a>
-              <a class="sponsor" href="https://twitter.com/artsyopensource" target="_blank"><img src='img/sponsors/artsy.jpg' alt='Artsy Open Source'></a>
-              <a class="sponsor" href="https://m.do.co/c/5b26011f9a9b" target="_blank"><img src='img/sponsors/do.png' alt='DigitalOcean'></a>
+              <a class="sponsor" href="https://www.kickstarter.com/backing-and-hacking" target="_blank"><img src='<%= h asset_path('/img/sponsors/kickstarter.png') %>' alt='Kickstarter'></a>
+              <a class="sponsor" href="https://twitter.com/artsyopensource" target="_blank"><img src='<%= h asset_path('/img/sponsors/artsy.jpg') %>' alt='Artsy Open Source'></a>
+              <a class="sponsor" href="https://m.do.co/c/5b26011f9a9b" target="_blank"><img src='<%= h asset_path('/img/sponsors/do.png') %>' alt='DigitalOcean'></a>
               <br>
-              <a class="sponsor" href="https://365retailmarkets.com/" target="_blank"><img src='img/sponsors/365-retail-markets.gif' alt='365 Retail Markets'></a>
-              <a class="sponsor" href="https://alightanalytics.com/" target="_blank"><img src='img/sponsors/alightanalytics.png' alt='Alight Analytics'></a>
+              <a class="sponsor" href="https://365retailmarkets.com/" target="_blank"><img src='<%= h asset_path('/img/sponsors/365-retail-markets.gif') %>' alt='365 Retail Markets'></a>
+              <a class="sponsor" href="https://alightanalytics.com/" target="_blank"><img src='<%= h asset_path('/img/sponsors/alightanalytics.png') %>' alt='Alight Analytics'></a>
               <br><br>
-              <img src='img/giphy.png'>
+              <img src='<%= h asset_path('/img/giphy.png') %>'>
             </h3>
             <h4>
               <small>
@@ -210,7 +210,7 @@
           <div class="col-lg-12 text-center">
             <h3 class="section-heading">Open-Source</h3>
             <h3 class="section-subheading text-muted">The game bot service and the playplay.io website are open-source under the MIT license.</h3>
-            <div><img src='img/github.png'></div>
+            <div><img src='<%= h asset_path('/img/github.png') %>'></div>
             <h3 class="section-subheading text-muted"><a href="https://github.com/playplayio" target="_blank">Fork us on Github</a></h3>
           </div>
         </div>
@@ -222,7 +222,7 @@
           <div class="col-lg-12 text-center">
             <h3 class="setion-heading">Hypermedia API</h3>
             <h3 class="section-subheading text-muted">All public game data is available via a Hypermedia HAL API.</h3>
-            <div><img src='img/api.png'></div>
+            <div><img src='<%= h asset_path('/img/api.png') %>'></div>
             <h3 class="section-subheading text-muted">Try <a href="<%= SlackRubyBotServer::Service.api_url %>" target="_blank">www.playplay.io/api</a>.</h3>
           </div>
         </div>
@@ -280,7 +280,7 @@
                 <!-- Project Details Go Here -->
                 <h2>Step 1: Invite the gamebot</h2>
                 <p class="item-intro text-muted">Invite the gamebot</p>
-                <img class="img-responsive img-centered" src="img/portfolio/welcome.gif" alt="">
+                <img class="img-responsive img-centered" src="<%= h asset_path('/img/portfolio/welcome.gif') %>" alt="">
                 <p>
                   It's easy to join. Create a slack channel (#pong, #chess, #pool or #tictactoe) and invite the bot (@pongbot, @chessbot, @poolbot or @tictactoebot) to it. Then, from your slack account, invite friends to join your team.
                   <br><br>
@@ -308,9 +308,9 @@
               <div class="modal-body">
                 <h2>Step 2: Invite friends for a challenge</h2>
                 <p class="item-intro text-muted">Challenges a member of your team by sending: @bot challenge @opponent</p>
-                <img class="img-responsive img-centered" src="img/portfolio/gamechallenge.gif" alt="">
+                <img class="img-responsive img-centered" src="<%= h asset_path('/img/portfolio/gamechallenge.gif') %>" alt="">
                 <p class="item-intro text-muted">Accept the challenge with: @bot accept</p>
-                <img class="img-responsive img-centered" src="img/portfolio/gameaccept.gif" alt="">
+                <img class="img-responsive img-centered" src="<%= h asset_path('/img/portfolio/gameaccept.gif') %>" alt="">
                 <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i>Close</button>
               </div>
             </div>
@@ -333,9 +333,9 @@
               <div class="modal-body">
                 <h2>Results</h2>
                 <p class="item-intro text-muted">Lost the game? Send: @bot lost, in a draw both say @bot draw</p>
-                <img class="img-responsive img-centered" src="img/portfolio/gameresult.gif" alt="">
+                <img class="img-responsive img-centered" src="<%= h asset_path('/img/portfolio/gameresult.gif') %>" alt="">
                 <p class="item-intro text-muted">Check your rankings with: @bot leaderboard 10 or @bot rank.</p>
-                <img class="img-responsive img-centered" src="img/portfolio/teamrankings.png" alt="">
+                <img class="img-responsive img-centered" src="<%= h asset_path('/img/portfolio/teamrankings.png') %>" alt="">
                 <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i>Close</button>
               </div>
             </div>
@@ -360,12 +360,12 @@
         </div>
       </div>
     </div>
-    <%= partial 'public/partials/_scripts.html' %>
+    <%= partial 'public/partials/_scripts.html.erb' %>
     <!-- Slack -->
-    <script src="js/register.js"></script>
-    <script src="js/status.js"></script>
-    <script src="js/toggle.js"></script>
+    <script src="<%= h asset_path('/js/register.js') %>"></script>
+    <script src="<%= h asset_path('/js/status.js') %>"></script>
+    <script src="<%= h asset_path('/js/toggle.js') %>"></script>
     <!-- Uptime -->
-    <script src="js/uptime.js"></script>
+    <script src="<%= h asset_path('/js/uptime.js') %>"></script>
   </body>
 </html>

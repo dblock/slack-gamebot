@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>PlayPlay.io - Update Credit Card</title>
-    <%= partial 'public/partials/_head.html' %>
+    <%= partial 'public/partials/_head.html.erb' %>
     <%
       game = Game.where(name: request.params['game']).first
       team = game && game.teams.where(team_id: request.params['team_id']).first
@@ -12,7 +12,7 @@
   </head>
   <body style='text-align: center'>
     <p style='margin: 50px;'>
-      <a href='/'><img src='img/<%= game ? game.name : 'pong' %>.png' width='120px'></a>
+      <a href='/'><img src='<%= h asset_path("/img/#{game ? game.name : 'pong'}.png") %>' width='120px'></a>
     </p>
     <p>
       <h3>PlayPlay.io: Update Credit Card Info</h3>
@@ -23,7 +23,7 @@
         <script
           src="https://checkout.stripe.com/checkout.js" class="stripe-button"
           data-key="<%= ENV['STRIPE_API_PUBLISHABLE_KEY'] %>"
-          data-image='/img/<%= game ? game.name : 'pong' %>.png'
+          data-image='<%= h asset_path("/img/#{game ? game.name : 'pong'}.png") %>'
           data-name="Playplay.io"
           data-panel-label="Update Credit Card"
           data-label="Update Credit Card"
@@ -32,12 +32,12 @@
         </script>
       </form>
       <p>
-        <img src='/img/stripe.png' width='119' height='26'></img>
+        <img src='<%= h asset_path('/img/stripe.png') %>' width='119' height='26'></img>
         <div class='small'>
           Questions? Contact dblock[at]dblock[dot]org or DM <a href='https://twitter.com/playplayio'>@playplayio</a>.
         </div>
       </p>
-      <%= partial 'public/partials/_scripts.html' %>
+      <%= partial 'public/partials/_scripts.html.erb' %>
       <script>
         $(document).ready(function() {
           var data = {

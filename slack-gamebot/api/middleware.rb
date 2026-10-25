@@ -23,7 +23,9 @@ module Api
 
         use Rack::Robotz, 'User-Agent' => '*', 'Disallow' => '/api'
 
-        use Rack::ServerPages
+        use Rack::ServerPages do |pages|
+          SlackRubyBotServer.config.server_pages&.call(pages)
+        end
 
         run Api::Middleware.new
       end.to_app
