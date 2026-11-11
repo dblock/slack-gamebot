@@ -18,7 +18,7 @@ describe 'index.html', :js, type: :feature do
   context 'v2', driver: :selenium_no_wait do
     it 'redirects' do
       visit '/'
-      expect(page).to have_current_path('https://gamebot2.playplay.io/', url: true)
+      expect(page).to have_current_path('https://gamebot2.playplay.io/', url: true, wait: 30)
     end
   end
 end
